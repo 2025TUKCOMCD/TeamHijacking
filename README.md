@@ -12,12 +12,12 @@
  * 프레젠테이션 자료 첨부 (예정)
 
 ## 아이디어 회의
-<a href = "https://drive.google.com/file/d/1PWDy0bk7yWFf5zSxnszCO37uCx1hHFtU/view?usp=sharing">팀 하이재킹 아이디어</a>
+- <a href = "https://drive.google.com/file/d/1PWDy0bk7yWFf5zSxnszCO37uCx1hHFtU/view?usp=sharing">팀 하이재킹 아이디어</a>
 
 ### 회의 통합
  * 통합 자료
 
 ### 회의 결과
  * 회의 결과물
-<a href = "https://drive.google.com/file/d/176_STpg_pBsIT_EmeeFJf_z5qdy2MSUh/view?usp=sharing">팀 하이재킹 제안서</a>
-<a href = "https://drive.google.com/file/d/14pNoPenm9NCOFus4_Id3Xb9OWA8gTNcc/view?usp=sharing">팀 하이재킹 요약 계획서</a>
+- <a href = "https://drive.google.com/file/d/176_STpg_pBsIT_EmeeFJf_z5qdy2MSUh/view?usp=sharing">팀 하이재킹 제안서</a>
+- <a href = "https://drive.google.com/file/d/14pNoPenm9NCOFus4_Id3Xb9OWA8gTNcc/view?usp=sharing">팀 하이재킹 요약 계획서</a>
