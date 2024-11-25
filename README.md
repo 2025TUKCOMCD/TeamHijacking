@@ -1,5 +1,4 @@
-# TeamHijacking
-
+![header](https://capsule-render.vercel.app/api?type=waving&color=0&text=TeamHijacking)
 ## 프로젝트 소개
 
 ### 프로젝트 주제
