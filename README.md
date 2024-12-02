@@ -11,10 +11,10 @@
  * 프레젠테이션 자료 첨부 (예정)
 
 ## 아이디어 회의
-- <a href = "https://drive.google.com/file/d/1PWDy0bk7yWFf5zSxnszCO37uCx1hHFtU/view?usp=sharing">팀 하이재킹 아이디어</a>
 
 ### 회의 통합
  * 통합 자료
+- <a href = "https://drive.google.com/file/d/1PWDy0bk7yWFf5zSxnszCO37uCx1hHFtU/view?usp=sharing">팀 하이재킹 아이디어</a>
 
 ### 회의 결과
  * 회의 결과물
