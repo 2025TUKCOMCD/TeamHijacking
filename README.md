@@ -20,3 +20,7 @@
  * 회의 결과물
 - <a href = "https://drive.google.com/file/d/176_STpg_pBsIT_EmeeFJf_z5qdy2MSUh/view?usp=sharing">팀 하이재킹 제안서</a>
 - <a href = "https://drive.google.com/file/d/14pNoPenm9NCOFus4_Id3Xb9OWA8gTNcc/view?usp=sharing">팀 하이재킹 요약 계획서</a>
+
+### 백로그 임시 링크
+ * 구글 시트
+- <a href = "https://docs.google.com/spreadsheets/d/1uAExKp5AzgLS1jqo5DNTCr7qjixIJr5FRZ3kJ6K_j34/edit?gid=0#gid=0"> 백로그 외부 시트(임시) </a>
