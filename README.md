@@ -67,9 +67,3 @@
 :------: | :-------: | :-------: | :------: 
 <img src="https://avatars.githubusercontent.com/u/134044125?s=64&v=4" width="150" height="150"/> | <img src="https://avatars.githubusercontent.com/u/67358565?v=4" width="150" height="150"/> | <img src="https://avatars.githubusercontent.com/u/133322979?v=4" width="150" height="150"/> | <img src="https://avatars.githubusercontent.com/u/150454163?v=4" width="150" height="150"/>
 [@HyunBeen0903](https://github.com/HyunBeen0903) | [@srn13542](https://github.com/srn13542) | [@kecetchup](https://github.com/kecetchup) | [@Ret751](https://github.com/Ret751)
-
-[![Anurag's GitHub stats](https://github-readme-stats.vercel.app/api?username=HyunBeen0903)](https://github.com/anuraghazra/github-readme-stats)
-[![Anurag's GitHub stats](https://github-readme-stats.vercel.app/api?username=srn13542)](https://github.com/anuraghazra/github-readme-stats)
-[![Anurag's GitHub stats](https://github-readme-stats.vercel.app/api?username=kecetchup)](https://github.com/anuraghazra/github-readme-stats)
-[![Anurag's GitHub stats](https://github-readme-stats.vercel.app/api?username=Ret751)](https://github.com/anuraghazra/github-readme-stats)
-***
