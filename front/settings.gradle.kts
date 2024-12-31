@@ -19,6 +19,5 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "capstone"
+rootProject.name = "front"
 include(":app")
- 

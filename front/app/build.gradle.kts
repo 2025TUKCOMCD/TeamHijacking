@@ -4,11 +4,11 @@ plugins {
 }
 
 android {
-    namespace = "com.example.capstone"
+    namespace = "com.example.front"
     compileSdk = 34
 
     defaultConfig {
-        applicationId = "com.example.capstone"
+        applicationId = "com.example.front"
         minSdk = 30
         targetSdk = 34
         versionCode = 1

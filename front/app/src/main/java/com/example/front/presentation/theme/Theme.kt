@@ -1,10 +1,10 @@
-package com.example.capstone.presentation.theme
+package com.example.front.presentation.theme
 
 import androidx.compose.runtime.Composable
 import androidx.wear.compose.material.MaterialTheme
 
 @Composable
-fun CapstoneTheme(
+fun FrontTheme(
     content: @Composable () -> Unit
 ) {
     /**

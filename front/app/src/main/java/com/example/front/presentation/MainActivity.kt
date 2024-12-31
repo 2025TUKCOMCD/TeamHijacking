@@ -4,7 +4,7 @@
  * changes to the libraries and their usages.
  */
 
-package com.example.capstone.presentation
+package com.example.front.presentation
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -24,8 +24,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.wear.compose.material.MaterialTheme
 import androidx.wear.compose.material.Text
 import androidx.wear.compose.material.TimeText
-import com.example.capstone.R
-import com.example.capstone.presentation.theme.CapstoneTheme
+import com.example.front.R
+import com.example.front.presentation.theme.FrontTheme
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -43,7 +43,7 @@ class MainActivity : ComponentActivity() {
 
 @Composable
 fun WearApp(greetingName: String) {
-    CapstoneTheme {
+    FrontTheme {
         Box(
             modifier = Modifier
                 .fillMaxSize()
