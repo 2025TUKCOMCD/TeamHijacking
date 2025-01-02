@@ -30,4 +30,13 @@
         android:layout_marginBottom="16dp"
         app:srcCompat="@android:drawable/ic_dialog_email" />
 
+    <!-- 추가된 TextView -->
+    <TextView
+        android:id="@+id/resultTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="here"
+        android:textSize="18sp"
+        android:layout_gravity="center"
+        android:padding="16dp"/>
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
