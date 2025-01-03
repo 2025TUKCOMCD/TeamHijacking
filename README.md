@@ -45,8 +45,7 @@
 
 ## 📆 일정 📆
 <p align="center">
-<img width="900" src = "https://github.com/user-attachments/assets/f77dac68-2996-4a65-ad8a-1b499e8ecb98"> <br>
-<img width="280" src = "https://github.com/user-attachments/assets/324bafd2-84f9-41d4-a3e7-c4036b28d1fe"> <img width="280" src = "https://github.com/user-attachments/assets/ccf54270-32b5-47b4-8456-0c09c70650f5"> <img width="280" src = "https://github.com/user-attachments/assets/8d0c2b30-16c0-485f-964e-f78b2090c004">
+<img width="900" src = "https://github.com/user-attachments/assets/80d9cc27-b99e-4c90-af78-ce7700aed50f"> <br>
 </p>
   
 ## 📋 프로젝트 프레젠테이션 자료 📋
