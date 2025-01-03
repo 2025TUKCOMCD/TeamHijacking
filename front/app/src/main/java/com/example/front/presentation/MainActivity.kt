@@ -1,48 +1,62 @@
-/* While this template provides a good starting point for using Wear Compose, you can always
- * take a look at https://github.com/android/wear-os-samples/tree/main/ComposeStarter and
- * https://github.com/android/wear-os-samples/tree/main/ComposeAdvanced to find the most up to date
- * changes to the libraries and their usages.
- */
-
 package com.example.front.presentation
 
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.wear.compose.material.MaterialTheme
 import androidx.wear.compose.material.Text
 import androidx.wear.compose.material.TimeText
-import com.example.front.R
+import com.example.front.data.RouteProcessor
 import com.example.front.presentation.theme.FrontTheme
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
-        installSplashScreen()
-
         super.onCreate(savedInstanceState)
 
-        setTheme(android.R.style.Theme_DeviceDefault)
-
         setContent {
-            WearApp("Android")
+            var routeData by remember { mutableStateOf("Loading...") }
+
+            // API 호출 및 데이터 처리
+            LaunchedEffect(Unit) {
+                try {
+                    val result = RouteProcessor.fetchAndProcessRoutes(
+                        startLat = 37.513841, // 잠실역
+                        startLng = 127.101823,
+                        endLat = 37.476813, // 낙성대역
+                        endLng = 126.964156
+                    )
+                    Log.d("MainActivity", "Received Data from RouteProcessor: $result")
+
+                    withContext(Dispatchers.Main) {
+                        routeData = result
+                    }
+                } catch (e: Exception) {
+                    Log.e("MainActivity", "Error fetching routes", e)
+                    routeData = "Failed to load data."
+                }
+            }
+
+            WearApp(routeData)
         }
     }
 }
 
 @Composable
-fun WearApp(greetingName: String) {
+fun WearApp(routeData: String) {
     FrontTheme {
         Box(
             modifier = Modifier
@@ -51,18 +65,18 @@ fun WearApp(greetingName: String) {
             contentAlignment = Alignment.Center
         ) {
             TimeText()
-            Greeting(greetingName = greetingName)
+            Greeting(routeData)
         }
     }
 }
 
 @Composable
-fun Greeting(greetingName: String) {
+fun Greeting(routeData: String) {
     Text(
         modifier = Modifier.fillMaxWidth(),
         textAlign = TextAlign.Center,
         color = MaterialTheme.colors.primary,
-        text = stringResource(R.string.hello_world, greetingName)
+        text = routeData
     )
 }
 
