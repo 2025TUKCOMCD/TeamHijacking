@@ -129,7 +129,7 @@ class MainActivity : AppCompatActivity() {
                     val sb = StringBuilder()  //sb로 화면에 출력할 데이터를 만듦
 
                     sb.append("총 경로 개수: $pathCount\n")
-                    for (i in 2 until minOf(pathCount, 4)) {  //원래는 전체를 다 구하지만 2개만 보는걸로 타협 너무 많음
+                    for (i in 0 until minOf(pathCount, 3)) {  //원래는 전체를 다 구하지만 2개만 보는걸로 타협 너무 많음
                         val path = pathArray.getJSONObject(i) //pathArray중 i 번째를 path에 넣음
                         val info = path.getJSONObject("info") //path내부 데이터중 info를 추출
                         val totalTime = info.getInt("totalTime") //info중 totalTim,busTransitCount(버스 환승 횟수), subwayTransitCount( 지하철 환승횟수), 총 걸은 시간 등등 추출
