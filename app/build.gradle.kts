@@ -1,3 +1,5 @@
+import org.jetbrains.kotlin.storage.CacheResetOnProcessCanceled.enabled
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.jetbrains.kotlin.android)
@@ -51,6 +53,7 @@ android {
 dependencies {
 
     implementation(libs.play.services.wearable)
+    implementation(libs.material)
     implementation(platform(libs.compose.bom))
     implementation(libs.ui)
     implementation(libs.ui.tooling.preview)
@@ -63,6 +66,11 @@ dependencies {
     implementation(libs.horologist.compose.tools)
     implementation(libs.horologist.tiles)
     implementation(libs.watchface.complications.data.source.ktx)
+    implementation(libs.appcompat)
+    implementation(libs.material)
+    implementation(libs.activity)
+    implementation(libs.constraintlayout)
+    implementation(libs.wear)
     androidTestImplementation(platform(libs.compose.bom))
     androidTestImplementation(libs.ui.test.junit4)
     debugImplementation(libs.ui.tooling)

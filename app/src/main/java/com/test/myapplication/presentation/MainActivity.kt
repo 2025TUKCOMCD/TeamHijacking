@@ -1,73 +1,34 @@
-/* While this template provides a good starting point for using Wear Compose, you can always
- * take a look at https://github.com/android/wear-os-samples/tree/main/ComposeStarter and
- * https://github.com/android/wear-os-samples/tree/main/ComposeAdvanced to find the most up to date
- * changes to the libraries and their usages.
- */
-
 package com.test.myapplication.presentation
 
+import android.content.Intent
 import android.os.Bundle
+import android.util.Log
+import android.widget.Button
 import androidx.activity.ComponentActivity
-import androidx.activity.compose.setContent
-import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
-import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Devices
-import androidx.compose.ui.tooling.preview.Preview
-import androidx.wear.compose.material.MaterialTheme
-import androidx.wear.compose.material.Text
-import androidx.wear.compose.material.TimeText
 import com.test.myapplication.R
-import com.test.myapplication.presentation.theme.MyApplicationTheme
 
 class MainActivity : ComponentActivity() {
-    override fun onCreate(savedInstanceState: Bundle?) {
-        installSplashScreen()
 
+    override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        setTheme(android.R.style.Theme_DeviceDefault)
+        // XML 레이아웃 설정
+        setContentView(R.layout.activity_main)
 
-        setContent {
-            WearApp("Android")
-        }
+        // 뷰 초기화
+        val btnTransport = findViewById<Button>(R.id.btn_transport)
+        val btnAudioGuide = findViewById<Button>(R.id.btn_audio_guide)
+        val btnIoTHome = findViewById<Button>(R.id.btn_iot_home)
+
+        // 클릭 이벤트 설정
+        btnTransport.setOnClickListener { navigateToActivity(TransportActivity::class.java) }
+        btnAudioGuide.setOnClickListener { navigateToActivity(AudioGuideActivity::class.java) }
+        btnIoTHome.setOnClickListener { navigateToActivity(IoTHomeActivity::class.java) }
     }
-}
 
-@Composable
-fun WearApp(greetingName: String) {
-    MyApplicationTheme {
-        Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .background(MaterialTheme.colors.background),
-            contentAlignment = Alignment.Center
-        ) {
-            TimeText()
-            Greeting(greetingName = greetingName)
-        }
+    // 화면 전환 메서드
+    private fun navigateToActivity(activityClass: Class<*>) {
+        Log.d("MainActivity", "${activityClass.simpleName}로 이동")
+        startActivity(Intent(this, activityClass))
     }
-}
-
-@Composable
-fun Greeting(greetingName: String) {
-    Text(
-        modifier = Modifier.fillMaxWidth(),
-        textAlign = TextAlign.Center,
-        color = MaterialTheme.colors.primary,
-        text = stringResource(R.string.hello_world, greetingName)
-    )
-}
-
-@Preview(device = Devices.WEAR_OS_SMALL_ROUND, showSystemUi = true)
-@Composable
-fun DefaultPreview() {
-    WearApp("Preview Android")
 }

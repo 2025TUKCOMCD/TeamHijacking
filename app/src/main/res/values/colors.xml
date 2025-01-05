@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="primaryColor">#6200EE</color>
+    <color name="primaryColorVariant">#3700B3</color>
+    <color name="accentColor">#03DAC5</color>
+    <color name="backgroundGray">#212121</color>
+
+    <color name="mainPrimaryColor">#BB86FC</color>
+    <color name="mainPrimaryVariant">#6200EA</color>
+
+    <color name="transportPrimaryColor">#03DAC5</color>
+    <color name="transportPrimaryVariant">#018786</color>
+
+    <color name="onPrimaryColor">#FFFFFF</color>
+    <color name="onSurfaceColor">#000000</color>
+    <color name="onBackgroundColor">#FFFFFF</color>
+    <color name="splashScreenBackgroundColor">#000000</color>
+</resources>
+

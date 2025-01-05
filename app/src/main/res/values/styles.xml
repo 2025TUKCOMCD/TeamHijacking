@@ -1,8 +1,62 @@
 <resources>
+    <!-- 공통 테마 -->
+    <style name="BaseTheme" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <!-- 기본 색상 -->
+        <item name="colorPrimary">@color/primaryColor</item>
+        <item name="colorPrimaryVariant">@color/primaryColorVariant</item>
+        <item name="colorAccent">@color/accentColor</item>
 
+        <!-- 텍스트 및 배경 색상 -->
+        <item name="colorOnPrimary">@color/onPrimaryColor</item>
+        <item name="colorOnSurface">@color/onSurfaceColor</item>
+        <item name="colorOnBackground">@color/onBackgroundColor</item>
+
+        <!-- 액션바와 타이틀바 설정 -->
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+
+    </style>
+
+    <style name="BaseButtonStyle">
+        <item name="android:layout_width">200dp</item>
+        <item name="android:layout_height">50dp</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:padding">8dp</item>
+        <item name="android:layout_marginBottom">20dp</item>
+        <item name="android:gravity">center</item>
+    </style>
+
+    <!-- MainActivity 테마 -->
+    <style name="MainActivityTheme" parent="BaseTheme">
+        <!-- MainActivity 전용 색상 -->
+        <item name="colorPrimary">@color/mainPrimaryColor</item>
+        <item name="colorPrimaryVariant">@color/mainPrimaryVariant</item>
+    </style>
+
+    <!-- MainActivity Starting 테마 (Splash Screen) -->
     <style name="MainActivityTheme.Starting" parent="Theme.SplashScreen">
-        <item name="windowSplashScreenBackground">@android:color/black</item>
+        <!-- 스플래시 화면 배경색 -->
+        <item name="windowSplashScreenBackground">@color/splashScreenBackgroundColor</item>
+        <!-- 스플래시 화면 아이콘 -->
         <item name="windowSplashScreenAnimatedIcon">@drawable/splash_icon</item>
-        <item name="postSplashScreenTheme">@android:style/Theme.DeviceDefault</item>
+        <!-- 스플래시 이후 적용될 테마 -->
+        <item name="postSplashScreenTheme">@style/MainActivityTheme</item>
+    </style>
+
+    <!-- TransportActivity 테마 -->
+    <style name="TransportActivityTheme" parent="BaseTheme">
+        <!-- TransportActivity 전용 색상 -->
+        <item name="colorPrimary">@color/transportPrimaryColor</item>
+        <item name="colorPrimaryVariant">@color/transportPrimaryVariant</item>
+    </style>
+
+    <!-- TransportActivity Starting 테마 (Splash Screen) -->
+    <style name="TransportActivityTheme.Starting" parent="Theme.SplashScreen">
+        <!-- 스플래시 화면 배경색 -->
+        <item name="windowSplashScreenBackground">@color/splashScreenBackgroundColor</item>
+        <!-- 스플래시 화면 아이콘 -->
+        <item name="windowSplashScreenAnimatedIcon">@drawable/splash_icon</item>
+        <!-- 스플래시 이후 적용될 테마 -->
+        <item name="postSplashScreenTheme">@style/TransportActivityTheme</item>
     </style>
 </resources>
