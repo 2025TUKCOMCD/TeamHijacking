@@ -24,7 +24,7 @@
 <img width="900" src = "https://github.com/user-attachments/assets/656a2ebb-ea70-41cb-acb7-3caef437a1bf">
 </p>
 
-## 시스템 구성도
+## 🖋️ 시스템 구성도 🖋️
 
 <table align="center">
     <tr>
