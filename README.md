@@ -26,10 +26,12 @@
 
 ## 시스템 구성도
 <p align="center">
+IOT 등록, 홈 서비스
 <img width="900" src = "https://github.com/2025TUKCOMCD/TeamHijacking/blob/main/%EC%8B%9C%EC%8A%A4%ED%85%9C%20%EA%B5%AC%EC%84%B1%EB%8F%84/%EC%8B%9C%EC%8A%A4%ED%85%9C%20%EA%B5%AC%EC%84%B1%EB%8F%84%20IOT.png">
+
+<img width="900" src = "https://github.com/2025TUKCOMCD/TeamHijacking/blob/main/%EC%8B%9C%EC%8A%A4%ED%85%9C%20%EA%B5%AC%EC%84%B1%EB%8F%84/%EC%8B%9C%EC%8A%A4%ED%85%9C%20%EA%B5%AC%EC%84%B1%EB%8F%84%20%EB%8C%80%EC%A4%91%EA%B5%90%ED%86%B5%EC%95%88%EB%82%B4.png
+">
 </p>
-
-
 ## ⚙ 기술 스택 ⚙
 
 <div align="center">
