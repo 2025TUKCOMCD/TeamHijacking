@@ -45,6 +45,9 @@
 <img width="900" src = "https://github.com/user-attachments/assets/7d839fcf-5cdb-40eb-8b92-138c6adea852"> <br>
 </p>
 
+> 상세일정을 보고싶다면?
+> <a href = "https://drive.google.com/file/d/1rFrqaWC5YcvNnjylfoi3GrwuYjLE4Qvq/view?usp=drive_link"> 상세일정</a>
+
 # 📌 아이디어 회의 📌
 매주 월요일 6pm / 금요일 2pm 
 
