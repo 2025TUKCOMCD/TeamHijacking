@@ -42,7 +42,7 @@
 
 # 📆 일정 📆
 <p align="center">
-<img width="900" src = "https://github.com/user-attachments/assets/80d9cc27-b99e-4c90-af78-ce7700aed50f"> <br>
+<img width="900" src = "https://github.com/user-attachments/assets/7d839fcf-5cdb-40eb-8b92-138c6adea852"> <br>
 </p>
 
 # 📌 아이디어 회의 📌
