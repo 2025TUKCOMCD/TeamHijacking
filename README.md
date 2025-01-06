@@ -1,17 +1,17 @@
 ![header](https://capsule-render.vercel.app/api?type=waving&color=0&text=TeamHijacking)
 # 팀 소개 🔫🔫🔫
  * Hijacking이란 말에서 어원을 따와서 사람들의 머리속을 탁하고 때릴만한 아이디어로 세상을 놀라게 해주겠다는 의의를 가지고 있습니다.
-## 프로젝트 주제
+# 프로젝트 주제
  * 스마트 워치를 이용한, 시각장애인 일상생활 보조 애플리케이션
 
-## 🚩 프로젝트 목표 🚩
+# 🚩 프로젝트 목표 🚩
  * 프로젝트 목표
-## 🖥 시스템 소프트웨어 아키텍처 🖥
+# 🖥 시스템 소프트웨어 아키텍처 🖥
 <p align="center">
 <img width="680" src = "https://github.com/user-attachments/assets/656a2ebb-ea70-41cb-acb7-3caef437a1bf">
 </p>
 
-## ⚙ 기술 스택 ⚙
+# ⚙ 기술 스택 ⚙
 
 <p align = "center">
  <strong> Frontend </strong><br>
@@ -43,12 +43,12 @@
   
 </p>
 
-## 📆 일정 📆
+# 📆 일정 📆
 <p align="center">
 <img width="900" src = "https://github.com/user-attachments/assets/80d9cc27-b99e-4c90-af78-ce7700aed50f"> <br>
 </p>
   
-## 📋 프로젝트 프레젠테이션 자료 📋
+# 📋 프로젝트 프레젠테이션 자료 📋
  * 프레젠테이션 자료 첨부 (예정)
 
 # 📌 아이디어 회의 📌
@@ -62,7 +62,7 @@
 - <a href = "https://drive.google.com/file/d/176_STpg_pBsIT_EmeeFJf_z5qdy2MSUh/view?usp=sharing">팀 하이재킹 제안서</a>
 - <a href = "https://drive.google.com/file/d/14pNoPenm9NCOFus4_Id3Xb9OWA8gTNcc/view?usp=sharing">팀 하이재킹 요약 계획서</a>
 
-## 🚥 개발자 🚥
+# 🚥 개발자 🚥
 **김현빈** | **서하연** | **연찬호** | **김의연**
 :------: | :-------: | :-------: | :------: 
 <img src="https://avatars.githubusercontent.com/u/134044125?s=64&v=4" width="150" height="150"/> | <img src="https://avatars.githubusercontent.com/u/67358565?v=4" width="150" height="150"/> | <img src="https://avatars.githubusercontent.com/u/133322979?v=4" width="150" height="150"/> | <img src="https://avatars.githubusercontent.com/u/150454163?v=4" width="150" height="150"/>
