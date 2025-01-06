@@ -26,25 +26,28 @@
 
 ## 시스템 구성도
 
-### 사용자 인증
-<p align="center">
-    <img src="https://github.com/2025TUKCOMCD/TeamHijacking/blob/main/%EC%8B%9C%EC%8A%A4%ED%85%9C%20%EA%B5%AC%EC%84%B1%EB%8F%84/%EC%8B%9C%EC%8A%A4%ED%85%9C%20%EA%B5%AC%EC%84%B1%EB%8F%84%20%EC%82%AC%EC%9A%A9%EC%9E%90%20%EC%9D%B8%EC%A6%9D.png" alt="사용자 인증 이미지" width="900">
-</p>
-
-### 대중교통 안내
-<p align="center">
-    <img src="https://github.com/2025TUKCOMCD/TeamHijacking/blob/main/%EC%8B%9C%EC%8A%A4%ED%85%9C%20%EA%B5%AC%EC%84%B1%EB%8F%84/%EC%8B%9C%EC%8A%A4%ED%85%9C%20%EA%B5%AC%EC%84%B1%EB%8F%84%20%EB%8C%80%EC%A4%91%EA%B5%90%ED%86%B5%EC%95%88%EB%82%B4.png" alt="대중교통 안내 이미지" width="900">
-</p>
-
-### IOT 등록, 홈 서비스
-<p align="center">
-    <img src="https://github.com/2025TUKCOMCD/TeamHijacking/blob/main/%EC%8B%9C%EC%8A%A4%ED%85%9C%20%EA%B5%AC%EC%84%B1%EB%8F%84/%EC%8B%9C%EC%8A%A4%ED%85%9C%20%EA%B5%AC%EC%84%B1%EB%8F%84%20IOT.png" alt="IOT 등록, 홈 서비스 이미지" width="900">
-</p>
-
-### 음향신호기 기능
-<p align="center">
-    <img src="https://github.com/2025TUKCOMCD/TeamHijacking/blob/main/%EC%8B%9C%EC%8A%A4%ED%85%9C%20%EA%B5%AC%EC%84%B1%EB%8F%84/%EC%8B%9C%EC%8A%A4%ED%85%9C%20%EA%B5%AC%EC%84%B1%EB%8F%84%20%EC%9D%8C%ED%96%A5%EC%8B%A0%ED%98%B8%EA%B8%B0.png" alt="음향신호기 기능 이미지" width="900">
-</p>
+<table align="center">
+    <tr>
+        <td align="center">
+            <h3>사용자 인증</h3>
+            <img src="https://github.com/2025TUKCOMCD/TeamHijacking/blob/main/%EC%8B%9C%EC%8A%A4%ED%85%9C%20%EA%B5%AC%EC%84%B1%EB%8F%84/%EC%8B%9C%EC%8A%A4%ED%85%9C%20%EA%B5%AC%EC%84%B1%EB%8F%84%20%EC%82%AC%EC%9A%A9%EC%9E%90%20%EC%9D%B8%EC%A6%9D.png" alt="사용자 인증 이미지" width="400">
+        </td>
+        <td align="center">
+            <h3>대중교통 안내</h3>
+            <img src="https://github.com/2025TUKCOMCD/TeamHijacking/blob/main/%EC%8B%9C%EC%8A%A4%ED%85%9C%20%EA%B5%AC%EC%84%B1%EB%8F%84/%EC%8B%9C%EC%8A%A4%ED%85%9C%20%EA%B5%AC%EC%84%B1%EB%8F%84%20%EB%8C%80%EC%A4%91%EA%B5%90%ED%86%B5%EC%95%88%EB%82%B4.png" alt="대중교통 안내 이미지" width="400">
+        </td>
+    </tr>
+    <tr>
+        <td align="center">
+            <h3>IOT 등록, 홈 서비스</h3>
+            <img src="https://github.com/2025TUKCOMCD/TeamHijacking/blob/main/%EC%8B%9C%EC%8A%A4%ED%85%9C%20%EA%B5%AC%EC%84%B1%EB%8F%84/%EC%8B%9C%EC%8A%A4%ED%85%9C%20%EA%B5%AC%EC%84%B1%EB%8F%84%20IOT.png" alt="IOT 등록, 홈 서비스 이미지" width="400">
+        </td>
+        <td align="center">
+            <h3>음향신호기 기능</h3>
+            <img src="https://github.com/2025TUKCOMCD/TeamHijacking/blob/main/%EC%8B%9C%EC%8A%A4%ED%85%9C%20%EA%B5%AC%EC%84%B1%EB%8F%84/%EC%8B%9C%EC%8A%A4%ED%85%9C%20%EA%B5%AC%EC%84%B1%EB%8F%84%20%EC%9D%8C%ED%96%A5%EC%8B%A0%ED%98%B8%EA%B8%B0.png" alt="음향신호기 기능 이미지" width="400">
+        </td>
+    </tr>
+</table>
 
 ## ⚙ 기술 스택 ⚙
 
