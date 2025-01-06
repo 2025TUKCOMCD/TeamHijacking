@@ -2,33 +2,30 @@ package com.test.myapplication.presentation
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
-import android.widget.Button
-import androidx.activity.ComponentActivity
-import com.test.myapplication.R
+import androidx.appcompat.app.AppCompatActivity
+import com.test.myapplication.databinding.ActivityMainBinding
 
-class MainActivity : ComponentActivity() {
+class MainActivity : AppCompatActivity() {
+    private lateinit var binding: ActivityMainBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        // XML 레이아웃 설정
-        setContentView(R.layout.activity_main)
+        // View Binding 초기화
+        binding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
-        // 뷰 초기화
-        val btnTransport = findViewById<Button>(R.id.btn_transport)
-        val btnAudioGuide = findViewById<Button>(R.id.btn_audio_guide)
-        val btnIoTHome = findViewById<Button>(R.id.btn_iot_home)
+        // 버튼 클릭 이벤트 설정
+        binding.btnTransport.setOnClickListener {
+            startActivity(Intent(this, TransportActivity::class.java))
+        }
 
-        // 클릭 이벤트 설정
-        btnTransport.setOnClickListener { navigateToActivity(TransportActivity::class.java) }
-        btnAudioGuide.setOnClickListener { navigateToActivity(AudioGuideActivity::class.java) }
-        btnIoTHome.setOnClickListener { navigateToActivity(IoTHomeActivity::class.java) }
-    }
+        binding.btnAudioGuide.setOnClickListener {
+            startActivity(Intent(this, AudioGuideActivity::class.java))
+        }
 
-    // 화면 전환 메서드
-    private fun navigateToActivity(activityClass: Class<*>) {
-        Log.d("MainActivity", "${activityClass.simpleName}로 이동")
-        startActivity(Intent(this, activityClass))
+        binding.btnIotHome.setOnClickListener {
+            startActivity(Intent(this, IoTHomeActivity::class.java))
+        }
     }
 }

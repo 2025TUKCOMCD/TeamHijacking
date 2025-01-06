@@ -1,10 +1,55 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".presentation.TransportActivity">
+    android:background="@color/backgroundGray">
 
+    <TextView
+        android:id="@+id/tv_transport"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="대중교통"
+        android:textSize="20sp"
+        android:textColor="@color/primaryColor"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_marginTop="32dp"
+        app:layout_constraintStart_toStartOf="parent"/>
+
+    <Button
+        android:id="@+id/btn_bus"
+        android:layout_width="150dp"
+        android:layout_height="50dp"
+        android:text="버스"
+        android:backgroundTint="@color/primaryColor"
+        android:textColor="@color/onPrimaryColor"
+        app:layout_constraintTop_toBottomOf="@id/tv_transport"
+        app:layout_marginTop="24dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <Button
+        android:id="@+id/btn_subway"
+        android:layout_width="150dp"
+        android:layout_height="50dp"
+        android:text="지하철"
+        android:backgroundTint="@color/primaryColorVariant"
+        android:textColor="@color/onPrimaryColor"
+        app:layout_constraintTop_toBottomOf="@id/btn_bus"
+        app:layout_marginTop="24dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <Button
+        android:id="@+id/btn_back_transport"
+        android:layout_width="150dp"
+        android:layout_height="50dp"
+        android:text="뒤로가기"
+        android:backgroundTint="@color/primaryColor"
+        android:textColor="@color/onPrimaryColor"
+        app:layout_constraintTop_toBottomOf="@id/btn_subway"
+        app:layout_marginTop="24dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>

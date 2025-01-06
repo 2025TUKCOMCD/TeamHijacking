@@ -1,5 +1,3 @@
-import org.jetbrains.kotlin.storage.CacheResetOnProcessCanceled.enabled
-
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.jetbrains.kotlin.android)
@@ -19,6 +17,10 @@ android {
             useSupportLibrary = true
         }
 
+    }
+
+    buildFeatures {
+        viewBinding = true
     }
 
     buildTypes {
@@ -53,6 +55,7 @@ android {
 dependencies {
 
     implementation(libs.play.services.wearable)
+    implementation(libs.constraintlayout.v214)
     implementation(libs.material)
     implementation(platform(libs.compose.bom))
     implementation(libs.ui)

@@ -7,10 +7,10 @@
     android:background="@color/backgroundGray">
 
     <TextView
-        android:id="@+id/tv_audio_guide"
+        android:id="@+id/tv_iot_home"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Audio Guide 기능"
+        android:text="IoT 스마트 홈"
         android:textSize="20sp"
         android:textColor="@color/primaryColor"
         app:layout_constraintTop_toTopOf="parent"
@@ -19,13 +19,13 @@
         app:layout_constraintEnd_toEndOf="parent" />
 
     <Button
-        android:id="@+id/btn_back_audio"
+        android:id="@+id/btn_back_iot"
         android:layout_width="150dp"
         android:layout_height="50dp"
         android:text="뒤로가기"
         android:backgroundTint="@color/primaryColor"
         android:textColor="@color/onPrimaryColor"
-        app:layout_constraintTop_toBottomOf="@id/tv_audio_guide"
+        app:layout_constraintTop_toBottomOf="@id/tv_iot_home"
         app:layout_marginTop="24dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />

@@ -6,7 +6,6 @@
     android:layout_height="match_parent"
     android:background="@color/backgroundGray">
 
-    <!-- 스크롤 뷰 -->
     <ScrollView
         android:layout_width="0dp"
         android:layout_height="0dp"
@@ -25,25 +24,33 @@
             <!-- 대중교통 버튼 -->
             <Button
                 android:id="@+id/btn_transport"
-                style="@style/BaseButtonStyle"
+                android:layout_width="150dp"
+                android:layout_height="40dp"
                 android:text="대중교통"
-                android:backgroundTint="@color/primaryColor"
-                android:textColor="@color/onPrimaryColor" />
+                android:textSize="12sp"
+                android:background="@drawable/rounded_button"
+                android:textColor="@color/onPrimaryColor"
+                android:layout_marginBottom="20dp" />
 
             <!-- 음향 유도기 버튼 -->
             <Button
                 android:id="@+id/btn_audio_guide"
-                style="@style/BaseButtonStyle"
+                android:layout_width="150dp"
+                android:layout_height="40dp"
                 android:text="음향 유도기"
-                android:backgroundTint="@color/accentColor"
-                android:textColor="@color/onBackgroundColor" />
+                android:textSize="12sp"
+                android:background="@drawable/rounded_button"
+                android:textColor="@color/onBackgroundColor"
+                android:layout_marginBottom="20dp" />
 
             <!-- IoT 스마트 홈 버튼 -->
             <Button
                 android:id="@+id/btn_iot_home"
-                style="@style/BaseButtonStyle"
+                android:layout_width="150dp"
+                android:layout_height="40dp"
                 android:text="IoT 스마트 홈"
-                android:backgroundTint="@color/transportPrimaryColor"
+                android:textSize="12sp"
+                android:background="@drawable/rounded_button"
                 android:textColor="@color/onPrimaryColor" />
 
         </LinearLayout>

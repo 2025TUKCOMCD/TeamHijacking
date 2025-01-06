@@ -1,17 +1,18 @@
 [versions]
 agp = "8.5.1"
+constraintlayoutVersion = "2.2.0"
 kotlin = "1.9.0"
 playServicesWearable = "19.0.0"
-composeBom = "2024.04.01"
-composeMaterial = "1.2.1"
-composeFoundation = "1.2.1"
-activityCompose = "1.7.2"
+composeBom = "2024.12.01"
+composeMaterial = "1.4.0"
+composeFoundation = "1.4.0"
+activityCompose = "1.9.3"
 coreSplashscreen = "1.0.1"
-tiles = "1.1.0"
-tilesMaterial = "1.1.0"
-horologistComposeTools = "0.4.8"
-horologistTiles = "0.4.8"
-watchfaceComplicationsDataSourceKtx = "1.1.1"
+tiles = "1.4.1"
+tilesMaterial = "1.4.1"
+horologistComposeTools = "0.6.22"
+horologistTiles = "0.6.22"
+watchfaceComplicationsDataSourceKtx = "1.2.1"
 appcompat = "1.7.0"
 material = "1.12.0"
 activity = "1.9.3"
@@ -19,6 +20,7 @@ constraintlayout = "2.2.0"
 wear = "1.3.0"
 
 [libraries]
+constraintlayout-v214 = { module = "androidx.constraintlayout:constraintlayout", version.ref = "constraintlayoutVersion" }
 play-services-wearable = { group = "com.google.android.gms", name = "play-services-wearable", version.ref = "playServicesWearable" }
 compose-bom = { group = "androidx.compose", name = "compose-bom", version.ref = "composeBom" }
 ui = { group = "androidx.compose.ui", name = "ui" }

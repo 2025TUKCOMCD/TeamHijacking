@@ -28,16 +28,18 @@
         <!-- Sub Activities -->
         <activity
             android:name=".presentation.TransportActivity"
-            android:exported="false"
+            android:exported="true"
             android:theme="@style/TransportActivityTheme.Starting" />
+
         <activity
             android:name=".presentation.AudioGuideActivity"
-            android:exported="false"
-            android:theme="@style/TransportActivityTheme.Starting" />
+            android:exported="true"
+            android:theme="@style/AudioGuideActivityTheme" />
+
         <activity
             android:name=".presentation.IoTHomeActivity"
-            android:exported="false"
-            android:theme="@style/TransportActivityTheme.Starting" />
+            android:exported="true"
+            android:theme="@style/IoTHomeActivityTheme" />
 
         <!-- Wear OS Metadata -->
         <meta-data

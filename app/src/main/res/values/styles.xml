@@ -59,4 +59,14 @@
         <!-- 스플래시 이후 적용될 테마 -->
         <item name="postSplashScreenTheme">@style/TransportActivityTheme</item>
     </style>
+
+    <!-- AudioGuideActivity 테마 -->
+    <style name="AudioGuideActivityTheme" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <item name="colorPrimary">@color/accentColor</item>
+    </style>
+
+    <!-- IoTHomeActivity 테마 -->
+    <style name="IoTHomeActivityTheme" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <item name="colorPrimary">@color/transportPrimaryColor</item>
+    </style>
 </resources>

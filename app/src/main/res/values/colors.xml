@@ -4,6 +4,7 @@
     <color name="primaryColorVariant">#3700B3</color>
     <color name="accentColor">#03DAC5</color>
     <color name="backgroundGray">#212121</color>
+    <color name="backgroundDark">#121212</color>
 
     <color name="mainPrimaryColor">#BB86FC</color>
     <color name="mainPrimaryVariant">#6200EA</color>
