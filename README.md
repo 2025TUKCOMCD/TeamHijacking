@@ -37,25 +37,22 @@
  <strong> ETC </strong><br>
   <img src="https://img.shields.io/badge/figma-5B0BB5?style=for-the-badge&logo=figma&logoColor=white" alt="icon" />
   <img src="https://img.shields.io/badge/github-181717?style=for-the-badge&logo=github&logoColor=white">
-  
+  <img src="https://img.shields.io/badge/discord-5865F2?style=for-the-badge&logo=discord&logoColor=white">
 </p>
 
 # 📆 일정 📆
 <p align="center">
 <img width="900" src = "https://github.com/user-attachments/assets/80d9cc27-b99e-4c90-af78-ce7700aed50f"> <br>
 </p>
-  
-# 📋 프로젝트 프레젠테이션 자료 📋
- * 프레젠테이션 자료 첨부 (예정)
 
 # 📌 아이디어 회의 📌
+매주 월요일 6pm / 금요일 2pm 
 
-## 회의 통합
+## 자료실
  🗂 통합 자료
 - <a href = "https://drive.google.com/file/d/1PWDy0bk7yWFf5zSxnszCO37uCx1hHFtU/view?usp=sharing">팀 하이재킹 아이디어</a>
-
-## 회의 결과
- 🗂 회의 결과물
+***
+ 🗂 종합설계기획 발표 및 제출 서류
 - <a href = "https://drive.google.com/file/d/176_STpg_pBsIT_EmeeFJf_z5qdy2MSUh/view?usp=sharing">팀 하이재킹 제안서</a>
 - <a href = "https://drive.google.com/file/d/14pNoPenm9NCOFus4_Id3Xb9OWA8gTNcc/view?usp=sharing">팀 하이재킹 요약 계획서</a>
 
