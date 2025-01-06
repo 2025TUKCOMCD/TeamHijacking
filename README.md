@@ -1,11 +1,11 @@
 ![header](https://capsule-render.vercel.app/api?type=waving&color=0&text=TeamHijacking)
-# 팀 소개 🔫🔫🔫
+# 🔫  팀 소개 🔫
  * Hijacking이란 말에서 어원을 따와서 사람들의 머리속을 탁하고 때릴만한 아이디어로 세상을 놀라게 해주겠다는 의의를 가지고 있습니다.
 # 프로젝트 주제
  * 스마트 워치를 이용한, 시각장애인 일상생활 보조 애플리케이션
 
 # 🚩 프로젝트 목표 🚩
- * 프로젝트 목표
+ * 비약적인 기술의 발전이 있었지만 그에 따른 시각장애인들의 불편함도 증가 할 수 있다는 사실을 알았습니다.<br> 저희 팀은 시각장애인들에게 접근성이 용이한 스마트워치를 활용하여 <br>이러한 기술의 간극을 줄이고 시각장애인의 삶의 질 향상을 목표로 삼았습니다.
 # 🖥 시스템 소프트웨어 아키텍처 🖥
 <p align="center">
 <img width="680" src = "https://github.com/user-attachments/assets/656a2ebb-ea70-41cb-acb7-3caef437a1bf">
