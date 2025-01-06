@@ -24,6 +24,11 @@
 <img width="900" src = "https://github.com/user-attachments/assets/656a2ebb-ea70-41cb-acb7-3caef437a1bf">
 </p>
 
+## 시스템 구성도
+<p align="center">
+<img width="900" src = "https://github.com/2025TUKCOMCD/TeamHijacking/blob/main/%EC%8B%9C%EC%8A%A4%ED%85%9C%20%EA%B5%AC%EC%84%B1%EB%8F%84/%EC%8B%9C%EC%8A%A4%ED%85%9C%20%EA%B5%AC%EC%84%B1%EB%8F%84%20IOT.png">
+</p>
+
 
 ## ⚙ 기술 스택 ⚙
 
