@@ -46,7 +46,7 @@
 </p>
 
 > 상세일정을 보고싶다면?
-> <a href = "https://drive.google.com/file/d/1rFrqaWC5YcvNnjylfoi3GrwuYjLE4Qvq/view?usp=drive_link"> TH_간트차트</a>
+> <a href = "https://drive.google.com/file/d/1rFrqaWC5YcvNnjylfoi3GrwuYjLE4Qvq/view?usp=drive_link"> TH_GanttChart</a>
 
 # 📌 아이디어 회의 📌
 매주 월요일 6pm / 금요일 2pm 
