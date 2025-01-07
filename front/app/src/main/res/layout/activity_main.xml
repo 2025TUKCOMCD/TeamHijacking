@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".presentation.MainActivity">
+
+    <ScrollView
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="16dp"
+            android:gravity="center_horizontal">
+
+            <!-- 대중교통 버튼 -->
+            <Button
+                android:id="@+id/btn_transport"
+                android:layout_width="150dp"
+                android:layout_height="40dp"
+                android:text="대중교통"
+                android:textSize="12sp"
+                android:background="@drawable/rounded_button"
+                android:textColor="@color/onPrimaryColor"
+                android:layout_marginBottom="20dp" />
+
+            <!-- 음향 유도기 버튼 -->
+            <Button
+                android:id="@+id/btn_audio_guide"
+                android:layout_width="150dp"
+                android:layout_height="40dp"
+                android:text="음향 유도기"
+                android:textSize="12sp"
+                android:background="@drawable/rounded_button"
+                android:textColor="@color/onBackgroundColor"
+                android:layout_marginBottom="20dp" />
+
+            <!-- IoT 스마트 홈 버튼 -->
+            <Button
+                android:id="@+id/btn_iot_home"
+                android:layout_width="150dp"
+                android:layout_height="40dp"
+                android:text="IoT 스마트 홈"
+                android:textSize="12sp"
+                android:background="@drawable/rounded_button"
+                android:textColor="@color/onPrimaryColor" />
+
+        </LinearLayout>
+    </ScrollView>
+</androidx.constraintlayout.widget.ConstraintLayout>

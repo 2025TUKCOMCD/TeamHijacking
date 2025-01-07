@@ -1,87 +1,32 @@
 package com.example.front.presentation
 
 import android.os.Bundle
-import android.util.Log
-import androidx.activity.ComponentActivity
-import androidx.activity.compose.setContent
-import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.runtime.*
-import androidx.compose.ui.Alignment
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Devices
-import androidx.compose.ui.tooling.preview.Preview
-import androidx.wear.compose.material.MaterialTheme
-import androidx.wear.compose.material.Text
-import androidx.wear.compose.material.TimeText
-import com.example.front.data.RouteProcessor
-import com.example.front.presentation.theme.FrontTheme
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
+import android.widget.Button
+import androidx.appcompat.app.AppCompatActivity
+import com.example.front.R
 
-class MainActivity : ComponentActivity() {
+class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        // activity_main.xml 레이아웃 설정
+        setContentView(R.layout.activity_main)
 
-        setContent {
-            var routeData by remember { mutableStateOf("Loading...") }
+        // XML에서 정의된 버튼들을 연결
+        val transportButton: Button = findViewById(R.id.btn_transport)
+        val audioGuideButton: Button = findViewById(R.id.btn_audio_guide)
+        val iotHomeButton: Button = findViewById(R.id.btn_iot_home)
 
-            // API 호출 및 데이터 처리
-            LaunchedEffect(Unit) {
-                try {
-                    val result = RouteProcessor.fetchAndProcessRoutes(
-                        startLat = 37.513841, // 잠실역
-                        startLng = 127.101823,
-                        endLat = 37.476813, // 낙성대역
-                        endLng = 126.964156
-                    )
-                    Log.d("MainActivity", "Received Data from RouteProcessor: $result")
+        // 각 버튼의 클릭 이벤트 처리
+        transportButton.setOnClickListener {
+            // 대중교통 버튼 클릭 시 실행할 로직
+        }
 
-                    withContext(Dispatchers.Main) {
-                        routeData = result
-                    }
-                } catch (e: Exception) {
-                    Log.e("MainActivity", "Error fetching routes", e)
-                    routeData = "Failed to load data."
-                }
-            }
+        audioGuideButton.setOnClickListener {
+            // 음향 유도기 버튼 클릭 시 실행할 로직
+        }
 
-            WearApp(routeData)
+        iotHomeButton.setOnClickListener {
+            // IoT 스마트 홈 버튼 클릭 시 실행할 로직
         }
     }
-}
-
-@Composable
-fun WearApp(routeData: String) {
-    FrontTheme {
-        Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .background(MaterialTheme.colors.background),
-            contentAlignment = Alignment.Center
-        ) {
-            TimeText()
-            Greeting(routeData)
-        }
-    }
-}
-
-@Composable
-fun Greeting(routeData: String) {
-    Text(
-        modifier = Modifier.fillMaxWidth(),
-        textAlign = TextAlign.Center,
-        color = MaterialTheme.colors.primary,
-        text = routeData
-    )
-}
-
-@Preview(device = Devices.WEAR_OS_SMALL_ROUND, showSystemUi = true)
-@Composable
-fun DefaultPreview() {
-    WearApp("Preview Android")
 }
