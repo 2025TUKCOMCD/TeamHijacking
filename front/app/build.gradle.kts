@@ -1,6 +1,7 @@
 plugins {
     alias(libs.plugins.androidApplication)
-    alias(libs.plugins.jetbrainsKotlinAndroid)
+    //alias(libs.plugins.jetbrainsKotlinAndroid)
+    id("org.jetbrains.kotlin.android")
 }
 
 android {
@@ -45,6 +46,12 @@ android {
         resources {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
         }
+    }
+
+    //화면 전환 가능하게 하는 코드
+    buildFeatures{
+        viewBinding  = true
+        dataBinding = true
     }
 }
 

@@ -15,6 +15,11 @@
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
     </style>
+    <style name="Transportation_Main_Theme" parent="Theme.AppCompat.Light.NoActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/mainPrimaryColor</item>
+        <item name="colorPrimaryVariant">@color/mainPrimaryVariant</item>
+    </style>
 
     <style name="BaseButtonStyle">
         <item name="android:layout_width">200dp</item>

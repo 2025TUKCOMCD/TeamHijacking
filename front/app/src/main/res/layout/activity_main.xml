@@ -6,6 +6,7 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/backgroundDark"
     tools:context=".presentation.MainActivity">
 
     <ScrollView
@@ -31,7 +32,7 @@
                 android:text="대중교통"
                 android:textSize="12sp"
                 android:background="@drawable/rounded_button"
-                android:textColor="@color/onPrimaryColor"
+                android:textColor="@color/backgroundDark"
                 android:layout_marginBottom="20dp" />
 
             <!-- 음향 유도기 버튼 -->
@@ -42,7 +43,7 @@
                 android:text="음향 유도기"
                 android:textSize="12sp"
                 android:background="@drawable/rounded_button"
-                android:textColor="@color/onBackgroundColor"
+                android:textColor="@color/backgroundDark"
                 android:layout_marginBottom="20dp" />
 
             <!-- IoT 스마트 홈 버튼 -->
@@ -53,7 +54,7 @@
                 android:text="IoT 스마트 홈"
                 android:textSize="12sp"
                 android:background="@drawable/rounded_button"
-                android:textColor="@color/onPrimaryColor" />
+                android:textColor="@color/backgroundDark" />
 
         </LinearLayout>
     </ScrollView>
