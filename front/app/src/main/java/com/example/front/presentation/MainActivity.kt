@@ -4,10 +4,9 @@ import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
-import com.example.front.R
+import com.example.front.audioguide.AudioGuideActivity
 import com.example.front.databinding.ActivityMainBinding
-import com.example.front.databinding.ActivityTransportationMainBinding
-import com.example.front.transportation.transportation_main
+import com.example.front.transportation.TransportationMainActivity
 
 class MainActivity : AppCompatActivity() {
 
@@ -27,13 +26,15 @@ class MainActivity : AppCompatActivity() {
 
         // 각 버튼의 클릭 이벤트 처리
         transportButton.setOnClickListener {
-            val intent = Intent(this, transportation_main::class.java)
-            startActivity(intent)
             // 대중교통 버튼 클릭 시 실행할 로직
+            val intent = Intent(this, TransportationMainActivity::class.java)
+            startActivity(intent)
         }
 
         audioGuideButton.setOnClickListener {
             // 음향 유도기 버튼 클릭 시 실행할 로직
+            val intent = Intent(this, AudioGuideActivity::class.java)
+            startActivity(intent)
         }
 
         iotHomeButton.setOnClickListener {
