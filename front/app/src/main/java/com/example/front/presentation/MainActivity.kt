@@ -7,6 +7,8 @@ import android.widget.ImageButton
 import androidx.appcompat.app.AppCompatActivity
 import com.example.front.audioguide.AudioGuideActivity
 import com.example.front.databinding.ActivityMainBinding
+import com.example.front.iot.HomeIotActivity
+import com.example.front.setting.SettingActivity
 import com.example.front.transportation.TransportationMainActivity
 
 class MainActivity : AppCompatActivity() {
@@ -41,10 +43,14 @@ class MainActivity : AppCompatActivity() {
 
         iotHomeButton.setOnClickListener {
             // IoT 스마트 홈 버튼 클릭 시 실행할 로직
+            val intent = Intent(this, HomeIotActivity::class.java)
+            startActivity(intent)
         }
 
         settingButton.setOnClickListener{
             // Setting 버튼 클릭 시 실행할 로직
+            val intent = Intent(this, SettingActivity::class.java)
+            startActivity(intent)
         }
     }
 }

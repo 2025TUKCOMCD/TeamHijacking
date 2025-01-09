@@ -2,7 +2,8 @@ import com.android.build.gradle.internal.cxx.configure.gradleLocalProperties
 
 plugins {
     alias(libs.plugins.androidApplication)
-    alias(libs.plugins.jetbrainsKotlinAndroid)
+    //alias(libs.plugins.jetbrainsKotlinAndroid)
+    id("org.jetbrains.kotlin.android")
     //id("org.jetbrains.kotlin.android") version "1.9.0" apply false
 
     //id("com.android.application") version "8.7.3" apply false
