@@ -11,7 +11,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 
 object RouteProcessor {
     private const val BASE_URL = "https://api.odsay.com/v1/api/"
-    private const val API_KEY = "{API_KEY}" // 실제 API 키로 교체하세요.
+    private const val API_KEY = "APIKEY" // Project->local.propertice 가서 APIKEY= 이렇게 적으면 됨 이때 "" 적지말고 그대로 적을것
     private val gson = Gson()
     private val client = OkHttpClient.Builder().build()
 
