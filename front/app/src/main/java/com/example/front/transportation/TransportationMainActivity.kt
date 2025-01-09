@@ -26,7 +26,6 @@ class TransportationMainActivity : AppCompatActivity() {
                     endLat = 37.476813, // 낙성대역
                     endLng = 126.964156
                 )
-                Log.d("TransportationMainActivity", "Received Data from RouteProcessor: $result")
             } catch (e: Exception) {
                 Log.e("TransportationMainActivity", "Error fetching routes", e)
             }
