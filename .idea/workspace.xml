@@ -26,14 +26,8 @@
     <option name="autoReloadType" value="NONE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="5a34f773-8c82-4b0a-86d3-a37d3cf6ba80" name="Changes" comment="UI/UX --음향신호기 화면쪽 이동하는 파일 분리 및 이동 로직 생성">
-      <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/deploymentTargetSelector.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/deploymentTargetSelector.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/gradle.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/gradle.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+    <list default="true" id="5a34f773-8c82-4b0a-86d3-a37d3cf6ba80" name="Changes" comment="build.gradle 파일에 buildConfig = true 추가. buildFeatures에서 나는 오류 제거 위함">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/front/app/build.gradle.kts" beforeDir="false" afterPath="$PROJECT_DIR$/front/app/build.gradle.kts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/front/gradle/wrapper/gradle-wrapper.properties" beforeDir="false" afterPath="$PROJECT_DIR$/front/gradle/wrapper/gradle-wrapper.properties" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -109,12 +103,12 @@
     &quot;assignee&quot;: &quot;Ret751&quot;
   }
 }</component>
-  <component name="GithubPullRequestsUISettings">{
-  &quot;selectedUrlAndAccountId&quot;: {
-    &quot;url&quot;: &quot;https://github.com/2025TUKCOMCD/TeamHijacking.git&quot;,
-    &quot;accountId&quot;: &quot;ad721d8a-13a7-4963-88cb-60cce07cfa39&quot;
+  <component name="GithubPullRequestsUISettings"><![CDATA[{
+  "selectedUrlAndAccountId": {
+    "url": "https://github.com/2025TUKCOMCD/TeamHijacking.git",
+    "accountId": "b516b541-0427-4eb0-ae27-65c1684fbf88"
   }
-}</component>
+}]]></component>
   <component name="MarkdownSettingsMigration">
     <option name="stateVersion" value="1" />
   </component>
@@ -135,12 +129,12 @@
     "RunOnceActivity.cidr.known.project.marker": "true",
     "RunOnceActivity.readMode.enableVisualFormatting": "true",
     "SHARE_PROJECT_CONFIGURATION_FILES": "true",
-    "android.gradle.sync.needed": "true",
     "cf.first.check.clang-format": "false",
     "cidr.known.project.marker": "true",
     "com.google.services.firebase.aqiPopupShown": "true",
     "dart.analysis.tool.window.visible": "false",
     "git-widget-placeholder": "watch",
+    "ignore.virus.scanning.warn.message": "true",
     "kotlin-language-version-configured": "true",
     "last_opened_file_path": "C:/Users/klmot/AndroidStudioProjects/TeamHijacking/front/build.gradle.kts",
     "project.structure.last.edited": "Suggestions",
@@ -337,7 +331,15 @@
       <option name="project" value="LOCAL" />
       <updated>1736299327467</updated>
     </task>
-    <option name="localTasksCounter" value="4" />
+    <task id="LOCAL-00004" summary="build.gradle 파일에 buildConfig = true 추가. buildFeatures에서 나는 오류 제거 위함">
+      <option name="closed" value="true" />
+      <created>1736395141961</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1736395141961</updated>
+    </task>
+    <option name="localTasksCounter" value="5" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -355,6 +357,7 @@
     <MESSAGE value="UI/UX 프레임 구축" />
     <MESSAGE value="UI/UX --Transportation으로 화면전환하는 로직 구현, 화면 생성시에 Theme을 설정하지 않으면 오류 발생, 앞으로 생성하면서 작업해야함--" />
     <MESSAGE value="UI/UX --음향신호기 화면쪽 이동하는 파일 분리 및 이동 로직 생성" />
-    <option name="LAST_COMMIT_MESSAGE" value="UI/UX --음향신호기 화면쪽 이동하는 파일 분리 및 이동 로직 생성" />
+    <MESSAGE value="build.gradle 파일에 buildConfig = true 추가. buildFeatures에서 나는 오류 제거 위함" />
+    <option name="LAST_COMMIT_MESSAGE" value="build.gradle 파일에 buildConfig = true 추가. buildFeatures에서 나는 오류 제거 위함" />
   </component>
 </project>
