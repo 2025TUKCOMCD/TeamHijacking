@@ -2,7 +2,7 @@ package com.example.front.presentation
 
 import android.content.Intent
 import android.os.Bundle
-import android.widget.Button
+//import android.widget.Button
 import android.widget.ImageButton
 import androidx.appcompat.app.AppCompatActivity
 import com.example.front.audioguide.AudioGuideActivity
