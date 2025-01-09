@@ -26,25 +26,30 @@
 
 ## 🖋️ 시스템 구성도 🖋️
 
+<p align="center">
+<img width="900" src = "https://github.com/user-attachments/assets/5b4bdf79-b280-4a8c-8fff-7b4668fc6840">
+</p>
+
+###  시스템 상세 모듈
 <table align="center">
     <tr>
         <td align="center">
             <h4>사용자 인증</h4>
-            <img src="https://github.com/2025TUKCOMCD/TeamHijacking/blob/main/%EC%8B%9C%EC%8A%A4%ED%85%9C%20%EA%B5%AC%EC%84%B1%EB%8F%84/%EC%8B%9C%EC%8A%A4%ED%85%9C%20%EA%B5%AC%EC%84%B1%EB%8F%84%20%EC%82%AC%EC%9A%A9%EC%9E%90%20%EC%9D%B8%EC%A6%9D.png" alt="사용자 인증 이미지" width="400">
+            <img src="https://github.com/user-attachments/assets/c7764825-cbbf-450e-a765-9d44ddd13095" alt="사용자 인증 이미지" width="400">
         </td>
         <td align="center">
             <h4>대중교통 안내</h4>
-            <img src="https://github.com/2025TUKCOMCD/TeamHijacking/blob/main/%EC%8B%9C%EC%8A%A4%ED%85%9C%20%EA%B5%AC%EC%84%B1%EB%8F%84/%EC%8B%9C%EC%8A%A4%ED%85%9C%20%EA%B5%AC%EC%84%B1%EB%8F%84%20%EB%8C%80%EC%A4%91%EA%B5%90%ED%86%B5%EC%95%88%EB%82%B4.png" alt="대중교통 안내 이미지" width="400">
+            <img src="https://github.com/user-attachments/assets/e74e2c86-f935-454c-9d0b-c494fc3cd8ad" alt="대중교통 안내 이미지" width="400">
         </td>
     </tr>
     <tr>
         <td align="center">
             <h4>IOT 등록, 홈 서비스</h4>
-            <img src="https://github.com/2025TUKCOMCD/TeamHijacking/blob/main/%EC%8B%9C%EC%8A%A4%ED%85%9C%20%EA%B5%AC%EC%84%B1%EB%8F%84/%EC%8B%9C%EC%8A%A4%ED%85%9C%20%EA%B5%AC%EC%84%B1%EB%8F%84%20IOT.png" alt="IOT 등록, 홈 서비스 이미지" width="400">
+            <img src="https://github.com/user-attachments/assets/758b457e-397b-42e4-8a75-566cebd0e3e2" alt="IOT 등록, 홈 서비스 이미지" width="400">
         </td>
         <td align="center">
             <h4>음향신호기 기능</h4>
-            <img src="https://github.com/2025TUKCOMCD/TeamHijacking/blob/main/%EC%8B%9C%EC%8A%A4%ED%85%9C%20%EA%B5%AC%EC%84%B1%EB%8F%84/%EC%8B%9C%EC%8A%A4%ED%85%9C%20%EA%B5%AC%EC%84%B1%EB%8F%84%20%EC%9D%8C%ED%96%A5%EC%8B%A0%ED%98%B8%EA%B8%B0.png" alt="음향신호기 기능 이미지" width="400">
+            <img src="https://github.com/user-attachments/assets/90cf2ca1-5986-4b84-b856-db6bbe335253" alt="음향신호기 기능 이미지" width="400">
         </td>
     </tr>
 </table>
