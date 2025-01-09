@@ -2,8 +2,10 @@ import com.android.build.gradle.internal.cxx.configure.gradleLocalProperties
 
 plugins {
     alias(libs.plugins.androidApplication)
-    //alias(libs.plugins.jetbrainsKotlinAndroid)
-    id("org.jetbrains.kotlin.android")
+    alias(libs.plugins.jetbrainsKotlinAndroid)
+    //id("org.jetbrains.kotlin.android") version "1.9.0" apply false
+
+    //id("com.android.application") version "8.7.3" apply false
 }
 
 android {
@@ -46,6 +48,7 @@ android {
     }
     buildFeatures {
         compose = true
+        buildConfig = true
     }
     composeOptions {
         kotlinCompilerExtensionVersion = "1.5.1"
