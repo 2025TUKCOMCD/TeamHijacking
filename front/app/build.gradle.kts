@@ -1,3 +1,5 @@
+import com.android.build.gradle.internal.cxx.configure.gradleLocalProperties
+
 plugins {
     alias(libs.plugins.androidApplication)
     //alias(libs.plugins.jetbrainsKotlinAndroid)
@@ -18,6 +20,7 @@ android {
             useSupportLibrary = true
         }
 
+
     }
 
     buildTypes {
@@ -27,6 +30,11 @@ android {
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
+            //리소스나 xml파일에서도 apikey 접근 가능하게 해줌 일단 필요 없어서 주석
+            //resValue("string","APIKEY", gradleLocalProperties(rootDir,providers).getProperty("APIKEY"))
+
+            //코드 내에서 api접근 가능하게함
+            buildConfigField("String","APIKEY", gradleLocalProperties(rootDir,providers).getProperty("APIKEY"))
         }
     }
     compileOptions {
@@ -52,7 +60,9 @@ android {
     buildFeatures{
         viewBinding  = true
         dataBinding = true
+
     }
+
 }
 
 dependencies {
