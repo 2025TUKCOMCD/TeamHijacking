@@ -2,23 +2,37 @@ package com.example.front.transportation
 
 import android.os.Bundle
 import android.util.Log
-import androidx.activity.enableEdgeToEdge
-import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
-import androidx.lifecycle.lifecycleScope
-import com.example.front.R
+import androidx.activity.ComponentActivity
+import androidx.activity.compose.setContent
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
+import androidx.compose.material3.Text
+import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
 import com.example.front.data.RouteProcessor
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
-class TransportationMainActivity : AppCompatActivity() {
+class TransportationMainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_transportation_main)
 
-        lifecycleScope.launch {
+        setContent {
+            TransportationScreen()
+        }
+    }
+}
+
+@Composable
+fun TransportationScreen() {
+    var routeDataList by remember { mutableStateOf(listOf("Fetching routes...")) }
+    val coroutineScope = rememberCoroutineScope()
+
+    // 비동기 데이터 로드
+    LaunchedEffect(Unit) {
+        coroutineScope.launch {
             try {
                 val result = RouteProcessor.fetchAndProcessRoutes(
                     startLat = 37.513841, // 잠실역
@@ -26,8 +40,29 @@ class TransportationMainActivity : AppCompatActivity() {
                     endLat = 37.476813, // 낙성대역
                     endLng = 126.964156
                 )
+                routeDataList = result.split("\n")
             } catch (e: Exception) {
-                Log.e("TransportationMainActivity", "Error fetching routes", e)
+                Log.e("TransportationScreen", "Error fetching routes", e)
+                routeDataList = listOf("Error fetching routes")
+            }
+        }
+    }
+
+    // UI 구성
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(16.dp),
+        contentAlignment = Alignment.TopStart
+    ) {
+        LazyColumn(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(16.dp),
+            verticalArrangement = Arrangement.spacedBy(8.dp)
+        ) {
+            items(routeDataList) { route ->
+                Text(text = route)
             }
         }
     }
