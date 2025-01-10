@@ -13,10 +13,11 @@ plugins {
 android {
     namespace = "com.example.front"
     compileSdk = 34
-
+    //localProperties의 변수 지정 및 파일 정보 받아오기
     val localProperties = Properties()
     localProperties.load(project.rootProject.file("local.properties").inputStream())
-    val APIKEY = localProperties.getProperty("APIKEY")?:""
+    //ODsay_APIKEY이름 으로 받아옴
+    val ODsay_APIKEY = localProperties.getProperty("ODsay_APIKEY")?:""
     
     defaultConfig {
         applicationId = "com.example.front"
@@ -27,7 +28,8 @@ android {
         vectorDrawables {
             useSupportLibrary = true
         }
-        buildConfigField("String", "APIKEY", APIKEY)
+        //buildConfig필드에 ODsay_APIKEY로 저장
+        buildConfigField("String", "ODsay_APIKEY", ODsay_APIKEY)
     }
 
     buildTypes {
@@ -67,6 +69,7 @@ android {
 
     //화면 전환 가능하게 하는 코드
     buildFeatures{
+        //buildConfig를 true로 변경
         viewBinding  = true
         dataBinding = true
         buildConfig = true
