@@ -2,10 +2,13 @@ package com.example.front.presentation
 
 import android.content.Intent
 import android.os.Bundle
-import android.widget.Button
+//import android.widget.Button
+import android.widget.ImageButton
 import androidx.appcompat.app.AppCompatActivity
 import com.example.front.audioguide.AudioGuideActivity
 import com.example.front.databinding.ActivityMainBinding
+import com.example.front.iot.HomeIotActivity
+import com.example.front.setting.SettingActivity
 import com.example.front.transportation.TransportationMainActivity
 
 class MainActivity : AppCompatActivity() {
@@ -20,9 +23,10 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.main)
 
         // XML에서 정의된 버튼들을 연결
-        val transportButton: Button = binding.btnTransport
-        val audioGuideButton: Button = binding.btnAudioGuide
-        val iotHomeButton: Button = binding.btnIotHome
+        val transportButton: ImageButton = binding.btnTransport
+        val audioGuideButton: ImageButton = binding.btnAudioGuide
+        val iotHomeButton: ImageButton = binding.btnIotHome
+        val settingButton: ImageButton = binding.btnSetting
 
         // 각 버튼의 클릭 이벤트 처리
         transportButton.setOnClickListener {
@@ -39,6 +43,14 @@ class MainActivity : AppCompatActivity() {
 
         iotHomeButton.setOnClickListener {
             // IoT 스마트 홈 버튼 클릭 시 실행할 로직
+            val intent = Intent(this, HomeIotActivity::class.java)
+            startActivity(intent)
+        }
+
+        settingButton.setOnClickListener{
+            // Setting 버튼 클릭 시 실행할 로직
+            val intent = Intent(this, SettingActivity::class.java)
+            startActivity(intent)
         }
     }
 }

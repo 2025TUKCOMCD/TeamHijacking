@@ -1,6 +1,7 @@
 package com.example.front.data
 
 import android.util.Log
+import com.example.front.BuildConfig
 import com.google.gson.Gson
 import com.google.gson.JsonSyntaxException
 import kotlinx.coroutines.Dispatchers
@@ -11,7 +12,8 @@ import retrofit2.converter.gson.GsonConverterFactory
 
 object RouteProcessor {
     private const val BASE_URL = "https://api.odsay.com/v1/api/"
-    private const val API_KEY = "APIKEY" // Project->local.propertice 가서 APIKEY= 이렇게 적으면 됨 이때 "" 적지말고 그대로 적을것
+
+    private const val ODsay_APIKEY : String = BuildConfig.ODsay_APIKEY
     private val gson = Gson()
     private val client = OkHttpClient.Builder().build()
 
@@ -33,7 +35,7 @@ object RouteProcessor {
     ): String {
         return try {
             val response = withContext(Dispatchers.IO) {
-                routeService.searchPubTransPathT(startLat, startLng, endLat, endLng, API_KEY)
+                routeService.searchPubTransPathT(startLat, startLng, endLat, endLng, ODsay_APIKEY)
             }
 
             // 원시 JSON 응답 데이터 출력

@@ -1,4 +1,5 @@
 import com.android.build.gradle.internal.cxx.configure.gradleLocalProperties
+import java.util.Properties
 
 plugins {
     alias(libs.plugins.androidApplication)
@@ -9,6 +10,11 @@ plugins {
 android {
     namespace = "com.example.front"
     compileSdk = 34
+    //localProperties의 변수 지정 및 파일 정보 받아오기
+    val localProperties = Properties()
+    localProperties.load(project.rootProject.file("local.properties").inputStream())
+    //ODsay_APIKEY이름 으로 받아옴
+    val ODsay_APIKEY = localProperties.getProperty("ODsay_APIKEY")?:""
 
     defaultConfig {
         applicationId = "com.example.front"
@@ -19,8 +25,8 @@ android {
         vectorDrawables {
             useSupportLibrary = true
         }
-
-
+        //buildConfig필드에 ODsay_APIKEY로 저장
+        buildConfigField("String", "ODsay_APIKEY", ODsay_APIKEY)
     }
 
     buildTypes {
@@ -30,8 +36,12 @@ android {
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
-            val apiKey = gradleLocalProperties(rootDir, providers).getProperty("APIKEY") ?: "default_api_key"
-            buildConfigField("String", "APIKEY", "\"$apiKey\"")
+            //리소스나 xml파일에서도 apikey 접근 가능하게 해줌 일단 필요 없어서 주석
+           // resValue("String","APIKEY", gradleLocalProperties(rootDir,providers).getProperty("APIKEY"))
+
+            //코드 내에서 api접근 가능하게함
+           // buildConfigField("String","APIKEY", gradleLocalProperties(rootDir,providers).getProperty("APIKEY"))
+
         }
     }
     compileOptions {
@@ -55,6 +65,7 @@ android {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
         }
     }
+
 }
 
 dependencies {
