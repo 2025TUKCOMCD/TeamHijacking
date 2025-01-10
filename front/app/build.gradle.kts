@@ -1,4 +1,5 @@
 import com.android.build.gradle.internal.cxx.configure.gradleLocalProperties
+import java.util.Properties
 
 plugins {
     alias(libs.plugins.androidApplication)
@@ -33,9 +34,12 @@ android {
             //리소스나 xml파일에서도 apikey 접근 가능하게 해줌 일단 필요 없어서 주석
             //resValue("string","APIKEY", gradleLocalProperties(rootDir,providers).getProperty("APIKEY"))
 
-            //코드 내에서 api접근 가능하게함
-            buildConfigField("String","APIKEY", gradleLocalProperties(rootDir,providers).getProperty("APIKEY"))
-        }
+            val localProperties = Properties()
+            localProperties.load(project.rootProject.file("local.properties").inputStream())
+            val odsayApiKey = localProperties.getProperty("ODsay_APIKEY")?:""
+            buildConfigField("String", "ODsay_APIKEY", odsayApiKey)
+
+            }
     }
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_1_8
