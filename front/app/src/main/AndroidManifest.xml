@@ -12,13 +12,25 @@
         android:supportsRtl="true"
         android:theme="@style/MainActivityTheme.Starting">
         <activity
+            android:name=".transportation.TransportNewPathSearchActivity"
+            android:exported="false" />
+        <activity
+            android:name=".transportation.TransNewPathDetatilActivity"
+            android:exported="false" />
+        <activity
+            android:name=".transportation.TransportationNewPathActivity"
+            android:exported="false" />
+        <activity
+            android:name=".transportation.TransportationSavedPathActivity"
+            android:exported="false" />
+        <activity
             android:name=".iot.HomeIotActivity"
             android:exported="false"
             android:theme="@style/Transportation_Main_Theme" />
         <activity
             android:name=".setting.SettingActivity"
             android:exported="false"
-            android:theme="@style/Transportation_Main_Theme"/>
+            android:theme="@style/Transportation_Main_Theme" />
         <activity
             android:name=".audioguide.AudioGuideActivity"
             android:exported="false"
