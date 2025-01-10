@@ -13,16 +13,20 @@
         android:theme="@style/MainActivityTheme.Starting">
         <activity
             android:name=".transportation.TransportNewPathSearchActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:theme="@style/Transportation_Main_Theme" />
         <activity
             android:name=".transportation.TransNewPathDetatilActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:theme="@style/Transportation_Main_Theme" />
         <activity
             android:name=".transportation.TransportationNewPathActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:theme="@style/Transportation_Main_Theme" />
         <activity
             android:name=".transportation.TransportationSavedPathActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:theme="@style/Transportation_Main_Theme" />
         <activity
             android:name=".iot.HomeIotActivity"
             android:exported="false"

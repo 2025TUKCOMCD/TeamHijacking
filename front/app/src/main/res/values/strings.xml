@@ -18,4 +18,5 @@
     <string name="btn_new_path">새로운 경로 탐색 API</string>
     <string name="btn_new_path_description">"저장된 경로로 탐색버튼입니다. 새로운 곳을 갈 때, 어떤 버스를 타야 하는지, 어떤 지하철을 타야 하는지 알려줍니다. "</string>
     <string name="undo">뒤로가기</string>
+    <string name="default_text">기본 텍스트</string>
 </resources>
