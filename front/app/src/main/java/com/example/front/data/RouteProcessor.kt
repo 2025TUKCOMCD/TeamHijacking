@@ -13,7 +13,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 object RouteProcessor {
     private const val BASE_URL = "https://api.odsay.com/v1/api/"
 
-    private const val API_KEY : String = BuildConfig.APIKEY
+    private const val ODsay_APIKEY : String = BuildConfig.ODsay_APIKEY
     private val gson = Gson()
     private val client = OkHttpClient.Builder().build()
 
@@ -35,7 +35,7 @@ object RouteProcessor {
     ): String {
         return try {
             val response = withContext(Dispatchers.IO) {
-                routeService.searchPubTransPathT(startLat, startLng, endLat, endLng, API_KEY)
+                routeService.searchPubTransPathT(startLat, startLng, endLat, endLng, ODsay_APIKEY)
             }
 
             // 원시 JSON 응답 데이터 출력
