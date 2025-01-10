@@ -12,10 +12,17 @@
         android:supportsRtl="true"
         android:theme="@style/MainActivityTheme.Starting">
         <activity
-            android:name=".audioguide.AudioGuideActivity"
+            android:name=".iot.HomeIotActivity"
             android:exported="false"
             android:theme="@style/Transportation_Main_Theme" />
-        <!-- 화면설정시에 Theme이 설정되어있지 않으면 화면 호출시에 오류가 남 화면 늘릴시마다 설정해 주어야 할듯 -->
+        <activity
+            android:name=".setting.SettingActivity"
+            android:exported="false"
+            android:theme="@style/Transportation_Main_Theme"/>
+        <activity
+            android:name=".audioguide.AudioGuideActivity"
+            android:exported="false"
+            android:theme="@style/Transportation_Main_Theme" /> <!-- 화면설정시에 Theme이 설정되어있지 않으면 화면 호출시에 오류가 남 화면 늘릴시마다 설정해 주어야 할듯 -->
         <activity
             android:name=".transportation.TransportationMainActivity"
             android:exported="false"
