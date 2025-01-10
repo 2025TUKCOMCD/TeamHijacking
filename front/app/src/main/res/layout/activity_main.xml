@@ -67,7 +67,6 @@
                 android:layout_height="60dp"
                 android:text="@string/btn_setting"
                 android:textSize="12sp"
-                android:background="@drawable/setting_btn2"
                 android:textColor="#00000000"
                 android:contentDescription="@string/btn_setting_description">
             </ImageButton>
