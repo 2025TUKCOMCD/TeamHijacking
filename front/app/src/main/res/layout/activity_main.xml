@@ -25,37 +25,51 @@
             android:gravity="center_horizontal">
 
             <!-- 대중교통 버튼 -->
-            <Button
+            <ImageButton
                 android:id="@+id/btn_transport"
-                android:layout_width="150dp"
-                android:layout_height="40dp"
-                android:text="대중교통"
+                android:layout_width="152dp"
+                android:layout_height="60dp"
+                android:text="@string/btn_transport"
                 android:textSize="12sp"
-                android:background="@drawable/rounded_button"
-                android:textColor="@color/backgroundDark"
-                android:layout_marginBottom="20dp" />
+                android:background="@drawable/traffic_doc_btn3"
+                android:textColor="#00000000"
+                android:layout_marginBottom="20dp"
+                android:contentDescription="@string/btn_transport_description"/>
 
             <!-- 음향 유도기 버튼 -->
-            <Button
+            <ImageButton
                 android:id="@+id/btn_audio_guide"
-                android:layout_width="150dp"
-                android:layout_height="40dp"
-                android:text="음향 유도기"
+                android:layout_width="152dp"
+                android:layout_height="60dp"
+                android:text="@string/btn_audio_guide"
                 android:textSize="12sp"
-                android:background="@drawable/rounded_button"
-                android:textColor="@color/backgroundDark"
-                android:layout_marginBottom="20dp" />
+                android:background="@drawable/blinker_btn3"
+                android:textColor="#00000000"
+                android:layout_marginBottom="20dp"
+                android:contentDescription="@string/btn_audio_guide_description"/>
 
             <!-- IoT 스마트 홈 버튼 -->
-            <Button
+            <ImageButton
                 android:id="@+id/btn_iot_home"
-                android:layout_width="150dp"
-                android:layout_height="40dp"
-                android:text="IoT 스마트 홈"
+                android:layout_width="152dp"
+                android:layout_height="60dp"
+                android:text="@string/btn_iot_home"
                 android:textSize="12sp"
-                android:background="@drawable/rounded_button"
-                android:textColor="@color/backgroundDark" />
+                android:background="@drawable/iot_home_btn3"
+                android:textColor="#00000000"
+                android:layout_marginBottom="20dp"
+                android:contentDescription="@string/btn_iot_description"/>
 
+            <!-- 설정 버튼 -->
+            <ImageButton
+                android:id="@+id/btn_setting"
+                android:layout_width="152dp"
+                android:layout_height="60dp"
+                android:text="@string/btn_setting"
+                android:textSize="12sp"
+                android:textColor="#00000000"
+                android:contentDescription="@string/btn_setting_description">
+            </ImageButton>
         </LinearLayout>
     </ScrollView>
 </androidx.constraintlayout.widget.ConstraintLayout>

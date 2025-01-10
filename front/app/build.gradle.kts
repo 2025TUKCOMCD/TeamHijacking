@@ -1,13 +1,23 @@
+import com.android.build.gradle.internal.cxx.configure.gradleLocalProperties
+import java.util.Properties
+
 plugins {
     alias(libs.plugins.androidApplication)
     //alias(libs.plugins.jetbrainsKotlinAndroid)
     id("org.jetbrains.kotlin.android")
+    //id("org.jetbrains.kotlin.android") version "1.9.0" apply false
+
+    //id("com.android.application") version "8.7.3" apply false
 }
 
 android {
     namespace = "com.example.front"
     compileSdk = 34
 
+    val localProperties = Properties()
+    localProperties.load(project.rootProject.file("local.properties").inputStream())
+    val APIKEY = localProperties.getProperty("APIKEY")?:""
+    
     defaultConfig {
         applicationId = "com.example.front"
         minSdk = 30
@@ -17,7 +27,7 @@ android {
         vectorDrawables {
             useSupportLibrary = true
         }
-
+        buildConfigField("String", "APIKEY", APIKEY)
     }
 
     buildTypes {
@@ -27,6 +37,12 @@ android {
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
+            //리소스나 xml파일에서도 apikey 접근 가능하게 해줌 일단 필요 없어서 주석
+           // resValue("String","APIKEY", gradleLocalProperties(rootDir,providers).getProperty("APIKEY"))
+
+            //코드 내에서 api접근 가능하게함
+           // buildConfigField("String","APIKEY", gradleLocalProperties(rootDir,providers).getProperty("APIKEY"))
+
         }
     }
     compileOptions {
@@ -38,6 +54,7 @@ android {
     }
     buildFeatures {
         compose = true
+        buildConfig = true
     }
     composeOptions {
         kotlinCompilerExtensionVersion = "1.5.1"
@@ -52,7 +69,10 @@ android {
     buildFeatures{
         viewBinding  = true
         dataBinding = true
+        buildConfig = true
+
     }
+
 }
 
 dependencies {
