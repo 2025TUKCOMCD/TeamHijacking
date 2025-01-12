@@ -1,9 +1,13 @@
 package com.example.front.transportation
 
 import android.Manifest
+import android.content.ActivityNotFoundException
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
+import android.speech.RecognizerIntent
 import android.util.Log
+import android.widget.Button
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
@@ -15,6 +19,7 @@ import com.google.gson.JsonParser
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import java.io.IOException
+import java.util.Locale
 
 class TransportationNewPathActivity : AppCompatActivity() {
 
@@ -22,6 +27,8 @@ class TransportationNewPathActivity : AppCompatActivity() {
 
     companion object {
         private const val PERMISSION_REQUEST_ACCESS_FINE_LOCATION = 100
+        private const val PERMISSION_REQUEST_RECORD_AUDIO = 101
+        private const val REQUEST_CODE_SPEECH_INPUT = 102
         private const val GEOCODING_API_KEY = "AIzaSyDXdv60obb-54dlxvbSO0QgJM8WYpRyjqs" // 실제 API 키로 변경
         private const val TAG = "TransportationNewPathActivity"
     }
@@ -31,17 +38,50 @@ class TransportationNewPathActivity : AppCompatActivity() {
         binding = ActivityTransportationNewPathBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        val buttonStartSTT: Button = binding.buttonStartStt
         val addressTextView: TextView = binding.addressTextView
         val latitudeTextView: TextView = binding.latitudeTextView
         val longitudeTextView: TextView = binding.longitudeTextView
 
-        val address = "서울특별시 강남구 강남대로 323"
-        addressTextView.text = "Address: $address"
-
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+            val address = "서울특별시 강남구 강남대로 323"
+            addressTextView.text = "Address: $address"
             getLocationFromAddress(address, latitudeTextView, longitudeTextView)
         } else {
             ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.ACCESS_FINE_LOCATION), PERMISSION_REQUEST_ACCESS_FINE_LOCATION)
+        }
+
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.RECORD_AUDIO), PERMISSION_REQUEST_RECORD_AUDIO)
+        }
+
+        buttonStartSTT.setOnClickListener {
+            startSTT()
+        }
+    }
+
+    private fun startSTT() {
+        val intent = Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH)
+        intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM)
+        intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, Locale.getDefault())
+        intent.putExtra(RecognizerIntent.EXTRA_PROMPT, "Speak the address...")
+
+        try {
+            startActivityForResult(intent, REQUEST_CODE_SPEECH_INPUT)
+        } catch (e: ActivityNotFoundException) {
+            e.printStackTrace()
+        }
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == REQUEST_CODE_SPEECH_INPUT && resultCode == RESULT_OK && data != null) {
+            val result = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS)
+            if (result != null && result.isNotEmpty()) {
+                val address = result[0]
+                binding.addressTextView.text = "Address: $address"
+                getLocationFromAddress(address, binding.latitudeTextView, binding.longitudeTextView)
+            }
         }
     }
 
