@@ -22,15 +22,23 @@ class TransportationMainActivity : AppCompatActivity() {
         binding = ActivityTransportationMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        val routeContainer: LinearLayout = binding.routeContainer
+        // Example call to fetch and display routes
+        fetchAndDisplayRoutes(
+            startLat = 37.513841, // 잠실역
+            startLng = 127.101823,
+            endLat = 37.476813, // 낙성대역
+            endLng = 126.964156
+        )
+    }
 
+    private fun fetchAndDisplayRoutes(startLat: Double, startLng: Double, endLat: Double, endLng: Double) {
         lifecycleScope.launch {
             try {
                 val result = RouteProcessor.fetchAndProcessRoutes(
-                    startLat = 37.513841, // 잠실역
-                    startLng = 127.101823,
-                    endLat = 37.476813, // 낙성대역
-                    endLng = 126.964156
+                    startLat = startLat,
+                    startLng = startLng,
+                    endLat = endLat,
+                    endLng = endLng
                 )
 
                 result.forEach { routeInfo ->
@@ -44,7 +52,7 @@ class TransportationMainActivity : AppCompatActivity() {
                             showRouteDetails(routeInfo)
                         }
                     }
-                    routeContainer.addView(button)
+                    binding.routeContainer.addView(button)
                 }
 
             } catch (e: Exception) {
