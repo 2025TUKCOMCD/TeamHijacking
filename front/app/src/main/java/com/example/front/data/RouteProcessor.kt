@@ -13,7 +13,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 object RouteProcessor {
     private const val BASE_URL = "https://api.odsay.com/v1/api/"
 
-    private val ODsay_APIKEY : String = BuildConfig.ODsay_APIKEY
+    private const val ODsay_APIKEY : String = BuildConfig.ODsay_APIKEY
     private val gson = Gson()
     private val client = OkHttpClient.Builder().build()
 

@@ -5,4 +5,12 @@
     values-round/strings.xml for round devices.
     -->
     <string name="hello_world">From the Square world,\nHello, %1$s!</string>
+    <string name="btn_transport">대중교통</string>
+    <string name="btn_audio_guide">음향 유도기</string>
+    <string name="btn_iot_home">iot 스마트홈</string>
+    <string name="btn_setting">설정</string>
+    <string name="btn_transport_description">교통안내 기능입니다. 자세한 설명이 필요하시다면 꾹 누르십시오.</string>
+    <string name="btn_audio_guide_description">음향 유도기 버튼입니다. 자세한 설명이 필요하시다면 꾹 누르십시오.</string>
+    <string name="btn_iot_description">AI 스피커와 연결하여 원격 조종하는 기능입니다. 자세한 설명이 필요하시다면 꾹 눌러주십시오.</string>
+    <string name="btn_setting_description">설정 버튼입니다</string>
 </resources>
