@@ -10,6 +10,8 @@ import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
+
+
 object RouteProcessor {
     private const val BASE_URL = "https://api.odsay.com/v1/api/"
 
@@ -32,7 +34,7 @@ object RouteProcessor {
         startLng: Double,
         endLat: Double,
         endLng: Double
-    ): List<String> {
+    ): List<RouteInfo> {
         return try {
             val response = withContext(Dispatchers.IO) {
                 routeService.searchPubTransPathT(startLat, startLng, endLat, endLng, ODsay_APIKEY)
@@ -49,7 +51,7 @@ object RouteProcessor {
 
             if (paths == null || paths.isEmpty()) {
                 Log.d("RouteProcessor", "No paths found in API response.")
-                return listOf("No routes found")
+                return listOf()
             }
 
             // 경로 데이터 처리 및 점수 계산 후 정렬
@@ -63,8 +65,18 @@ object RouteProcessor {
                 val info = path.info
                 val subPaths = path.subPath
 
+                // 주요 교통수단 요약
+                val mainTransitTypes = subPaths.mapNotNull { subPath ->
+                    when (subPath.trafficType) {
+                        1 -> "지하철 (${subPath.sectionTime}분)"
+                        2 -> "버스 (${subPath.sectionTime}분)"
+                        3 -> if (subPath.sectionTime != null && subPath.sectionTime >= 5) "도보 (${subPath.sectionTime}분)" else null
+                        else -> null
+                    }
+                }.joinToString(" -> ")
+
                 // 세부 경로 처리
-                val subPathDetails = subPaths.joinToString(", ") { subPath ->
+                val detailedPath = subPaths.joinToString(", ") { subPath ->
                     when (subPath.trafficType) {
                         1 -> { // 지하철
                             val lane = subPath.lane?.firstOrNull()
@@ -81,16 +93,20 @@ object RouteProcessor {
                     }
                 }
 
-                // 요약 정보 출력
-                "총 소요 시간: ${info.totalTime}분, 환승 횟수: ${info.busTransitCount + info.subwayTransitCount}, 세부 경로: $subPathDetails"
+                RouteInfo(
+                    totalTime = info.totalTime,
+                    transitCount = info.busTransitCount + info.subwayTransitCount,
+                    mainTransitTypes = mainTransitTypes,
+                    detailedPath = detailedPath
+                )
             }
 
         } catch (e: JsonSyntaxException) {
             Log.e("RouteProcessor", "JSON 문법 오류", e)
-            listOf("JSON syntax error")
+            listOf()
         } catch (e: Exception) {
             Log.e("RouteProcessor", "Error fetching routes", e)
-            listOf("Error fetching routes")
+            listOf()
         }
     }
 

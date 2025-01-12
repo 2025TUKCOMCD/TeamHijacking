@@ -24,10 +24,18 @@ data class Info(
     val distance: Double?,
     val startName: String?,
     val endName: String?,
-    val lane: List<Lane>?
+    val lane: List<Lane>?,
+    val sectionTime: Int?
 )
 
 data class Lane(
     val name: String?,
     val busNo: String?
+)
+
+data class RouteInfo(
+    val totalTime: Int,
+    val transitCount: Int,
+    val mainTransitTypes: String,
+    val detailedPath: String
 )
