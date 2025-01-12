@@ -2,11 +2,9 @@ package com.example.front.transportation
 
 import android.os.Bundle
 import android.util.Log
-import android.widget.TextView
-import androidx.activity.enableEdgeToEdge
+import android.widget.Button
+import android.widget.LinearLayout
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.lifecycleScope
 import com.example.front.R
 import com.example.front.data.RouteProcessor
@@ -20,10 +18,9 @@ class TransportationMainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityTransportationMainBinding.inflate(layoutInflater)
-        setContentView(binding.main)
+        setContentView(binding.root)
 
-        val tvRouteInfo: TextView = binding.tvRouteInfo
-
+        val routeContainer: LinearLayout = binding.routeContainer
 
         lifecycleScope.launch {
             try {
@@ -33,7 +30,16 @@ class TransportationMainActivity : AppCompatActivity() {
                     endLat = 37.476813, // 낙성대역
                     endLng = 126.964156
                 )
-                tvRouteInfo.text = result
+
+                result.forEach { routeInfo ->
+                    val button = Button(this@TransportationMainActivity).apply {
+                        text = routeInfo
+                        setTextColor(resources.getColor(android.R.color.white))
+                        textSize = 16f
+                        setPadding(8, 8, 8, 8)
+                    }
+                    routeContainer.addView(button)
+                }
             } catch (e: Exception) {
                 Log.e("TransportationMainActivity", "Error fetching routes", e)
             }

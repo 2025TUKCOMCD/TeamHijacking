@@ -32,7 +32,7 @@ object RouteProcessor {
         startLng: Double,
         endLat: Double,
         endLng: Double
-    ): String {
+    ): List<String> {
         return try {
             val response = withContext(Dispatchers.IO) {
                 routeService.searchPubTransPathT(startLat, startLng, endLat, endLng, ODsay_APIKEY)
@@ -49,7 +49,7 @@ object RouteProcessor {
 
             if (paths == null || paths.isEmpty()) {
                 Log.d("RouteProcessor", "No paths found in API response.")
-                return "No routes found"
+                return listOf("No routes found")
             }
 
             // 경로 데이터 처리 및 점수 계산 후 정렬
@@ -59,7 +59,7 @@ object RouteProcessor {
             }.sortedByDescending { it.second }
 
             // 경로 출력
-            sortedPaths.joinToString("\n") { (path, score) ->
+            sortedPaths.map { (path, _) ->
                 val info = path.info
                 val subPaths = path.subPath
 
@@ -81,18 +81,16 @@ object RouteProcessor {
                     }
                 }
 
-                // 점수 먼저 출력하고 요약 정보 출력
-                "Score: $score, 총 소요 시간: ${info.totalTime}분, 도보 거리: ${info.totalWalk}m, 세부 경로: $subPathDetails"
-            }.also { result ->
-                Log.d("RouteProcessor", "가중치 재정렬 데이터: $result")
+                // 요약 정보 출력
+                "총 소요 시간: ${info.totalTime}분, 환승 횟수: ${info.busTransitCount + info.subwayTransitCount}, 세부 경로: $subPathDetails"
             }
 
         } catch (e: JsonSyntaxException) {
             Log.e("RouteProcessor", "JSON 문법 오류", e)
-            "JSON syntax error"
+            listOf("JSON syntax error")
         } catch (e: Exception) {
             Log.e("RouteProcessor", "Error fetching routes", e)
-            "Error fetching routes"
+            listOf("Error fetching routes")
         }
     }
 
