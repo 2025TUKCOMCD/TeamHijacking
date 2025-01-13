@@ -12,6 +12,7 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import com.example.front.BuildConfig
 import com.example.front.R
 import com.example.front.databinding.ActivityTransportationNewPathBinding
 import com.google.gson.JsonObject
@@ -29,7 +30,7 @@ class TransportationNewPathActivity : AppCompatActivity() {
         private const val PERMISSION_REQUEST_ACCESS_FINE_LOCATION = 100
         private const val PERMISSION_REQUEST_RECORD_AUDIO = 101
         private const val REQUEST_CODE_SPEECH_INPUT = 102
-        private const val GEOCODING_API_KEY = "AIzaSyDXdv60obb-54dlxvbSO0QgJM8WYpRyjqs" // 실제 API 키로 변경
+        private const val GEOCODING_API_KEY = BuildConfig.Geolocation_APIKEY // 실제 API 키로 변경
         private const val TAG = "TransportationNewPathActivity"
     }
 

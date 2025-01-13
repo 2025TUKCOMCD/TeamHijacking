@@ -18,6 +18,7 @@ android {
     localProperties.load(project.rootProject.file("local.properties").inputStream())
     //ODsay_APIKEY이름 으로 받아옴
     val ODsay_APIKEY = localProperties.getProperty("ODsay_APIKEY")?:""
+    val Geolocation_APIKEY = localProperties.getProperty("Geolocation_APIKEY")?:""
     
     defaultConfig {
         applicationId = "com.example.front"
@@ -30,6 +31,7 @@ android {
         }
         //buildConfig필드에 ODsay_APIKEY로 저장
         buildConfigField("String", "ODsay_APIKEY", ODsay_APIKEY)
+        buildConfigField("String","Geolocation_APIKEY", Geolocation_APIKEY)
     }
 
     buildTypes {
