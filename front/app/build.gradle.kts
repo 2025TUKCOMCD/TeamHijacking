@@ -79,7 +79,10 @@ android {
 }
 
 dependencies {
-
+    //위도 경도를 위한 google-gecodingAPI
+    implementation ("com.google.maps:google-maps-services:2.0.0")
+    //위치를 받아오는 코드
+    implementation("com.google.android.gms:play-services-location:21.0.1")
     implementation(libs.play.services.wearable)
     implementation(platform(libs.compose.bom))
     implementation(libs.ui)

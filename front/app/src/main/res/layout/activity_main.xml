@@ -68,7 +68,8 @@
                 android:text="@string/btn_setting"
                 android:textSize="12sp"
                 android:textColor="#00000000"
-                android:contentDescription="@string/btn_setting_description">
+                android:contentDescription="@string/btn_setting_description"
+                android:background="@drawable/setting_btn2">
             </ImageButton>
         </LinearLayout>
     </ScrollView>
