@@ -1,7 +1,11 @@
-package com.example.front.data
+package com.example.front.processor
 
 import android.util.Log
 import com.example.front.BuildConfig
+import com.example.front.data.Path
+import com.example.front.service.RouteService
+import com.example.front.data.SearchPubTransPathTResponse
+import com.example.front.transportation.PathRouteResult
 import com.google.gson.Gson
 import com.google.gson.JsonSyntaxException
 import kotlinx.coroutines.Dispatchers
@@ -92,7 +96,7 @@ object RouteProcessor {
                         else -> "알 수 없는 교통수단"
                     }
                 }
-                // 경로 결과 반환
+
                 PathRouteResult(
                     totalTime = info.totalTime,
                     transitCount = info.busTransitCount + info.subwayTransitCount,

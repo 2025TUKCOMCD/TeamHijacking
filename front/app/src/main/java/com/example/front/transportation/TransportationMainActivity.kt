@@ -5,10 +5,16 @@ import android.util.Log
 import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
-import com.example.front.data.PathRouteResult
-import com.example.front.data.RouteProcessor
+import com.example.front.processor.RouteProcessor
 import com.example.front.databinding.ActivityTransportationMainBinding
 import kotlinx.coroutines.launch
+
+data class PathRouteResult(
+    val totalTime: Int,
+    val transitCount: Int,
+    val mainTransitTypes: String,
+    val detailedPath: String
+)
 
 class TransportationMainActivity : AppCompatActivity() {
 

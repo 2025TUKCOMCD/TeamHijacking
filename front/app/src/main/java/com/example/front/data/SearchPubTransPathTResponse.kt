@@ -1,10 +1,10 @@
 package com.example.front.data
 
 data class SearchPubTransPathTResponse(
-    val result: Result?
+    val result: PathResult?
 )
 
-data class Result(
+data class PathResult(
     val path: List<Path>?
 )
 
