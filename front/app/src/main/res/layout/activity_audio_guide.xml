@@ -24,7 +24,8 @@
             android:src="@drawable/blinker_btn1"
             android:id="@+id/blinker_btn1"
             android:background="@android:color/transparent"
-            android:layout_margin="8dp" />
+            android:layout_margin="8dp"
+            android:clickable="true" />
 
         <ImageButton
             android:layout_width="wrap_content"
@@ -33,6 +34,7 @@
             android:src="@drawable/blinker_btn2_click"
             android:id="@+id/blinker_btn2"
             android:background="@android:color/transparent"
+            android:clickable="true"
              />
 
     </LinearLayout>

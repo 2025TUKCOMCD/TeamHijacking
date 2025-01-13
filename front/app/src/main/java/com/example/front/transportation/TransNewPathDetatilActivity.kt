@@ -3,16 +3,11 @@ package com.example.front.transportation
 import android.os.Bundle
 import android.util.Log
 import android.widget.TextView
-import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.lifecycleScope
-import com.example.front.R
+//import com.example.front.R
 import com.example.front.data.RouteProcessor
 import com.example.front.databinding.ActivityTransNewPathDetatilBinding
-//import com.example.front.databinding.ActivityTransportationMainBinding
-//import com.example.front.databinding.ActivityTransportationMainBinding
 import kotlinx.coroutines.launch
 
 /*경로 상세 정보 페이지, 경로 선택 시 상세 경로를 나타낼
