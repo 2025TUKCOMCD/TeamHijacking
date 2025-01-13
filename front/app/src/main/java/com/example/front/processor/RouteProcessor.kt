@@ -2,10 +2,10 @@ package com.example.front.processor
 
 import android.util.Log
 import com.example.front.BuildConfig
-import com.example.front.data.Path
+import com.example.front.data.searchPath.Path
+import com.example.front.data.searchPath.PathRouteResult
 import com.example.front.service.RouteService
-import com.example.front.data.SearchPubTransPathTResponse
-import com.example.front.transportation.PathRouteResult
+import com.example.front.data.searchPath.SearchPubTransPathTResponse
 import com.google.gson.Gson
 import com.google.gson.JsonSyntaxException
 import kotlinx.coroutines.Dispatchers

@@ -1,4 +1,4 @@
-package com.example.front.data
+package com.example.front.data.realtimeBus
 
 data class RealtimeRouteResponse(
     val result: RealtimeResult?

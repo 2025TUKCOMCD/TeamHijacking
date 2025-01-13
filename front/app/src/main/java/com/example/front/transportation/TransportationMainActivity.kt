@@ -9,12 +9,6 @@ import com.example.front.processor.RouteProcessor
 import com.example.front.databinding.ActivityTransportationMainBinding
 import kotlinx.coroutines.launch
 
-data class PathRouteResult(
-    val totalTime: Int,
-    val transitCount: Int,
-    val mainTransitTypes: String,
-    val detailedPath: String
-)
 
 class TransportationMainActivity : AppCompatActivity() {
 
