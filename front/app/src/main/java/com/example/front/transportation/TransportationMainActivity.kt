@@ -44,9 +44,9 @@ class TransportationMainActivity : AppCompatActivity() {
                     endLng = endLng
                 )
 
-                result.forEach { PathRouteResult : PathRouteResult ->
+                result.forEachIndexed { index, pathRouteResult ->
                     val button = Button(this@TransportationMainActivity).apply {
-                        text = "총 소요 시간 ${PathRouteResult.totalTime}분\n환승 횟수 ${PathRouteResult.transitCount}\n환승 정보\n ${PathRouteResult.mainTransitTypes}"
+                        text = "경로 ${index + 1}\n총 소요 시간 ${pathRouteResult.totalTime}분\n환승 횟수 ${pathRouteResult.transitCount}\n환승 정보\n${pathRouteResult.mainTransitTypes}"
                         setTextColor(resources.getColor(android.R.color.white))
                         textSize = 16f
                         setPadding(32, 24, 32, 24) // 버튼 내부 여백
