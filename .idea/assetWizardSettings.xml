@@ -14,8 +14,8 @@
                         <option name="values">
                           <map>
                             <entry key="assetSourceType" value="FILE" />
-                            <entry key="outputName" value="blinker_btn2" />
-                            <entry key="sourceFile" value="C:\Users\srnb1\AndroidStudioProjects\TeamHijacking\front\app\src\main\res\drawable\blinker_btn2.svg" />
+                            <entry key="outputName" value="redtriangle" />
+                            <entry key="sourceFile" value="C:\Users\srnb1\AndroidStudioProjects\TeamHijacking\front\app\src\main\res\drawable\redTriangle.svg" />
                           </map>
                         </option>
                       </PersistentState>
