@@ -86,7 +86,7 @@
  종합설계기획 발표 및 제출 서류
 - <a href = "https://drive.google.com/file/d/176_STpg_pBsIT_EmeeFJf_z5qdy2MSUh/view?usp=sharing">팀 하이재킹 제안서</a>
 - <a href = "https://drive.google.com/file/d/14pNoPenm9NCOFus4_Id3Xb9OWA8gTNcc/view?usp=sharing">팀 하이재킹 요약 계획서</a>
-- <a href = "https://drive.google.com/file/d/14pNoPenm9NCOFus4_Id3Xb9OWA8gTNcc/view?usp=sharing">시스템 구성도, 개발 환경, 운용 환경, 데모 환경</a>
+- <a href = "https://docs.google.com/presentation/d/1yz5gyiYBwBFY1xeWGXbyRp7kZKCSKEi1/edit?usp=drive_link&ouid=102873262839899259467&rtpof=true&sd=true">시스템 구성도, 개발 환경, 운용 환경, 데모 환경</a>
 
 ## 🚥 개발자 🚥
 **김현빈** | **서하연** | **연찬호** | **김의연**
