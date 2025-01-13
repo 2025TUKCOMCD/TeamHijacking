@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="16dp">
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+            <TextView
+                android:paddingTop="20dp"
+                android:id="@+id/addressStartTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Start Address:"
+                android:textSize="18sp"
+                android:layout_marginBottom="8dp"/>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+                <TextView
+                    android:id="@+id/latitudeStartTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Latitude:"
+                    android:textSize="8sp"
+                    android:layout_marginBottom="4dp"/>
+
+                <TextView
+                    android:id="@+id/longitudeStartTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Longitude:"
+                    android:textSize="8sp"
+                    android:layout_marginBottom="4dp"/>
+            </LinearLayout>
+
+
+            <Button
+                android:id="@+id/buttonStartSttStart"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Start Address STT"
+                android:layout_marginBottom="16dp"/>
+
+            <TextView
+                android:id="@+id/addressEndTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="End Address:"
+                android:textSize="18sp"
+                android:layout_marginBottom="8dp"/>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/latitudeEndTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Latitude:"
+                android:textSize="8sp"
+                android:layout_marginBottom="4dp"/>
+
+            <TextView
+                android:id="@+id/longitudeEndTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Longitude:"
+                android:textSize="8sp"
+                android:layout_marginBottom="16dp"/>
+        </LinearLayout>
+
+            <Button
+                android:id="@+id/buttonStartSttEnd"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="End Address STT"
+                android:layout_marginBottom="16dp"/>
+
+
+        </LinearLayout>
+    </ScrollView>
+
+
+</LinearLayout>

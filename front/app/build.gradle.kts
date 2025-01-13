@@ -5,6 +5,9 @@ plugins {
     alias(libs.plugins.androidApplication)
     //alias(libs.plugins.jetbrainsKotlinAndroid)
     id("org.jetbrains.kotlin.android")
+    //id("org.jetbrains.kotlin.android") version "1.9.0" apply false
+
+    //id("com.android.application") version "8.7.3" apply false
 }
 
 android {
@@ -15,6 +18,8 @@ android {
     localProperties.load(project.rootProject.file("local.properties").inputStream())
     //ODsay_APIKEY이름 으로 받아옴
     val ODsay_APIKEY = localProperties.getProperty("ODsay_APIKEY")?:""
+    val Geolocation_APIKEY = localProperties.getProperty("Geolocation_APIKEY")?:""
+
 
     defaultConfig {
         applicationId = "com.example.front"
@@ -27,6 +32,7 @@ android {
         }
         //buildConfig필드에 ODsay_APIKEY로 저장
         buildConfigField("String", "ODsay_APIKEY", ODsay_APIKEY)
+        buildConfigField("String","Geolocation_APIKEY", Geolocation_APIKEY)
     }
 
     buildTypes {
@@ -52,10 +58,8 @@ android {
         jvmTarget = "1.8"
     }
     buildFeatures {
-        buildConfig = true
         compose = true
-        viewBinding = true
-        dataBinding = true
+        buildConfig = true
     }
     composeOptions {
         kotlinCompilerExtensionVersion = "1.5.1"
@@ -66,10 +70,22 @@ android {
         }
     }
 
+    //화면 전환 가능하게 하는 코드
+    buildFeatures{
+        //buildConfig를 true로 변경
+        viewBinding  = true
+        dataBinding = true
+        buildConfig = true
+
+    }
+
 }
 
 dependencies {
-
+    //위도 경도를 위한 google-gecodingAPI
+    implementation ("com.google.maps:google-maps-services:2.0.0")
+    //위치를 받아오는 코드
+    implementation("com.google.android.gms:play-services-location:21.0.1")
     implementation(libs.play.services.wearable)
     implementation(platform(libs.compose.bom))
     implementation(libs.ui)
