@@ -11,7 +11,6 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
 
-
 object RouteProcessor {
     private const val BASE_URL = "https://api.odsay.com/v1/api/"
 
@@ -34,7 +33,7 @@ object RouteProcessor {
         startLng: Double,
         endLat: Double,
         endLng: Double
-    ): List<RouteInfo> {
+    ): List<PathRouteResult> {
         return try {
             val response = withContext(Dispatchers.IO) {
                 routeService.searchPubTransPathT(startLat, startLng, endLat, endLng, ODsay_APIKEY)
@@ -45,7 +44,7 @@ object RouteProcessor {
             Log.d("RouteProcessor", "API Raw Response: $rawJson")
 
             // JSON 데이터 파싱
-            val parsedResponse = gson.fromJson(rawJson, AccessibleResponse::class.java)
+            val parsedResponse = gson.fromJson(rawJson, SearchPubTransPathTResponse::class.java)
 
             val paths = parsedResponse.result?.path
 
@@ -68,8 +67,9 @@ object RouteProcessor {
                 // 주요 교통수단 요약
                 val mainTransitTypes = subPaths.mapNotNull { subPath ->
                     when (subPath.trafficType) {
-                        1 -> "지하철 (${subPath.sectionTime}분)"
-                        2 -> "버스 (${subPath.sectionTime}분)"
+                        1 -> "지하철(${subPath.sectionTime}분)"
+                        2 -> "버스(${subPath.sectionTime}분)"
+                        // 도보는 5분이상일 경우만 표시
                         3 -> if (subPath.sectionTime != null && subPath.sectionTime >= 5) "도보 (${subPath.sectionTime}분)" else null
                         else -> null
                     }
@@ -92,8 +92,8 @@ object RouteProcessor {
                         else -> "알 수 없는 교통수단"
                     }
                 }
-
-                RouteInfo(
+                // 경로 결과 반환
+                PathRouteResult(
                     totalTime = info.totalTime,
                     transitCount = info.busTransitCount + info.subwayTransitCount,
                     mainTransitTypes = mainTransitTypes,

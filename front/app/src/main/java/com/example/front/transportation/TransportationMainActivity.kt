@@ -3,12 +3,9 @@ package com.example.front.transportation
 import android.os.Bundle
 import android.util.Log
 import android.widget.Button
-import android.widget.LinearLayout
-import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
-import com.example.front.R
-import com.example.front.data.RouteInfo
+import com.example.front.data.PathRouteResult
 import com.example.front.data.RouteProcessor
 import com.example.front.databinding.ActivityTransportationMainBinding
 import kotlinx.coroutines.launch
@@ -22,7 +19,7 @@ class TransportationMainActivity : AppCompatActivity() {
         binding = ActivityTransportationMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        // Example call to fetch and display routes
+        //위도 경도 입력 부분
         fetchAndDisplayRoutes(
             startLat = 37.513841, // 잠실역
             startLng = 127.101823,
@@ -30,7 +27,7 @@ class TransportationMainActivity : AppCompatActivity() {
             endLng = 126.964156
         )
     }
-
+    // 경로 데이터 가져오기
     private fun fetchAndDisplayRoutes(startLat: Double, startLng: Double, endLat: Double, endLng: Double) {
         lifecycleScope.launch {
             try {
@@ -41,15 +38,15 @@ class TransportationMainActivity : AppCompatActivity() {
                     endLng = endLng
                 )
 
-                result.forEach { routeInfo ->
+                result.forEach { PathRouteResult : PathRouteResult ->
                     val button = Button(this@TransportationMainActivity).apply {
-                        text = "총 소요 시간 ${routeInfo.totalTime}분\n환승 횟수 ${routeInfo.transitCount}\n환승 정보 ${routeInfo.mainTransitTypes}"
+                        text = "총 소요 시간 ${PathRouteResult.totalTime}분\n환승 횟수 ${PathRouteResult.transitCount}\n환승 정보\n ${PathRouteResult.mainTransitTypes}"
                         setTextColor(resources.getColor(android.R.color.white))
                         textSize = 16f
                         setPadding(32, 24, 32, 24) // 버튼 내부 여백
                         setBackgroundColor(resources.getColor(android.R.color.black)) // 버튼 배경색을 검정색으로 설정
                         setOnClickListener {
-                            showRouteDetails(routeInfo)
+                            // 상세 경로 표시 부분
                         }
                     }
                     binding.routeContainer.addView(button)
@@ -60,12 +57,5 @@ class TransportationMainActivity : AppCompatActivity() {
             }
         }
     }
-
-    private fun showRouteDetails(routeInfo: RouteInfo) {
-        AlertDialog.Builder(this)
-            .setTitle("경로 상세 정보")
-            .setMessage("총 소요 시간: ${routeInfo.totalTime}분\n환승 횟수: ${routeInfo.transitCount}\n주요 교통수단: ${routeInfo.mainTransitTypes}\n세부 경로: ${routeInfo.detailedPath}")
-            .setPositiveButton("확인", null)
-            .show()
-    }
+    // 상세 경로 다이얼로그
 }

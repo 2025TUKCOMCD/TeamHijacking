@@ -1,6 +1,6 @@
 package com.example.front.data
 
-data class AccessibleResponse(
+data class SearchPubTransPathTResponse(
     val result: Result?
 )
 
@@ -33,9 +33,3 @@ data class Lane(
     val busNo: String?
 )
 
-data class RouteInfo(
-    val totalTime: Int,
-    val transitCount: Int,
-    val mainTransitTypes: String,
-    val detailedPath: String
-)
