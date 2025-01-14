@@ -31,7 +31,7 @@ class TransportationNewPathActivity : AppCompatActivity() {
         private const val PERMISSION_REQUEST_RECORD_AUDIO = 101
         private const val REQUEST_CODE_SPEECH_INPUT_START = 102
         private const val REQUEST_CODE_SPEECH_INPUT_END = 103
-        private const val GEOCODING_API_KEY = BuildConfig.Geolocation_APIKEY // 실제 API 키로 변경
+        private val GEOCODING_API_KEY = BuildConfig.Geolocation_APIKEY // 실제 API 키로 변경
         private const val TAG = "TransportationNewPathActivity"
     }
 

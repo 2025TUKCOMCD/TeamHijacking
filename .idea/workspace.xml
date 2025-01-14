@@ -26,13 +26,8 @@
     <option name="autoReloadType" value="NONE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="5a34f773-8c82-4b0a-86d3-a37d3cf6ba80" name="Changes" comment="패키지 수정">
-      <change afterPath="$PROJECT_DIR$/front/app/src/main/java/com/example/front/data/smartHome/DeviceResponse.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/front/app/src/main/java/com/example/front/data/smartHome/RetrofitClient.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/front/app/src/main/java/com/example/front/data/smartHome/SmartThingsApiService.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/front/app/src/main/AndroidManifest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/front/app/src/main/AndroidManifest.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/front/app/src/main/java/com/example/front/iot/HomeIotActivity.kt" beforeDir="false" afterPath="$PROJECT_DIR$/front/app/src/main/java/com/example/front/iot/HomeIotActivity.kt" afterDir="false" />
+    <list default="true" id="5a34f773-8c82-4b0a-86d3-a37d3cf6ba80" name="Changes" comment="스마트 싱스 연동">
+      <change beforePath="$PROJECT_DIR$/front/app/src/main/java/com/example/front/transportation/TransportationNewPathActivity.kt" beforeDir="false" afterPath="$PROJECT_DIR$/front/app/src/main/java/com/example/front/transportation/TransportationNewPathActivity.kt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -398,7 +393,15 @@
       <option name="project" value="LOCAL" />
       <updated>1736751580559</updated>
     </task>
-    <option name="localTasksCounter" value="11" />
+    <task id="LOCAL-00011" summary="스마트 싱스 연동">
+      <option name="closed" value="true" />
+      <created>1736827222060</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL-00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1736827222060</updated>
+    </task>
+    <option name="localTasksCounter" value="12" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -423,6 +426,7 @@
     <MESSAGE value="SettingActivity와 iotActivity 추가, 신호등과 교통안내 기능 클릭 시 검은 화면이 뜨는 이슈가 있으므로 이 점 확인 필요." />
     <MESSAGE value="패키지 수정" />
     <MESSAGE value="데이터 오류 수정" />
-    <option name="LAST_COMMIT_MESSAGE" value="데이터 오류 수정" />
+    <MESSAGE value="스마트 싱스 연동" />
+    <option name="LAST_COMMIT_MESSAGE" value="스마트 싱스 연동" />
   </component>
 </project>
