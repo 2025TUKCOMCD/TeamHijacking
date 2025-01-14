@@ -1,5 +1,7 @@
 package com.example.front.data.searchPath
 
+import com.example.front.data.realtimeBus.DetailInfo
+
 data class PathRouteResult(
     val totalTime: Int,
     val transitCount: Int,

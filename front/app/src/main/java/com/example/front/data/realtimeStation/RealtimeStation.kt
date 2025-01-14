@@ -1,7 +1,6 @@
-package com.example.front.data.realtimeBus
+package com.example.front.data.realtimeStation
 
-//1. 최상위 노드
-data class RealtimeRouteResponse(
+data class realtimeStation(
     val result: Result?
 )
 

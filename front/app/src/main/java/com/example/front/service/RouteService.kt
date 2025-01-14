@@ -17,7 +17,7 @@ interface RouteService {
     @GET("realtimeRoute")
     suspend fun realtimeRoute(
         @Query("busID") busID: String,
-        @Query("busBase") busBase: Int? = 0,
+        @Query("busBase") busBase: Int? = 1,
         @Query("lowBus") lowBus: Int? = 0,
         @Query("apiKey") apiKey: String
     ): ResponseBody
