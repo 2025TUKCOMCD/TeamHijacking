@@ -10,6 +10,11 @@
           <theme>@style/Transportation_Main_Theme</theme>
         </config>
       </layout>
+      <layout url="file://$PROJECT_DIR$/front/app/src/main/res/layout/activity_home_iot.xml">
+        <config>
+          <theme>@style/Transportation_Main_Theme</theme>
+        </config>
+      </layout>
       <layout url="file://$PROJECT_DIR$/front/app/src/main/res/layout/activity_main.xml">
         <config>
           <theme>@android:style/Theme.DeviceDefault</theme>
@@ -26,8 +31,9 @@
     <option name="autoReloadType" value="NONE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="5a34f773-8c82-4b0a-86d3-a37d3cf6ba80" name="Changes" comment="스마트 싱스 연동">
-      <change beforePath="$PROJECT_DIR$/front/app/src/main/java/com/example/front/transportation/TransportationNewPathActivity.kt" beforeDir="false" afterPath="$PROJECT_DIR$/front/app/src/main/java/com/example/front/transportation/TransportationNewPathActivity.kt" afterDir="false" />
+    <list default="true" id="5a34f773-8c82-4b0a-86d3-a37d3cf6ba80" name="Changes" comment="API키 설정">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/front/app/src/main/res/layout/activity_home_iot.xml" beforeDir="false" afterPath="$PROJECT_DIR$/front/app/src/main/res/layout/activity_home_iot.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -401,7 +407,15 @@
       <option name="project" value="LOCAL" />
       <updated>1736827222060</updated>
     </task>
-    <option name="localTasksCounter" value="12" />
+    <task id="LOCAL-00012" summary="API키 설정">
+      <option name="closed" value="true" />
+      <created>1736827772620</created>
+      <option name="number" value="00012" />
+      <option name="presentableId" value="LOCAL-00012" />
+      <option name="project" value="LOCAL" />
+      <updated>1736827772620</updated>
+    </task>
+    <option name="localTasksCounter" value="13" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -427,6 +441,7 @@
     <MESSAGE value="패키지 수정" />
     <MESSAGE value="데이터 오류 수정" />
     <MESSAGE value="스마트 싱스 연동" />
-    <option name="LAST_COMMIT_MESSAGE" value="스마트 싱스 연동" />
+    <MESSAGE value="API키 설정" />
+    <option name="LAST_COMMIT_MESSAGE" value="API키 설정" />
   </component>
 </project>
