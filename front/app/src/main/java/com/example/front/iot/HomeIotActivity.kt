@@ -1,21 +1,38 @@
 package com.example.front.iot
 
 import android.os.Bundle
-import androidx.activity.enableEdgeToEdge
+import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
 import com.example.front.R
+import com.example.front.data.smartHome.DeviceResponse
+import com.example.front.data.smartHome.RetrofitClient
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 class HomeIotActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
         setContentView(R.layout.activity_home_iot)
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
-            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
-            insets
-        }
+
+        val apiToken = "Bearer f590f9f7-b8fd-4926-8dff-d9fd84774576" // 발급받은 SmartThings API 토큰
+
+        val apiService = RetrofitClient.instance
+        apiService.getDevices(apiToken).enqueue(object : Callback<DeviceResponse> {
+            override fun onResponse(call: Call<DeviceResponse>, response: Response<DeviceResponse>) {
+                if (response.isSuccessful) {
+                    val devices = response.body()?.items
+                    devices?.forEach { device ->
+                        Log.d("SmartThings", "Device: ${device.label}, Type: ${device.deviceTypeName}")
+                    }
+                } else {
+                    Log.e("SmartThings", "Error: ${response.errorBody()?.string()}")
+                }
+            }
+
+            override fun onFailure(call: Call<DeviceResponse>, t: Throwable) {
+                Log.e("SmartThings", "Failure: ${t.message}")
+            }
+        })
     }
 }
