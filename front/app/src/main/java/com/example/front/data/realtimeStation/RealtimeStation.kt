@@ -1,6 +1,6 @@
 package com.example.front.data.realtimeStation
 
-data class realtimeStation(
+data class RealtimeStation(
     val result: Result?
 )
 
@@ -31,10 +31,6 @@ data class Real(
     val positionY: Double?
 )
 
-data class DetailInfo(
-    val fromStationId: Int,
-    val toStationId: Int,
-    val positionX: Int,
-    val positionY: Int
-)
+
+
 

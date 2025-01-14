@@ -5,6 +5,8 @@ data class SubPath(
     val distance: Double?,
     val startName: String?,
     val endName: String?,
+    val startID: Int?,
     val lane: List<Lane>?,
-    val sectionTime: Int?
+    val sectionTime: Int?,
+    val passStopList: PassStopList?
 )

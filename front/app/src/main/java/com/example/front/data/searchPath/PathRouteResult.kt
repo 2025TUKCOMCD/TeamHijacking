@@ -6,6 +6,8 @@ data class PathRouteResult(
     val totalTime: Int,
     val transitCount: Int,
     val mainTransitTypes: String,
-    val detailedPath: String
+    val detailedPath: String,
+    val startStationIDs: Array<Int>,
+    val busIDs: Array<Int>
 )
 
