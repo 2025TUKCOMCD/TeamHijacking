@@ -27,7 +27,7 @@
 ## 🖋️ 시스템 구성도 🖋️
 
 <p align="center">
-<img width="900" src = "https://github.com/user-attachments/assets/5b4bdf79-b280-4a8c-8fff-7b4668fc6840">
+<img width="900" src = "https://github.com/user-attachments/assets/b86e943d-aa16-4d88-a247-52fb5241a678">
 </p>
 
 ###  시스템 상세 모듈
