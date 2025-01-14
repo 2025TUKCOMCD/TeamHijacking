@@ -18,7 +18,7 @@
             android:id="@+id/locationTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="SmartThings 데이터 가져오는 중..."
+            android:text="SmartThings 데이터 연동완료!"
             android:textSize="18sp" />
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
