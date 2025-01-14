@@ -1,4 +1,4 @@
-package com.example.front.data.smartHome
+package com.example.front.data.SmartHome
 
 data class DeviceResponse(
     val items: List<Device>

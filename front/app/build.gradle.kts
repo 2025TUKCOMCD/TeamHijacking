@@ -13,13 +13,15 @@ plugins {
 android {
     namespace = "com.example.front"
     compileSdk = 34
-    //localProperties의 변수 지정 및 파일 정보 받아오기
+
+    // localProperties 파일에서 변수 지정 및 파일 정보 받아오기
     val localProperties = Properties()
     localProperties.load(project.rootProject.file("local.properties").inputStream())
-    //ODsay_APIKEY이름 으로 받아옴
-    val ODsay_APIKEY = localProperties.getProperty("ODsay_APIKEY")?:""
-    val Geolocation_APIKEY = localProperties.getProperty("Geolocation_APIKEY")?:""
 
+    // 기존 API 키와 함께 SMARTTHINGS_API_TOKEN 추가
+    val ODsay_APIKEY = localProperties.getProperty("ODsay_APIKEY") ?: ""
+    val Geolocation_APIKEY = localProperties.getProperty("Geolocation_APIKEY") ?: ""
+    val SMARTTHINGS_API_TOKEN = localProperties.getProperty("SMARTTHINGS_API_TOKEN") ?: ""
 
     defaultConfig {
         applicationId = "com.example.front"
@@ -27,12 +29,15 @@ android {
         targetSdk = 34
         versionCode = 1
         versionName = "1.0"
+
         vectorDrawables {
             useSupportLibrary = true
         }
-        //buildConfig필드에 ODsay_APIKEY로 저장
-        buildConfigField("String", "ODsay_APIKEY", ODsay_APIKEY)
-        buildConfigField("String","Geolocation_APIKEY", Geolocation_APIKEY)
+
+        // buildConfigField에 API 키 추가
+        buildConfigField("String", "ODsay_APIKEY", "\"$ODsay_APIKEY\"")
+        buildConfigField("String", "Geolocation_APIKEY", "\"$Geolocation_APIKEY\"")
+        buildConfigField("String", "SMARTTHINGS_API_TOKEN", "\"$SMARTTHINGS_API_TOKEN\"")
     }
 
     buildTypes {
@@ -42,43 +47,34 @@ android {
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
-            //리소스나 xml파일에서도 apikey 접근 가능하게 해줌 일단 필요 없어서 주석
-           // resValue("String","APIKEY", gradleLocalProperties(rootDir,providers).getProperty("APIKEY"))
-
-            //코드 내에서 api접근 가능하게함
-           // buildConfigField("String","APIKEY", gradleLocalProperties(rootDir,providers).getProperty("APIKEY"))
-
         }
     }
+
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_1_8
         targetCompatibility = JavaVersion.VERSION_1_8
     }
+
     kotlinOptions {
         jvmTarget = "1.8"
     }
+
     buildFeatures {
         compose = true
         buildConfig = true
+        viewBinding = true
+        dataBinding = true
     }
+
     composeOptions {
         kotlinCompilerExtensionVersion = "1.5.1"
     }
+
     packaging {
         resources {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
         }
     }
-
-    //화면 전환 가능하게 하는 코드
-    buildFeatures{
-        //buildConfig를 true로 변경
-        viewBinding  = true
-        dataBinding = true
-        buildConfig = true
-
-    }
-
 }
 
 dependencies {

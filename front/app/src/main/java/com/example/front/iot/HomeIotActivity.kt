@@ -3,9 +3,10 @@ package com.example.front.iot
 import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
+import com.example.front.BuildConfig
 import com.example.front.R
-import com.example.front.data.smartHome.DeviceResponse
-import com.example.front.data.smartHome.RetrofitClient
+import com.example.front.data.SmartHome.DeviceResponse
+import com.example.front.data.SmartHome.RetrofitClient
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -15,7 +16,7 @@ class HomeIotActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_home_iot)
 
-        val apiToken = "Bearer f590f9f7-b8fd-4926-8dff-d9fd84774576" // 발급받은 SmartThings API 토큰
+        val apiToken = "Bearer ${BuildConfig.SMARTTHINGS_API_TOKEN}"
 
         val apiService = RetrofitClient.instance
         apiService.getDevices(apiToken).enqueue(object : Callback<DeviceResponse> {
