@@ -14,7 +14,7 @@
             android:layout_height="match_parent"
             android:orientation="vertical">
             <TextView
-                android:paddingTop="20dp"
+                android:paddingTop="30dp"
                 android:id="@+id/addressStartTextView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -48,6 +48,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Start Address STT"
+                android:layout_gravity="center"
                 android:layout_marginBottom="16dp"/>
 
             <TextView
@@ -83,6 +84,7 @@
                 android:id="@+id/buttonStartSttEnd"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center"
                 android:text="End Address STT"
                 android:layout_marginBottom="16dp"/>
 
