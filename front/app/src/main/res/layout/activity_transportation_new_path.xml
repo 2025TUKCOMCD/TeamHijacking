@@ -1,101 +1,125 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
     android:orientation="vertical"
-    android:background="@color/backgroundDark"
-    android:padding="16dp">
-    <ScrollView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
+    android:background="#000000"
+    android:padding="20dp"
+    app:layout_constraintBottom_toBottomOf="parent"
+    android:gravity="center" >
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical">
-            <TextView
-                android:paddingTop="20dp"
-                android:id="@+id/addressStartTextView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Start Address:"
-                android:textColor="@android:color/white"
-                android:textSize="18sp"
-                android:layout_marginBottom="8dp"/>
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
-                <TextView
-                    android:id="@+id/latitudeStartTextView"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Latitude:"
-                    android:textColor="@android:color/white"
-                    android:textSize="8sp"
-                    android:layout_marginBottom="4dp"/>
+<ScrollView
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
 
-                <TextView
-                    android:id="@+id/longitudeStartTextView"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Longitude:"
-                    android:textSize="8sp"
-                    android:textColor="@android:color/white"
-                    android:layout_marginBottom="4dp"/>
-            </LinearLayout>
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_margin="10dp" >
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/departure_view"
+        android:orientation="vertical" >
 
-
-            <Button
-                android:id="@+id/buttonStartSttStart"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Start Address STT"
-                android:layout_marginBottom="16dp"/>
-
-            <TextView
-                android:id="@+id/addressEndTextView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="End Address:"
-                android:textColor="@android:color/white"
-                android:textSize="18sp"
-                android:layout_marginBottom="8dp"/>
-        <LinearLayout
-            android:layout_width="match_parent"
+        <TextView
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:text="@string/start_address"
+            android:textColor="@android:color/white"
+            android:textSize="11sp"
+            android:contentDescription="@string/start_address_description"/>
+        <TextView
+            android:id="@+id/addressStartTextView"
+            android:layout_width="185dp"
+            android:layout_height="80dp"
+            android:layout_marginBottom="8dp"
+            android:autofillHints="@string/addressStartTextView"
+            android:text="출발지를 입력하십시오."
+            android:hint="@string/addressStartTextView"
+            android:textColor="@android:color/white"
+            android:textSize="12sp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:background="@drawable/destination_view" >
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/end_address"
+            android:textSize="11sp"
+            android:textColor="@android:color/white"
+            android:contentDescription="@string/end_address_description"/>
+        <TextView
+            android:id="@+id/addressEndTextView"
+            android:layout_width="185dp"
+            android:layout_height="80dp"
+            android:autofillHints="@string/addressEndTextView"
+            android:text="목적지를 입력하십시오."
+            android:hint="@string/addressEndTextView"
+            android:textColor="@android:color/white"
+            android:textSize="12sp"
+            android:scaleType="centerInside" />
+    </LinearLayout>
+
+
+    <!--<ImageButton
+        android:id="@+id/buttonSTT"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:contentDescription="@string/buttonSTT"
+        android:src="@drawable/stt_btn"
+        android:background="@android:color/transparent"
+        android:scaleType="centerInside"
+        android:layout_gravity="end" />
+
+
+  <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingTop="40dp">
 
             <TextView
                 android:id="@+id/latitudeEndTextView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="@android:color/white"
-                android:text="Latitude:"
-                android:textSize="8sp"
+                android:text="@string/latitude_end"
+                android:textSize="12sp"
                 android:layout_marginBottom="4dp"/>
-
             <TextView
                 android:id="@+id/longitudeEndTextView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Longitude:"
+                android:text="@string/longitude_end"
                 android:textColor="@android:color/white"
-                android:textSize="8sp"
+                android:textSize="12sp"
                 android:layout_marginBottom="16dp"/>
-        </LinearLayout>
+            <TextView
+                    android:id="@+id/latitudeStartTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/latitude_start"
+                    android:textColor="@android:color/white"
+                    android:textSize="12sp"
+                    android:layout_marginBottom="4dp"/>
 
-            <Button
-                android:id="@+id/buttonStartSttEnd"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="End Address STT"
-                android:layout_marginBottom="16dp"/>
-
-
-        </LinearLayout>
-    </ScrollView>
-
-
+                <TextView
+                    android:id="@+id/longitudeStartTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/longitude_start"
+                    android:textSize="12sp"
+                    android:textColor="@android:color/white"
+                    android:layout_marginBottom="4dp"/>
+            </LinearLayout>-->
+    </LinearLayout>
+</ScrollView>
 </LinearLayout>
