@@ -56,10 +56,7 @@
     <option name="autoReloadType" value="NONE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="5a34f773-8c82-4b0a-86d3-a37d3cf6ba80" name="Changes" comment="[dev]&#10;UIUX에 사용할(transportationsaved root) 이미지(xml,png) 파일 추가">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/front/app/src/main/java/com/example/front/iot/HomeIotActivity.kt" beforeDir="false" afterPath="$PROJECT_DIR$/front/app/src/main/java/com/example/front/iot/HomeIotActivity.kt" afterDir="false" />
-    </list>
+    <list default="true" id="5a34f773-8c82-4b0a-86d3-a37d3cf6ba80" name="Changes" comment="etc." />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -491,7 +488,15 @@
       <option name="project" value="LOCAL" />
       <updated>1736837784419</updated>
     </task>
-    <option name="localTasksCounter" value="19" />
+    <task id="LOCAL-00019" summary="etc.">
+      <option name="closed" value="true" />
+      <created>1736923430279</created>
+      <option name="number" value="00019" />
+      <option name="presentableId" value="LOCAL-00019" />
+      <option name="project" value="LOCAL" />
+      <updated>1736923430279</updated>
+    </task>
+    <option name="localTasksCounter" value="20" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -526,8 +531,8 @@
     <MESSAGE value="스마트 싱스 토큰키 값 수정 및 그래들 코드 리펙토링" />
     <MESSAGE value="데이터 패키지 오류 수정" />
     <MESSAGE value="그래들 코드 리펙토링2" />
-    <MESSAGE value="etc." />
     <MESSAGE value="xml 파일 수정2" />
-    <option name="LAST_COMMIT_MESSAGE" value="xml 파일 수정2" />
+    <MESSAGE value="etc." />
+    <option name="LAST_COMMIT_MESSAGE" value="etc." />
   </component>
 </project>
