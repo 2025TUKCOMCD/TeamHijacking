@@ -21,4 +21,15 @@
     <string name="default_text">기본 텍스트</string>
     <string name="btn_audio_guide_btn1">음성 유도기 동작, 음향 신호기의 유도 버튼입니다. \n음성 유도기 안내 기능과 횡단보도의 위치로 유도하는 기능이 들어있습니다.</string>
     <string name="btn_audio_guide_btn2">음향 신호기 신호 버튼입니다. 신호기에 의해 횡단보도를 횡단할 수 있게 음성으로 도와주는 버튼입니다.</string>
+    <string name="buttonSTT">주소를 말씀해주십시오.</string>
+    <string name="start_address">출발지:</string>
+    <string name="end_address">목적지:</string>
+    <string name="latitude_end">Latitude-End:</string>
+    <string name="longitude_end">Longitude-End:</string>
+    <string name="latitude_start">Latitude-Start:</string>
+    <string name="longitude_start">Longitude-Start:</string>
+    <string name="addressEndTextView">목적지를 입력하십시오.</string>
+    <string name="addressStartView">출발지를 입력하십시오.</string>
+    <string name="start_address_description">출발지.\n다음에 있을 칸에서 출발지를 입력할 수 있습니다.</string>
+    <string name="end_address_description">목적지.\n다음에 있을 칸에서 목적지를 입력할 수 있습니다.</string>
 </resources>
