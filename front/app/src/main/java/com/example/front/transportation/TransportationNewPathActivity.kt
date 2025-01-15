@@ -9,6 +9,7 @@ import android.speech.RecognizerIntent
 import android.util.Log
 //import android.widget.Button
 import android.widget.EditText
+import android.widget.TextView
 //import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
@@ -44,8 +45,8 @@ class TransportationNewPathActivity : AppCompatActivity() {
         //사용할 객체들 선언
        // val buttonStartSTTStart: Button = binding.buttonStartSttStart
        // val buttonStartSTTEnd: Button = binding.buttonStartSttEnd
-        val addressStartEditText: EditText = binding.addressStartEditText
-        val addressEndEditText: EditText = binding.addressEndEditText
+        val addressStartEditText: TextView = binding.addressStartTextView
+        val addressEndEditText: TextView = binding.addressEndTextView
        // val latitudeStartTextView: TextView = binding.latitudeStartTextView
         //val longitudeStartTextView: TextView = binding.longitudeStartTextView
         //val latitudeEndTextView: TextView = binding.latitudeEndTextView
@@ -98,10 +99,10 @@ class TransportationNewPathActivity : AppCompatActivity() {
             if (result != null && result.isNotEmpty()) {
                 val address = result[0]
                 if (requestCode == REQUEST_CODE_SPEECH_INPUT_START) {
-                    binding.addressStartEditText.setText(address)
+                    binding.addressStartTextView.text=address
                     getLocationFromAddress(address/*, binding.latitudeStartTextView, binding.longitudeStartTextView*/)
                 } else {
-                    binding.addressEndEditText.setText(address)
+                    binding.addressEndTextView.text=address
                     getLocationFromAddress(address/*, binding.latitudeEndTextView, binding.longitudeEndTextView*/)
                 }
             }
