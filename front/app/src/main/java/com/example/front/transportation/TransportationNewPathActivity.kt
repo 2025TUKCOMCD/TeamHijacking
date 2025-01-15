@@ -7,6 +7,7 @@ import android.content.pm.PackageManager
 import android.os.Bundle
 import android.speech.RecognizerIntent
 import android.util.Log
+import android.widget.Button
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
@@ -41,6 +42,7 @@ class TransportationNewPathActivity : AppCompatActivity() {
         //사용할 객체들 선언
         val addressStartEditText: TextView = binding.addressStartTextView
         val addressEndEditText: TextView = binding.addressEndTextView
+        val AddressConfirmBtn: Button = binding.AddressConfirmBtn
 
         // 권한이 있는지 확인 (여기서는 위치 권한 확인)
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
