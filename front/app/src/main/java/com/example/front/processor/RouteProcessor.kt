@@ -130,23 +130,6 @@ object RouteProcessor {
     }
 }
 
-//    fun fetchRealtimeStationData(pathRouteResult: PathRouteResult, pathIndex: Int) {
-//        Log.d("RouteProcessor", "Fetching real-time data for path index: $pathIndex")
-//        CoroutineScope(Dispatchers.IO).launch {
-//            pathRouteResult.startStationIDsArray.zip(pathRouteResult.busIDsArray).forEach { (startStationID, busID) ->
-//                try {
-//                    val response = fetchRealtimeStation(startStationID, busID)
-//                    if (response != null) {
-//                        Log.d("TransportationMainActivity", "Realtime Station Data: $response")
-//                    } else {
-//                        Log.d("TransportationMainActivity", "No data received for stationID: $startStationID, busID: $busID")
-//                    }
-//                } catch (e: Exception) {
-//                    Log.e("TransportationMainActivity", "Error fetching real-time station data", e)
-//                }
-//            }
-//        }
-//    }
 
     private fun calculateRouteScore(path: Path): Double {
         val info = path.info
