@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:background="@color/backgroundDark"
+    android:padding="16dp"
+    app:layout_constraintBottom_toBottomOf="parent"
+    android:gravity="center"
+    >
+
+    <!-- <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/redtriangle" />-->
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/departure_view"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/start_address"
+            android:textColor="@android:color/white"
+            android:textSize="11sp"
+            android:contentDescription="@string/start_address_description"/>
+
+        <EditText
+            android:id="@+id/addressStartEditText"
+            android:layout_width="185dp"
+            android:layout_height="80dp"
+            android:layout_marginBottom="8dp"
+            android:autofillHints="@string/addressStartTextView"
+            android:inputType="textMultiLine"
+            android:text="출발지를 입력하십시오."
+            android:hint="@string/addressStartView"
+            android:textColor="@android:color/white"
+            android:textSize="12sp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:background="@drawable/destination_view" >
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/end_address"
+            android:textSize="11sp"
+            android:textColor="@android:color/white"
+            android:contentDescription="@string/end_address_description"/>
+        <EditText
+            android:id="@+id/addressEndEditText"
+            android:layout_width="185dp"
+            android:layout_height="80dp"
+            android:autofillHints="@string/addressEndTextView"
+            android:inputType="textMultiLine"
+            android:text="목적지를 입력하십시오."
+            android:hint="@string/addressEndTextView"
+            android:textColor="@android:color/white"
+            android:textSize="12sp"
+            android:scaleType="centerInside"/>
+    </LinearLayout>
+
+
+    <!--<ImageButton
+        android:id="@+id/buttonSTT"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:contentDescription="@string/buttonSTT"
+        android:src="@drawable/stt_btn"
+        android:background="@android:color/transparent"
+        android:scaleType="centerInside"
+        android:layout_gravity="end" />
+
+
+  <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingTop="40dp">
+
+            <TextView
+                android:id="@+id/latitudeEndTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@android:color/white"
+                android:text="@string/latitude_end"
+                android:textSize="12sp"
+                android:layout_marginBottom="4dp"/>
+            <TextView
+                android:id="@+id/longitudeEndTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/longitude_end"
+                android:textColor="@android:color/white"
+                android:textSize="12sp"
+                android:layout_marginBottom="16dp"/>
+            <TextView
+                    android:id="@+id/latitudeStartTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/latitude_start"
+                    android:textColor="@android:color/white"
+                    android:textSize="12sp"
+                    android:layout_marginBottom="4dp"/>
+
+                <TextView
+                    android:id="@+id/longitudeStartTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/longitude_start"
+                    android:textSize="12sp"
+                    android:textColor="@android:color/white"
+                    android:layout_marginBottom="4dp"/>
+            </LinearLayout>-->
+</LinearLayout>
