@@ -15,6 +15,7 @@ class HomeIotActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_home_iot)
 
+        // 스마트싱스 API 토큰키 연동 (local.properties에 키값 저장)
         val apiToken = "Bearer ${BuildConfig.SMARTTHINGS_API_TOKEN}"
 
         val apiService = RetrofitClient.instance

@@ -57,9 +57,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="5a34f773-8c82-4b0a-86d3-a37d3cf6ba80" name="Changes" comment="[dev]&#10;UIUX에 사용할(transportationsaved root) 이미지(xml,png) 파일 추가">
-      <change afterPath="$PROJECT_DIR$/.idea/modules/app/front.app.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/front/app/src/main/res/layout/activity_transportation_new_path.xml" beforeDir="false" afterPath="$PROJECT_DIR$/front/app/src/main/res/layout/activity_transportation_new_path.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/front/app/src/main/java/com/example/front/iot/HomeIotActivity.kt" beforeDir="false" afterPath="$PROJECT_DIR$/front/app/src/main/java/com/example/front/iot/HomeIotActivity.kt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -69,7 +68,7 @@
   <component name="ClangdSettings">
     <option name="formatViaClangd" value="false" />
   </component>
-  <component name="ExecutionTargetManager" SELECTED_TARGET="device_and_snapshot_combo_box_target[DeviceId(pluginId=LocalEmulator, isTemplate=false, identifier=path=C:\Users\srnb1\.android\avd\Wear_OS_Small_Round_API_34.avd)]" />
+  <component name="ExecutionTargetManager" SELECTED_TARGET="device_and_snapshot_combo_box_target[DeviceId(pluginId=LocalEmulator, isTemplate=false, identifier=path=C:\Users\klmot\.android\avd\Wear_OS_Large_Round_API_34.avd)]" />
   <component name="ExternalProjectsData">
     <projectState path="$PROJECT_DIR$/front">
       <ProjectState />
@@ -118,13 +117,19 @@
       <list>
         <option value="valueResourceFile" />
         <option value="resourceFile" />
+        <option value="Kotlin Interface" />
+        <option value="Kotlin Data Class" />
+        <option value="Kotlin Object" />
       </list>
     </option>
+  </component>
+  <component name="Git.Merge.Settings">
+    <option name="BRANCH" value="main" />
   </component>
   <component name="Git.Settings">
     <option name="RECENT_BRANCH_BY_REPOSITORY">
       <map>
-        <entry key="$PROJECT_DIR$" value="main" />
+        <entry key="$PROJECT_DIR$" value="watch" />
       </map>
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -165,7 +170,7 @@
     &quot;cidr.known.project.marker&quot;: &quot;true&quot;,
     &quot;com.google.services.firebase.aqiPopupShown&quot;: &quot;true&quot;,
     &quot;dart.analysis.tool.window.visible&quot;: &quot;false&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;watch&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;watch-yeon&quot;,
     &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
     &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
     &quot;last_opened_file_path&quot;: &quot;C:/Users/klmot/AndroidStudioProjects/TeamHijacking/front/build.gradle.kts&quot;,
@@ -406,7 +411,87 @@
       <option name="project" value="LOCAL" />
       <updated>1736751416004</updated>
     </task>
-    <option name="localTasksCounter" value="9" />
+    <task id="LOCAL-00009" summary="패키지 수정">
+      <option name="closed" value="true" />
+      <created>1736403002109</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1736403002109</updated>
+    </task>
+    <task id="LOCAL-00010" summary="데이터 오류 수정">
+      <option name="closed" value="true" />
+      <created>1736751580559</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1736751580559</updated>
+    </task>
+    <task id="LOCAL-00011" summary="스마트 싱스 연동">
+      <option name="closed" value="true" />
+      <created>1736827222060</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL-00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1736827222060</updated>
+    </task>
+    <task id="LOCAL-00012" summary="API키 설정">
+      <option name="closed" value="true" />
+      <created>1736827772620</created>
+      <option name="number" value="00012" />
+      <option name="presentableId" value="LOCAL-00012" />
+      <option name="project" value="LOCAL" />
+      <updated>1736827772620</updated>
+    </task>
+    <task id="LOCAL-00013" summary="xml 파일 수정">
+      <option name="closed" value="true" />
+      <created>1736828311207</created>
+      <option name="number" value="00013" />
+      <option name="presentableId" value="LOCAL-00013" />
+      <option name="project" value="LOCAL" />
+      <updated>1736828311207</updated>
+    </task>
+    <task id="LOCAL-00014" summary="스마트 싱스 토큰키 값 수정 및 그래들 코드 리펙토링">
+      <option name="closed" value="true" />
+      <created>1736834184651</created>
+      <option name="number" value="00014" />
+      <option name="presentableId" value="LOCAL-00014" />
+      <option name="project" value="LOCAL" />
+      <updated>1736834184651</updated>
+    </task>
+    <task id="LOCAL-00015" summary="데이터 패키지 오류 수정">
+      <option name="closed" value="true" />
+      <created>1736836418251</created>
+      <option name="number" value="00015" />
+      <option name="presentableId" value="LOCAL-00015" />
+      <option name="project" value="LOCAL" />
+      <updated>1736836418251</updated>
+    </task>
+    <task id="LOCAL-00016" summary="그래들 코드 리펙토링2">
+      <option name="closed" value="true" />
+      <created>1736836988146</created>
+      <option name="number" value="00016" />
+      <option name="presentableId" value="LOCAL-00016" />
+      <option name="project" value="LOCAL" />
+      <updated>1736836988146</updated>
+    </task>
+    <task id="LOCAL-00017" summary="etc.">
+      <option name="closed" value="true" />
+      <created>1736837325066</created>
+      <option name="number" value="00017" />
+      <option name="presentableId" value="LOCAL-00017" />
+      <option name="project" value="LOCAL" />
+      <updated>1736837325066</updated>
+    </task>
+    <task id="LOCAL-00018" summary="xml 파일 수정2">
+      <option name="closed" value="true" />
+      <created>1736837784419</created>
+      <option name="number" value="00018" />
+      <option name="presentableId" value="LOCAL-00018" />
+      <option name="project" value="LOCAL" />
+      <updated>1736837784419</updated>
+    </task>
+    <option name="localTasksCounter" value="19" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -429,6 +514,20 @@
     <MESSAGE value="[dev]&#10;AudioGuideActivity에 SetonClickListener 추가" />
     <MESSAGE value="[dev]&#10;TransportationMainActivity 디자인 변경" />
     <MESSAGE value="[dev]&#10;UIUX에 사용할(transportationsaved root) 이미지(xml,png) 파일 추가" />
-    <option name="LAST_COMMIT_MESSAGE" value="[dev]&#10;UIUX에 사용할(transportationsaved root) 이미지(xml,png) 파일 추가" />
+    <MESSAGE value="mainActivity에 넣을 png 구현" />
+    <MESSAGE value="mainActivity 디자인 수정" />
+    <MESSAGE value="mainActivity contentDescription 추가, text 내용을 strings.xml에 추가, button에서 ImageButton으로 수정." />
+    <MESSAGE value="SettingActivity와 iotActivity 추가, 신호등과 교통안내 기능 클릭 시 검은 화면이 뜨는 이슈가 있으므로 이 점 확인 필요." />
+    <MESSAGE value="패키지 수정" />
+    <MESSAGE value="데이터 오류 수정" />
+    <MESSAGE value="스마트 싱스 연동" />
+    <MESSAGE value="API키 설정" />
+    <MESSAGE value="xml 파일 수정" />
+    <MESSAGE value="스마트 싱스 토큰키 값 수정 및 그래들 코드 리펙토링" />
+    <MESSAGE value="데이터 패키지 오류 수정" />
+    <MESSAGE value="그래들 코드 리펙토링2" />
+    <MESSAGE value="etc." />
+    <MESSAGE value="xml 파일 수정2" />
+    <option name="LAST_COMMIT_MESSAGE" value="xml 파일 수정2" />
   </component>
 </project>
