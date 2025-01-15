@@ -3,11 +3,7 @@ package com.example.front.transportation
 import android.content.Intent
 import android.os.Bundle
 import android.widget.TextView
-import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
-import com.example.front.R
 import com.example.front.databinding.ActivityTransportationSavedPathBinding
 
 class TransportationSavedPathActivity : AppCompatActivity() {

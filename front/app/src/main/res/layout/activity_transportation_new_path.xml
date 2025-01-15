@@ -4,6 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:background="@color/backgroundDark"
     android:padding="16dp">
     <ScrollView
         android:layout_width="match_parent"
@@ -19,6 +20,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Start Address:"
+                android:textColor="@android:color/white"
                 android:textSize="18sp"
                 android:layout_marginBottom="8dp"/>
             <LinearLayout
@@ -30,6 +32,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Latitude:"
+                    android:textColor="@android:color/white"
                     android:textSize="8sp"
                     android:layout_marginBottom="4dp"/>
 
@@ -39,6 +42,7 @@
                     android:layout_height="wrap_content"
                     android:text="Longitude:"
                     android:textSize="8sp"
+                    android:textColor="@android:color/white"
                     android:layout_marginBottom="4dp"/>
             </LinearLayout>
 
@@ -56,6 +60,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="End Address:"
+                android:textColor="@android:color/white"
                 android:textSize="18sp"
                 android:layout_marginBottom="8dp"/>
         <LinearLayout
@@ -67,6 +72,7 @@
                 android:id="@+id/latitudeEndTextView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:textColor="@android:color/white"
                 android:text="Latitude:"
                 android:textSize="8sp"
                 android:layout_marginBottom="4dp"/>
@@ -76,6 +82,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Longitude:"
+                android:textColor="@android:color/white"
                 android:textSize="8sp"
                 android:layout_marginBottom="16dp"/>
         </LinearLayout>
