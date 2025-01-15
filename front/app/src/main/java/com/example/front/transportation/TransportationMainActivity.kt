@@ -4,11 +4,8 @@ import android.os.Bundle
 import android.util.Log
 import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
-import androidx.databinding.adapters.ViewBindingAdapter.setPadding
-import com.example.front.R
-import com.example.front.data.searchPath.PathRouteResult
 import com.example.front.databinding.ActivityTransportationMainBinding
-import com.example.front.processor.RouteProcessor
+import com.example.front.transportation.processor.RouteProcessor
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -64,7 +61,7 @@ class TransportationMainActivity : AppCompatActivity() {
                     }
 
                     // 생성된 버튼을 컨테이너에 추가
-                    binding.routeContainer.addView(button)
+
                 }
             } catch (e: Exception) {
                 Log.e("TransportationMainActivity", "Error fetching routes", e)

@@ -1,17 +1,15 @@
-package com.example.front.processor
+package com.example.front.transportation.processor
 
 import android.util.Log
 import com.example.front.BuildConfig
-import com.example.front.data.realtimeStation.RealtimeStation
-import com.example.front.data.searchPath.Path
-import com.example.front.data.searchPath.PathRouteResult
-import com.example.front.data.searchPath.SearchPubTransPathTResponse
-import com.example.front.service.RouteService
+import com.example.front.transportation.data.realtimeStation.RealtimeStation
+import com.example.front.transportation.data.searchPath.Path
+import com.example.front.transportation.data.searchPath.PathRouteResult
+import com.example.front.transportation.data.searchPath.SearchPubTransPathTResponse
+import com.example.front.transportation.service.RouteService
 import com.google.gson.Gson
 import com.google.gson.JsonSyntaxException
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit

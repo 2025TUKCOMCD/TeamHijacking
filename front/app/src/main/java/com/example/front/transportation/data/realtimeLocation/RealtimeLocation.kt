@@ -1,4 +1,4 @@
-package com.example.front.data.realtimeLocation
+package com.example.front.transportation.data.realtimeLocation
 
 //1. 최상위 노드
 data class RealtimeRouteResponse(

@@ -1,4 +1,4 @@
-package com.example.front.data.searchPath
+package com.example.front.transportation.data.searchPath
 
 data class Path(
     val info: Info,

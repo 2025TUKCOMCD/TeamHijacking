@@ -1,4 +1,4 @@
-package com.example.front.data.realtimeStation
+package com.example.front.transportation.data.realtimeStation
 
 data class Real(
     val routeId: String,
