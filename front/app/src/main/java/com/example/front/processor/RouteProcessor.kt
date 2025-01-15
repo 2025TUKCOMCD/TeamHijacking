@@ -2,8 +2,6 @@ package com.example.front.processor
 
 import android.util.Log
 import com.example.front.BuildConfig
-import com.example.front.data.realtimeBus.DetailInfo
-import com.example.front.data.realtimeBus.RealtimeRouteResponse
 import com.example.front.data.realtimeStation.RealtimeStation
 import com.example.front.data.searchPath.Path
 import com.example.front.data.searchPath.PathRouteResult
@@ -52,21 +50,15 @@ object RouteProcessor {
                 path.subPath.filter { it.trafficType == 2 }
                     .mapNotNull { subPath ->
                         subPath.startID
-                    }.toTypedArray()
-            }
-
-            val formattedStartStationIDs = startStationIDsArray.mapIndexed { i, startStationIDs ->
-                "Path $i: ${startStationIDs.joinToString(", ")}"
-            }.joinToString("\n")
-
-            Log.d("RouteProcessor", formattedStartStationIDs)
+                    }
+            }.flatten().toCollection(ArrayList())
 
             val busIDsArray = paths.map { path ->
                 path.subPath.filter { it.trafficType == 2 }
                     .mapNotNull { subPath ->
                         subPath.lane?.firstOrNull()?.busID
-                    }.toTypedArray()
-            }
+                    }
+            }.flatten().toCollection(ArrayList())
 
             sortedPaths.map { (path, _) ->
                 val info = path.info
@@ -100,12 +92,12 @@ object RouteProcessor {
                 Log.d("RouteProcessor", "Detailed Path: $detailedPath")
 
                 PathRouteResult(
+                    startStationIDsArray = startStationIDsArray,
+                    busIDsArray = busIDsArray,
                     totalTime = info.totalTime,
                     transitCount = info.busTransitCount + info.subwayTransitCount,
                     mainTransitTypes = mainTransitTypes,
-                    detailedPath = detailedPath,
-                    startStationIDs = startStationIDsArray.firstOrNull() ?: arrayOf(),
-                    busIDs = busIDsArray.firstOrNull() ?: arrayOf()
+                    detailedPath = detailedPath
                 )
             }
         } catch (e: JsonSyntaxException) {
@@ -117,29 +109,34 @@ object RouteProcessor {
         }
     }
 
-//    suspend fun fetchRealtimeStation(stationID: Int, busID: Int): RealtimeStation? {
-//        return try {
-//            val response = withContext(Dispatchers.IO) {
-//                routeService.realtimeStation(stationID, busID.toString(), apiKey = ODsay_APIKEY)
-//            }
-//
-//            val rawJson = response.string()
-//            Log.d("RouteProcessor", "Realtime Station Raw Response: $rawJson")
-//
-//            gson.fromJson(rawJson, RealtimeStation::class.java)
-//        } catch (e: Exception) {
-//            Log.e("RouteProcessor", "Error fetching real-time station data", e)
-//            null
-//        }
-//    }
-//
+    suspend fun fetchRealtimeStation(stationID: ArrayList<Int>, busID: ArrayList<Int>): RealtimeStation? {
+        return try {
+
+            val response = withContext(Dispatchers.IO) {
+                routeService.realtimeStation(stationID, busID.toString(), apiKey = ODsay_APIKEY)
+            }
+
+            val rawJson = response.string()
+            Log.d("RouteProcessor", "Realtime Station Raw Response: $rawJson")
+
+            gson.fromJson(rawJson, RealtimeStation::class.java)
+        } catch (e: Exception) {
+            Log.e("RouteProcessor", "Error fetching real-time station data", e)
+            null
+        }
+    }
+
 //    fun fetchRealtimeStationData(pathRouteResult: PathRouteResult, pathIndex: Int) {
 //        Log.d("RouteProcessor", "Fetching real-time data for path index: $pathIndex")
 //        CoroutineScope(Dispatchers.IO).launch {
-//            pathRouteResult.startStationIDs.zip(pathRouteResult.busIDs).forEach { (startStationID, busID) ->
+//            pathRouteResult.startStationIDsArray.zip(pathRouteResult.busIDsArray).forEach { (startStationID, busID) ->
 //                try {
 //                    val response = fetchRealtimeStation(startStationID, busID)
-//                    Log.d("TransportationMainActivity", "Realtime Station Data: $response")
+//                    if (response != null) {
+//                        Log.d("TransportationMainActivity", "Realtime Station Data: $response")
+//                    } else {
+//                        Log.d("TransportationMainActivity", "No data received for stationID: $startStationID, busID: $busID")
+//                    }
 //                } catch (e: Exception) {
 //                    Log.e("TransportationMainActivity", "Error fetching real-time station data", e)
 //                }
