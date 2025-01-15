@@ -7,14 +7,11 @@ import android.content.pm.PackageManager
 import android.os.Bundle
 import android.speech.RecognizerIntent
 import android.util.Log
-//import android.widget.Button
-import android.widget.EditText
-//import android.widget.TextView
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.example.front.BuildConfig
-//import com.example.front.R
 import com.example.front.databinding.ActivityTransportationNewPathBinding
 import com.google.gson.JsonObject
 import com.google.gson.JsonParser
@@ -42,20 +39,14 @@ class TransportationNewPathActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         //사용할 객체들 선언
-       // val buttonStartSTTStart: Button = binding.buttonStartSttStart
-       // val buttonStartSTTEnd: Button = binding.buttonStartSttEnd
-        val addressStartEditText: EditText = binding.addressStartEditText
-        val addressEndEditText: EditText = binding.addressEndEditText
-       // val latitudeStartTextView: TextView = binding.latitudeStartTextView
-        //val longitudeStartTextView: TextView = binding.longitudeStartTextView
-        //val latitudeEndTextView: TextView = binding.latitudeEndTextView
-        //val longitudeEndTextView: TextView = binding.longitudeEndTextView
+        val addressStartEditText: TextView = binding.addressStartTextView
+        val addressEndEditText: TextView = binding.addressEndTextView
 
         // 권한이 있는지 확인 (여기서는 위치 권한 확인)
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
             val address = "서울특별시 강남구 강남대로 323"
-            addressStartEditText.setText(address)
-            getLocationFromAddress(address/*, latitudeStartTextView, longitudeStartTextView*/)
+            addressStartEditText.text=address
+            getLocationFromAddress(address)
         } else { // 만약 권한이 없으면 권한 요청
             ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.ACCESS_FINE_LOCATION), PERMISSION_REQUEST_ACCESS_FINE_LOCATION)
         }
@@ -98,11 +89,11 @@ class TransportationNewPathActivity : AppCompatActivity() {
             if (result != null && result.isNotEmpty()) {
                 val address = result[0]
                 if (requestCode == REQUEST_CODE_SPEECH_INPUT_START) {
-                    binding.addressStartEditText.setText(address)
-                    getLocationFromAddress(address/*, binding.latitudeStartTextView, binding.longitudeStartTextView*/)
+                    binding.addressStartTextView.text=address
+                    getLocationFromAddress(address)
                 } else {
-                    binding.addressEndEditText.setText(address)
-                    getLocationFromAddress(address/*, binding.latitudeEndTextView, binding.longitudeEndTextView*/)
+                    binding.addressEndTextView.text=address
+                    getLocationFromAddress(address)
                 }
             }
         }
@@ -124,10 +115,6 @@ class TransportationNewPathActivity : AppCompatActivity() {
             //실패시 출력
             override fun onFailure(call: okhttp3.Call, e: IOException) {
                 Log.e(TAG, "Geocoding API call failed", e)
-                /*runOnUiThread {
-                    latitudeTextView.text = "Latitude: Error"
-                    longitudeTextView.text = "Longitude: Error"
-                }*/
             }
 
             //성공시 함수
@@ -146,27 +133,15 @@ class TransportationNewPathActivity : AppCompatActivity() {
                         //텍스트를 넣어줌
                         Log.d("location","Latitude: $latitude")
                         Log.d("location","Longitude: $longitude")
-                        /*runOnUiThread {
-                            latitudeTextView.text = "Latitude: $latitude"
-                            longitudeTextView.text = "Longitude: $longitude"
-                        }*/
                     } else {
                         Log.e(TAG, "No results found for the specified address.")
                         Log.d("location","Latitude: Not found")
                         Log.d("location","Longitude: Not found")
-                        /*runOnUiThread {
-                            latitudeTextView.text = "Latitude: Not found"
-                            longitudeTextView.text = "Longitude: Not found"
-                        }*/
                     }
                 } else {
                     Log.e(TAG, "Geocoding API response was not successful")
                     Log.d("location", "Latitude: Error")
                     Log.d("location","Longitude: Error")
-                    /*runOnUiThread {
-                        latitudeTextView.text = "Latitude: Error"
-                        longitudeTextView.text = "Longitude: Error"
-                    }*/
                 }
             }
         })
@@ -176,9 +151,7 @@ class TransportationNewPathActivity : AppCompatActivity() {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         if (requestCode == PERMISSION_REQUEST_ACCESS_FINE_LOCATION && grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
             val address = "서울특별시 강남구 강남대로 323"
-            //val latitudeStartTextView: TextView = binding.latitudeStartTextView
-            //val longitudeStartTextView: TextView = binding.longitudeStartTextView
-            getLocationFromAddress(address/*, latitudeStartTextView, longitudeStartTextView*/)
+            getLocationFromAddress(address)
         }
     }
 }

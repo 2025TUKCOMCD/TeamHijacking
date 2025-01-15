@@ -5,22 +5,25 @@
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    android:background="@color/backgroundDark"
-    android:padding="16dp"
+    android:background="#000000"
+    android:padding="20dp"
     app:layout_constraintBottom_toBottomOf="parent"
-    android:gravity="center"
-    >
+    android:gravity="center" >
 
-    <!-- <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@drawable/redtriangle" />-->
+<ScrollView
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
 
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_margin="10dp" >
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:background="@drawable/departure_view"
-        android:orientation="vertical">
+        android:orientation="vertical" >
 
         <TextView
             android:layout_width="wrap_content"
@@ -29,14 +32,12 @@
             android:textColor="@android:color/white"
             android:textSize="11sp"
             android:contentDescription="@string/start_address_description"/>
-
-        <EditText
-            android:id="@+id/addressStartEditText"
+        <TextView
+            android:id="@+id/addressStartTextView"
             android:layout_width="185dp"
             android:layout_height="80dp"
             android:layout_marginBottom="8dp"
             android:autofillHints="@string/addressStartTextView"
-            android:inputType="textMultiLine"
             android:text="출발지를 입력하십시오."
             android:hint="@string/addressStartTextView"
             android:textColor="@android:color/white"
@@ -55,17 +56,16 @@
             android:textSize="11sp"
             android:textColor="@android:color/white"
             android:contentDescription="@string/end_address_description"/>
-        <EditText
-            android:id="@+id/addressEndEditText"
+        <TextView
+            android:id="@+id/addressEndTextView"
             android:layout_width="185dp"
             android:layout_height="80dp"
             android:autofillHints="@string/addressEndTextView"
-            android:inputType="textMultiLine"
             android:text="목적지를 입력하십시오."
             android:hint="@string/addressEndTextView"
             android:textColor="@android:color/white"
             android:textSize="12sp"
-            android:scaleType="centerInside"/>
+            android:scaleType="centerInside" />
     </LinearLayout>
 
 
@@ -120,4 +120,6 @@
                     android:textColor="@android:color/white"
                     android:layout_marginBottom="4dp"/>
             </LinearLayout>-->
+    </LinearLayout>
+</ScrollView>
 </LinearLayout>
