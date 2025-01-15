@@ -22,7 +22,7 @@
             android:layout_gravity="end"
             android:contentDescription="@string/btn_audio_guide_btn1"
             android:src="@drawable/blinker_btn1"
-            android:id="@+id/blinker_btn1"
+            android:id="@+id/blinkerBtn1"
             android:background="@android:color/transparent"
             android:layout_margin="8dp"
             android:clickable="true" />
@@ -32,7 +32,7 @@
             android:layout_height="wrap_content"
             android:contentDescription="@string/btn_audio_guide_btn2"
             android:src="@drawable/blinker_btn2_click"
-            android:id="@+id/blinker_btn2"
+            android:id="@+id/blinkerBtn2"
             android:background="@android:color/transparent"
             android:clickable="true"
              />

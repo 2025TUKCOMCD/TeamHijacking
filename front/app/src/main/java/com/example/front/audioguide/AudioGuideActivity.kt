@@ -10,13 +10,13 @@ class AudioGuideActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityAudioGuideBinding
 
-    //XML에서 정의된 버튼들을 연결
-    private val blinkerBtn1: ImageButton = binding.blinkerBtn1
-    private val blinkerBtn2: ImageButton = binding.blinkerBtn2
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityAudioGuideBinding.inflate(layoutInflater)
+
+        //XML에서 정의된 버튼들을 연결
+        val blinkerBtn1: ImageButton = binding.blinkerBtn1
+        val blinkerBtn2: ImageButton = binding.blinkerBtn2
 
         setContentView(binding.main)
 
