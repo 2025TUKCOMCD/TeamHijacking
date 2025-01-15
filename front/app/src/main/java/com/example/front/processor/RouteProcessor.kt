@@ -46,21 +46,18 @@ object RouteProcessor {
                 path to score
             }.sortedByDescending { it.second }
 
-            val startStationIDsArray = paths.map { path ->
-                path.subPath.filter { it.trafficType == 2 }
-                    .mapNotNull { subPath ->
-                        subPath.startID
-                    }
-            }.flatten().toCollection(ArrayList())
 
-            val busIDsArray = paths.map { path ->
-                path.subPath.filter { it.trafficType == 2 }
-                    .mapNotNull { subPath ->
-                        subPath.lane?.firstOrNull()?.busID
-                    }
-            }.flatten().toCollection(ArrayList())
 
             sortedPaths.map { (path, _) ->
+                val startStationIDsArray = path.subPath.filter { it.trafficType == 2 }
+                    .mapNotNull { subPath -> subPath.startID }
+
+                val busIDsArray = path.subPath.filter { it.trafficType == 2 }
+                    .mapNotNull { subPath -> subPath.lane?.firstOrNull()?.busID }
+
+                // `routeStationsAndBuses` 리스트 생성
+                val routeStationsAndBuses = startStationIDsArray.zip(busIDsArray)
+
                 val info = path.info
                 val subPaths = path.subPath
 
@@ -92,8 +89,7 @@ object RouteProcessor {
                 Log.d("RouteProcessor", "Detailed Path: $detailedPath")
 
                 PathRouteResult(
-                    startStationIDsArray = startStationIDsArray,
-                    busIDsArray = busIDsArray,
+                    routeStationsAndBuses = routeStationsAndBuses,
                     totalTime = info.totalTime,
                     transitCount = info.busTransitCount + info.subwayTransitCount,
                     mainTransitTypes = mainTransitTypes,
@@ -109,22 +105,24 @@ object RouteProcessor {
         }
     }
 
-    suspend fun fetchRealtimeStation(stationID: ArrayList<Int>, busID: ArrayList<Int>): RealtimeStation? {
-        return try {
-
-            val response = withContext(Dispatchers.IO) {
-                routeService.realtimeStation(stationID, busID.toString(), apiKey = ODsay_APIKEY)
-            }
-
-            val rawJson = response.string()
-            Log.d("RouteProcessor", "Realtime Station Raw Response: $rawJson")
-
-            gson.fromJson(rawJson, RealtimeStation::class.java)
-        } catch (e: Exception) {
-            Log.e("RouteProcessor", "Error fetching real-time station data", e)
-            null
-        }
-    }
+//    suspend fun fetchRealtimeStation(stationID: ArrayList<Int>, busID: ArrayList<Int>): RealtimeStation? {
+//        return try {
+//            val stationIDQuery = stationID.firstOrNull()
+//            val routeIDsQuery = busID.joinToString(",")
+//
+//            val response = withContext(Dispatchers.IO) {
+//                routeService.realtimeStation(stationIDQuery, routeIDsQuery, apiKey = ODsay_APIKEY)
+//            }
+//
+//            val rawJson = response.string()
+//            Log.d("RouteProcessor", "Realtime Station Raw Response: $rawJson")
+//
+//            gson.fromJson(rawJson, RealtimeStation::class.java)
+//        } catch (e: Exception) {
+//            Log.e("RouteProcessor", "Error fetching real-time station data", e)
+//            null
+//        }
+//    }
 
 //    fun fetchRealtimeStationData(pathRouteResult: PathRouteResult, pathIndex: Int) {
 //        Log.d("RouteProcessor", "Fetching real-time data for path index: $pathIndex")

@@ -22,10 +22,10 @@ class TransportationMainActivity : AppCompatActivity() {
         binding = ActivityTransportationMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        val startLat = 37.5665
-        val startLng = 126.9780
-        val endLat = 37.5651
-        val endLng = 126.9895
+        val startLat = 37.513841
+        val startLng = 127.101823
+        val endLat = 37.476813
+        val endLng = 126.964156
 
         CoroutineScope(Dispatchers.Main).launch {
             try {
@@ -34,16 +34,14 @@ class TransportationMainActivity : AppCompatActivity() {
 // 결과 분리 및 로그 출력 + 버튼 생성
                 result.forEach { route ->
                     // 각각의 값 분리
-                    val startStations = route.startStationIDsArray
-                    val busIDs = route.busIDsArray
+                    val routeStationsAndBuses = route.routeStationsAndBuses
                     val totalTime = route.totalTime
                     val transitCount = route.transitCount
                     val mainTransitTypes = route.mainTransitTypes
                     val detailedPath = route.detailedPath
 
                     // 로그 출력
-                    Log.d("RouteProcessor", "Start Stations: $startStations")
-                    Log.d("RouteProcessor", "Bus IDs: $busIDs")
+                    Log.d("RouteProcessor", "routeStationsAndBuses = $routeStationsAndBuses")
                     Log.d("RouteProcessor", "Total Time: $totalTime 분")
                     Log.d("RouteProcessor", "Transit Count: $transitCount 회")
                     Log.d("RouteProcessor", "Main Transit Types: $mainTransitTypes")
