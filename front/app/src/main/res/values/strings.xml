@@ -29,7 +29,7 @@
     <string name="latitude_start">Latitude-Start:</string>
     <string name="longitude_start">Longitude-Start:</string>
     <string name="addressEndTextView">목적지를 입력하십시오.</string>
-    <string name="addressStartView">출발지를 입력하십시오.</string>
+    <string name="addressStartTextView">출발지를 입력하십시오.</string>
     <string name="start_address_description">출발지.\n다음에 있을 칸에서 출발지를 입력할 수 있습니다.</string>
     <string name="end_address_description">목적지.\n다음에 있을 칸에서 목적지를 입력할 수 있습니다.</string>
 </resources>

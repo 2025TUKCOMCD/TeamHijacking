@@ -38,7 +38,7 @@
             android:autofillHints="@string/addressStartTextView"
             android:inputType="textMultiLine"
             android:text="출발지를 입력하십시오."
-            android:hint="@string/addressStartView"
+            android:hint="@string/addressStartTextView"
             android:textColor="@android:color/white"
             android:textSize="12sp" />
     </LinearLayout>
