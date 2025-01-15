@@ -1,36 +1,32 @@
 package com.example.front.data.realtimeStation
 
 data class RealtimeStation(
-    val result: Result?
+    val result: Result
 )
 
-//2. 노선 기반 정보 포함 노드
 data class Result(
-    val base: List<Base>?,
-    val real: List<Real>?,
+    val real: List<Real>
 )
 
-//3. 노선 정보 노드
-data class Base(
-    val busID: Int,
-    val station: List<Station>?
-)
-//4. 정류장 정보 노드
-data class Station(
-    val idx: Int,
-    val stationId: Int,
-    val stationName: String,
-    val x: Double,
-    val y: Double
-)
-//5. 실시간 버스 위치 정보 노드
 data class Real(
-    val fromStationId: String,
-    val toStationId: String,
-    val positionX: Double?,
-    val positionY: Double?
+    val routeId: String,
+    val updownFlag: String,
+    val arrival1: Arrival?,
+    val arrival2: Arrival?,
+    val localRouteId: String,
+    val stationSeq: String,
+    val routeNm: String
 )
 
-
-
-
+data class Arrival(
+    val fulCarAt: String,
+    val busPlateNo: String,
+    val waitStatus: String,
+    val busStatus: String,
+    val endBusYn: String,
+    val leftStation: Int,
+    val lowBusYn: String,
+    val congestion: Int,
+    val arrivalSec: Int,
+    val nmprType: Int
+)

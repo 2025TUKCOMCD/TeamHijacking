@@ -1,6 +1,5 @@
 package com.example.front.data.searchPath
 
-import com.example.front.data.realtimeBus.DetailInfo
 
 data class PathRouteResult(
     val routeStationsAndBuses : List<Pair<Int,Int>>,

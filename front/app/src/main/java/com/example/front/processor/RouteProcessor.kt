@@ -105,24 +105,30 @@ object RouteProcessor {
         }
     }
 
-//    suspend fun fetchRealtimeStation(stationID: ArrayList<Int>, busID: ArrayList<Int>): RealtimeStation? {
-//        return try {
-//            val stationIDQuery = stationID.firstOrNull()
-//            val routeIDsQuery = busID.joinToString(",")
-//
-//            val response = withContext(Dispatchers.IO) {
-//                routeService.realtimeStation(stationIDQuery, routeIDsQuery, apiKey = ODsay_APIKEY)
-//            }
-//
-//            val rawJson = response.string()
-//            Log.d("RouteProcessor", "Realtime Station Raw Response: $rawJson")
-//
-//            gson.fromJson(rawJson, RealtimeStation::class.java)
-//        } catch (e: Exception) {
-//            Log.e("RouteProcessor", "Error fetching real-time station data", e)
-//            null
-//        }
-//    }
+    suspend fun fetchRealtimeStation(routeStationsAndBuses: List<Pair<Int, Int>>): List<RealtimeStation?> {
+    return try {
+        Log.d("RouteProcessor", "Fetching real-time data for routeStationsAndBuses: $routeStationsAndBuses")
+
+        val realtimeStations = routeStationsAndBuses.map { (stationID, busID) ->
+            withContext(Dispatchers.IO) {
+                try {
+                    val response = routeService.realtimeStation(stationID, busID.toString(), apiKey = ODsay_APIKEY)
+                    val rawJson = response.string()
+                    Log.d("RouteProcessor", "Realtime Station Raw Response: $rawJson")
+                    gson.fromJson(rawJson, RealtimeStation::class.java)
+                } catch (e: Exception) {
+                    Log.e("RouteProcessor", "Error fetching real-time station data for stationID: $stationID, busID: $busID", e)
+                    null
+                }
+            }
+        }
+
+        realtimeStations
+    } catch (e: Exception) {
+        Log.e("RouteProcessor", "Error fetching real-time station data", e)
+        listOf()
+    }
+}
 
 //    fun fetchRealtimeStationData(pathRouteResult: PathRouteResult, pathIndex: Int) {
 //        Log.d("RouteProcessor", "Fetching real-time data for path index: $pathIndex")

@@ -54,13 +54,13 @@ class TransportationMainActivity : AppCompatActivity() {
                         textSize = 16f
                         setPadding(32, 24, 32, 24)
                         setBackgroundColor(resources.getColor(android.R.color.black))
-//                        setOnClickListener {
-//                            CoroutineScope(Dispatchers.Main).launch {
-//                                val realtimeResult =
-//                                    RouteProcessor.fetchRealtimeStation(startStations, busIDs)
-//                                Log.d("RouteProcessor", "실시간 경로 데이터: $realtimeResult")
-//                            }
-//                        }
+                        setOnClickListener {
+                            CoroutineScope(Dispatchers.Main).launch {
+                                val realtimeResult =
+                                    RouteProcessor.fetchRealtimeStation(routeStationsAndBuses)
+                                Log.d("RouteProcessor", "실시간 경로 데이터: $realtimeResult")
+                            }
+                        }
                     }
 
                     // 생성된 버튼을 컨테이너에 추가
