@@ -3,9 +3,14 @@ package com.example.front.transportation
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
+import android.widget.Button
 import android.widget.ImageButton
 import androidx.appcompat.app.AppCompatActivity
 import com.example.front.databinding.ActivityTransportationMainBinding
+import com.example.front.transportation.processor.RouteProcessor
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 class TransportationMainActivity : AppCompatActivity() {
 
@@ -13,7 +18,6 @@ class TransportationMainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
         binding = ActivityTransportationMainBinding.inflate(layoutInflater)
         setContentView(binding.main)
 
@@ -38,4 +42,5 @@ class TransportationMainActivity : AppCompatActivity() {
         }
 
     }
+
 }
