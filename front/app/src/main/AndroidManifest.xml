@@ -41,18 +41,20 @@
         <activity
             android:name=".audioguide.AudioGuideActivity"
             android:exported="false"
-            android:theme="@style/Transportation_Main_Theme" /> <!-- 화면설정시에 Theme이 설정되어있지 않으면 화면 호출시에 오류가 남 화면 늘릴시마다 설정해 주어야 할듯 -->
+            android:theme="@style/Transportation_Main_Theme" />
+        <!-- 화면설정시에 Theme이 설정되어있지 않으면 화면 호출시에 오류가 남 화면 늘릴시마다 설정해 주어야 할듯 -->
         <activity
             android:name=".transportation.TransportationMainActivity"
             android:exported="false"
-            android:theme="@style/Transportation_Main_Theme" /> <!-- Wear OS 전용 라이브러리 -->
+            android:theme="@style/Transportation_Main_Theme" />
         <uses-library
             android:name="com.google.android.wearable"
             android:required="true" />
 
         <meta-data
             android:name="com.google.android.wearable.standalone"
-            android:value="true" /> <!-- MainActivity 선언 -->
+            android:value="true" />
+        <!-- MainActivity 선언 -->
         <activity
             android:name=".presentation.MainActivity"
             android:exported="true"

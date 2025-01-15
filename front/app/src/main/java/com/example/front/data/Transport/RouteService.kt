@@ -1,4 +1,4 @@
-package com.example.front.data
+package com.example.front.data.Transport
 
 import okhttp3.ResponseBody
 import retrofit2.http.GET

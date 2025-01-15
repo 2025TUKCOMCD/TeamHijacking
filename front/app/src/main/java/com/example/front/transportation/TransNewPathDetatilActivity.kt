@@ -6,7 +6,7 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 //import com.example.front.R
-import com.example.front.data.RouteProcessor
+import com.example.front.data.Transport.RouteProcessor
 import com.example.front.databinding.ActivityTransNewPathDetatilBinding
 import kotlinx.coroutines.launch
 

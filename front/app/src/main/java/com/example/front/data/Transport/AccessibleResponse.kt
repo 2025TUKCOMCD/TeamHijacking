@@ -1,4 +1,4 @@
-package com.example.front.data
+package com.example.front.data.Transport
 
 data class AccessibleResponse(
     val result: Result?

@@ -27,7 +27,7 @@
 ## 🖋️ 시스템 구성도 🖋️
 
 <p align="center">
-<img width="900" src = "https://github.com/user-attachments/assets/5b4bdf79-b280-4a8c-8fff-7b4668fc6840">
+<img width="900" src = "https://github.com/user-attachments/assets/b86e943d-aa16-4d88-a247-52fb5241a678">
 </p>
 
 ###  시스템 상세 모듈
@@ -71,6 +71,9 @@
 ## 📆 일정 📆
 <p align="center">
 <img width="900" src = "https://github.com/user-attachments/assets/7d839fcf-5cdb-40eb-8b92-138c6adea852"> <br>
+<img width="900" src ="https://github.com/user-attachments/assets/58631842-2cf3-4c6f-8c23-70106c24e627">
+<img width="900" src="https://github.com/user-attachments/assets/50bd6c60-0a6c-4443-9e4c-0a8f807151d4">
+<img width="900" src="https://github.com/user-attachments/assets/ca5b881e-94e7-41b4-a932-f29ebd262d23">
 </p>
 
 > 상세일정을 보고싶다면?
@@ -86,6 +89,7 @@
  종합설계기획 발표 및 제출 서류
 - <a href = "https://drive.google.com/file/d/176_STpg_pBsIT_EmeeFJf_z5qdy2MSUh/view?usp=sharing">팀 하이재킹 제안서</a>
 - <a href = "https://drive.google.com/file/d/14pNoPenm9NCOFus4_Id3Xb9OWA8gTNcc/view?usp=sharing">팀 하이재킹 요약 계획서</a>
+- <a href = "https://docs.google.com/presentation/d/1yz5gyiYBwBFY1xeWGXbyRp7kZKCSKEi1/edit?usp=drive_link&ouid=102873262839899259467&rtpof=true&sd=true">시스템 구성도, 개발 환경, 운용 환경, 데모 환경</a>
 
 ## 🚥 개발자 🚥
 **김현빈** | **서하연** | **연찬호** | **김의연**
