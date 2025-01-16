@@ -1,7 +1,9 @@
 package com.example.front.transportation
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
+import android.widget.Button
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import com.example.front.databinding.ActivityTransNewPathDetatilBinding
@@ -21,6 +23,12 @@ class TransNewPathDetatilActivity : AppCompatActivity() {
 
         val tvRouteInfo: TextView = binding.tvRouteInfo
         tvRouteInfo.setTextColor(resources.getColor(android.R.color.white))
+
+        val btnSelectRoute: Button = binding.btnSelectRoute
+        btnSelectRoute.setOnClickListener {
+            val intent = Intent(this, TransRealtimeLocationActivity::class.java)
+            startActivity(intent)
+        }
 
         // Retrieve the routeStationsAndBuses from the intent
         val routeStationsAndBusesString = intent.getStringExtra("routeStationsAndBuses") ?: ""

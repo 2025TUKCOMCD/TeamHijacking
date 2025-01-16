@@ -16,7 +16,8 @@
         android:theme="@style/MainActivityTheme.Starting">
         <activity
             android:name=".transportation.TransRealtimeLocationActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:theme="@style/Transportation_Main_Theme" />
         <activity
             android:name=".transportation.TransportNewPathSearchActivity"
             android:exported="false"
