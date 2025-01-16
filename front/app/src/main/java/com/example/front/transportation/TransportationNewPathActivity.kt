@@ -30,6 +30,10 @@ class TransportationNewPathActivity : AppCompatActivity() {
         private const val PERMISSION_REQUEST_RECORD_AUDIO = 101
         private const val REQUEST_CODE_SPEECH_INPUT_START = 102
         private const val REQUEST_CODE_SPEECH_INPUT_END = 103
+        var revs_latitude: Double = 0.0
+        var revs_longitude: Double = 0.0
+        var reve_latitude: Double = 0.0
+        var reve_longitude: Double = 0.0
         private val GEOCODING_API_KEY = BuildConfig.Geolocation_APIKEY // 실제 API 키로 변경
         private const val TAG = "TransportationNewPathActivity"
     }
@@ -39,34 +43,50 @@ class TransportationNewPathActivity : AppCompatActivity() {
         binding = ActivityTransportationNewPathBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        //사용할 객체들 선언
+        // 사용할 객체들 선언
         val addressStartEditText: TextView = binding.addressStartTextView
         val addressEndEditText: TextView = binding.addressEndTextView
         val AddressConfirmBtn: Button = binding.AddressConfirmBtn
-
-        // 권한이 있는지 확인 (여기서는 위치 권한 확인)
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-            val address = "서울특별시 강남구 강남대로 323"
-            addressStartEditText.text=address
-            getLocationFromAddress(address)
-        } else { // 만약 권한이 없으면 권한 요청
-            ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.ACCESS_FINE_LOCATION), PERMISSION_REQUEST_ACCESS_FINE_LOCATION)
-        }
-
         // 오디오 권한 요청
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.RECORD_AUDIO), PERMISSION_REQUEST_RECORD_AUDIO)
         }
-        //시작지점 STT함수
+        // 권한이 있는지 확인 (여기서는 위치 권한 확인) //일단 이곳에서 먼저 주소를 넣어둠(나중에 삭제 예정)
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+            val saddress = "서울특별시 강남구 강남대로 323"
+            addressStartEditText.text = saddress
+            fetchLocation(saddress) { latitude, longitude ->
+                revs_latitude = latitude
+                revs_longitude = longitude
+                Log.d(TAG, "Start Location - Latitude: $revs_latitude, Longitude: $revs_longitude")
+            }
+            val eaddress = "아차산로 65길 85"
+            addressEndEditText.text = eaddress
+            fetchLocation(eaddress) { latitude, longitude ->
+                reve_latitude = latitude
+                reve_longitude = longitude
+                Log.d(TAG, "End Location - Latitude: $reve_latitude, Longitude: $reve_longitude")
+            }
+        } else { // 만약 권한이 없으면 권한 요청
+            ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.ACCESS_FINE_LOCATION), PERMISSION_REQUEST_ACCESS_FINE_LOCATION)
+        }
+        // 시작 지점 STT 함수
         addressStartEditText.setOnClickListener {
             startSTT(REQUEST_CODE_SPEECH_INPUT_START)
         }
-        //도착지점 STT함수
+        // 도착 지점 STT 함수
         addressEndEditText.setOnClickListener {
             startSTT(REQUEST_CODE_SPEECH_INPUT_END)
         }
+        AddressConfirmBtn.setOnClickListener{
+            val intent = Intent(this, TransportNewPathSearchActivity::class.java)
+            intent.putExtra("startLat", revs_latitude)
+            intent.putExtra("startLng", revs_longitude)
+            intent.putExtra("EndLat", reve_latitude)
+            intent.putExtra("EndLng", reve_longitude)
+            startActivity(intent)
+        }
     }
-
 
     private fun startSTT(requestCode: Int) {
         // 음성 인식을 위한 인텐트
@@ -83,7 +103,7 @@ class TransportationNewPathActivity : AppCompatActivity() {
         }
     }
 
-    //STT이후 오게되는 함수 만약 REQUESTCODE == REQUET_CODE_INPUT_START라면 STARTADRESS를 바꿔주고 아니면 END ADDRESS를 바꿔준다
+    // STT 이후 오게 되는 함수. 만약 REQUESTCODE == REQUEST_CODE_INPUT_START라면 STARTADRESS를 바꿔주고 아니면 END ADDRESS를 바꿔준다
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if ((requestCode == REQUEST_CODE_SPEECH_INPUT_START || requestCode == REQUEST_CODE_SPEECH_INPUT_END) && resultCode == RESULT_OK && data != null) {
@@ -91,69 +111,77 @@ class TransportationNewPathActivity : AppCompatActivity() {
             if (result != null && result.isNotEmpty()) {
                 val address = result[0]
                 if (requestCode == REQUEST_CODE_SPEECH_INPUT_START) {
-                    binding.addressStartTextView.text=address
-                    getLocationFromAddress(address)
+                    binding.addressStartTextView.text = address
+                    fetchLocation(address) { latitude, longitude ->
+                        revs_latitude = latitude
+                        revs_longitude = longitude
+                        Log.d(TAG, "Start Location - Latitude: $revs_latitude, Longitude: $revs_longitude")
+                    }
                 } else {
-                    binding.addressEndTextView.text=address
-                    getLocationFromAddress(address)
+                    binding.addressEndTextView.text = address
+                    fetchLocation(address) { latitude, longitude ->
+                        reve_latitude = latitude
+                        reve_longitude = longitude
+                        Log.d(TAG, "End Location - Latitude: $reve_latitude, Longitude: $reve_longitude")
+                    }
                 }
             }
         }
     }
 
+    private fun fetchLocation(address: String, callback: (Double, Double) -> Unit) {
+        Thread {
+            val location = getLocationFromAddress(address)
+            if (location != null) {
+                runOnUiThread {
+                    callback(location.first, location.second)
+                }
+            } else {
+                Log.e(TAG, "Failed to get location for address: $address")
+            }
+        }.start()
+    }
 
-    private fun getLocationFromAddress(address: String/*, latitudeTextView: TextView, longitudeTextView: TextView*/) {
-        Log.d(TAG, "getLocationFromAddress: Starting geocoding for address $address")
-        // HTTP 요청 형식: API 키와 주소를 입력하면 위도 경도로 바꿔줌
+    private fun getLocationFromAddress(address: String): Pair<Double, Double>? {
         val client = OkHttpClient()
         val url = "https://maps.googleapis.com/maps/api/geocode/json?address=${address}&key=$GEOCODING_API_KEY"
+        val request = Request.Builder().url(url).build()
 
-        val request = Request.Builder()
-            .url(url)
-            .build()
-
-
-        client.newCall(request).enqueue(object : okhttp3.Callback {
-            //실패시 출력
-            override fun onFailure(call: okhttp3.Call, e: IOException) {
-                Log.e(TAG, "Geocoding API call failed", e)
-            }
-
-            //성공시 함수
-            override fun onResponse(call: okhttp3.Call, response: okhttp3.Response) {
-                if (response.isSuccessful) {
-                    val responseBody = response.body?.string()
-                    Log.d(TAG, "Geocoding API response: $responseBody")
-
-                    val json = JsonParser.parseString(responseBody) as JsonObject
-                    val results = json["results"].asJsonArray
-                    //대충 JSON추출 하는 코드라는 뜻
-                    if (results.size() > 0) {
-                        val location = results[0].asJsonObject["geometry"].asJsonObject["location"].asJsonObject
-                        val latitude = location["lat"].asDouble
-                        val longitude = location["lng"].asDouble
-                        //텍스트를 넣어줌
-                        Log.d("location","Latitude: $latitude")
-                        Log.d("location","Longitude: $longitude")
-                    } else {
-                        Log.e(TAG, "No results found for the specified address.")
-                        Log.d("location","Latitude: Not found")
-                        Log.d("location","Longitude: Not found")
-                    }
+        return try {
+            val response = client.newCall(request).execute() // 동기식 네트워크 요청
+            if (response.isSuccessful) {
+                val responseBody = response.body?.string()
+                val json = JsonParser.parseString(responseBody) as JsonObject
+                val results = json["results"].asJsonArray
+                if (results.size() > 0) {
+                    val location = results[0].asJsonObject["geometry"].asJsonObject["location"].asJsonObject
+                    val latitude = location["lat"].asDouble
+                    val longitude = location["lng"].asDouble
+                    Pair(latitude, longitude)
                 } else {
-                    Log.e(TAG, "Geocoding API response was not successful")
-                    Log.d("location", "Latitude: Error")
-                    Log.d("location","Longitude: Error")
+                    Log.e(TAG, "No results found for the specified address.")
+                    null
                 }
+            } else {
+                Log.e(TAG, "Geocoding API response was not successful")
+                null
             }
-        })
+        } catch (e: IOException) {
+            Log.e(TAG, "Geocoding API call failed", e)
+            null
+        }
     }
-    //Default함수 일단 실행 먼저 됨 API와의 통신을 위함
+
+    // Default 함수. 일단 실행 먼저 됨. API와의 통신을 위함
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         if (requestCode == PERMISSION_REQUEST_ACCESS_FINE_LOCATION && grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
             val address = "서울특별시 강남구 강남대로 323"
-            getLocationFromAddress(address)
+            fetchLocation(address) { latitude, longitude ->
+                revs_latitude = latitude
+                revs_longitude = longitude
+                Log.d(TAG, "Permission Granted - Latitude: $revs_latitude, Longitude: $revs_longitude")
+            }
         }
     }
 }

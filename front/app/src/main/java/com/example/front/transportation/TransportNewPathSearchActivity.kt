@@ -39,10 +39,18 @@ class TransportNewPathSearchActivity : AppCompatActivity() {
         val routeStationAndBusesView: TextView = binding.routeStationsAndBusesView
         val mainTransitTypesView: TextView = binding.mainTransitTypesView
 
-        val startLat = 37.340174
-        val startLng = 126.7335933
-        val endLat = 37.5414001
-        val endLng = 127.0900351
+        //val startLat = 37.340174
+        //val startLng = 126.7335933
+        //val endLat = 37.5414001
+        //val endLng = 127.0900351
+        val startLat = intent.getDoubleExtra("startLat", 37.340174)
+        val startLng = intent.getDoubleExtra("startLng", 126.7335933)
+        val endLat = intent.getDoubleExtra("endLat", 37.340174)
+        val endLng = intent.getDoubleExtra("endLng",127.0900351)
+        Log.d("현빈", startLat.toString())
+        Log.d("현빈", startLng.toString())
+        Log.d("현빈", endLat.toString())
+        Log.d("현빈", endLng.toString())
 
         CoroutineScope(Dispatchers.Main).launch {
             try {
