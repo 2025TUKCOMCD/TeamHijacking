@@ -47,12 +47,11 @@ class TransportationNewPathActivity : AppCompatActivity() {
         val addressStartEditText: TextView = binding.addressStartTextView
         val addressEndEditText: TextView = binding.addressEndTextView
         val AddressConfirmBtn: Button = binding.AddressConfirmBtn
-
         // 오디오 권한 요청
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.RECORD_AUDIO), PERMISSION_REQUEST_RECORD_AUDIO)
         }
-        // 권한이 있는지 확인 (여기서는 위치 권한 확인)
+        // 권한이 있는지 확인 (여기서는 위치 권한 확인) //일단 이곳에서 먼저 주소를 넣어둠(나중에 삭제 예정)
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
             val saddress = "서울특별시 강남구 강남대로 323"
             addressStartEditText.text = saddress
@@ -78,6 +77,14 @@ class TransportationNewPathActivity : AppCompatActivity() {
         // 도착 지점 STT 함수
         addressEndEditText.setOnClickListener {
             startSTT(REQUEST_CODE_SPEECH_INPUT_END)
+        }
+        AddressConfirmBtn.setOnClickListener{
+            val intent = Intent(this, TransportNewPathSearchActivity::class.java)
+            intent.putExtra("startLat", revs_latitude)
+            intent.putExtra("startLng", revs_longitude)
+            intent.putExtra("EndLat", reve_latitude)
+            intent.putExtra("EndLng", reve_longitude)
+            startActivity(intent)
         }
     }
 
