@@ -1,5 +1,6 @@
-package com.example.front.data.SmartHome
+package com.example.front.iot.processor
 
+import com.example.front.iot.service.SmartThingsApiService
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 

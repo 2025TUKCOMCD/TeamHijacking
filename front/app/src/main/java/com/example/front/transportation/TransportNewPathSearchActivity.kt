@@ -25,10 +25,10 @@ class TransportNewPathSearchActivity : AppCompatActivity() {
 
         setContentView(R.layout.activity_transport_new_path_search)
         binding = ActivityTransportNewPathSearchBinding.inflate(layoutInflater)
-        val startLat = 1.1
-        val startLng = 2.2
-        val endLat = 3.3
-        val endLng = 4.4
+        val startLat = 37.513841
+        val startLng = 127.101823
+        val endLat = 37.476813
+        val endLng = 126.964156
 
         CoroutineScope(Dispatchers.Main).launch {
             try {
