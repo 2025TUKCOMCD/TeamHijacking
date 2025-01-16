@@ -21,6 +21,9 @@ class HomeIotActivity : AppCompatActivity() {
         // 스마트싱스 API 토큰키 연동 (local.properties에 키값 저장)
         val apiToken = "Bearer ${BuildConfig.SMARTTHINGS_API_TOKEN}"
 
+        fetchDeviceList(apiToken)
+
+
         val apiService = RetrofitClient.instance
         apiService.getDevices(apiToken).enqueue(object : Callback<DeviceResponse> {
             override fun onResponse(call: Call<DeviceResponse>, response: Response<DeviceResponse>) {
