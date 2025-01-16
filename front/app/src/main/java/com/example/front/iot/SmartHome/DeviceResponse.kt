@@ -19,3 +19,12 @@ data class Component(
 data class Capability(
     val id: String
 )
+
+data class CommandBody(
+    val commands: List<Command>
+)
+
+data class Command(
+    val capability: String,
+    val command: String
+)
