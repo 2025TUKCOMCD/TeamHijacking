@@ -20,6 +20,7 @@ class TransNewPathDetatilActivity : AppCompatActivity() {
         setContentView(binding.main)
 
         val tvRouteInfo: TextView = binding.tvRouteInfo
+        tvRouteInfo.setTextColor(resources.getColor(android.R.color.white))
 
         // Retrieve the routeStationsAndBuses from the intent
         val routeStationsAndBusesString = intent.getStringExtra("routeStationsAndBuses") ?: ""
@@ -36,16 +37,24 @@ class TransNewPathDetatilActivity : AppCompatActivity() {
             CoroutineScope(Dispatchers.Main).launch {
                 if (routeStationsAndBuses.isNotEmpty()) {
                     val realtimeResult = RouteProcessor.fetchRealtimeStation(routeStationsAndBuses)
-                    // 도착정보 출력
+                    Log.d("TransNewPathDetatilActivity", "realtimeResult: $realtimeResult")
+                    if (realtimeResult.isNotEmpty()) {
+                        val busInfo = realtimeResult.joinToString("\n") { result ->
+                            val endBusText = if (result?.endBusYn == "Y") "막차" else ""
+                            "Left Station: ${result?.leftStation}, Arrival Sec: ${result?.arrivalSec}, Bus Status: ${result?.busStatus}, End Bus: ${result?.endBusYn} $endBusText, Low Bus: ${result?.lowBusYn}, Full Car: ${result?.fulCarAt}"
+                        }
+                        tvRouteInfo.text = busInfo
+                    } else {
+                        tvRouteInfo.text = "No bus information available."
+                    }
                 } else {
                     // 기본 정보 출력
+                    tvRouteInfo.text = "No bus information available."
                 }
             }
-            //
-
         } else {
             Log.e("TransNewPathDetatilActivity", "routeStationsAndBusesString is empty")
+            tvRouteInfo.text = "No route information provided."
         }
-
     }
 }

@@ -2,6 +2,7 @@ package com.example.front.transportation.processor
 
 import android.util.Log
 import com.example.front.BuildConfig
+import com.example.front.transportation.data.realtimeStation.RealStationResult
 import com.example.front.transportation.data.realtimeStation.RealtimeStation
 import com.example.front.transportation.data.searchPath.Path
 import com.example.front.transportation.data.searchPath.PathRouteResult
@@ -59,7 +60,14 @@ object RouteProcessor {
                     }
                 }")
             }
-            sortedPaths.map { (path, _) ->
+
+            val filteredPaths = sortedPaths.filter { (path, _) ->
+                path.subPath.none { subPath ->
+                    subPath.lane?.firstOrNull()?.type == 4
+                }
+            }
+
+            val validPaths = filteredPaths.map { (path, score) ->
                 val filteredSubPaths = path.subPath.filter { subPath ->
                     subPath.lane?.firstOrNull()?.type != 4
                 }
@@ -108,6 +116,7 @@ object RouteProcessor {
                     detailedPath = detailedPath
                 )
             }
+            validPaths
         } catch (e: JsonSyntaxException) {
             Log.e("RouteProcessor", "JSON 문법 오류", e)
             listOf()
@@ -117,60 +126,75 @@ object RouteProcessor {
         }
     }
 
-    suspend fun fetchRealtimeStation(routeStationsAndBuses: List<Pair<Int, Int>>): List<RealtimeStation?> {
-    return try {
-        val realtimeStations = routeStationsAndBuses.map { (stationID, busID) ->
-            withContext(Dispatchers.IO) {
-                try {
-                    val response = routeService.realtimeStation(stationID, busID.toString(), apiKey = ODsay_APIKEY)
-                    val rawJson = response.string()
-                    Log.d("RouteProcessor", "Realtime Station Raw Response: $rawJson")
-                    gson.fromJson(rawJson, RealtimeStation::class.java)
-                } catch (e: Exception) {
-                    Log.e("RouteProcessor", "Error fetching real-time station data for stationID: $stationID, busID: $busID", e)
-                    null
+    suspend fun fetchRealtimeStation(routeStationsAndBuses: List<Pair<Int, Int>>): List<RealStationResult?> {
+        return try {
+            val realtimeStations = routeStationsAndBuses.mapNotNull { (stationID, busID) ->
+                withContext(Dispatchers.IO) {
+                    try {
+                        val response = routeService.realtimeStation(stationID, busID.toString(), apiKey = ODsay_APIKEY)
+                        val rawJson = response.string()
+                        Log.d("RouteProcessor", "Realtime Station Raw Response: $rawJson")
+                        val realtimeStation = gson.fromJson(rawJson, RealtimeStation::class.java)
+                        val real = realtimeStation.result.real.firstOrNull()
+                        val arrival1 = real?.arrival1
+                        val arrival2 = real?.arrival2
+                        Log.d("RouteProcessor", "Arrival1: $arrival1")
+                        Log.d("RouteProcessor", "Arrival2: $arrival2")
+                        listOfNotNull(
+                            arrival1?.let {
+                                RealStationResult(
+                                    leftStation = it.leftStation,
+                                    arrivalSec = it.arrivalSec,
+                                    busStatus = it.busStatus,
+                                    endBusYn = it.endBusYn,
+                                    lowBusYn = it.lowBusYn,
+                                    fulCarAt = it.fulCarAt) },
+                            arrival2?.let {
+                                RealStationResult(
+                                    leftStation = it.leftStation,
+                                    arrivalSec = it.arrivalSec,
+                                    busStatus = it.busStatus,
+                                    endBusYn = it.endBusYn,
+                                    lowBusYn = it.lowBusYn,
+                                    fulCarAt = it.fulCarAt ) }
+                        )
+                    } catch (e: Exception) {
+                        Log.e("RouteProcessor", "Error fetching real-time station data for stationID: $stationID, busID: $busID", e)
+                        null
+                    }
                 }
-            }
+            }.flatMap { it }
+            realtimeStations
+        } catch (e: Exception) {
+            Log.e("RouteProcessor", "Error fetching real-time station data", e)
+            listOf()
         }
-        realtimeStations
-    } catch (e: Exception) {
-        Log.e("RouteProcessor", "Error fetching real-time station data", e)
-        listOf()
-    }
-}
-    suspend fun fetchRealtimeLocation(){
-
     }
 
-    //가중치
+    suspend fun fetchRealtimeLocation() {
+        // Implementation needed
+    }
+
     private fun calculateRouteScore(path: Path): Double {
-    val info = path.info
+        val info = path.info
 
-    // 총 환승 횟수
-    val totalTransfers = info.busTransitCount + info.subwayTransitCount
+        val totalTransfers = info.busTransitCount + info.subwayTransitCount
+        val transferScore = if (totalTransfers > 0) {
+            1.5.pow(totalTransfers)
+        } else {
+            1.0
+        }
 
-    // 환승 횟수가 많을수록 점수가 비선형적으로 증가
-    val transferScore = if (totalTransfers > 0) {
-        1.5.pow(totalTransfers) // 1.1의 totalTransfers 제곱
-    } else {
-        1.0 // 환승이 없을 경우 기본 점수
-    }
+        val timeScore = (info.totalTime / 60) * 1.0
+        val busWeight = if (totalTransfers > 0) {
+            info.busTransitCount.toDouble() / totalTransfers
+        } else 0.0
 
-    // 소요 시간이 많을수록 높은 점수를 부여
-    val timeScore = (info.totalTime /60 ) * 1.0
+        val walkFactor = (info.totalWalk / 1000.0) * 1.0
 
-    // 버스 환승 비율이 높을수록 점수를 부여
-    val busWeight = if (totalTransfers > 0) {
-        info.busTransitCount.toDouble() / totalTransfers
-    } else 0.0
-
-    // 도보 거리가 많을수록 높은 점수를 부여 (m → km 변환)
-    val walkFactor = (info.totalWalk / 1000.0) * 1.0 // 도보 거리 (km 기준)
-
-    // 각 요소에 가중치 부여
-    return (0.4 * transferScore) + // 환승 횟수 가중치 (제곱 반영)
-            (0.3 * timeScore) +    // 소요 시간 가중치 (시간 기준)
-            (0.2 * busWeight) +    // 버스 비율 가중치
-            (0.1 * walkFactor)     // 도보 거리 가중치 (km 기준)
+        return (0.4 * transferScore) +
+                (0.3 * timeScore) +
+                (0.2 * busWeight) +
+                (0.1 * walkFactor)
     }
 }

@@ -31,7 +31,13 @@
                 android:textColor="@android:color/white"
                 android:textSize="16sp"
                 android:padding="8dp"
-                android:gravity="center" />
+                android:gravity="center"
+                android:text=" "/>
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="결정"/>
+
 
         </LinearLayout>
     </ScrollView>
