@@ -1,4 +1,4 @@
-package com.example.front.data.SmartHome
+package com.example.front.iot.SmartHome
 
 import retrofit2.Call
 import retrofit2.http.GET

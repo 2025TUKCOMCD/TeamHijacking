@@ -1,16 +1,19 @@
 package com.example.front.iot
 
 import android.os.Bundle
+import android.util.JsonToken
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import com.example.front.BuildConfig
 import com.example.front.R
-import com.example.front.data.SmartHome.*
+import com.example.front.iot.SmartHome.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
 class HomeIotActivity : AppCompatActivity() {
+    private lateinit var apiToken: String
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_home_iot)
