@@ -3,14 +3,11 @@
     <!-- 필요한 권한 -->
     <uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-permission android:name="android.permission.INTERNET" /> <!-- Wear OS 지원 -->
-    <uses-feature android:name="android.hardware.type.watch" />
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-    <uses-permission android:name="android.permission.BIND_WEARABLE_SERVICE" />
-    <uses-permission android:name="android.permission.BLUETOOTH" />
-    <!-- 정밀 위치 권한 요청 -->
+    <uses-feature android:name="android.hardware.type.watch" /> <!-- 정밀 위치 권한 요청 -->
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -44,20 +41,19 @@
         <activity
             android:name=".audioguide.AudioGuideActivity"
             android:exported="false"
-            android:theme="@style/Transportation_Main_Theme" />
-        <!-- 화면설정시에 Theme이 설정되어있지 않으면 화면 호출시에 오류가 남 화면 늘릴시마다 설정해 주어야 할듯 -->
+            android:theme="@style/Transportation_Main_Theme" /> <!-- 화면설정시에 Theme이 설정되어있지 않으면 화면 호출시에 오류가 남 화면 늘릴시마다 설정해 주어야 할듯 -->
         <activity
             android:name=".transportation.TransportationMainActivity"
             android:exported="false"
             android:theme="@style/Transportation_Main_Theme" />
+
         <uses-library
             android:name="com.google.android.wearable"
             android:required="true" />
 
         <meta-data
             android:name="com.google.android.wearable.standalone"
-            android:value="true" />
-        <!-- MainActivity 선언 -->
+            android:value="true" /> <!-- MainActivity 선언 -->
         <activity
             android:name=".presentation.MainActivity"
             android:exported="true"

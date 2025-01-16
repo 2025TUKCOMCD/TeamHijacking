@@ -25,15 +25,14 @@ class TransportNewPathSearchActivity : AppCompatActivity() {
 
         setContentView(R.layout.activity_transport_new_path_search)
         binding = ActivityTransportNewPathSearchBinding.inflate(layoutInflater)
-        val startLat = 37.513841
-        val startLng = 127.101823
-        val endLat = 37.476813
-        val endLng = 126.964156
+        val startLat = 37.340174
+        val startLng = 126.7335933
+        val endLat = 37.5414001
+        val endLng = 127.0900351
 
         CoroutineScope(Dispatchers.Main).launch {
             try {
                 val result = RouteProcessor.fetchAndProcessRoutes(startLat, startLng, endLat, endLng)
-
 // 결과 분리 및 로그 출력 + 버튼 생성
                 result.forEach { route ->
                     // 각각의 값 분리
