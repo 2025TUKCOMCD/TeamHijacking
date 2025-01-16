@@ -33,4 +33,6 @@
     <string name="start_address_description">출발지.\n다음에 있을 칸에서 출발지를 입력할 수 있습니다.</string>
     <string name="end_address_description">목적지.\n다음에 있을 칸에서 목적지를 입력할 수 있습니다.</string>
     <string name="defaultText">기본 텍스트</string>
+
+    <string name="transitCount">%d 회</string>
 </resources>
