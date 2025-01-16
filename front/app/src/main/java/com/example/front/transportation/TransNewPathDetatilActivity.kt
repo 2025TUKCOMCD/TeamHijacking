@@ -26,8 +26,9 @@ class TransNewPathDetatilActivity : AppCompatActivity() {
 
         val btnSelectRoute: Button = binding.btnSelectRoute
         btnSelectRoute.setOnClickListener {
-            val intent = Intent(this, TransRealtimeLocationActivity::class.java)
-            startActivity(intent)
+            CoroutineScope(Dispatchers.Main).launch {
+                RouteProcessor.fetchRealtimeLocation()
+            }
         }
 
         // Retrieve the routeStationsAndBuses from the intent

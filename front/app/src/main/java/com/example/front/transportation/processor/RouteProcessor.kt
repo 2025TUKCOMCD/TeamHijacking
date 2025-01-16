@@ -171,9 +171,21 @@ object RouteProcessor {
         }
     }
 
-    suspend fun fetchRealtimeLocation() {
-        // Implementation needed
+    suspend fun fetchRealtimeLocation(busIDs: List<Int>) {
+        busIDs.forEach { busID ->
+            try {
+                val response = withContext(Dispatchers.IO) {
+                    routeService.realtimeStation(0, busID.toString(), apiKey = ODsay_APIKEY)
+                }
+                val rawJson = response.string()
+                Log.d("RouteProcessor", "Realtime Location Raw Response: $rawJson")
+                // Process the response as needed
+            } catch (e: Exception) {
+                Log.e("RouteProcessor", "Error fetching real-time location data for busID: $busID", e)
+            }
+        }
     }
+
 
     private fun calculateRouteScore(path: Path): Double {
         val info = path.info
