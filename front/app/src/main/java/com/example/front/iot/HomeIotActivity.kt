@@ -40,7 +40,7 @@ class HomeIotActivity : AppCompatActivity() {
     }
 
 
-
+    // 1. SmartThings API로 기기 목록 가져오기
     private fun fetchDeviceList() {
         val apiService = RetrofitClient.instance
         apiService.getDevices(apiToken).enqueue(object : retrofit2.Callback<DeviceResponse> {
@@ -68,7 +68,7 @@ class HomeIotActivity : AppCompatActivity() {
         })
     }
 
-
+    // 2. 기기 목록 표시
     private fun displayDeviceList(devices: List<Device>) {
         val recyclerView = findViewById<RecyclerView>(R.id.recyclerViewDevices)
         recyclerView.layoutManager = LinearLayoutManager(this)
@@ -78,6 +78,7 @@ class HomeIotActivity : AppCompatActivity() {
         }
     }
 
+    // 3. 기기 제어 명령 보내기
     private fun sendDeviceCommand(deviceId: String, capability: String, command: String) {
         val apiService = RetrofitClient.instance
         val commandBody = CommandBody(
@@ -85,6 +86,21 @@ class HomeIotActivity : AppCompatActivity() {
         )
 
         apiService.sendCommand(deviceId, commandBody, apiToken).enqueue(object : Callback<Unit> {
+            override fun onResponse(call: Call<Unit>, response: Response<Unit>) {
+                if (response.isSuccessful) {
+                    Toast.makeText(this@HomeIotActivity, "명령이 성공적으로 전송되었습니다.", Toast.LENGTH_SHORT).show()
+                    Log.d("SmartThings", "Command sent successfully to deviceId: $deviceId")
+                } else {
+                    val errorMessage = response.errorBody()?.string() ?: "Unknown error"
+                    Toast.makeText(this@HomeIotActivity, "명령 전송 실패: $errorMessage", Toast.LENGTH_SHORT).show()
+                    Log.e("SmartThings", "Failed to send command: ${response.code()} - $errorMessage")
+                }
+            }
+
+            override fun onFailure(call: Call<Unit>, t: Throwable) {
+                Toast.makeText(this@HomeIotActivity, "네트워크 오류: 명령을 전송할 수 없습니다.", Toast.LENGTH_SHORT).show()
+                Log.e("SmartThings", "Error sending command: ${t.message}")
+            }
 
         }
     }
