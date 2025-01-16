@@ -3,7 +3,10 @@
     <!-- 필요한 권한 -->
     <uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-permission android:name="android.permission.INTERNET" /> <!-- Wear OS 지원 -->
-    <uses-feature android:name="android.hardware.type.watch" />
+    <uses-feature android:name="android.hardware.type.watch" /> <!-- 정밀 위치 권한 요청 -->
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
 
     <application
         android:allowBackup="true"
@@ -12,13 +15,29 @@
         android:supportsRtl="true"
         android:theme="@style/MainActivityTheme.Starting">
         <activity
+            android:name=".transportation.TransportNewPathSearchActivity"
+            android:exported="false"
+            android:theme="@style/Transportation_Main_Theme" />
+        <activity
+            android:name=".transportation.TransNewPathDetatilActivity"
+            android:exported="false"
+            android:theme="@style/Transportation_Main_Theme" />
+        <activity
+            android:name=".transportation.TransportationNewPathActivity"
+            android:exported="false"
+            android:theme="@style/Transportation_Main_Theme" />
+        <activity
+            android:name=".transportation.TransportationSavedPathActivity"
+            android:exported="false"
+            android:theme="@style/Transportation_Main_Theme" />
+        <activity
             android:name=".iot.HomeIotActivity"
             android:exported="false"
             android:theme="@style/Transportation_Main_Theme" />
         <activity
             android:name=".setting.SettingActivity"
             android:exported="false"
-            android:theme="@style/Transportation_Main_Theme"/>
+            android:theme="@style/Transportation_Main_Theme" />
         <activity
             android:name=".audioguide.AudioGuideActivity"
             android:exported="false"
@@ -26,7 +45,8 @@
         <activity
             android:name=".transportation.TransportationMainActivity"
             android:exported="false"
-            android:theme="@style/Transportation_Main_Theme" /> <!-- Wear OS 전용 라이브러리 -->
+            android:theme="@style/Transportation_Main_Theme" />
+
         <uses-library
             android:name="com.google.android.wearable"
             android:required="true" />

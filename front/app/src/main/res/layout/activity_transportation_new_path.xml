@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:background="#000000"
+    android:padding="10dp"
+    app:layout_constraintBottom_toBottomOf="parent"
+    android:gravity="center" >
+
+<ScrollView
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_margin="10dp" >
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/departure_view"
+        android:orientation="vertical" >
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/start_address"
+            android:textColor="@android:color/white"
+            android:textSize="11sp"
+            android:contentDescription="@string/start_address_description"/>
+        <TextView
+            android:id="@+id/addressStartTextView"
+            android:layout_width="185dp"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:autofillHints="@string/addressStartTextView"
+            android:text="출발지를 입력하십시오."
+            android:hint="@string/addressStartTextView"
+            android:textColor="@android:color/white"
+            android:textSize="12sp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:background="@drawable/destination_view" >
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/end_address"
+            android:textSize="11sp"
+            android:textColor="@android:color/white"
+            android:contentDescription="@string/end_address_description"/>
+        <TextView
+            android:id="@+id/addressEndTextView"
+            android:layout_width="185dp"
+            android:layout_height="wrap_content"
+            android:autofillHints="@string/addressEndTextView"
+            android:text="목적지를 입력하십시오."
+            android:hint="@string/addressEndTextView"
+            android:textColor="@android:color/white"
+            android:textSize="12sp"
+            android:scaleType="centerInside" />
+        <Button
+            android:id="@+id/AddressConfirmBtn"
+            android:layout_width="90dp"
+            android:layout_height="30dp"
+            android:layout_gravity="end"
+            android:layout_marginTop="10dp"
+            android:text="완료"
+            android:textSize="8sp"
+            android:textColor="#000000"
+            android:background="@drawable/rounded_button"
+            android:backgroundTint="#FF1414"
+            />
+    </LinearLayout>
+    </LinearLayout>
+</ScrollView>
+</LinearLayout>
