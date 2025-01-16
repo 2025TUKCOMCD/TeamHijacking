@@ -56,9 +56,7 @@
     <option name="autoReloadType" value="NONE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="5a34f773-8c82-4b0a-86d3-a37d3cf6ba80" name="Changes" comment="Smart싱스 API 서비스 인터페이스 수정">
-      <change beforePath="$PROJECT_DIR$/front/app/src/main/java/com/example/front/iot/SmartHome/SmartThingsApiService.kt" beforeDir="false" afterPath="$PROJECT_DIR$/front/app/src/main/java/com/example/front/iot/SmartHome/SmartThingsApiService.kt" afterDir="false" />
-    </list>
+    <list default="true" id="5a34f773-8c82-4b0a-86d3-a37d3cf6ba80" name="Changes" comment="Smart싱스 API 서비스 인터페이스 수정2" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -550,7 +548,15 @@
       <option name="project" value="LOCAL" />
       <updated>1737003965550</updated>
     </task>
-    <option name="localTasksCounter" value="26" />
+    <task id="LOCAL-00026" summary="Smart싱스 API 서비스 인터페이스 수정2">
+      <option name="closed" value="true" />
+      <created>1737004221796</created>
+      <option name="number" value="00026" />
+      <option name="presentableId" value="LOCAL-00026" />
+      <option name="project" value="LOCAL" />
+      <updated>1737004221796</updated>
+    </task>
+    <option name="localTasksCounter" value="27" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -565,7 +571,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="UI/UX --음향신호기 화면쪽 이동하는 파일 분리 및 이동 로직 생성" />
     <MESSAGE value="build.gradle 파일에 buildConfig = true 추가. buildFeatures에서 나는 오류 제거 위함" />
     <MESSAGE value="[dev]&#10;AudioGuideActivity에 button layout 추가" />
     <MESSAGE value="[dev]&#10;AudioGuideActivity에 SetonClickListener 추가" />
@@ -590,6 +595,7 @@
     <MESSAGE value="Iot 액티비티 기능 작업" />
     <MESSAGE value="Iot 데이터 추가 및 어뎁터 클래스 추가" />
     <MESSAGE value="Smart싱스 API 서비스 인터페이스 수정" />
-    <option name="LAST_COMMIT_MESSAGE" value="Smart싱스 API 서비스 인터페이스 수정" />
+    <MESSAGE value="Smart싱스 API 서비스 인터페이스 수정2" />
+    <option name="LAST_COMMIT_MESSAGE" value="Smart싱스 API 서비스 인터페이스 수정2" />
   </component>
 </project>
