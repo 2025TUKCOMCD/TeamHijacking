@@ -5,6 +5,8 @@ import android.util.Log
 import android.widget.Button
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.example.front.BuildConfig
 import com.example.front.R
 import com.example.front.iot.SmartHome.*
@@ -67,7 +69,23 @@ class HomeIotActivity : AppCompatActivity() {
     }
 
 
-    private  fun displayDeviceList(devices: List<Device>) {
+    private fun displayDeviceList(devices: List<Device>) {
+        val recyclerView = findViewById<RecyclerView>(R.id.recyclerViewDevices)
+        recyclerView.layoutManager = LinearLayoutManager(this)
+        recyclerView.adapter = DeviceAdapter (devices) { device, command ->
+            // 사용자가 버튼을 클릭하면 기기 제어 명령 실행
+            sendDeviceCommand(device.deviceId, "swich", command)
+        }
+    }
 
+    private fun sendDeviceCommand(deviceId: String, capability: String, command: String) {
+        val apiService = RetrofitClient.instance
+        val commandBody = CommandBody(
+            commands = listOf(Command(capability, command))
+        )
+
+        apiService.sendCommand(deviceId, commandBody, apiToken).enqueue(object : Callback<Unit> {
+
+        }
     }
 }

@@ -56,7 +56,7 @@
     <option name="autoReloadType" value="NONE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="5a34f773-8c82-4b0a-86d3-a37d3cf6ba80" name="Changes" comment="VoiceControlHelper 클래스 수정">
+    <list default="true" id="5a34f773-8c82-4b0a-86d3-a37d3cf6ba80" name="Changes" comment="HomeIotActivity 디스플레이리스트 추가">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/front/app/src/main/java/com/example/front/iot/HomeIotActivity.kt" beforeDir="false" afterPath="$PROJECT_DIR$/front/app/src/main/java/com/example/front/iot/HomeIotActivity.kt" afterDir="false" />
     </list>
@@ -591,7 +591,23 @@
       <option name="project" value="LOCAL" />
       <updated>1737006010755</updated>
     </task>
-    <option name="localTasksCounter" value="31" />
+    <task id="LOCAL-00031" summary="HomeIotActivity 수정">
+      <option name="closed" value="true" />
+      <created>1737010461777</created>
+      <option name="number" value="00031" />
+      <option name="presentableId" value="LOCAL-00031" />
+      <option name="project" value="LOCAL" />
+      <updated>1737010461777</updated>
+    </task>
+    <task id="LOCAL-00032" summary="HomeIotActivity 디스플레이리스트 추가">
+      <option name="closed" value="true" />
+      <created>1737010593511</created>
+      <option name="number" value="00032" />
+      <option name="presentableId" value="LOCAL-00032" />
+      <option name="project" value="LOCAL" />
+      <updated>1737010593511</updated>
+    </task>
+    <option name="localTasksCounter" value="33" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -606,8 +622,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="[dev]&#10;UIUX에 사용할(transportationsaved root) 이미지(xml,png) 파일 추가" />
-    <MESSAGE value="mainActivity에 넣을 png 구현" />
     <MESSAGE value="mainActivity 디자인 수정" />
     <MESSAGE value="mainActivity contentDescription 추가, text 내용을 strings.xml에 추가, button에서 ImageButton으로 수정." />
     <MESSAGE value="SettingActivity와 iotActivity 추가, 신호등과 교통안내 기능 클릭 시 검은 화면이 뜨는 이슈가 있으므로 이 점 확인 필요." />
@@ -631,6 +645,8 @@
     <MESSAGE value="DeviceControlHelper 수정" />
     <MESSAGE value="VoiceControlHelper 클래스 추가" />
     <MESSAGE value="VoiceControlHelper 클래스 수정" />
-    <option name="LAST_COMMIT_MESSAGE" value="VoiceControlHelper 클래스 수정" />
+    <MESSAGE value="HomeIotActivity 수정" />
+    <MESSAGE value="HomeIotActivity 디스플레이리스트 추가" />
+    <option name="LAST_COMMIT_MESSAGE" value="HomeIotActivity 디스플레이리스트 추가" />
   </component>
 </project>
