@@ -1,10 +1,74 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<LinearLayout
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="15dp"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/main"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".transportation.TransportNewPathSearchActivity">
+    tools:context=".transportation.TransportNewPathSearchActivity"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:background="@color/backgroundDark">
+    
+    <LinearLayout
+        android:layout_width="152dp"
+        android:layout_height="52dp"
+        android:background="@drawable/some_chip"
+        android:id="@+id/someRootLayout"
+        android:padding="10dp"
+        android:orientation="vertical"
+        android:layout_marginBottom="10dp">
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="12sp"
+            android:text="@string/defaultText"
+            android:textColor="@android:color/white"
+            android:id="@+id/someRootText" />
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="11sp"
+            android:text="조금 작은 텍스트"
+            android:textColor="#cccccc"
+            android:id="@+id/someRootTextDescription" />
+    </LinearLayout>
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+
+    <!-- 두 개 이상을 더했을시의 예시를 위해 추가-->
+    <LinearLayout
+        android:layout_width="152dp"
+        android:layout_height="100dp"
+        android:background="@drawable/some_chip"
+        android:id="@+id/someRootLayout2"
+        android:padding="10dp"
+        android:orientation="vertical"
+        android:layout_marginBottom="10dp">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
+            <TextView
+                android:layout_width="80dp"
+                android:layout_height="wrap_content"
+                android:textSize="12sp"
+                android:text="@string/defaultText"
+                android:textColor="@android:color/white"
+                android:id="@+id/someRootText2" />
+            <TextView
+                android:layout_width="20dp"
+                android:layout_height="wrap_content"
+                android:textSize="8sp"
+                android:text="n회"
+                android:textColor="#cccccc"
+                android:id="@+id/someRootTextDescription2" />
+            <TextView
+                android:layout_width="32dp"
+                android:layout_height="wrap_content"
+                android:text="n시간 n분"
+                android:textColor="@android:color/white"
+                android:textSize="10sp"
+        </LinearLayout>
+    </LinearLayout>
+        
+        
+</LinearLayout>

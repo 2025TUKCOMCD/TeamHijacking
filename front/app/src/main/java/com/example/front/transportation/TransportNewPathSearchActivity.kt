@@ -2,6 +2,7 @@ package com.example.front.transportation
 
 import android.os.Bundle
 import android.util.Log
+import android.widget.TextView
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
@@ -25,6 +26,11 @@ class TransportNewPathSearchActivity : AppCompatActivity() {
 
         setContentView(R.layout.activity_transport_new_path_search)
         binding = ActivityTransportNewPathSearchBinding.inflate(layoutInflater)
+
+        /*사용할 객체 바인딩*/
+        val someRootText: TextView = binding.someRootText
+        val someRootDescription: TextView = binding.someRootTextDescription
+
         val startLat = 37.340174
         val startLng = 126.7335933
         val endLat = 37.5414001
