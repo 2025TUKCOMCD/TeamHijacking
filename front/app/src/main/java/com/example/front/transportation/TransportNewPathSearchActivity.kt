@@ -2,6 +2,7 @@ package com.example.front.transportation
 
 import android.os.Bundle
 import android.util.Log
+import android.widget.TextView
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
@@ -23,8 +24,25 @@ class TransportNewPathSearchActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        setContentView(R.layout.activity_transport_new_path_search)
+
         binding = ActivityTransportNewPathSearchBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+
+        /*사용할 객체 바인딩*/
+            //val someRootText: TextView = binding.someRootText
+            //val someRootDescription: TextView = binding.someRootTextDescription
+           //-
+           //실행이 안 되어 findViewByID로 수정
+        val transitCountView: TextView = binding.transitCountView
+        val totalTimeView: TextView = binding.totalTimeView
+        val detatiledPathView: TextView = binding.detatiledPathView
+        val routeStationAndBusesView: TextView = binding.routeStationsAndBusesView
+        val mainTransitTypesView: TextView = binding.mainTransitTypesView
+
+        //val startLat = 37.340174
+        //val startLng = 126.7335933
+        //val endLat = 37.5414001
+        //val endLng = 127.0900351
         val startLat = intent.getDoubleExtra("startLat", 37.340174)
         val startLng = intent.getDoubleExtra("startLng", 126.7335933)
         val endLat = intent.getDoubleExtra("endLat", 37.340174)
@@ -53,6 +71,14 @@ class TransportNewPathSearchActivity : AppCompatActivity() {
                     Log.d("RouteProcessor", "Main Transit Types: $mainTransitTypes")
                     Log.d("RouteProcessor", "Detailed Path: $detailedPath")
 
+                    //임시로 한 Layout text에 들어가도록 설정
+                    transitCountView.text = getString(R.string.transitCount, transitCount)
+                    totalTimeView.text = Integer.toString(totalTime)+"분"
+                    detatiledPathView.setText("$detailedPath")
+                    routeStationAndBusesView.text="$routeStationsAndBuses"
+                    mainTransitTypesView.text="$mainTransitTypes"
+
+
                     // 동적 버튼 생성
 //
 //                        setOnClickListener {
@@ -71,5 +97,7 @@ class TransportNewPathSearchActivity : AppCompatActivity() {
                 Log.e("RouteProcessor", "경로 탐색 중 오류 발생", e)
             }
         }
+
+
     }
 }
