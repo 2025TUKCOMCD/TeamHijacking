@@ -67,4 +67,7 @@ class HomeIotActivity : AppCompatActivity() {
     }
 
 
+    private  fun displayDeviceList(devices: List<Device>) {
+
+    }
 }
