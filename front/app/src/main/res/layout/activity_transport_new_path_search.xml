@@ -2,42 +2,19 @@
 <LinearLayout
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
+    android:minHeight="172dp"
     android:orientation="vertical"
     android:padding="15dp"
     xmlns:tools="http://schemas.android.com/tools"
     tools:context=".transportation.TransportNewPathSearchActivity"
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:background="@color/backgroundDark">
-    
-    <LinearLayout
-        android:layout_width="162dp"
-        android:layout_height="52dp"
-        android:background="@drawable/some_chip"
-        android:id="@+id/someRootLayout"
-        android:padding="5dp"
-        android:orientation="vertical"
-        android:layout_marginBottom="10dp">
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textSize="12sp"
-            android:text="@string/defaultText"
-            android:textColor="@android:color/white"
-            android:id="@+id/someRootText" />
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textSize="11sp"
-            android:text="조금 작은 텍스트"
-            android:textColor="#cccccc"
-            android:id="@+id/someRootTextDescription" />
-    </LinearLayout>
-
 
     <!-- 두 개 이상을 더했을시의 예시를 위해 추가-->
     <LinearLayout
         android:layout_width="162dp"
-        android:layout_height="100dp"
+        android:layout_height="wrap_content"
+        android:minHeight="100dp"
         android:background="@drawable/some_chip"
         android:id="@+id/someRootLayout2"
         android:padding="5dp"
@@ -54,16 +31,21 @@
                 android:textSize="12sp"
                 android:text="@string/defaultText"
                 android:textColor="@android:color/white"
-                android:id="@+id/mainTransitTypesView" />
+                android:id="@+id/mainTransitTypesView"
+                android:layout_gravity="start"/>
             <TextView
-                android:layout_width="16dp"
+                android:layout_width="wrap_content"
+                android:maxWidth="18dp"
                 android:layout_height="wrap_content"
                 android:textSize="8sp"
                 android:text="n회"
                 android:textColor="#cccccc"
-                android:id="@+id/transitCountView" />
+                android:id="@+id/transitCountView"
+                android:padding="2dp"/>
             <TextView
-                android:layout_width="47dp"
+                android:layout_width="wrap_content"
+                android:maxWidth="47dp"
+                android:textAlignment="textEnd"
                 android:layout_height="wrap_content"
                 android:text="n시간 nn분"
                 android:textColor="@android:color/white"
