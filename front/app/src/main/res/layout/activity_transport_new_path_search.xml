@@ -1,77 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:minHeight="172dp"
-    android:orientation="vertical"
+<androidx.recyclerview.widget.RecyclerView
+    android:id="@+id/routeRecyclerView"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
     android:padding="15dp"
-    xmlns:tools="http://schemas.android.com/tools"
-    tools:context=".transportation.TransportNewPathSearchActivity"
+    android:background="@color/backgroundDark"
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:background="@color/backgroundDark">
-
-    <!-- 두 개 이상을 더했을시의 예시를 위해 추가-->
-    <LinearLayout
-        android:layout_width="162dp"
-        android:layout_height="wrap_content"
-        android:minHeight="100dp"
-        android:background="@drawable/some_chip"
-        android:id="@+id/someRootLayout2"
-        android:padding="5dp"
-        android:orientation="vertical"
-        android:layout_marginBottom="10dp">
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_marginBottom="5dp">
-            <TextView
-                android:layout_width="79dp"
-                android:layout_height="wrap_content"
-                android:textSize="12sp"
-                android:text="@string/defaultText"
-                android:textColor="@android:color/white"
-                android:id="@+id/mainTransitTypesView"
-                android:layout_gravity="start"/>
-            <TextView
-                android:layout_width="wrap_content"
-                android:maxWidth="18dp"
-                android:layout_height="wrap_content"
-                android:textSize="8sp"
-                android:text="n회"
-                android:textColor="#cccccc"
-                android:id="@+id/transitCountView"
-                android:padding="2dp"/>
-            <TextView
-                android:layout_width="wrap_content"
-                android:maxWidth="47dp"
-                android:textAlignment="textEnd"
-                android:layout_height="wrap_content"
-                android:text="n시간 nn분"
-                android:textColor="@android:color/white"
-                android:textSize="10sp"
-                android:id="@+id/totalTimeView" />
-        </LinearLayout>
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/defaultText"
-            android:textSize="11sp"
-            android:textColor="#cccccc"
-            android:id="@+id/detatiledPathView"
-            android:paddingStart="5dp"
-            android:paddingEnd="5dp" />
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="코드"
-            android:textSize="10sp"
-            android:id="@+id/routeStationsAndBusesView"
-            android:paddingStart="5dp"
-            android:paddingEnd="5dp"
-            android:textColor="#cccccc"
-            android:textAlignment="textEnd"/>
-    </LinearLayout>
-        
-        
-</LinearLayout>
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".transportation.TransportNewPathSearchActivity" />

@@ -14,6 +14,7 @@ import kotlinx.coroutines.withContext
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import kotlin.math.pow
 
 object RouteProcessor {
     private const val BASE_URL = "https://api.odsay.com/v1/api/"
@@ -42,24 +43,37 @@ object RouteProcessor {
             val sortedPaths = paths.map { path ->
                 val score = calculateRouteScore(path)
                 path to score
-            }.sortedByDescending { it.second }
-
-
-
+            }.sortedBy { it.second }
+            sortedPaths.forEachIndexed { index, (path, score) ->
+                Log.d("RouteProcessor", "Sorted Path $index: Score = $score")
+                Log.d("RouteProcessor", "Transit Count: ${path.info.busTransitCount + path.info.subwayTransitCount} 회")
+                Log.d("RouteProcessor", "Total Time: ${path.info.totalTime} 분")
+                Log.d("RouteProcessor", "Main Transit Types: ${
+                    path.subPath.joinToString(" -> ") { subPath ->
+                        when (subPath.trafficType) {
+                            1 -> "지하철(${subPath.lane?.firstOrNull()?.name})"
+                            2 -> "버스(${subPath.lane?.firstOrNull()?.busNo})"
+                            3 -> "도보 (${subPath.sectionTime ?: 0}분)"
+                            else -> "알 수 없는 교통수단"
+                        }
+                    }
+                }")
+            }
             sortedPaths.map { (path, _) ->
-                val startStationIDsArray = path.subPath.filter { it.trafficType == 2 }
+                val filteredSubPaths = path.subPath.filter { subPath ->
+                    subPath.lane?.firstOrNull()?.type != 4
+                }
+
+                val startStationIDsArray = filteredSubPaths.filter { it.trafficType == 2 }
                     .mapNotNull { subPath -> subPath.startID }
 
-                val busIDsArray = path.subPath.filter { it.trafficType == 2 }
+                val busIDsArray = filteredSubPaths.filter { it.trafficType == 2 }
                     .mapNotNull { subPath -> subPath.lane?.firstOrNull()?.busID }
 
-                // `routeStationsAndBuses` 리스트 생성
                 val routeStationsAndBuses = startStationIDsArray.zip(busIDsArray)
 
                 val info = path.info
-                val subPaths = path.subPath
-
-                val mainTransitTypes = subPaths.mapNotNull { subPath ->
+                val mainTransitTypes = filteredSubPaths.mapNotNull { subPath ->
                     when (subPath.trafficType) {
                         1 -> "지하철(${subPath.lane?.firstOrNull()?.name})"
                         2 -> "버스(${subPath.lane?.firstOrNull()?.busNo})"
@@ -68,7 +82,7 @@ object RouteProcessor {
                     }
                 }.joinToString(" -> ")
 
-                val detailedPath = subPaths.joinToString(", ") { subPath ->
+                val detailedPath = filteredSubPaths.joinToString(", ") { subPath ->
                     when (subPath.trafficType) {
                         1 -> {
                             val lane = subPath.lane?.firstOrNull()
@@ -105,8 +119,6 @@ object RouteProcessor {
 
     suspend fun fetchRealtimeStation(routeStationsAndBuses: List<Pair<Int, Int>>): List<RealtimeStation?> {
     return try {
-        Log.d("RouteProcessor", "Fetching real-time data for routeStationsAndBuses: $routeStationsAndBuses")
-
         val realtimeStations = routeStationsAndBuses.map { (stationID, busID) ->
             withContext(Dispatchers.IO) {
                 try {
@@ -120,23 +132,45 @@ object RouteProcessor {
                 }
             }
         }
-
         realtimeStations
     } catch (e: Exception) {
         Log.e("RouteProcessor", "Error fetching real-time station data", e)
         listOf()
     }
 }
+    suspend fun fetchRealtimeLocation(){
 
+    }
 
+    //가중치
     private fun calculateRouteScore(path: Path): Double {
-        val info = path.info
-        val walkFactor = if (info.totalWalk > 500) 0.0 else 0.5
+    val info = path.info
 
-        return (0.30 * (info.busTransitCount + info.subwayTransitCount)) +
-                (0.25 * if (info.subwayTransitCount > 0) 1 else 0) +
-                (0.20 * (60.0 / info.totalTime)) +
-                (0.15 * if (info.busTransitCount > 0) 1 else 0) +
-                (0.10 * walkFactor)
+    // 총 환승 횟수
+    val totalTransfers = info.busTransitCount + info.subwayTransitCount
+
+    // 환승 횟수가 많을수록 점수가 비선형적으로 증가
+    val transferScore = if (totalTransfers > 0) {
+        1.5.pow(totalTransfers) // 1.1의 totalTransfers 제곱
+    } else {
+        1.0 // 환승이 없을 경우 기본 점수
+    }
+
+    // 소요 시간이 많을수록 높은 점수를 부여
+    val timeScore = (info.totalTime /60 ) * 1.0
+
+    // 버스 환승 비율이 높을수록 점수를 부여
+    val busWeight = if (totalTransfers > 0) {
+        info.busTransitCount.toDouble() / totalTransfers
+    } else 0.0
+
+    // 도보 거리가 많을수록 높은 점수를 부여 (m → km 변환)
+    val walkFactor = (info.totalWalk / 1000.0) * 1.0 // 도보 거리 (km 기준)
+
+    // 각 요소에 가중치 부여
+    return (0.4 * transferScore) + // 환승 횟수 가중치 (제곱 반영)
+            (0.3 * timeScore) +    // 소요 시간 가중치 (시간 기준)
+            (0.2 * busWeight) +    // 버스 비율 가중치
+            (0.1 * walkFactor)     // 도보 거리 가중치 (km 기준)
     }
 }

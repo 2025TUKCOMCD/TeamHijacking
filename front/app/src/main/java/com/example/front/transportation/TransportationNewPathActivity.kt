@@ -53,14 +53,14 @@ class TransportationNewPathActivity : AppCompatActivity() {
         }
         // 권한이 있는지 확인 (여기서는 위치 권한 확인) //일단 이곳에서 먼저 주소를 넣어둠(나중에 삭제 예정)
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-            val saddress = "서울특별시 강남구 강남대로 323"
+            val saddress = "잠실역"
             addressStartEditText.text = saddress
             fetchLocation(saddress) { latitude, longitude ->
                 revs_latitude = latitude
                 revs_longitude = longitude
                 Log.d(TAG, "Start Location - Latitude: $revs_latitude, Longitude: $revs_longitude")
             }
-            val eaddress = "아차산로 65길 85"
+            val eaddress = "낙성대역"
             addressEndEditText.text = eaddress
             fetchLocation(eaddress) { latitude, longitude ->
                 reve_latitude = latitude
@@ -176,7 +176,7 @@ class TransportationNewPathActivity : AppCompatActivity() {
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         if (requestCode == PERMISSION_REQUEST_ACCESS_FINE_LOCATION && grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-            val address = "서울특별시 강남구 강남대로 323"
+            val address = "잠실역"
             fetchLocation(address) { latitude, longitude ->
                 revs_latitude = latitude
                 revs_longitude = longitude

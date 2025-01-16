@@ -37,7 +37,7 @@ class TransportationMainActivity : AppCompatActivity() {
         btnNewPath.setOnClickListener {
             // 새로운 경로 탐색 버튼 클릭 시 실행할 로직
             Log.d("Transportation", "새로운 경로 탐색 버튼 클릭")
-            val intent = Intent(this, TransportNewPathSearchActivity::class.java)
+            val intent = Intent(this, TransportationNewPathActivity::class.java)
             startActivity(intent)
         }
 
