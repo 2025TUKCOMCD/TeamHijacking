@@ -26,7 +26,7 @@ class TransportationSavedPathActivity : AppCompatActivity() {
             //일단 한 번 읽어주고
             //세부 정보로 넘어감
             // 새로운 경로 탐색 버튼 클릭 시 실행할 로직
-            val intent = Intent(this, TransNewPathDetatilActivity::class.java)
+            val intent = Intent(this, TransportNewPathSearchActivity::class.java)
             startActivity(intent)
         }
 
