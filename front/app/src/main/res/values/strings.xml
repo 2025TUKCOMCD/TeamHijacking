@@ -35,4 +35,7 @@
     <string name="defaultText">기본 텍스트</string>
 
     <string name="transitCount">%d 회</string>
+    <string name="yes">예</string>
+    <string name="no">아니요</string>
+    <string name="doYouWantSave">경로를 저장하시겠습니까?</string>
 </resources>

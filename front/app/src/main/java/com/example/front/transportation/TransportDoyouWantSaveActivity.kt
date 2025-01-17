@@ -6,16 +6,18 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.example.front.R
+import com.example.front.databinding.ActivityTransportDoyouWantSaveBinding
+import com.example.front.databinding.ActivityTransportationSavedPathBinding
 
+//모달을 띄우기 위한 임시.,
 class TransportDoyouWantSaveActivity : AppCompatActivity() {
+
+    private lateinit var binding: ActivityTransportDoyouWantSaveBinding
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
-        setContentView(R.layout.activity_transport_doyou_want_save)
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
-            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
-            insets
-        }
+
+        binding = ActivityTransportDoyouWantSaveBinding.inflate(layoutInflater)
+        setContentView(binding.root)
     }
 }
