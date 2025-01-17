@@ -61,16 +61,8 @@ object RouteProcessor {
                 }")
             }
 
-            val filteredPaths = sortedPaths.filter { (path, _) ->
-                path.subPath.none { subPath ->
-                    subPath.lane?.firstOrNull()?.type == 4
-                }
-            }
-
-            val validPaths = filteredPaths.map { (path, score) ->
-                val filteredSubPaths = path.subPath.filter { subPath ->
-                    subPath.lane?.firstOrNull()?.type != 4
-                }
+            val validPaths = sortedPaths.map { (path, _) ->
+                val filteredSubPaths = path.subPath
 
                 val startStationIDsArray = filteredSubPaths.filter { it.trafficType == 2 }
                     .mapNotNull { subPath -> subPath.startID }
@@ -123,66 +115,6 @@ object RouteProcessor {
         } catch (e: Exception) {
             Log.e("RouteProcessor", "Error fetching routes", e)
             listOf()
-        }
-    }
-
-    suspend fun fetchRealtimeStation(routeStationsAndBuses: List<Pair<Int, Int>>): List<RealStationResult?> {
-        return try {
-            val realtimeStations = routeStationsAndBuses.mapNotNull { (stationID, busID) ->
-                withContext(Dispatchers.IO) {
-                    try {
-                        val response = routeService.realtimeStation(stationID, busID.toString(), apiKey = ODsay_APIKEY)
-                        val rawJson = response.string()
-                        Log.d("RouteProcessor", "Realtime Station Raw Response: $rawJson")
-                        val realtimeStation = gson.fromJson(rawJson, RealtimeStation::class.java)
-                        val real = realtimeStation.result.real.firstOrNull()
-                        val arrival1 = real?.arrival1
-                        val arrival2 = real?.arrival2
-                        Log.d("RouteProcessor", "Arrival1: $arrival1")
-                        Log.d("RouteProcessor", "Arrival2: $arrival2")
-                        listOfNotNull(
-                            arrival1?.let {
-                                RealStationResult(
-                                    leftStation = it.leftStation,
-                                    arrivalSec = it.arrivalSec,
-                                    busStatus = it.busStatus,
-                                    endBusYn = it.endBusYn,
-                                    lowBusYn = it.lowBusYn,
-                                    fulCarAt = it.fulCarAt) },
-                            arrival2?.let {
-                                RealStationResult(
-                                    leftStation = it.leftStation,
-                                    arrivalSec = it.arrivalSec,
-                                    busStatus = it.busStatus,
-                                    endBusYn = it.endBusYn,
-                                    lowBusYn = it.lowBusYn,
-                                    fulCarAt = it.fulCarAt ) }
-                        )
-                    } catch (e: Exception) {
-                        Log.e("RouteProcessor", "Error fetching real-time station data for stationID: $stationID, busID: $busID", e)
-                        null
-                    }
-                }
-            }.flatMap { it }
-            realtimeStations
-        } catch (e: Exception) {
-            Log.e("RouteProcessor", "Error fetching real-time station data", e)
-            listOf()
-        }
-    }
-
-    suspend fun fetchRealtimeLocation(busIDs: List<Int>) {
-        busIDs.forEach { busID ->
-            try {
-                val response = withContext(Dispatchers.IO) {
-                    routeService.realtimeStation(0, busID.toString(), apiKey = ODsay_APIKEY)
-                }
-                val rawJson = response.string()
-                Log.d("RouteProcessor", "Realtime Location Raw Response: $rawJson")
-                // Process the response as needed
-            } catch (e: Exception) {
-                Log.e("RouteProcessor", "Error fetching real-time location data for busID: $busID", e)
-            }
         }
     }
 

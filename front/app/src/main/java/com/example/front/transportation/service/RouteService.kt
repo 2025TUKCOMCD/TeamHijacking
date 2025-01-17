@@ -14,22 +14,4 @@ interface RouteService {
         @Query("apiKey") apiKey: String // API 키
     ): ResponseBody
 
-    @GET("realtimeStation")
-    suspend fun realtimeStation(
-        @Query("stationID") stationID: Int,
-        @Query("routeIDs") routeIDs: String,
-        @Query("stationBase") stationBase: Int? = 0,
-        @Query("lowBus") lowBus: Int? = 0,
-        @Query("apiKey") apiKey: String
-    ): ResponseBody
-
-    @GET("realtimeRoute")
-    suspend fun realtimeRoute(
-        @Query("busID") busID: String,
-        @Query("busBase") busBase: Int? = 1,
-        @Query("lowBus") lowBus: Int? = 0,
-        @Query("apiKey") apiKey: String
-    ): ResponseBody
-
-
 }

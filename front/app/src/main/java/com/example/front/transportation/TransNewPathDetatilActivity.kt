@@ -7,6 +7,7 @@ import android.widget.Button
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import com.example.front.databinding.ActivityTransNewPathDetatilBinding
+import com.example.front.transportation.processor.RealTimeProcessor
 import com.example.front.transportation.processor.RouteProcessor
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -27,7 +28,7 @@ class TransNewPathDetatilActivity : AppCompatActivity() {
         val btnSelectRoute: Button = binding.btnSelectRoute
         btnSelectRoute.setOnClickListener {
             CoroutineScope(Dispatchers.Main).launch {
-                RouteProcessor.fetchRealtimeLocation()
+//                RouteProcessor.fetchRealtimeLocation()
             }
         }
 
@@ -45,7 +46,8 @@ class TransNewPathDetatilActivity : AppCompatActivity() {
             // 도착 정보 추출
             CoroutineScope(Dispatchers.Main).launch {
                 if (routeStationsAndBuses.isNotEmpty()) {
-                    val realtimeResult = RouteProcessor.fetchRealtimeStation(routeStationsAndBuses)
+                    // 실시간 도착정보 api 실행
+                    val realtimeResult = RealTimeProcessor.fetchRealtimeStation(routeStationsAndBuses)
                     Log.d("TransNewPathDetatilActivity", "realtimeResult: $realtimeResult")
                     if (realtimeResult.isNotEmpty()) {
                         val busInfo = realtimeResult.joinToString("\n") { result ->
