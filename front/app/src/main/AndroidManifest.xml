@@ -15,11 +15,17 @@
         android:supportsRtl="true"
         android:theme="@style/MainActivityTheme.Starting">
         <activity
+            android:name=".transportation.TransportInfrmationActivity"
+            android:exported="false"
+            android:theme="@style/Transportation_Main_Theme" />
+        <activity
             android:name=".transportation.dialog.TransSavedDialogActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:theme="@style/Transportation_Main_Theme" />
         <activity
             android:name=".transportation.TransportDoyouWantSaveActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:theme="@style/Transportation_Main_Theme" />
         <activity
             android:name=".transportation.TransportNewPathSearchActivity"
             android:exported="false"
