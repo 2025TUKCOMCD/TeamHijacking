@@ -1,18 +1,13 @@
 package com.example.front.transportation
 
 import android.os.Bundle
-import android.view.LayoutInflater
 import androidx.appcompat.app.AppCompatActivity
 import com.example.front.databinding.ActivityTransportInfrmationBinding
-import android.view.View
 import android.widget.Button
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
-import androidx.compose.material3.AlertDialog
-import com.example.front.R
 import com.example.front.databinding.TransSavedDialogBinding
-import com.example.front.transportation.dialog.TransSavedDialog
 
 //교통 안내용 Activity
 class TransportInfrmationActivity : AppCompatActivity() {
