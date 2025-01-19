@@ -26,29 +26,13 @@ class TransportInfrmationActivity : AppCompatActivity() {
 
         val imsiBtt2 : Button = binding.imsiBtt2
 
-       // imsiBtt2.setOnClickListener(this)
+       //다이얼로그를 띄우기 위한 임시 버튼, 추후 삭제 예정.
         imsiBtt2.setOnClickListener{
-            transSavedDialogShow2()
+            transSavedDialogShow()
         }
     }
 
     private fun transSavedDialogShow(){
-        val transSavedBuilder = AlertDialog.Builder(this)
-            .setTitle("Title")
-            .setMessage("Message")
-            .setPositiveButton("Ok") {dialog, which->
-                //handle OK button Click
-            }
-            .setNegativeButton("Cancle") {dialog, which->
-                //handle cancle butotn click
-            }
-        val dialog = transSavedBuilder.create()
-        dialog.show()
-        //https://medium.com/@manuchekhrdev/android-show-simple-alert-dialog-in-kotlin-f7e232ec949e
-        //커스텀 dialog가 아닐 시
-    }
-
-    private fun transSavedDialogShow2(){
         // 뷰 바인딩 확인
         val transSavedDialogBinding = try {
             TransSavedDialogBinding.inflate(layoutInflater)
@@ -84,5 +68,11 @@ class TransportInfrmationActivity : AppCompatActivity() {
             dialog.dismiss()
             //원하는 추가 작업
         }
+
+        noSavedBtt.setOnClickListener{
+            dialog.dismiss()
+        }
     }
+
+    //다이얼로그의 yes 버튼 클릭 시 동작되어야 할 코드.
 }
