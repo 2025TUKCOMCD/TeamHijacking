@@ -11,6 +11,7 @@ import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import android.content.pm.PackageManager
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.widget.ArrayAdapter
@@ -134,15 +135,28 @@ class AudioGuideBLEConnectActivity : AppCompatActivity() {
         }
         registerReceiver(receiver, filter)
         Log.d("현빈","탐색시작")
-        if (ActivityCompat.checkSelfPermission(
-                this,
-                Manifest.permission.BLUETOOTH_SCAN
-            ) != PackageManager.PERMISSION_GRANTED
-        ) {
-            ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.BLUETOOTH_SCAN), 1)
-            return
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            if (ActivityCompat.checkSelfPermission(
+                    this,
+                    Manifest.permission.BLUETOOTH_SCAN
+                ) != PackageManager.PERMISSION_GRANTED
+            ) {
+                ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.BLUETOOTH_SCAN), 1)
+                return
+            } else {
+                Log.d("현빈", "권한 잘 부여되어있음")
+            }
         } else {
-            Log.d("현빈", "권한 잘 부여되어있음")
+            if (ActivityCompat.checkSelfPermission(
+                    this,
+                    Manifest.permission.ACCESS_FINE_LOCATION
+                ) != PackageManager.PERMISSION_GRANTED
+            ) {
+                ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.ACCESS_FINE_LOCATION), 1)
+                return
+            } else {
+                Log.d("현빈", "권한 잘 부여되어있음")
+            }
         }
         bluetoothAdapter?.let {
             if (it.isDiscovering) {
@@ -199,10 +213,24 @@ class AudioGuideBLEConnectActivity : AppCompatActivity() {
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         if (requestCode == 1) {
-            if ((grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED)) {
+            // 권한별로 상태 확인
+            for (i in permissions.indices) {
+                val permission = permissions[i]
+                val grantResult = grantResults[i]
+
+                if (grantResult == PackageManager.PERMISSION_GRANTED) {
+                    Log.d("Permissions", "$permission 권한이 허용되었습니다.")
+                } else {
+                    Log.e("Permissions", "$permission 권한이 거부되었습니다.")
+                    Toast.makeText(this, "$permission 권한이 거부되었습니다.", Toast.LENGTH_SHORT).show()
+                }
+            }
+
+            // 모든 권한이 허용되었는지 확인
+            if (grantResults.isNotEmpty() && grantResults.all { it == PackageManager.PERMISSION_GRANTED }) {
                 startDiscovery()
             } else {
-                Log.e("Bluetooth", "블루투스 권한이 거부되었습니다.")
+                Log.e("Bluetooth", "필요한 권한 중 일부가 거부되었습니다.")
             }
         }
     }
