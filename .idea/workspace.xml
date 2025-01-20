@@ -56,9 +56,8 @@
     <option name="autoReloadType" value="NONE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="5a34f773-8c82-4b0a-86d3-a37d3cf6ba80" name="Changes" comment="HomeIotActivity 샌드디바이스 추가">
+    <list default="true" id="5a34f773-8c82-4b0a-86d3-a37d3cf6ba80" name="Changes" comment="HomeIotActivity 수정">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/front/app/src/main/java/com/example/front/iot/HomeIotActivity.kt" beforeDir="false" afterPath="$PROJECT_DIR$/front/app/src/main/java/com/example/front/iot/HomeIotActivity.kt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -615,7 +614,15 @@
       <option name="project" value="LOCAL" />
       <updated>1737011383101</updated>
     </task>
-    <option name="localTasksCounter" value="34" />
+    <task id="LOCAL-00034" summary="HomeIotActivity 수정">
+      <option name="closed" value="true" />
+      <created>1737012429402</created>
+      <option name="number" value="00034" />
+      <option name="presentableId" value="LOCAL-00034" />
+      <option name="project" value="LOCAL" />
+      <updated>1737012429402</updated>
+    </task>
+    <option name="localTasksCounter" value="35" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -652,9 +659,9 @@
     <MESSAGE value="DeviceControlHelper 수정" />
     <MESSAGE value="VoiceControlHelper 클래스 추가" />
     <MESSAGE value="VoiceControlHelper 클래스 수정" />
-    <MESSAGE value="HomeIotActivity 수정" />
     <MESSAGE value="HomeIotActivity 디스플레이리스트 추가" />
     <MESSAGE value="HomeIotActivity 샌드디바이스 추가" />
-    <option name="LAST_COMMIT_MESSAGE" value="HomeIotActivity 샌드디바이스 추가" />
+    <MESSAGE value="HomeIotActivity 수정" />
+    <option name="LAST_COMMIT_MESSAGE" value="HomeIotActivity 수정" />
   </component>
 </project>
