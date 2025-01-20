@@ -14,9 +14,9 @@ import android.content.pm.PackageManager
 import android.os.Bundle
 import android.util.Log
 import android.widget.ArrayAdapter
+import android.widget.Button
 import android.widget.ListView
 import android.widget.Toast
-import androidx.activity.enableEdgeToEdge
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
@@ -37,42 +37,50 @@ class AudioGuideBLEConnectActivity : AppCompatActivity() {
     private lateinit var deviceList: ArrayList<String>
     private lateinit var devices: ArrayList<BluetoothDevice>
     private lateinit var listView: ListView
+    private lateinit var scanButton: Button
     private val uuid: UUID = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB")
 
     private val activityResultLauncher: ActivityResultLauncher<Intent> =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
             if (it.resultCode == RESULT_OK) {
-                Log.d("현빈", "블루투스 활성화")
+                Log.d("Bluetooth", "블루투스 활성화")
                 startDiscovery()
             } else if (it.resultCode == RESULT_CANCELED) {
-                Log.d("현빈", "블루투스 활성화 취소")
+                Log.d("Bluetooth", "블루투스 활성화 취소")
             }
         }
 
     @SuppressLint("MissingInflatedId")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
         setContentView(R.layout.activity_audio_guide_bleconnect)
 
         listView = findViewById(R.id.listView)
+        scanButton = findViewById(R.id.scanButton)
         deviceList = ArrayList()
         devices = ArrayList()
         arrayAdapter = ArrayAdapter(this, android.R.layout.simple_list_item_1, deviceList)
         listView.adapter = arrayAdapter
 
         if (bluetoothAdapter == null) {
-            Log.d("현빈", "블루투스를 지원하지 않는 장비입니다.")
+            Log.d("Bluetooth", "블루투스를 지원하지 않는 장비입니다.")
             finish()
         } else if (ContextCompat.checkSelfPermission(this, Manifest.permission.BLUETOOTH_CONNECT) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.BLUETOOTH_CONNECT, Manifest.permission.BLUETOOTH_SCAN), 1)
-        } else {
-            startDiscovery()
+        }
+
+        scanButton.setOnClickListener {
+            if (bluetoothAdapter?.isEnabled == true) {
+                startDiscovery()
+            } else {
+                val enableBtIntent = Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE)
+                activityResultLauncher.launch(enableBtIntent)
+            }
         }
 
         listView.setOnItemClickListener { _, _, position, _ ->
             connectToDevice(devices[position])
-            Log.d("현빈", "기기 선택됨: ${devices[position].name} - ${devices[position].address}")
+            Log.d("Bluetooth", "기기 선택됨: ${devices[position].name} - ${devices[position].address}")
         }
     }
 
@@ -91,15 +99,26 @@ class AudioGuideBLEConnectActivity : AppCompatActivity() {
             if (it.isDiscovering) {
                 it.cancelDiscovery()
             }
-            it.startDiscovery()
-            Log.d("현빈", "블루투스 기기 탐색 시작됨")
+            val success = it.startDiscovery()
+            Log.d("현빈", "블루투스 기기 탐색 시작됨: $success")
+            Log.d("Bluetooth", "블루투스 기기 탐색 시작됨")
         }
-
     }
 
     private val receiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context, intent: Intent) {
             val action: String? = intent.action
+//            when(action) {
+//                BluetoothDevice.ACTION_FOUND -> {
+//                    // Discovery has found a device. Get the BluetoothDevice
+//                    // object and its info from the Intent.
+//                    val device: BluetoothDevice = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE)!!
+//                    val deviceName = device.name
+//                    Log.d("현빈",deviceName.toString())
+//                    val deviceHardwareAddress = device.address // MAC address
+//                    Log.d("현빈", deviceHardwareAddress.toString())
+//                }
+//            }
             if (BluetoothDevice.ACTION_FOUND == action) {
                 val device: BluetoothDevice? = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE)
                 device?.let {
@@ -108,7 +127,7 @@ class AudioGuideBLEConnectActivity : AppCompatActivity() {
                     deviceList.add("$deviceName - $deviceAddress")
                     devices.add(it)
                     arrayAdapter.notifyDataSetChanged()
-                    Log.d("현빈", "블루투스 기기 발견: $deviceName - $deviceAddress")
+                    Log.d("Bluetooth", "블루투스 기기 발견: $deviceName - $deviceAddress")
                     Toast.makeText(this@AudioGuideBLEConnectActivity, "발견된 기기: $deviceName", Toast.LENGTH_SHORT).show()
                 }
             }
@@ -123,15 +142,12 @@ class AudioGuideBLEConnectActivity : AppCompatActivity() {
             socket = device.createRfcommSocketToServiceRecord(uuid)
             socket.connect()
             Toast.makeText(this, "Connected to ${device.name}", Toast.LENGTH_SHORT).show()
-            Log.d("현빈", "Connected to ${device.name} - ${device.address}")
+            Log.d("Bluetooth", "Connected to ${device.name} - ${device.address}")
         } catch (e: IOException) {
             Log.e("Bluetooth", "Connection failed", e)
             Toast.makeText(this, "Connection failed", Toast.LENGTH_SHORT).show()
-            Log.d("현빈", "Connection failed to ${device.name} - ${device.address}")
-            return
+            Log.d("Bluetooth", "Connection failed to ${device.name} - ${device.address}")
         }
-
-        // 연결 후 데이터 통신 등을 추가로 구현할 수 있습니다.
     }
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
@@ -140,7 +156,7 @@ class AudioGuideBLEConnectActivity : AppCompatActivity() {
             if ((grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED)) {
                 startDiscovery()
             } else {
-                Log.e("현빈", "블루투스 권한이 거부되었습니다.")
+                Log.e("Bluetooth", "블루투스 권한이 거부되었습니다.")
             }
         }
     }
@@ -148,6 +164,6 @@ class AudioGuideBLEConnectActivity : AppCompatActivity() {
     override fun onDestroy() {
         super.onDestroy()
         unregisterReceiver(receiver)
-        Log.d("현빈", "BroadcastReceiver 해제")
+        Log.d("Bluetooth", "BroadcastReceiver 해제")
     }
 }
