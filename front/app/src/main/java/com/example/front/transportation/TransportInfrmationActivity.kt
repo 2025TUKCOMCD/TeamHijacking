@@ -7,6 +7,7 @@ import android.widget.Button
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
+import com.example.front.R
 import com.example.front.databinding.TransSavedDialogBinding
 
 //교통 안내용 Activity
@@ -42,7 +43,7 @@ class TransportInfrmationActivity : AppCompatActivity() {
         }
 
         //Alertdialog.Builder를 통한 다이얼로그 생성
-        val dialog = AlertDialog.Builder(this)
+        val dialog = AlertDialog.Builder(this, R.style.CustomDialogTheme)
             .setView(transSavedDialogBinding.root)
             .create()
 
