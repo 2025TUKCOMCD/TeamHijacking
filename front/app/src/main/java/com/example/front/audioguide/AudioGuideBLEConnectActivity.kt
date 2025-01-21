@@ -2,10 +2,7 @@ package com.example.front.audioguide
 
 import android.Manifest
 import android.annotation.SuppressLint
-import android.bluetooth.BluetoothAdapter
-import android.bluetooth.BluetoothDevice
-import android.bluetooth.BluetoothManager
-import android.bluetooth.BluetoothSocket
+import android.bluetooth.*
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
@@ -24,8 +21,6 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.example.front.R
-import java.io.IOException
-import java.util.*
 
 class AudioGuideBLEConnectActivity : AppCompatActivity() {
     private val bluetoothManager: BluetoothManager by lazy {
@@ -34,7 +29,11 @@ class AudioGuideBLEConnectActivity : AppCompatActivity() {
     private val bluetoothAdapter: BluetoothAdapter? by lazy {
         bluetoothManager.adapter
     }
-    // 퍼미션 응답 처리 코드 아래에 권한 추가하면 권한 요청됩니다.
+    private lateinit var arrayAdapter: ArrayAdapter<String>
+    private lateinit var deviceList: ArrayList<String>
+    private lateinit var devices: ArrayList<BluetoothDevice>
+    private lateinit var listView: ListView
+    private lateinit var scanButton: Button
     private val requiredPermissions = arrayOf(
         Manifest.permission.ACCESS_FINE_LOCATION,
         Manifest.permission.ACCESS_COARSE_LOCATION,
@@ -44,13 +43,6 @@ class AudioGuideBLEConnectActivity : AppCompatActivity() {
         Manifest.permission.BLUETOOTH,
         Manifest.permission.BLUETOOTH_ADMIN
     )
-
-    private lateinit var arrayAdapter: ArrayAdapter<String>
-    private lateinit var deviceList: ArrayList<String>
-    private lateinit var devices: ArrayList<BluetoothDevice>
-    private lateinit var listView: ListView
-    private lateinit var scanButton: Button
-    private val uuid: UUID = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB")
 
     private val activityResultLauncher: ActivityResultLauncher<Intent> =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
@@ -62,29 +54,20 @@ class AudioGuideBLEConnectActivity : AppCompatActivity() {
             }
         }
 
-    // 퍼미션 체크 및 권한 요청 함수
     private fun checkPermissions() {
-        // 거절되었거나 아직 수락하지 않은 권한(퍼미션)을 저장할 문자열 배열 리스트
-        var rejectedPermissionList = ArrayList<String>()
-        Log.d("현빈",rejectedPermissionList.toString())
-
-        // 필요한 퍼미션들을 하나씩 끄집어내서 현재 권한을 받았는지 체크
+        val rejectedPermissionList = ArrayList<String>()
         for (permission in requiredPermissions) {
             if (ActivityCompat.checkSelfPermission(
                     this,
                     permission
                 ) != PackageManager.PERMISSION_GRANTED
             ) {
-                //만약 권한이 없다면 rejectedPermissionList에 추가
                 rejectedPermissionList.add(permission)
             }
         }
-        // 거절된 퍼미션이 있다면 -> 권한 요청
         if (rejectedPermissionList.isNotEmpty()) {
-            // 권한 요청!
             val array = arrayOfNulls<String>(rejectedPermissionList.size)
             ActivityCompat.requestPermissions(this, rejectedPermissionList.toArray(array), 2)
-            Log.d("현빈", "권한추가됨$this")
         } else {
             Toast.makeText(this, "Bluetooth Permission Success", Toast.LENGTH_SHORT).show()
         }
@@ -122,7 +105,7 @@ class AudioGuideBLEConnectActivity : AppCompatActivity() {
 
     private fun makeDiscoverable() {
         val discoverableIntent = Intent(BluetoothAdapter.ACTION_REQUEST_DISCOVERABLE).apply {
-            putExtra(BluetoothAdapter.EXTRA_DISCOVERABLE_DURATION, 300) // 300초 동안 탐색 가능 모드로 설정
+            putExtra(BluetoothAdapter.EXTRA_DISCOVERABLE_DURATION, 300)
         }
         startActivity(discoverableIntent)
     }
@@ -134,7 +117,6 @@ class AudioGuideBLEConnectActivity : AppCompatActivity() {
             addAction(BluetoothAdapter.ACTION_DISCOVERY_FINISHED)
         }
         registerReceiver(receiver, filter)
-        Log.d("현빈","탐색시작")
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
             if (ActivityCompat.checkSelfPermission(
                     this,
@@ -143,8 +125,6 @@ class AudioGuideBLEConnectActivity : AppCompatActivity() {
             ) {
                 ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.BLUETOOTH_SCAN), 1)
                 return
-            } else {
-                Log.d("현빈", "권한 잘 부여되어있음")
             }
         } else {
             if (ActivityCompat.checkSelfPermission(
@@ -154,16 +134,13 @@ class AudioGuideBLEConnectActivity : AppCompatActivity() {
             ) {
                 ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.ACCESS_FINE_LOCATION), 1)
                 return
-            } else {
-                Log.d("현빈", "권한 잘 부여되어있음")
             }
         }
         bluetoothAdapter?.let {
             if (it.isDiscovering) {
                 it.cancelDiscovery()
             }
-            val success = it.startDiscovery()
-            Log.d("현빈", "블루투스 기기 탐색 시작됨: $success")
+            it.startDiscovery()
         }
     }
 
@@ -172,13 +149,12 @@ class AudioGuideBLEConnectActivity : AppCompatActivity() {
             val action: String? = intent.action
             when(action) {
                 BluetoothAdapter.ACTION_DISCOVERY_STARTED -> {
-                    Log.d("현빈","블루투스 탐색 시작")
+                    Log.d("Bluetooth", "블루투스 탐색 시작")
                 }
                 BluetoothAdapter.ACTION_DISCOVERY_FINISHED -> {
-                    Log.d("현빈","블루투스 탐색 종료")
+                    Log.d("Bluetooth", "블루투스 탐색 종료")
                 }
                 BluetoothDevice.ACTION_FOUND -> {
-                    Log.d("현빈","기기발견")
                     val device: BluetoothDevice? = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE)
                     device?.let {
                         val deviceName = it.name ?: "Unknown"
@@ -194,30 +170,45 @@ class AudioGuideBLEConnectActivity : AppCompatActivity() {
         }
     }
 
+    private val bluetoothGattCallback = object : BluetoothGattCallback() {
+        override fun onConnectionStateChange(gatt: BluetoothGatt, status: Int, newState: Int) {
+            if (newState == BluetoothProfile.STATE_CONNECTED) {
+                Log.d("Bluetooth", "GATT 연결 성공: ${gatt.device.name} - ${gatt.device.address}")
+                gatt.discoverServices()
+            } else if (newState == BluetoothProfile.STATE_DISCONNECTED) {
+                Log.d("Bluetooth", "GATT 연결 해제: ${gatt.device.name} - ${gatt.device.address}")
+            }
+        }
+
+        override fun onServicesDiscovered(gatt: BluetoothGatt, status: Int) {
+            if (status == BluetoothGatt.GATT_SUCCESS) {
+                Log.d("Bluetooth", "서비스 검색 성공: ${gatt.device.name}")
+                for (service in gatt.services) {
+                    Log.d("Bluetooth", "서비스: ${service.uuid}")
+                    for (characteristic in service.characteristics) {
+                        Log.d("Bluetooth", "  특성: ${characteristic.uuid}")
+                    }
+                }
+            } else {
+                Log.d("Bluetooth", "서비스 검색 실패: ${gatt.device.name}")
+            }
+        }
+    }
+
+
     private fun connectToDevice(device: BluetoothDevice) {
         bluetoothAdapter?.cancelDiscovery()
-        val socket: BluetoothSocket?
-
-        try {
-            socket = device.createRfcommSocketToServiceRecord(uuid)
-            socket.connect()
-            Toast.makeText(this, "Connected to ${device.name}", Toast.LENGTH_SHORT).show()
-            Log.d("Bluetooth", "Connected to ${device.name} - ${device.address}")
-        } catch (e: IOException) {
-            Log.e("Bluetooth", "Connection failed", e)
-            Toast.makeText(this, "Connection failed", Toast.LENGTH_SHORT).show()
-            Log.d("Bluetooth", "Connection failed to ${device.name} - ${device.address}")
-        }
+        device.connectGatt(this, false, bluetoothGattCallback)
+        Toast.makeText(this, "${device.name}에 연결 시도 중입니다", Toast.LENGTH_SHORT).show()
+        Log.d("Bluetooth", "${device.name} - ${device.address}에 연결 시도 중입니다")
     }
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         if (requestCode == 1) {
-            // 권한별로 상태 확인
             for (i in permissions.indices) {
                 val permission = permissions[i]
                 val grantResult = grantResults[i]
-
                 if (grantResult == PackageManager.PERMISSION_GRANTED) {
                     Log.d("Permissions", "$permission 권한이 허용되었습니다.")
                 } else {
@@ -225,8 +216,6 @@ class AudioGuideBLEConnectActivity : AppCompatActivity() {
                     Toast.makeText(this, "$permission 권한이 거부되었습니다.", Toast.LENGTH_SHORT).show()
                 }
             }
-
-            // 모든 권한이 허용되었는지 확인
             if (grantResults.isNotEmpty() && grantResults.all { it == PackageManager.PERMISSION_GRANTED }) {
                 startDiscovery()
             } else {
