@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.widget.ImageButton
 import androidx.appcompat.app.AppCompatActivity
 import com.example.front.audioguide.AudioGuideActivity
+import com.example.front.audioguide.AudioGuideBLEConnectActivity
 import com.example.front.databinding.ActivityMainBinding
 import com.example.front.iot.HomeIotActivity
 import com.example.front.setting.SettingActivity
@@ -37,7 +38,7 @@ class MainActivity : AppCompatActivity() {
 
         audioGuideButton.setOnClickListener {
             // 음향 유도기 버튼 클릭 시 실행할 로직
-            val intent = Intent(this, AudioGuideActivity::class.java)
+            val intent = Intent(this, AudioGuideBLEConnectActivity::class.java)
             startActivity(intent)
         }
 
