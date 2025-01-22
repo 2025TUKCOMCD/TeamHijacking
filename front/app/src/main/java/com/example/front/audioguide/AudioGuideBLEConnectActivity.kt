@@ -21,6 +21,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.example.front.R
+import com.example.front.transportation.TransportationMainActivity
 
 class AudioGuideBLEConnectActivity : AppCompatActivity() {
 
@@ -181,24 +182,24 @@ class AudioGuideBLEConnectActivity : AppCompatActivity() {
             }
         }
     }
-    /*
 
-     */
+
     private val bluetoothGattCallback = object : BluetoothGattCallback() {
         override fun onConnectionStateChange(gatt: BluetoothGatt, status: Int, newState: Int) {
             if (newState == BluetoothProfile.STATE_CONNECTED) {
                 Log.d("Bluetooth", "GATT 연결 성공: ${gatt.device.name} - ${gatt.device.address}") //Gatt 연결 성공
                 gatt.discoverServices()  //서비스를 찾는 코드
+                navigateToNextActivity(gatt.device)
             } else if (newState == BluetoothProfile.STATE_DISCONNECTED) {
                 Log.d("Bluetooth", "GATT 연결 해제: ${gatt.device.name} - ${gatt.device.address}")
             }
         }
 
-        override fun onServicesDiscovered(gatt: BluetoothGatt, status: Int) {  //만약 서비스를 찾는다ㅏ면
+        override fun onServicesDiscovered(gatt: BluetoothGatt, status: Int) {  //만약 서비스를 찾는다면
             if (status == BluetoothGatt.GATT_SUCCESS) {
                 Log.d("Bluetooth", "서비스 검색 성공: ${gatt.device.name}")
                 for (service in gatt.services) {
-                    Log.d("Bluetooth", "서비스: ${service.uuid}")  //서비스및 특성 출력
+                    Log.d("Bluetooth", "서비스: ${service.uuid}")  //서비스 및 특성 출력
                     for (characteristic in service.characteristics) {
                         Log.d("Bluetooth", "  특성: ${characteristic.uuid}")
                     }
@@ -209,7 +210,18 @@ class AudioGuideBLEConnectActivity : AppCompatActivity() {
         }
     }
 
-/*
+
+
+    private fun navigateToNextActivity(device: BluetoothDevice) {
+        val intent = Intent(this, AudioGuideBLEControl::class.java)
+        intent.putExtra("EXTRA_BLUETOOTH_DEVICE", device)
+        startActivity(intent)
+    }
+
+
+
+
+    /*
     연결함수로 device.connectGatt부분이 메인임
     Gatt함수 자동 재연결을 false로 하였고 bludtoothGattCallback을 넣어서 GATT과의 연결 상태 및 서비스 등을 발견하게 해줌
  */

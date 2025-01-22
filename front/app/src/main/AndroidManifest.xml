@@ -5,17 +5,18 @@
     <uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-permission android:name="android.permission.INTERNET" /> <!-- Wear OS 지원 -->
     <uses-feature android:name="android.hardware.type.watch" /> <!-- 정밀 위치 권한 요청 -->
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/> <!-- 사용자 위치 받아오기 -->
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" /> <!-- 사용자 위치 받아오기 -->
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.RECORD_AUDIO" /> <!-- 오디오 권한 요청 -->
     <uses-permission android:name="android.permission.BLUETOOTH_ADVERTISE" />
-
-    <uses-permission
-        android:name="android.permission.BLUETOOTH"/> <!-- 블루투스 권한 요청 -->
-    <uses-permission
-        android:name="android.permission.BLUETOOTH_ADMIN"/> <!-- 기기 검색을 위한 권한(위치가 필요하지 않고 장비만 검색하기 위해 위치는 무시) -->
-    <uses-feature android:name="android.hardware.bluetooth" android:required="true"/>
-    <uses-feature android:name="android.hardware.bluetooth_le" android:required="true"/>
+    <uses-permission android:name="android.permission.BLUETOOTH" /> <!-- 블루투스 권한 요청 -->
+    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" /> <!-- 기기 검색을 위한 권한(위치가 필요하지 않고 장비만 검색하기 위해 위치는 무시) -->
+    <uses-feature
+        android:name="android.hardware.bluetooth"
+        android:required="true" />
+    <uses-feature
+        android:name="android.hardware.bluetooth_le"
+        android:required="true" />
 
     <uses-permission
         android:name="android.permission.BLUETOOTH_SCAN"
@@ -29,6 +30,10 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/MainActivityTheme.Starting">
+        <activity
+            android:name=".audioguide.AudioGuideBLEControl"
+            android:exported="false"
+            android:theme="@style/Transportation_Main_Theme"  />
         <activity
             android:name=".audioguide.AudioGuideBLEConnectActivity"
             android:exported="false"
