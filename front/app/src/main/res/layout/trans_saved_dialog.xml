@@ -11,7 +11,7 @@
     android:orientation="vertical"
     android:background="@drawable/setting_view"
     android:padding="10dp"
-    android:layout_margin="20dp">
+    android:layout_margin="20dp" >
 
     <TextView
         android:id="@+id/doYouWantSaveTextView"
