@@ -8,22 +8,27 @@ import android.bluetooth.BluetoothGattCharacteristic
 import android.bluetooth.BluetoothProfile
 import android.content.pm.PackageManager
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.util.Log
-import android.widget.Button
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import com.example.front.R
+import com.example.front.databinding.ActivityAudioGuideBlecontrolBinding
 import java.util.UUID
 
 class AudioGuideBLEControl : AppCompatActivity() {
 
+    private lateinit var binding: ActivityAudioGuideBlecontrolBinding
     private lateinit var bluetoothGatt: BluetoothGatt
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
-        setContentView(R.layout.activity_audio_guide_blecontrol)
+        binding = ActivityAudioGuideBlecontrolBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+        Log.d("현빈", "화면 시작")
 
         // 인텐트에서 BluetoothGatt 객체를 받아옵니다.
         val device: BluetoothDevice? = intent.getParcelableExtra("EXTRA_BLUETOOTH_DEVICE")
@@ -33,19 +38,15 @@ class AudioGuideBLEControl : AppCompatActivity() {
                     Manifest.permission.BLUETOOTH_CONNECT
                 ) != PackageManager.PERMISSION_GRANTED
             ) {
-                // TODO: Consider calling
-                //    ActivityCompat#requestPermissions
-                // here to request the missing permissions, and then overriding
-                //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-                //                                          int[] grantResults)
-                // to handle the case where the user grants the permission. See the documentation
-                // for ActivityCompat#requestPermissions for more details.
+                // 권한 요청을 처리합니다.
+                ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.BLUETOOTH_CONNECT), 1)
                 return
             }
             bluetoothGatt = it.connectGatt(this, false, object : BluetoothGattCallback() {
                 override fun onConnectionStateChange(gatt: BluetoothGatt, status: Int, newState: Int) {
                     if (newState == BluetoothProfile.STATE_CONNECTED) {
                         Log.d("Bluetooth", "GATT 연결 성공: ${gatt.device.name} - ${gatt.device.address}") // GATT 연결 성공
+                        Log.d("현빈", "하고 있는건가1")
                         gatt.discoverServices() // 서비스 찾기 시작
                     } else if (newState == BluetoothProfile.STATE_DISCONNECTED) {
                         Log.d("Bluetooth", "GATT 연결 해제: ${gatt.device.name} - ${gatt.device.address}")
@@ -55,6 +56,7 @@ class AudioGuideBLEControl : AppCompatActivity() {
                 override fun onServicesDiscovered(gatt: BluetoothGatt, status: Int) {
                     if (status == BluetoothGatt.GATT_SUCCESS) {
                         Log.d("Bluetooth", "서비스 검색 성공: ${gatt.device.name}")
+                        Log.d("현빈", "하고 있는건가2")
                         for (service in gatt.services) {
                             Log.d("Bluetooth", "서비스: ${service.uuid}") // 서비스 출력
                             for (characteristic in service.characteristics) {
@@ -67,27 +69,35 @@ class AudioGuideBLEControl : AppCompatActivity() {
                 }
             })
         }
+        Log.d("현빈", "하고 있는건가3")
 
-        // 버튼 클릭 리스너 설정
-        findViewById<Button>(R.id.button1).setOnClickListener {
-            sendDataToCharacteristic(byteArrayOf(0x00, 0x31, 0x01))
-        }
+        // 0.5초의 지연 후 클릭 리스너 설정
+        Handler(Looper.getMainLooper()).postDelayed({
+            binding.button1.setOnClickListener {
+                sendDataToCharacteristic(byteArrayOf(0x00, 0x31, 0x01))
+                Log.d("현빈", "위치 유도")
+            }
 
-        findViewById<Button>(R.id.button2).setOnClickListener {
-            sendDataToCharacteristic(byteArrayOf(0x00, 0x31, 0x10))
-        }
+            binding.button2.setOnClickListener {
+                sendDataToCharacteristic(byteArrayOf(0x00, 0x31, 0x10))
+                Log.d("현빈", "신호 안내")
+            }
 
-        findViewById<Button>(R.id.button3).setOnClickListener {
-            sendDataToCharacteristic(byteArrayOf(0x00, 0x31, 0x00))
-        }
+            binding.button3.setOnClickListener {
+                sendDataToCharacteristic(byteArrayOf(0x00, 0x31, 0x00))
+                Log.d("현빈", "신호 안내")
+            }
+        }, 500)
     }
 
     // 데이터 전송 함수
     private fun sendDataToCharacteristic(data: ByteArray) {
         val characteristic = getTargetCharacteristic()
-        characteristic?.let {
-            it.value = data
-            bluetoothGatt.writeCharacteristic(it)
+        if (characteristic != null) {
+            characteristic.value = data
+            bluetoothGatt.writeCharacteristic(characteristic)
+        } else {
+            Log.d("Bluetooth", "특성 찾기 실패")
         }
     }
 
