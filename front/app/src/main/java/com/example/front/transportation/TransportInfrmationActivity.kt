@@ -21,9 +21,9 @@ class TransportInfrmationActivity : AppCompatActivity() {
 
     private lateinit var binding : ActivityTransportInfrmationBinding
     //imageSwitcher에 사용할 imageView 배열 선언
-    private val transInfoImgArray = intArrayOf(R.drawable.default_btt, R.drawable.train_btt, R.drawable.people_btt,
+    private val transInfoImgArray = intArrayOf(R.drawable.default_btt, R.drawable.train_btt, R.drawable.human_btt,
         R.drawable.bus_btt, R.drawable.complete_btt)
-    private val ImgIndex = 0
+    private var imgIndex = 0
     private lateinit var transInfoImgSwitcher: ImageSwitcher
 
 
@@ -34,14 +34,19 @@ class TransportInfrmationActivity : AppCompatActivity() {
 
         //바인딩
         val imsiBtt2: Button = binding.imsiBtt2
+        val imsiBtt3: Button = binding.imsiBtt3
         transInfoImgSwitcher = binding.transInfoImgSwitcher
 
         //imageSwitcher에 imageView 설정하여 이미지 표시
-        initTransImgSwitcher(transInfoImgSwitcher)
+        initTransImgSwitcher()
 
        //다이얼로그를 띄우기 위한 임시 버튼, 추후 삭제 예정.
-        imsiBtt2.setOnClickListener{
+        imsiBtt2.setOnClickListener {
             transSavedDialogShow()
+        }
+
+        imsiBtt3.setOnClickListener {
+            whatIsNext(++imgIndex)
         }
     }
 
@@ -142,18 +147,26 @@ class TransportInfrmationActivity : AppCompatActivity() {
     }
 
     //imgSwitcher 초기화 function
-    fun initTransImgSwitcher(transInfoImgSwitcher: ImageSwitcher){
+    private fun initTransImgSwitcher(){
         transInfoImgSwitcher.setFactory({val imgView = ImageView(applicationContext)
             imgView.scaleType = ImageView.ScaleType.FIT_CENTER
             //imgView.setPadding(2, 2, 2, 2)
             imgView
         })
         //imageSwitcher에 imageView 설정
-        transInfoImgSwitcher.setImageResource(transInfoImgArray[ImgIndex])
+        transInfoImgSwitcher.setImageResource(transInfoImgArray[imgIndex])
     }
 
         /* 교통 안내 변경 시, 버스, 지하철, ... 에 따라 사진 바뀌도록 구현 */
-    fun whatIsNext(imgIndex:Int) {
+    private fun whatIsNext(index:Int = 0) {
+        //만약 배열의 크기보다 크다면 0으로 바꾼다.
+        if(index>=transInfoImgArray.size) {
+            imgIndex = 0
+            transInfoImgSwitcher.setImageResource(transInfoImgArray[0])
+        }else{
+            transInfoImgSwitcher.setImageResource(transInfoImgArray[index])
+        }
 
+            return;
     }
 }

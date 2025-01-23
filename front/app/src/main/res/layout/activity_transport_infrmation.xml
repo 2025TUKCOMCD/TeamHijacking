@@ -14,10 +14,8 @@
     android:textAlignment="center">
 
     <ImageSwitcher
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:minWidth="50dp"
-        android:minHeight="50dp"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
         android:layout_gravity="center"
         android:paddingBottom="20dp"
         android:id="@+id/transInfoImgSwitcher">
