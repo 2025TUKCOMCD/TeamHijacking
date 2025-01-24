@@ -7,7 +7,9 @@
     android:layout_height="wrap_content"
     android:minHeight="170dp"
     android:minWidth="170dp"
-    tools:context=".transportation.TransportationSavedPathActivity">
+    tools:context=".transportation.TransportationSavedPathActivity"
+    android:background="@color/backgroundDark"
+    android:textAlignment="center">
 
     <ScrollView
         android:layout_width="0dp"
@@ -34,8 +36,8 @@
                 android:padding="8dp"
                 android:gravity="center"
                 android:contentDescription=""
-                android:background="@drawable/box_border"
-                android:text="@string/default_text" />
+                android:background="#333333"
+                android:text="@string/default_text"  />
 
             <!-- 동적 버튼 -->
             <LinearLayout
