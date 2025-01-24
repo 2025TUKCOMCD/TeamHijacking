@@ -10,7 +10,8 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:background="@color/backgroundDark">
 
-    <!-- 두 개 이상을 더했을시의 예시를 위해 추가-->
+    <!-- 경로 관련 하나. 이후 이 LineearLayout을 동적으로 개발할 수
+      있도록 정리할 것 -->
     <LinearLayout
         android:layout_width="162dp"
         android:layout_height="wrap_content"

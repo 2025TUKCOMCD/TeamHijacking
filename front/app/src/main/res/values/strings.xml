@@ -42,4 +42,5 @@
     <string name="nickName">별명</string>
     <string name="complete">완료</string>
     <string name="disable">취소</string>
+    <string name="favouritePathStarBtt">즐겨찾기 지정 버튼, 클릭 시 본 경로가 최상단에 노출됩니다. 여러개를 설정하였을 시, 가장 최근에 사용한 즐겨찾기 경로가 노출됩니다.</string>
 </resources>

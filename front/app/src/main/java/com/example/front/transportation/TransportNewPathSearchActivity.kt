@@ -31,8 +31,6 @@ class TransportNewPathSearchActivity : AppCompatActivity() {
         /*사용할 객체 바인딩*/
             //val someRootText: TextView = binding.someRootText
             //val someRootDescription: TextView = binding.someRootTextDescription
-           //-
-           //실행이 안 되어 findViewByID로 수정
         val transitCountView: TextView = binding.transitCountView
         val totalTimeView: TextView = binding.totalTimeView
         val detatiledPathView: TextView = binding.detatiledPathView

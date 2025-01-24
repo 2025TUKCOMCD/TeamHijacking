@@ -11,7 +11,8 @@
     tools:context=".transportation.TransportInfrmationActivity"
     android:orientation="vertical"
     android:padding="20dp"
-    android:textAlignment="center">
+    android:textAlignment="center"
+    android:background="@color/backgroundDark" >
 
     <ImageSwitcher
         android:layout_width="100dp"
