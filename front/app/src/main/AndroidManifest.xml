@@ -9,6 +9,10 @@
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.RECORD_AUDIO" /> <!-- 오디오 권한 요청 -->
     <uses-permission android:name="android.permission.BLUETOOTH_ADVERTISE" />
+
+    <uses-permission android:name="android.permission.BLUETOOTH_SCAN" /> <!-- 페어링된 기기를 확인하기 위한 권한 -->
+    <uses-permission android:name="android.permission.BLUETOOTH_CONNECT" />
+
     <uses-permission android:name="android.permission.BLUETOOTH" /> <!-- 블루투스 권한 요청 -->
     <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" /> <!-- 기기 검색을 위한 권한(위치가 필요하지 않고 장비만 검색하기 위해 위치는 무시) -->
     <uses-feature
@@ -17,12 +21,6 @@
     <uses-feature
         android:name="android.hardware.bluetooth_le"
         android:required="true" />
-
-    <uses-permission
-        android:name="android.permission.BLUETOOTH_SCAN"
-        android:usesPermissionFlags="neverForLocation"
-        tools:targetApi="s" /> <!-- 페어링된 기기를 확인하기 위한 권한 -->
-    <uses-permission android:name="android.permission.BLUETOOTH_CONNECT" />
 
     <application
         android:allowBackup="true"

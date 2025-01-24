@@ -38,4 +38,8 @@
     <string name="yes">예</string>
     <string name="no">아니요</string>
     <string name="doYouWantSave">경로를 저장하시겠습니까?</string>
+    <string name="plzEnterAddressName">별명을 지정하십시오.</string>
+    <string name="nickName">별명</string>
+    <string name="complete">완료</string>
+    <string name="disable">취소</string>
 </resources>
