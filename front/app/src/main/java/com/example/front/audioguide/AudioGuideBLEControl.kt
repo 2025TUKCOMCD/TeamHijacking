@@ -141,7 +141,7 @@ class AudioGuideBLEControl : AppCompatActivity() {
     private fun getTargetCharacteristic(): BluetoothGattCharacteristic? {
         Log.d("BluetoothControl", "Target함수쪽으로 들어옴")
         // 여기서 원하는 특성 UUID를 사용하여 찾습니다.
-        val targetUUID = UUID.fromString("0000ffe1-0000-1000-8000-00805f9b34fb") // 실제 UUID 값으로 변경
+        val targetUUID = UUID.fromString("0003cdd1-0000-1000-8000-00805f9b013") // 실제 UUID 값으로 변경
 
         Log.d("BluetoothControl", "UUID지정")
         bluetoothGatt?.let { gatt ->
