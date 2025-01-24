@@ -45,18 +45,21 @@ class AudioGuideBLEControl : AppCompatActivity() {
         Handler(Looper.getMainLooper()).postDelayed({
             if (bluetoothGatt != null) {
                 binding.button1.setOnClickListener {
+                    val locationuuid = UUID.fromString("0003cdd0-0000-1000-8000-00805f9b0131")
                     sendDataToCharacteristic(byteArrayOf(0x00, 0x31, 0x01))
                     Log.d("현빈", "위치 유도")
                 }
 
                 binding.button2.setOnClickListener {
+                    val voice_guidanceuuid = UUID.fromString("0003cdd0-0001-1000-8000-00805f9b0131")
                     sendDataToCharacteristic(byteArrayOf(0x00, 0x31, 0x10))
                     Log.d("현빈", "신호 안내")
                 }
 
                 binding.button3.setOnClickListener {
+                    val voice_requestuuid = UUID.fromString("0003cdd0-0002-1000-8000-00805f9b0131")
                     sendDataToCharacteristic(byteArrayOf(0x00, 0x31, 0x00))
-                    Log.d("현빈", "신호 안내")
+                    Log.d("현빈", "음성 안내")
                 }
             } else {
                 Log.d("Bluetooth", "bluetoothGatt 초기화되지 않음")
