@@ -31,7 +31,7 @@
         android:padding="2dp"
         android:layout_marginTop="5dp"
         android:background="@android:color/white"
-        android:inputType="textMultiLine"
+        android:inputType="text"
         android:textColor="@android:color/black"
         android:id="@+id/addressNickNameEditText"
         android:hint="@string/nickName"
@@ -45,6 +45,19 @@
         android:layout_marginTop="10dp"
         android:orientation="horizontal"
         android:gravity="end">
+
+        <TextView
+            android:id="@+id/cancelBtt"
+            android:layout_width="wrap_content"
+            android:minWidth="48dp"
+            android:layout_height="wrap_content"
+            android:text="@string/disable"
+            android:contentDescription="@string/disable"
+            android:textSize="12sp"
+            android:textColor="@android:color/black"
+            android:layout_margin="2dp"
+            android:background="@drawable/confirm_border"
+            android:textAlignment="center"/>
 
         <TextView
             android:layout_width="wrap_content"
