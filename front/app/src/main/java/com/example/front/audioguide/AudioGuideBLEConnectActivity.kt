@@ -71,11 +71,13 @@ class AudioGuideBLEConnectActivity : AppCompatActivity() {
                     permission
                 ) != PackageManager.PERMISSION_GRANTED   //만약 권한이 부여되어있지 않다면
             ) {
+                Log.d("bluetoothConnect", permission.toString())
                 rejectedPermissionList.add(permission) //rejectedPermissionList에 추가해 둠
             }
         }
         if (rejectedPermissionList.isNotEmpty()) {  //만약 거부된 권한 이 있다면
             val array = arrayOfNulls<String>(rejectedPermissionList.size)
+            Log.d("bluetoothConnect", "권한요청")
             ActivityCompat.requestPermissions(this, rejectedPermissionList.toArray(array), 2)  //권한을 요청함
         } else {
             Toast.makeText(this, "Bluetooth Permission Success", Toast.LENGTH_SHORT).show()  // 거부된 권한이 없다면 블루투스 권한성공을 출력
@@ -99,7 +101,7 @@ class AudioGuideBLEConnectActivity : AppCompatActivity() {
         //만약 스캔버튼을 누르면
         scanButton.setOnClickListener {
             if (bluetoothAdapter?.isEnabled == true) {  //만약 blutoothAdapter가 사용가능하다면
-                makeDiscoverable() //블루투스 권한을 요청하고
+                //makeDiscoverable() //블루투스 권한을 요청하고
                 startDiscovery() //블루투스 탐색을 시작
             } else {
                 val enableBtIntent = Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE)
@@ -162,10 +164,10 @@ class AudioGuideBLEConnectActivity : AppCompatActivity() {
             val action: String? = intent.action
             when(action) {
                 BluetoothAdapter.ACTION_DISCOVERY_STARTED -> {  //시작할때
-                    Log.d("Bluetooth", "블루투스 탐색 시작")
+                    Log.d("BluetoothConnect", "블루투스 탐색 시작")
                 }
                 BluetoothAdapter.ACTION_DISCOVERY_FINISHED -> { //끝날때
-                    Log.d("Bluetooth", "블루투스 탐색 종료")
+                    Log.d("BluetoothConnect", "블루투스 탐색 종료")
                 }
                 BluetoothDevice.ACTION_FOUND -> {  //블루투스를 찾았을때
                     val device: BluetoothDevice? = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE)  //device를 받아옴
@@ -187,21 +189,21 @@ class AudioGuideBLEConnectActivity : AppCompatActivity() {
     private val bluetoothGattCallback = object : BluetoothGattCallback() {
         override fun onConnectionStateChange(gatt: BluetoothGatt, status: Int, newState: Int) {
             if (newState == BluetoothProfile.STATE_CONNECTED) {
-                Log.d("Bluetooth", "GATT 연결 성공: ${gatt.device.name} - ${gatt.device.address}") //Gatt 연결 성공
-                gatt.discoverServices()  //서비스를 찾는 코드
+                Log.d("BluetoothConnect", "GATT 연결 성공: ${gatt.device.name} - ${gatt.device.address}") //Gatt 연결 성공
+                //gatt.discoverServices()  //서비스를 찾는 코드
                 navigateToNextActivity(gatt.device)
             } else if (newState == BluetoothProfile.STATE_DISCONNECTED) {
-                Log.d("Bluetooth", "GATT 연결 해제: ${gatt.device.name} - ${gatt.device.address}")
+                Log.d("BluetoothConnect", "GATT 연결 해제: ${gatt.device.name} - ${gatt.device.address}")
             }
         }
 
         override fun onServicesDiscovered(gatt: BluetoothGatt, status: Int) {  //만약 서비스를 찾는다면
             if (status == BluetoothGatt.GATT_SUCCESS) {
-                Log.d("Bluetooth", "서비스 검색 성공: ${gatt.device.name}")
+                Log.d("BluetoothConnect", "서비스 검색 성공: ${gatt.device.name}")
                 for (service in gatt.services) {
-                    Log.d("Bluetooth", "서비스: ${service.uuid}")  //서비스 및 특성 출력
+                    Log.d("BluetoothConnect", "서비스: ${service.uuid}")  //서비스 및 특성 출력
                     for (characteristic in service.characteristics) {
-                        Log.d("Bluetooth", "  특성: ${characteristic.uuid}")
+                        Log.d("BluetoothConnect", "  특성: ${characteristic.uuid}")
                     }
                 }
             } else {
