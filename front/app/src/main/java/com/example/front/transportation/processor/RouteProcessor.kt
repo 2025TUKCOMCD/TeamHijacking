@@ -2,10 +2,9 @@ package com.example.front.transportation.processor
 
 import android.util.Log
 import com.example.front.BuildConfig
-import com.example.front.transportation.data.realtimeStation.RealtimeStation
 import com.example.front.transportation.data.searchPath.Path
 import com.example.front.transportation.data.searchPath.PathRouteResult
-import com.example.front.transportation.data.searchPath.SearchPubTransPathTResponse
+import com.example.front.transportation.data.searchPath.SearchPubTransPathResponse
 import com.example.front.transportation.service.RouteService
 import com.google.gson.Gson
 import com.google.gson.JsonSyntaxException
@@ -39,21 +38,26 @@ object RouteProcessor {
         return try {
 
             val response = withContext(Dispatchers.IO) {
+                // searchPubTransPathT get 호출
                 routeService.searchPubTransPathT(startLat, startLng, endLat, endLng, ODsay_APIKEY)
             }
 
             val rawJson = response.string()
 
-            val parsedResponse = gson.fromJson(rawJson, SearchPubTransPathTResponse::class.java)
+            // gson으로 Data Class 객체화
+            val parsedResponse = gson.fromJson(rawJson, SearchPubTransPathResponse::class.java)
             val paths = parsedResponse.result?.path ?: return listOf()
 
+            // 정렬 경로 지정
             val sortedPaths = paths.map { path ->
                 val score = calculateRouteScore(path)
                 path to score
             }.sortedBy { it.second }
 
+            // 로그 호출
             sortedPaths.forEachIndexed { index, (path, score) ->
-                Log.d("RouteProcessor", "Sorted Path $index: Score = $score")
+                Log.d("RouteProcessor", "--- 경로 $index 시작 ---")
+                Log.d("RouteProcessor", "Score: $score")
                 Log.d("RouteProcessor", "Transit Count: ${path.info.busTransitCount + path.info.subwayTransitCount} 회")
                 Log.d("RouteProcessor", "Total Time: ${path.info.totalTime} 분")
                 Log.d("RouteProcessor", "Main Transit Types: ${
@@ -66,62 +70,43 @@ object RouteProcessor {
                         }
                     }
                 }")
+                Log.d("RouteProcessor", "--- 경로 $index 끝 ---")
             }
 
+            //
             val validPaths = sortedPaths.map { (path, _) ->
                 val filteredSubPaths = path.subPath
-
-                val startStationIDsArray = filteredSubPaths.filter { it.trafficType == 2 }
-                    .mapNotNull { subPath -> subPath.startID }
-
-                val busIDsArray = filteredSubPaths.filter { it.trafficType == 2 }
-                    .mapNotNull { subPath -> subPath.lane?.firstOrNull()?.busID }
-
-                val cityCodesArray = filteredSubPaths.mapNotNull { it.passStopList?.stations?.firstOrNull()?.stationCityCode }
-
-                val routeStationsAndBuses = startStationIDsArray.zip(busIDsArray)
-
                 val info = path.info
-                val mainTransitTypes = filteredSubPaths.mapNotNull { subPath ->
-                    when (subPath.trafficType) {
-                        1 -> "지하철(${subPath.lane?.firstOrNull()?.name})"
-                        2 -> "버스(${subPath.lane?.firstOrNull()?.busNo})"
-                        3 -> if (subPath.sectionTime != null && subPath.sectionTime >= 5) "도보 (${subPath.sectionTime}분)" else null
-                        else -> null
-                    }
-                }.joinToString(" -> ")
+
+                val mainTransitType = when (path.pathType) {
+                    1 -> "지하철"
+                    2 -> "버스"
+                    3 -> "버스+지하철"
+                    else -> "알 수 없음"
+                }
 
                 val detailedPath = filteredSubPaths.joinToString(", ") { subPath ->
                     when (subPath.trafficType) {
-                        1 -> {
-                            val lane = subPath.lane?.firstOrNull()
-                            "지하철: ${lane?.name} (${subPath.startName} → ${subPath.endName}), 노선명: ${lane?.name}"
-                        }
-
-                        2 -> {
-                            val lane = subPath.lane?.firstOrNull()
-                            "버스: ${lane?.busNo} (${subPath.startName} → ${subPath.endName}), 버스 코드: ${lane?.busID}"
-                        }
-
-                        3 -> "도보: ${subPath.distance}m"
+                        1 -> "지하철"
+                        2 -> "버스"
+                        3 -> "도보"
                         else -> "알 수 없는 교통수단"
                     }
                 }
-                Log.d("RouteProcessor", "Detailed Path: $detailedPath")
-
-                // CityCode 추출
-                val cityCodes = filteredSubPaths.flatMap { subPath ->
-                    subPath.passStopList?.stations?.mapNotNull { it.stationCityCode } ?: emptyList()
-                }.distinct()
-                Log.d("RouteProcessor", "추출된 CityCodes: $cityCodes")
+//                if (path.pathType == 2 || path.pathType == 3) {
+//                    filteredSubPaths.filter { it.trafficType == 2 }.forEach { subPath ->
+//                        val busID = subPath.lane?.firstOrNull()?.busID
+//                        if (busID != null) {
+//                            fetchBusRouteDetails(busID)
+//                        }
+//                    }
+//                }
 
                 PathRouteResult(
-                    routeStationsAndBuses = routeStationsAndBuses,
                     totalTime = info.totalTime,
                     transitCount = info.busTransitCount + info.subwayTransitCount,
-                    mainTransitTypes = mainTransitTypes,
+                    mainTransitTypes = mainTransitType,
                     detailedPath = detailedPath ,
-                    cityCodeArray = listOf(cityCodes)
                 )
             }
             validPaths

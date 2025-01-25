@@ -48,11 +48,11 @@ class TransNewPathDetatilActivity : AppCompatActivity() {
             CoroutineScope(Dispatchers.Main).launch {
                 if (routeStationsAndBuses.isNotEmpty()) {
                     // 실시간 도착정보 api 실행
-                    val realtimeResult = RouteProcessor.fetchRealtimeStation(routeStationsAndBuses)
-                    Log.d("TransNewPathDetatilActivity", "realtimeResult: $realtimeResult")
-                } else {
-                    // 기본 정보 출력
-                    tvRouteInfo.text = "No bus information available."
+//                    val realtimeResult = RouteProcessor.fetchRealtimeStation(routeStationsAndBuses)
+//                    Log.d("TransNewPathDetatilActivity", "realtimeResult: $realtimeResult")
+//                } else {
+//                    // 기본 정보 출력
+//                    tvRouteInfo.text = "No bus information available."
                 }
             }
         } else {
