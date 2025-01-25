@@ -9,6 +9,7 @@ import androidx.appcompat.app.AppCompatActivity
 import com.example.front.databinding.ActivityTransNewPathDetatilBinding
 import com.example.front.transportation.processor.RealTimeProcessor
 import com.example.front.transportation.processor.RouteProcessor
+import com.example.front.transportation.service.RouteService
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -28,7 +29,7 @@ class TransNewPathDetatilActivity : AppCompatActivity() {
         val btnSelectRoute: Button = binding.btnSelectRoute
         btnSelectRoute.setOnClickListener {
             CoroutineScope(Dispatchers.Main).launch {
-//                RouteProcessor.fetchRealtimeLocation()
+                // Route selection functionality can be implemented here
             }
         }
 
@@ -37,27 +38,18 @@ class TransNewPathDetatilActivity : AppCompatActivity() {
         Log.d("TransNewPathDetatilActivity", "routeStationsAndBusesString: $routeStationsAndBusesString")
 
         if (routeStationsAndBusesString.isNotEmpty()) {
-            val routeStationsAndBuses = routeStationsAndBusesString.split(",").map {
+            val routeStationsAndBuses = routeStationsAndBusesString.split(",").mapNotNull {
                 val parts = it.split(" ")
-                val stationID = parts[0].toIntOrNull() ?: 0 // Convert stationID to Int
-                val busID = parts[1].toIntOrNull() ?: 0 // Handle empty or invalid integer
+                val stationID = parts.getOrNull(0)?.toIntOrNull() ?: return@mapNotNull null
+                val busID = parts.getOrNull(1)?.toIntOrNull() ?: return@mapNotNull null
                 stationID to busID
             }
             // 도착 정보 추출
             CoroutineScope(Dispatchers.Main).launch {
                 if (routeStationsAndBuses.isNotEmpty()) {
                     // 실시간 도착정보 api 실행
-                    val realtimeResult = RealTimeProcessor.fetchRealtimeStation(routeStationsAndBuses)
+                    val realtimeResult = RouteProcessor.fetchRealtimeStation(routeStationsAndBuses)
                     Log.d("TransNewPathDetatilActivity", "realtimeResult: $realtimeResult")
-                    if (realtimeResult.isNotEmpty()) {
-                        val busInfo = realtimeResult.joinToString("\n") { result ->
-                            val endBusText = if (result?.endBusYn == "Y") "막차" else ""
-                            "Left Station: ${result?.leftStation}, Arrival Sec: ${result?.arrivalSec}, Bus Status: ${result?.busStatus}, End Bus: ${result?.endBusYn} $endBusText, Low Bus: ${result?.lowBusYn}, Full Car: ${result?.fulCarAt}"
-                        }
-                        tvRouteInfo.text = busInfo
-                    } else {
-                        tvRouteInfo.text = "No bus information available."
-                    }
                 } else {
                     // 기본 정보 출력
                     tvRouteInfo.text = "No bus information available."

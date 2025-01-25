@@ -96,6 +96,8 @@ dependencies {
     implementation("com.squareup.okhttp3:okhttp:4.12.0")
     implementation("com.squareup.okhttp3:logging-interceptor:4.12.0")
     implementation("org.simpleframework:simple-xml:2.7.1")
+    implementation("com.squareup.retrofit2:converter-simplexml:2.9.0")
+
     // 추가 라이브러리
     implementation("com.github.skydoves:powerspinner:1.2.7")
 

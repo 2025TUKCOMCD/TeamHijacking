@@ -39,6 +39,11 @@ class TransportNewPathSearchActivity : AppCompatActivity() {
         val endLat = intent.getDoubleExtra("endLat", 37.476813)
         val endLng = intent.getDoubleExtra("endLng", 126.964156)
 
+        Log.d("TransportNewPathSearchActivity", "Start Latitude: $startLat")
+        Log.d("TransportNewPathSearchActivity", "Start Longitude: $startLng")
+        Log.d("TransportNewPathSearchActivity", "End Latitude: $endLat")
+        Log.d("TransportNewPathSearchActivity", "End Longitude: $endLng")
+
         CoroutineScope(Dispatchers.Main).launch {
             try {
                 val result = RouteProcessor.fetchAndProcessRoutes(startLat, startLng, endLat, endLng)

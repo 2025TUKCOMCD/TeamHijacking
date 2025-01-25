@@ -1,15 +1,16 @@
 package com.example.front.transportation.service
 
-import okhttp3.ResponseBody
+import com.example.front.transportation.data.realtimeStation.RealStationResult
 import retrofit2.http.GET
 import retrofit2.http.Query
 
 interface BusService {
-    @GET("getArrInfoByRoute")
-    suspend fun getArrInfoByRoute(
-        @Query("serviceKey") serviceKey: String,
-        @Query("stId") stId: String,
-        @Query("busRouteId") busRouteId: String,
-        @Query("ord") ord: String = "1"
-    ): ResponseBody
+    @GET("realtimeStation")
+    suspend fun getRealtimeStation(
+        @Query("apiKey") apiKey: String,
+        @Query("stationID") stationID: Int,
+        @Query("routeIDs") routeIDs: String,
+        @Query("stationBase") stationBase: Int = 1,
+        @Query("lowBus") lowBus: Int = 0
+    ): RealStationResult
 }

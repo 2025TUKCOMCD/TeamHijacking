@@ -13,5 +13,4 @@ interface RouteService {
         @Query("EX") endLng: Double,    // 도착 경도
         @Query("apiKey") apiKey: String // API 키
     ): ResponseBody
-
 }
