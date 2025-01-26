@@ -50,7 +50,7 @@ class TransportNewPathSearchActivity : AppCompatActivity() {
 
                 // Initialize RecyclerView
                 routeAdapter = RouteRecycleView(result) { route ->
-                    navigateToRouteDetail(route)
+                    //navigateToRouteDetail(route)
                 }
                 binding.routeRecyclerView.layoutManager = LinearLayoutManager(this@TransportNewPathSearchActivity)
                 binding.routeRecyclerView.adapter = routeAdapter
@@ -63,13 +63,13 @@ class TransportNewPathSearchActivity : AppCompatActivity() {
         }
     }
 
-    private fun navigateToRouteDetail(route: PathRouteResult) {
-        // Navigate to TransNewPathDetailActivity with routeStationsAndBuses
-        val intent = Intent(this, TransNewPathDetatilActivity::class.java)
-        val routeStationsAndBusesString = route.routeStationsAndBuses.joinToString(",") { "${it.first} ${it.second}" }
-        intent.putExtra("routeStationsAndBuses", routeStationsAndBusesString)
-        startActivity(intent)
-    }
+//    private fun navigateToRouteDetail(route: PathRouteResult) {
+//        // Navigate to TransNewPathDetailActivity with routeStationsAndBuses
+//        val intent = Intent(this, TransNewPathDetatilActivity::class.java)
+//        val routeStationsAndBusesString = route.routeStationsAndBuses.joinToString(",") { "${it.first} ${it.second}" }
+//        intent.putExtra("routeStationsAndBuses", routeStationsAndBusesString)
+//        startActivity(intent)
+//    }
     class RouteRecycleView(
         private val routes: List<PathRouteResult>,
         private val onItemClick: (PathRouteResult) -> Unit

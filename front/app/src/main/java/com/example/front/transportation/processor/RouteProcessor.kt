@@ -36,47 +36,26 @@ object RouteProcessor {
 
     suspend fun fetchAndProcessRoutes(startLat: Double, startLng: Double, endLat: Double, endLng: Double): List<PathRouteResult> {
         return try {
-
             val response = withContext(Dispatchers.IO) {
-                // searchPubTransPathT get 호출
                 routeService.searchPubTransPathT(startLat, startLng, endLat, endLng, ODsay_APIKEY)
             }
 
             val rawJson = response.string()
-
-            // gson으로 Data Class 객체화
             val parsedResponse = gson.fromJson(rawJson, SearchPubTransPathResponse::class.java)
             val paths = parsedResponse.result?.path ?: return listOf()
 
-            // 정렬 경로 지정
-            val sortedPaths = paths.map { path ->
-                val score = calculateRouteScore(path)
-                path to score
-            }.sortedBy { it.second }
+            val processedPaths = paths.map { path ->
+                val busDetails = mutableListOf<String>()
 
-            // 로그 호출
-            sortedPaths.forEachIndexed { index, (path, score) ->
-                Log.d("RouteProcessor", "--- 경로 $index 시작 ---")
-                Log.d("RouteProcessor", "Score: $score")
-                Log.d("RouteProcessor", "Transit Count: ${path.info.busTransitCount + path.info.subwayTransitCount} 회")
-                Log.d("RouteProcessor", "Total Time: ${path.info.totalTime} 분")
-                Log.d("RouteProcessor", "Main Transit Types: ${
-                    path.subPath.joinToString(" -> ") { subPath ->
-                        when (subPath.trafficType) {
-                            1 -> "지하철(${subPath.lane?.firstOrNull()?.name})"
-                            2 -> "버스(${subPath.lane?.firstOrNull()?.busNo})"
-                            3 -> "도보 (${subPath.sectionTime ?: 0}분)"
-                            else -> "알 수 없는 교통수단"
+                if (path.pathType == 2 || path.pathType == 3) {
+                    path.subPath.filter { it.trafficType == 2 }.forEach { subPath ->
+                        val busID = subPath.lane?.firstOrNull()?.busID
+                        if (busID != null) {
+                            val busInfo = fetchBusRouteDetails(busID)
+                            busDetails.add("버스(${subPath.lane?.firstOrNull()?.busNo}): $busInfo")
                         }
                     }
-                }")
-                Log.d("RouteProcessor", "--- 경로 $index 끝 ---")
-            }
-
-            //
-            val validPaths = sortedPaths.map { (path, _) ->
-                val filteredSubPaths = path.subPath
-                val info = path.info
+                }
 
                 val mainTransitType = when (path.pathType) {
                     1 -> "지하철"
@@ -85,31 +64,24 @@ object RouteProcessor {
                     else -> "알 수 없음"
                 }
 
-                val detailedPath = filteredSubPaths.joinToString(", ") { subPath ->
+                val detailedPath = path.subPath.joinToString(" -> ") { subPath ->
                     when (subPath.trafficType) {
-                        1 -> "지하철"
-                        2 -> "버스"
-                        3 -> "도보"
+                        1 -> "지하철(${subPath.lane?.firstOrNull()?.name})"
+                        2 -> "버스(${subPath.lane?.firstOrNull()?.busNo})"
+                        3 -> "도보(${subPath.sectionTime ?: 0}분)"
                         else -> "알 수 없는 교통수단"
                     }
                 }
-//                if (path.pathType == 2 || path.pathType == 3) {
-//                    filteredSubPaths.filter { it.trafficType == 2 }.forEach { subPath ->
-//                        val busID = subPath.lane?.firstOrNull()?.busID
-//                        if (busID != null) {
-//                            fetchBusRouteDetails(busID)
-//                        }
-//                    }
-//                }
 
                 PathRouteResult(
-                    totalTime = info.totalTime,
-                    transitCount = info.busTransitCount + info.subwayTransitCount,
+                    totalTime = path.info.totalTime,
+                    transitCount = path.info.busTransitCount + path.info.subwayTransitCount,
                     mainTransitTypes = mainTransitType,
-                    detailedPath = detailedPath ,
+                    detailedPath = detailedPath,
+                    busDetails = busDetails
                 )
             }
-            validPaths
+            processedPaths
         } catch (e: JsonSyntaxException) {
             Log.e("RouteProcessor", "JSON 문법 오류", e)
             listOf()
@@ -119,6 +91,19 @@ object RouteProcessor {
         }
     }
 
+    private suspend fun fetchBusRouteDetails(busID: Int): String {
+        return try {
+            val response = withContext(Dispatchers.IO) {
+                routeService.busLaneDetail(busID, ODsay_APIKEY)
+            }
+            val rawJson = response.string()
+            Log.d("RouteProcessor", "Bus Route Details for busID $busID: $rawJson")
+            rawJson
+        } catch (e: Exception) {
+            Log.e("RouteProcessor", "Error fetching bus route details for busID $busID", e)
+            "상세 정보 불러오기 실패"
+        }
+    }
 
     private fun calculateRouteScore(path: Path): Double {
         val info = path.info
