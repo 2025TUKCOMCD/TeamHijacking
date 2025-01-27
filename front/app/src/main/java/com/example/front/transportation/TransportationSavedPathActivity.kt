@@ -43,7 +43,7 @@ class TransportationSavedPathActivity : AppCompatActivity() {
         favouritePathStarBtt.setOnClickListener{
             //임시로 이 곳에 구현, 동적 버튼 생성/ 각 버튼에 대한 구분이 가능해지면
             //이 역시 function으로 바꾸어 각 경로에 대해서만 작용하도록 바꾸어야 함
-            starBtnClickListener(savedPathRootLayout)
+            starBtnClickListener(favouritePathStarBtt)
         }
 
     }
@@ -54,15 +54,22 @@ class TransportationSavedPathActivity : AppCompatActivity() {
         * 버튼 생성 function은 하단의 createPathBtt 이용, 순회하며 받아옴 */
     }
 
-    private fun createPathBtt() {
-        //하... 버튼을 생성하는 기능,
+    private fun createPathBtt(savedPathThing: LinearLayout) {
+        //하... 각 path를 불러오고, text를 설정하는 기능
+        //아예 다른 activity로 만들어서 불러오는게 나을지도 모르겠음..
         /* todo::
-        *   1. path 지정 btt UIUX 디자인
-        *   2. UIUX 개발
-        *   3. 해당 버튼을 이 activity에 불러오도록 구현 */
+        *   1. path 지정 btt UIUX 디자인 (완료)
+        *   2. UIUX 개발 (대략 완료? ㅠㅠ)
+        *   3. 해당 버튼을 이 activity에 불러오도록 구현
+        *   4. 그 요소의 text 변경하도록 대략적으로..  */
+
+        val childAddressNickname: TextView
+        //val favouritePathStarBtt: ImageView
+        val departureTextView: TextView
+        val destinationTextView: TextView
     }
 
-    private fun starBtnClickListener(savedPathThing: LinearLayout) {
+    private fun starBtnClickListener(favouritePathStar: ImageView) {
         /*id가 savedPathRootLayout인, 일종의 저장 경로 띄워주기용 view의
         * favouriteStarBtt 클릭 시 버튼의 색이 노란색으로 바뀌며,
         * 다른 경로에 비해 우선도를 가지도록 조정하는 버튼
@@ -83,7 +90,7 @@ class TransportationSavedPathActivity : AppCompatActivity() {
         *       활용하는 등 */
 
         //자식 뷰 중 ImageView를 찾아 tint를 변경하기 위한, 임시 코드
-        val favouriteStarBtt: ImageView = savedPathThing.findViewById(R.id.favouritePathStarBtt)
+        val favouriteStarBtt: ImageView = favouritePathStar
 
         if(!isFavouritePath) {
             favouriteStarBtt.setColorFilter(getColor(R.color.yellow), android.graphics.PorterDuff.Mode.SRC_IN)
