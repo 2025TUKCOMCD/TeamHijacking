@@ -145,6 +145,7 @@ object RouteProcessor {
 
             var startStationInfo: String? = null
             var endStationInfo: String? = null
+            var busNo: String? = null
 
             busLaneDetail.result?.station?.forEach { station ->
                 if (station.localStationID == startLocalStationID) {
@@ -156,7 +157,7 @@ object RouteProcessor {
 
             if (busLocalBlID != null && startStationInfo != null && endStationInfo != null) {
                 val busInfo = mapOf(
-                "busID" to busID.toString(),
+                "busNo" to busNo.toString(),
                 "startLocalStationID" to (startLocalStationID ?: ""),
                 "endLocalStationID" to (endLocalStationID ?: ""),
                 "busLocalBlID" to (busLocalBlID ?: ""),

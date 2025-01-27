@@ -48,17 +48,13 @@ object RealTimeProcessor {
                 mapOf(
                     "정류소 이름" to (item.stNm ?: "정보 없음"),
                     "노선 이름" to (item.rtNm ?: "정보 없음"),
-                    "첫 번째 차량 번호판" to (item.plainNo1 ?: "정보 없음"),
                     "첫 번째 차량 남은 시간(초)" to (item.traTime1 ?: "정보 없음"),
                     "첫 번째 차량 도착 여부" to (item.isArrive1 ?: "정보 없음"),
                     "첫 번째 차량 도착 메시지" to (item.arrmsg1 ?: "정보 없음"),
-                    "두 번째 차량 번호판" to (item.plainNo2 ?: "정보 없음"),
                     "두 번째 차량 남은 시간(초)" to (item.traTime2 ?: "정보 없음"),
                     "두 번째 차량 도착 여부" to (item.isArrive2 ?: "정보 없음"),
                     "두 번째 차량 도착 메시지" to (item.arrmsg2 ?: "정보 없음")
                 )
-            }.also { resultList ->
-                return resultList
             }
         } catch (e: Exception) {
             Log.e("RealTimeProcessor", "Error while fetching realtime station data", e)

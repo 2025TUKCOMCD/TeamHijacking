@@ -23,7 +23,6 @@ class TransNewPathDetailActivity : AppCompatActivity() {
 
         val tvRouteInfo: TextView = binding.tvRouteInfo
         tvRouteInfo.setTextColor(resources.getColor(android.R.color.white))
-
         val btnSelectRoute: Button = binding.btnSelectRoute
         btnSelectRoute.setOnClickListener {
             CoroutineScope(Dispatchers.Main).launch {
@@ -31,12 +30,10 @@ class TransNewPathDetailActivity : AppCompatActivity() {
             }
         }
 
-        // Retrieve the routeStationsAndBuses from the intent
         val routeStationsAndBusesString = intent.getStringExtra("routeStationsAndBuses") ?: ""
         Log.d("TransNewPathDetailActivity", "routeStationsAndBusesString: $routeStationsAndBusesString")
 
         if (routeStationsAndBusesString.isNotEmpty()) {
-            // 쉼표(,)로 나누고 각 버스 정보를 담은 map 생성
             val routeStationsAndBuses = routeStationsAndBusesString.split(",").chunked(6).map { parts ->
                 mapOf(
                     "busID" to parts[0].split(":")[1].trim(),
@@ -48,15 +45,14 @@ class TransNewPathDetailActivity : AppCompatActivity() {
                 )
             }
 
-            // 도착 정보 추출 및 출력
             routeStationsAndBuses.forEach { busInfoMap ->
                 Log.d("TransNewPathDetailActivity", "Bus Info Map: $busInfoMap")
 
                 val busID = busInfoMap["busID"]
-                val startLocalStationID = busInfoMap["startLocalStationID"]
+                val startLocalStationID = busInfoMap["startLocalStationID"]?.toInt()
                 val endLocalStationID = busInfoMap["endLocalStationID"]
-                val busLocalBlID = busInfoMap["busLocalBlID"]
-                val startStationInfo = busInfoMap["startStationInfo"]
+                val busLocalBlID = busInfoMap["busLocalBlID"]?.toInt()
+                val startStationInfo = busInfoMap["startStationInfo"]?.toInt()
                 val endStationInfo = busInfoMap["endStationInfo"]
 
                 Log.d("TransNewPathDetailActivity", "Bus ID: $busID")
@@ -69,12 +65,14 @@ class TransNewPathDetailActivity : AppCompatActivity() {
                 CoroutineScope(Dispatchers.Main).launch {
                     try {
                         val result = RealTimeProcessor.fetchRealtimeStation(
-                            stId = startLocalStationID?.toInt() ?: 0,
-                            busRouteId = busLocalBlID?.toInt() ?: 0,
-                            ord = startStationInfo?.toInt() ?: 0,
+                            stId = startLocalStationID ?: 0,
+                            busRouteId = busLocalBlID ?: 0,
+                            ord = startStationInfo ?: 0,
                             "json"
                         )
-                        // Initialize RecyclerView
+
+                        Log.d("TransNewPathDetailActivity", "Real-time station data: $result")
+                        //tvRouteInfo.append("$busID: ${result?.joinToString(", ") { it.toString() }}\n")
                     } catch (e: Exception) {
                         Log.e("TransNewPathDetailActivity", "Error occurred while fetching real-time station data", e)
                     }
