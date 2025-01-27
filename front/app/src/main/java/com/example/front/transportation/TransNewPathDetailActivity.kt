@@ -68,7 +68,12 @@ class TransNewPathDetailActivity : AppCompatActivity() {
 
                 CoroutineScope(Dispatchers.Main).launch {
                     try {
-                        val result = RealTimeProcessor.fetchRealtimeStation(listOf(Pair(startLocalStationID!!.toInt(), busLocalBlID!!.toInt())))
+                        val result = RealTimeProcessor.fetchRealtimeStation(
+                            stId = startLocalStationID?.toInt() ?: 0,
+                            busRouteId = busLocalBlID?.toInt() ?: 0,
+                            ord = startStationInfo?.toInt() ?: 0,
+                            "json"
+                        )
                         // Initialize RecyclerView
                     } catch (e: Exception) {
                         Log.e("TransNewPathDetailActivity", "Error occurred while fetching real-time station data", e)

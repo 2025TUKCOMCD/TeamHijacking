@@ -1,6 +1,6 @@
 package com.example.front.transportation.service
 
-import com.example.front.transportation.data.realtimeStation.RealStationResult
+import okhttp3.ResponseBody
 import retrofit2.http.GET
 import retrofit2.http.Query
 
@@ -12,7 +12,7 @@ interface BusService {
         @Query("busRouteId") busRouteId: Int,
         @Query("ord") ord: Int,
         @Query("resultType") resultType: String
-    ): RealStationResult
+    ): ResponseBody
 
     @GET("buspos/getBusPosByRouteSt")
     suspend fun getBusPosByRouteSt(
@@ -21,5 +21,5 @@ interface BusService {
         @Query("startOrd") startOrd: Int,
         @Query("endOrd") endOrd: Int,
         @Query("resultType") resultType: String
-    ): RealStationResult
+    ): ResponseBody
 }
