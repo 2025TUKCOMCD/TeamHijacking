@@ -5,12 +5,21 @@ import retrofit2.http.GET
 import retrofit2.http.Query
 
 interface BusService {
-    @GET("realtimeStation")
-    suspend fun getRealtimeStation(
-        @Query("apiKey") apiKey: String,
-        @Query("stationID") stationID: Int,
-        @Query("routeIDs") routeIDs: String,
-        @Query("stationBase") stationBase: Int = 1,
-        @Query("lowBus") lowBus: Int = 0
+    @GET("arrive/getArrInfoByRoute")
+    suspend fun getArrInfoByRoute(
+        @Query("ServiceKey") ServiceKey: String,
+        @Query("stId") stId: Int,
+        @Query("busRouteId") busRouteId: Int,
+        @Query("ord") ord: Int,
+        @Query("resultType") resultType: String
+    ): RealStationResult
+
+    @GET("buspos/getBusPosByRouteSt")
+    suspend fun getBusPosByRouteSt(
+        @Query("ServiceKey") ServiceKey: String,
+        @Query("busRouteId") busRouteId: Int,
+        @Query("startOrd") startOrd: Int,
+        @Query("endOrd") endOrd: Int,
+        @Query("resultType") resultType: String
     ): RealStationResult
 }

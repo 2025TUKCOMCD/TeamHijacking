@@ -7,16 +7,11 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
-import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
-import androidx.databinding.adapters.ViewBindingAdapter.setPadding
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.front.R
 import com.example.front.databinding.ActivityTransportNewPathSearchBinding
-import com.example.front.databinding.ActivityTransportationMainBinding
 import com.example.front.transportation.data.searchPath.PathRouteResult
 import com.example.front.transportation.processor.RouteProcessor
 import kotlinx.coroutines.CoroutineScope
@@ -47,10 +42,9 @@ class TransportNewPathSearchActivity : AppCompatActivity() {
         CoroutineScope(Dispatchers.Main).launch {
             try {
                 val result = RouteProcessor.fetchAndProcessRoutes(startLat, startLng, endLat, endLng)
-
                 // Initialize RecyclerView
                 routeAdapter = RouteRecycleView(result) { route ->
-                    //navigateToRouteDetail(route)
+                    navigateToRouteDetail(route)
                 }
                 binding.routeRecyclerView.layoutManager = LinearLayoutManager(this@TransportNewPathSearchActivity)
                 binding.routeRecyclerView.adapter = routeAdapter
@@ -63,13 +57,13 @@ class TransportNewPathSearchActivity : AppCompatActivity() {
         }
     }
 
-//    private fun navigateToRouteDetail(route: PathRouteResult) {
-//        // Navigate to TransNewPathDetailActivity with routeStationsAndBuses
-//        val intent = Intent(this, TransNewPathDetatilActivity::class.java)
-//        val routeStationsAndBusesString = route.routeStationsAndBuses.joinToString(",") { "${it.first} ${it.second}" }
-//        intent.putExtra("routeStationsAndBuses", routeStationsAndBusesString)
-//        startActivity(intent)
-//    }
+    private fun navigateToRouteDetail(route: PathRouteResult) {
+        // Navigate to TransNewPathDetailActivity with routeStationsAndBuses
+        val intent = Intent(this, TransNewPathDetailActivity::class.java)
+        val routeStationsAndBusesString = route.busDetails.joinToString(",") { it }
+        intent.putExtra("routeStationsAndBuses", routeStationsAndBusesString)
+        startActivity(intent)
+    }
     class RouteRecycleView(
         private val routes: List<PathRouteResult>,
         private val onItemClick: (PathRouteResult) -> Unit

@@ -45,7 +45,6 @@ object RouteProcessor {
             val rawJson = response.string()
             val parsedResponse = gson.fromJson(rawJson, SearchPath::class.java)
             val paths = parsedResponse.result?.path ?: return listOf()
-
             val sortedPaths = paths.map { path ->
                 val score = calculateRouteScore(path)
                 path to score
@@ -71,7 +70,7 @@ object RouteProcessor {
             }
 
             // 경로 결과 생성
-            val validPaths = sortedPaths.map { (path, _) ->
+            val validPaths = sortedPaths.mapIndexed { index, (path, _) ->
                 val filteredSubPaths = path.subPath
                 val info = path.info
 
@@ -93,28 +92,29 @@ object RouteProcessor {
                     }
                 }
 
-                // 버스 노선 정보
-                val busDetails = mutableListOf<String>()
-
-                // 버스 정보 가져오기
-                sortedPaths.forEachIndexed { index, (path, _) ->
-                    path.subPath.filter { it.trafficType == 2 }.forEach { subPath ->
-                        val busID = subPath.lane?.firstOrNull()?.busID
-                        val startLocalStationID = subPath.startLocalStationID
-                        val endLocalStationID = subPath.endLocalStationID
-                        if (busID != null && startLocalStationID != null && endLocalStationID != null) {
-                            val busInfo = fetchBusRouteDetails(busID, startLocalStationID, endLocalStationID) // 특정 경로의 버스 정보를 가져옴
-                            Log.d("RouteProcessor", "Route $index - Bus($busID) StartStation($startLocalStationID) EndStation($endLocalStationID) Info: $busInfo")
-                            busDetails.add("Route $index - Bus($busID) StartStation($startLocalStationID) EndStation($endLocalStationID) Info: $busInfo")
+                // 경로별 busDetails 생성
+                val routeBusDetails = mutableListOf<String>()
+                filteredSubPaths.filter { it.trafficType == 2 }.forEach { subPath ->
+                    val busID = subPath.lane?.firstOrNull()?.busID
+                    val startLocalStationID = subPath.startLocalStationID
+                    val endLocalStationID = subPath.endLocalStationID
+                    if (busID != null && startLocalStationID != null && endLocalStationID != null) {
+                        val busInfo = fetchBusRouteDetails(busID, startLocalStationID, endLocalStationID)
+                        busInfo.forEach { info ->
+                            Log.d("RouteProcessor", "$info")
+                            routeBusDetails.add(info.map { "${it.key}:${it.value}" }
+                                .joinToString(", "))
                         }
                     }
                 }
+
+                // 각 경로별 PathRouteResult 생성
                 PathRouteResult(
                     totalTime = info.totalTime,
                     transitCount = info.busTransitCount + info.subwayTransitCount,
                     mainTransitTypes = mainTransitType,
                     detailedPath = detailedPath,
-                    busDetails = busDetails
+                    busDetails = routeBusDetails // 경로별로 분리된 busDetails 추가
                 )
             }
             validPaths
@@ -127,7 +127,7 @@ object RouteProcessor {
         }
     }
 
-    private suspend fun fetchBusRouteDetails(busID: Int, startLocalStationID: String, endLocalStationID: String): List<String> {
+    private suspend fun fetchBusRouteDetails(busID: Int, startLocalStationID: String, endLocalStationID: String): List<Map<String, String>> {
         return try {
             // 버스 경로 상세 정보 요청
             val response = withContext(Dispatchers.IO) {
@@ -138,10 +138,33 @@ object RouteProcessor {
 
             // busLaneDetail 파싱
             val busLaneDetail = gson.fromJson(rawJson, BusLaneDetail::class.java)
+            val busLocalBlID = busLaneDetail.result?.busLocalBlID
 
             // 반환할 결과 리스트
-            val resultList = mutableListOf<String>()
+            val resultList = mutableListOf<Map<String, String>>()
 
+            var startStationInfo: String? = null
+            var endStationInfo: String? = null
+
+            busLaneDetail.result?.station?.forEach { station ->
+                if (station.localStationID == startLocalStationID) {
+                    startStationInfo = "${station.idx + 1}"
+                } else if (station.localStationID == endLocalStationID) {
+                    endStationInfo = "${station.idx + 1}"
+                }
+            }
+
+            if (busLocalBlID != null && startStationInfo != null && endStationInfo != null) {
+                val busInfo = mapOf(
+                "busID" to busID.toString(),
+                "startLocalStationID" to (startLocalStationID ?: ""),
+                "endLocalStationID" to (endLocalStationID ?: ""),
+                "busLocalBlID" to (busLocalBlID ?: ""),
+                "startStationInfo" to (startStationInfo ?: ""),
+                "endStationInfo" to (endStationInfo ?: "")
+            )
+            resultList.add(busInfo)
+            }
 
             // 결과 리스트 반환
             resultList
@@ -150,6 +173,7 @@ object RouteProcessor {
             emptyList() // 오류 시 빈 리스트 반환
         }
     }
+
 
     private fun calculateRouteScore(path: Path): Double {
         val info = path.info
