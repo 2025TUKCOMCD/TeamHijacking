@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main"
     android:layout_width="wrap_content"
@@ -11,7 +10,8 @@
     tools:context=".transportation.TransportInfrmationActivity"
     android:orientation="vertical"
     android:padding="20dp"
-    android:textAlignment="center">
+    android:textAlignment="center"
+    android:background="@color/backgroundDark" >
 
     <ImageSwitcher
         android:layout_width="100dp"

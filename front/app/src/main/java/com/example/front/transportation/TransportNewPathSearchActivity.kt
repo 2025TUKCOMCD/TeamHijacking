@@ -3,14 +3,9 @@ package com.example.front.transportation
 import android.os.Bundle
 import android.util.Log
 import android.widget.TextView
-import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
-import androidx.databinding.adapters.ViewBindingAdapter.setPadding
 import com.example.front.R
 import com.example.front.databinding.ActivityTransportNewPathSearchBinding
-import com.example.front.databinding.ActivityTransportationMainBinding
 import com.example.front.transportation.processor.RouteProcessor
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -31,8 +26,6 @@ class TransportNewPathSearchActivity : AppCompatActivity() {
         /*사용할 객체 바인딩*/
             //val someRootText: TextView = binding.someRootText
             //val someRootDescription: TextView = binding.someRootTextDescription
-           //-
-           //실행이 안 되어 findViewByID로 수정
         val transitCountView: TextView = binding.transitCountView
         val totalTimeView: TextView = binding.totalTimeView
         val detatiledPathView: TextView = binding.detatiledPathView
@@ -74,9 +67,9 @@ class TransportNewPathSearchActivity : AppCompatActivity() {
                     //임시로 한 Layout text에 들어가도록 설정
                     transitCountView.text = getString(R.string.transitCount, transitCount)
                     totalTimeView.text = Integer.toString(totalTime)+"분"
-                    detatiledPathView.setText("$detailedPath")
+                    detatiledPathView.text = detailedPath
                     routeStationAndBusesView.text="$routeStationsAndBuses"
-                    mainTransitTypesView.text="$mainTransitTypes"
+                    mainTransitTypesView.text= mainTransitTypes
 
 
                     // 동적 버튼 생성

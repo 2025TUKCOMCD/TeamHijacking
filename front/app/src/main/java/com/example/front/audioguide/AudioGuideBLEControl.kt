@@ -45,18 +45,21 @@ class AudioGuideBLEControl : AppCompatActivity() {
         Handler(Looper.getMainLooper()).postDelayed({
             if (bluetoothGatt != null) {
                 binding.button1.setOnClickListener {
-                    sendDataToCharacteristic(byteArrayOf(0x00, 0x31, 0x01))
+                    val locationuuid = UUID.fromString("0003cdd0-0000-1000-8000-00805f9b0131")
+                    sendDataToCharacteristic(byteArrayOf(0x00, 0x31, 0x01), locationuuid)
                     Log.d("현빈", "위치 유도")
                 }
 
                 binding.button2.setOnClickListener {
-                    sendDataToCharacteristic(byteArrayOf(0x00, 0x31, 0x10))
+                    val voice_guidanceuuid = UUID.fromString("0003cdd0-0001-1000-8000-00805f9b0131")
+                    sendDataToCharacteristic(byteArrayOf(0x00, 0x31, 0x10),voice_guidanceuuid)
                     Log.d("현빈", "신호 안내")
                 }
 
                 binding.button3.setOnClickListener {
-                    sendDataToCharacteristic(byteArrayOf(0x00, 0x31, 0x00))
-                    Log.d("현빈", "신호 안내")
+                    val voice_requestuuid = UUID.fromString("0003cdd0-0002-1000-8000-00805f9b0131")
+                    sendDataToCharacteristic(byteArrayOf(0x00, 0x31, 0x00),voice_requestuuid)
+                    Log.d("현빈", "음성 안내")
                 }
             } else {
                 Log.d("Bluetooth", "bluetoothGatt 초기화되지 않음")
@@ -115,11 +118,12 @@ class AudioGuideBLEControl : AppCompatActivity() {
     }
 
     // 데이터 전송 함수
-    private fun sendDataToCharacteristic(data: ByteArray) {
+    private fun sendDataToCharacteristic(data: ByteArray, uuid: UUID) {
         Log.d("BluetoothControl", "함수입성")
+        Log.d("BluetoothControl",uuid.toString())
         bluetoothGatt?.let { gatt ->
             Log.d("BluetoothControl", "함수 실행전")
-            val characteristic = getTargetCharacteristic()
+            val characteristic = getTargetCharacteristic(uuid)
             Log.d("BluetoothControl", "변수지정")
             Log.d("BluetoothControl", "characteristic: $characteristic")
             if (characteristic != null) {
@@ -138,10 +142,10 @@ class AudioGuideBLEControl : AppCompatActivity() {
     }
 
     // 원하는 특성을 찾는 함수
-    private fun getTargetCharacteristic(): BluetoothGattCharacteristic? {
+    private fun getTargetCharacteristic(uuid: UUID): BluetoothGattCharacteristic? {
         Log.d("BluetoothControl", "Target함수쪽으로 들어옴")
         // 여기서 원하는 특성 UUID를 사용하여 찾습니다.
-        val targetUUID = UUID.fromString("0003cdd1-0000-1000-8000-00805f9b013") // 실제 UUID 값으로 변경
+        val targetUUID = uuid
 
         Log.d("BluetoothControl", "UUID지정")
         bluetoothGatt?.let { gatt ->
