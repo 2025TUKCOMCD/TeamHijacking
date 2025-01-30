@@ -45,4 +45,7 @@
     <string name="favouritePathStarBtt">즐겨찾기 지정 버튼, 클릭 시 본 경로가 최상단에 노출됩니다. 여러개를 설정하였을 시, 가장 최근에 사용한 즐겨찾기 경로가 노출됩니다.</string>
     <string name="askFormBttDescription">문의 버튼, 클릭시 이메일을 볼 수 있습니다. 이용해주셔서 감사합니다.</string>
     <string name="askFormBtt">문의용 연락처</string>
+    <string name="profileText">계정 설정</string>
+    <string name="faqText">FAQ</string>
+    <string name="thisVersionText">현재 버전</string>
 </resources>
