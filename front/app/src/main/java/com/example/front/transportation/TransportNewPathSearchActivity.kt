@@ -19,23 +19,17 @@ class TransportNewPathSearchActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-
         binding = ActivityTransportNewPathSearchBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
         /*사용할 객체 바인딩*/
-            //val someRootText: TextView = binding.someRootText
-            //val someRootDescription: TextView = binding.someRootTextDescription
         val transitCountView: TextView = binding.transitCountView
         val totalTimeView: TextView = binding.totalTimeView
         val detatiledPathView: TextView = binding.detatiledPathView
         val routeStationAndBusesView: TextView = binding.routeStationsAndBusesView
         val mainTransitTypesView: TextView = binding.mainTransitTypesView
 
-        //val startLat = 37.340174
-        //val startLng = 126.7335933
-        //val endLat = 37.5414001
-        //val endLng = 127.0900351
+        //val startLat = 37.340174 val startLng = 126.7335933 val endLat = 37.5414001 val endLng = 127.0900351
         val startLat = intent.getDoubleExtra("startLat", 37.340174)
         val startLng = intent.getDoubleExtra("startLng", 126.7335933)
         val endLat = intent.getDoubleExtra("endLat", 37.340174)
@@ -90,7 +84,9 @@ class TransportNewPathSearchActivity : AppCompatActivity() {
                 Log.e("RouteProcessor", "경로 탐색 중 오류 발생", e)
             }
         }
+    }
 
+    private fun makeNewPathBtn(){
 
     }
 }

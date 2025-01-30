@@ -48,4 +48,7 @@
     <string name="profileText">계정 설정</string>
     <string name="faqText">FAQ</string>
     <string name="thisVersionText">현재 버전</string>
+    <string name="code">코드</string>
+    <string name="n_nn">n시간 nn분</string>
+    <string name="n">n회</string>
 </resources>
