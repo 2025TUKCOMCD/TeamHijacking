@@ -1,7 +1,10 @@
 package com.example.front.transportation
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.util.Log
+import android.widget.Button
+import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import com.example.front.R
@@ -16,6 +19,7 @@ import kotlinx.coroutines.launch
 class TransportNewPathSearchActivity : AppCompatActivity() {
     private lateinit var binding: ActivityTransportNewPathSearchBinding
 
+    @SuppressLint("SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -67,16 +71,15 @@ class TransportNewPathSearchActivity : AppCompatActivity() {
 
 
                     // 동적 버튼 생성
-//
-//                        setOnClickListener {
-//                            CoroutineScope(Dispatchers.Main).launch {
-//                                val realtimeResult =
-//                                    RouteProcessor.fetchRealtimeStation(routeStationsAndBuses)
-//                                Log.d("RouteProcessor", "실시간 경로 데이터: $realtimeResult")
-//                            }
-//                        }
-//                    }
+                    val newPathLinearLayout = findViewById<LinearLayout>(R.id.newPathLinearLayout)
 
+                    val dynamicBtn = Button(this@TransportNewPathSearchActivity)
+                    val layoutParams = LinearLayout.LayoutParams(
+                        LinearLayout.LayoutParams.MATCH_PARENT,
+                        LinearLayout.LayoutParams.WRAP_CONTENT
+                    )
+                    dynamicBtn.layoutParams = layoutParams
+                    newPathLinearLayout.addView(dynamicBtn)
                     // 생성된 버튼을 컨테이너에 추가
 
                 }
