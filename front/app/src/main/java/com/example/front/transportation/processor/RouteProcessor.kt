@@ -50,8 +50,9 @@ object RouteProcessor {
                 path to score
             }.sortedBy { it.second }
 
+            val topPaths = sortedPaths.take(3)
             // 로그 출력
-            sortedPaths.forEachIndexed { index, (path, score) ->
+            topPaths.forEachIndexed { index, (path, score) ->
                 Log.d("RouteProcessor", "--- 경로 $index 시작 ---")
                 Log.d("RouteProcessor", "Score: $score")
                 Log.d("RouteProcessor", "Transit Count: ${path.info.busTransitCount + path.info.subwayTransitCount} 회")
@@ -70,7 +71,7 @@ object RouteProcessor {
             }
 
             // 경로 결과 생성
-            val validPaths = sortedPaths.mapIndexed { index, (path, _) ->
+            val validPaths = topPaths.mapIndexed { index, (path, _) ->
                 val filteredSubPaths = path.subPath
                 val info = path.info
 
@@ -128,24 +129,24 @@ object RouteProcessor {
     }
 
     private suspend fun fetchBusRouteDetails(busID: Int, startLocalStationID: String, endLocalStationID: String): List<Map<String, String>> {
+        Log.d("RouteProcessor", "Fetching bus route details for busID $busID")
         return try {
             // 버스 경로 상세 정보 요청
             val response = withContext(Dispatchers.IO) {
                 routeService.busLaneDetail(busID, ODsay_APIKEY)
             }
-
             val rawJson = response.string()
-
+            Log.d("RouteProcessor", "Raw response received: $rawJson")
             // busLaneDetail 파싱
             val busLaneDetail = gson.fromJson(rawJson, BusLaneDetail::class.java)
             val busLocalBlID = busLaneDetail.result?.busLocalBlID
-
+            var busNo = busLaneDetail.result?.busNo
             // 반환할 결과 리스트
             val resultList = mutableListOf<Map<String, String>>()
 
             var startStationInfo: String? = null
             var endStationInfo: String? = null
-            var busNo: String? = null
+
 
             busLaneDetail.result?.station?.forEach { station ->
                 if (station.localStationID == startLocalStationID) {

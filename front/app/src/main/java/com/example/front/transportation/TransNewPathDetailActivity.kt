@@ -5,12 +5,12 @@ import android.util.Log
 import android.widget.Button
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
-import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.front.databinding.ActivityTransNewPathDetatilBinding
 import com.example.front.transportation.processor.RealTimeProcessor
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class TransNewPathDetailActivity : AppCompatActivity() {
 
@@ -45,37 +45,44 @@ class TransNewPathDetailActivity : AppCompatActivity() {
                 )
             }
 
-            routeStationsAndBuses.forEach { busInfoMap ->
-                Log.d("TransNewPathDetailActivity", "Bus Info Map: $busInfoMap")
+            CoroutineScope(Dispatchers.Main).launch {
+                val results = mutableListOf<Map<String, String>>()
+                for (busInfoMap in routeStationsAndBuses) {
+                    Log.d("TransNewPathDetailActivity", "Bus Info Map: $busInfoMap")
 
-                val busID = busInfoMap["busID"]
-                val startLocalStationID = busInfoMap["startLocalStationID"]?.toInt()
-                val endLocalStationID = busInfoMap["endLocalStationID"]
-                val busLocalBlID = busInfoMap["busLocalBlID"]?.toInt()
-                val startStationInfo = busInfoMap["startStationInfo"]?.toInt()
-                val endStationInfo = busInfoMap["endStationInfo"]
+                    val busID = busInfoMap["busID"]
+                    val startLocalStationID = busInfoMap["startLocalStationID"]?.toInt()
+                    val endLocalStationID = busInfoMap["endLocalStationID"]
+                    val busLocalBlID = busInfoMap["busLocalBlID"]?.toInt()
+                    val startStationInfo = busInfoMap["startStationInfo"]?.toInt()
+                    val endStationInfo = busInfoMap["endStationInfo"]
 
-                Log.d("TransNewPathDetailActivity", "Bus ID: $busID")
-                Log.d("TransNewPathDetailActivity", "Start Local Station ID: $startLocalStationID")
-                Log.d("TransNewPathDetailActivity", "End Local Station ID: $endLocalStationID")
-                Log.d("TransNewPathDetailActivity", "Bus Local BLID: $busLocalBlID")
-                Log.d("TransNewPathDetailActivity", "Start Station Info: $startStationInfo")
-                Log.d("TransNewPathDetailActivity", "End Station Info: $endStationInfo")
+                    Log.d("TransNewPathDetailActivity", "Bus ID: $busID")
+                    Log.d("TransNewPathDetailActivity", "Start Local Station ID: $startLocalStationID")
+                    Log.d("TransNewPathDetailActivity", "End Local Station ID: $endLocalStationID")
+                    Log.d("TransNewPathDetailActivity", "Bus Local BLID: $busLocalBlID")
+                    Log.d("TransNewPathDetailActivity", "Start Station Info: $startStationInfo")
+                    Log.d("TransNewPathDetailActivity", "End Station Info: $endStationInfo")
 
-                CoroutineScope(Dispatchers.Main).launch {
                     try {
-                        val result = RealTimeProcessor.fetchRealtimeStation(
-                            stId = startLocalStationID ?: 0,
-                            busRouteId = busLocalBlID ?: 0,
-                            ord = startStationInfo ?: 0,
-                            "json"
-                        )
-
-                        Log.d("TransNewPathDetailActivity", "Real-time station data: $result")
-                        //tvRouteInfo.append("$busID: ${result?.joinToString(", ") { it.toString() }}\n")
+                        val result = withContext(Dispatchers.IO) {
+                            RealTimeProcessor.fetchRealtimeStation(
+                                stId = startLocalStationID ?: 0,
+                                busRouteId = busLocalBlID ?: 0,
+                                ord = startStationInfo ?: 0,
+                                "json"
+                            )
+                        }
+                        result?.let { results.addAll(it) }
                     } catch (e: Exception) {
                         Log.e("TransNewPathDetailActivity", "Error occurred while fetching real-time station data", e)
                     }
+                }
+
+                results.forEach { item ->
+                    tvRouteInfo.append("${item["rtNm"]} - ${item["stNm"]}:\n" +
+                            "첫 번째 차량: ${item["arrmsg1"]} (${item["traTime1"]}초)\n" +
+                            "두 번째 차량: ${item["arrmsg2"]} (${item["traTime2"]}초)\n\n")
                 }
             }
         } else {
