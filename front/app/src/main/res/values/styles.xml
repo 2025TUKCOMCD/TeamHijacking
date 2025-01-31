@@ -46,4 +46,9 @@
         <!-- 스플래시 이후 적용될 테마 -->
         <item name="postSplashScreenTheme">@style/MainActivityTheme</item>
     </style>
+
+    <style name="CustomDialogTheme" parent="Theme.AppCompat.Light.Dialog.Alert">
+        <item name="android:backgroundDimEnabled">true</item> <!-- 다이얼로그 배경 흐림 효과 -->
+        <item name="android:windowBackground">@android:color/transparent</item> <!-- 완전 투명 -->
+    </style>
 </resources>

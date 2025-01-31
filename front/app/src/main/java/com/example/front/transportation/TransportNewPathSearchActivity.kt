@@ -1,18 +1,15 @@
 package com.example.front.transportation
 
-import android.content.Intent
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.util.Log
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.widget.Button
+import android.widget.LinearLayout
 import android.widget.TextView
+import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.example.front.R
 import com.example.front.databinding.ActivityTransportNewPathSearchBinding
-import com.example.front.transportation.data.searchPath.PathRouteResult
 import com.example.front.transportation.processor.RouteProcessor
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -22,58 +19,78 @@ import kotlinx.coroutines.launch
 * 재사용할 때 동일하게 사용된다. 피그마의 경로 클릭시 경우 참고.*/
 class TransportNewPathSearchActivity : AppCompatActivity() {
     private lateinit var binding: ActivityTransportNewPathSearchBinding
-    private lateinit var routeAdapter: RouteRecycleView
 
+    @SuppressLint("SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         binding = ActivityTransportNewPathSearchBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        val startLat = intent.getDoubleExtra("startLat", 37.513841)
-        val startLng = intent.getDoubleExtra("startLng", 127.101823)
-        val endLat = intent.getDoubleExtra("endLat", 37.476813)
-        val endLng = intent.getDoubleExtra("endLng", 126.964156)
+        /*사용할 객체 바인딩*/
+        val transitCountView: TextView = binding.transitCountView
+        val totalTimeView: TextView = binding.totalTimeView
+        val detatiledPathView: TextView = binding.detatiledPathView
+        val routeStationAndBusesView: TextView = binding.routeStationsAndBusesView
+        val mainTransitTypesView: TextView = binding.mainTransitTypesView
 
-        Log.d("TransportNewPathSearchActivity", "Start Latitude: $startLat")
-        Log.d("TransportNewPathSearchActivity", "Start Longitude: $startLng")
-        Log.d("TransportNewPathSearchActivity", "End Latitude: $endLat")
-        Log.d("TransportNewPathSearchActivity", "End Longitude: $endLng")
+        //val startLat = 37.340174 val startLng = 126.7335933 val endLat = 37.5414001 val endLng = 127.0900351
+        val startLat = intent.getDoubleExtra("startLat", 37.340174)
+        val startLng = intent.getDoubleExtra("startLng", 126.7335933)
+        val endLat = intent.getDoubleExtra("endLat", 37.340174)
+        val endLng = intent.getDoubleExtra("endLng",127.0900351)
+        Log.d("현빈", startLat.toString())
+        Log.d("현빈", startLng.toString())
+        Log.d("현빈", endLat.toString())
+        Log.d("현빈", endLng.toString())
 
         CoroutineScope(Dispatchers.Main).launch {
             try {
                 val result = RouteProcessor.fetchAndProcessRoutes(startLat, startLng, endLat, endLng)
-                // Initialize RecyclerView
-                routeAdapter = RouteRecycleView(result) { route ->
-                    navigateToRouteDetail(route)
+// 결과 분리 및 로그 출력 + 버튼 생성
+                result.forEach { route ->
+                    // 각각의 값 분리
+                    val routeStationsAndBuses = route.routeStationsAndBuses
+                    val totalTime = route.totalTime
+                    val transitCount = route.transitCount
+                    val mainTransitTypes = route.mainTransitTypes
+                    val detailedPath = route.detailedPath
+
+                    // 로그 출력
+                    Log.d("RouteProcessor", "routeStationsAndBuses = $routeStationsAndBuses")
+                    Log.d("RouteProcessor", "Total Time: $totalTime 분")
+                    Log.d("RouteProcessor", "Transit Count: $transitCount 회")
+                    Log.d("RouteProcessor", "Main Transit Types: $mainTransitTypes")
+                    Log.d("RouteProcessor", "Detailed Path: $detailedPath")
+
+                    //임시로 한 Layout text에 들어가도록 설정
+                    transitCountView.text = getString(R.string.transitCount, transitCount)
+                    totalTimeView.text = Integer.toString(totalTime)+"분"
+                    detatiledPathView.text = detailedPath
+                    routeStationAndBusesView.text="$routeStationsAndBuses"
+                    mainTransitTypesView.text= mainTransitTypes
+
+
+                    // 동적 버튼 생성
+                    val newPathLinearLayout = findViewById<LinearLayout>(R.id.newPathLinearLayout)
+
+                    val dynamicBtn = Button(this@TransportNewPathSearchActivity)
+                    val layoutParams = LinearLayout.LayoutParams(
+                        LinearLayout.LayoutParams.MATCH_PARENT,
+                        LinearLayout.LayoutParams.WRAP_CONTENT
+                    )
+                    dynamicBtn.layoutParams = layoutParams
+                    newPathLinearLayout.addView(dynamicBtn)
+                    // 생성된 버튼을 컨테이너에 추가
+
                 }
-                binding.routeRecyclerView.layoutManager = LinearLayoutManager(this@TransportNewPathSearchActivity)
-                binding.routeRecyclerView.adapter = routeAdapter
-
-                Log.d("RouteProcessor", "Fetched ${result.size} routes.")
-
             } catch (e: Exception) {
                 Log.e("RouteProcessor", "경로 탐색 중 오류 발생", e)
             }
         }
     }
 
-    private fun navigateToRouteDetail(route: PathRouteResult) {
-        // Navigate to TransNewPathDetailActivity with routeStationsAndBuses
-        val intent = Intent(this, TransNewPathDetailActivity::class.java)
-        val routeStationsAndBusesString = route.busDetails.joinToString(",") { it }
-        intent.putExtra("routeStationsAndBuses", routeStationsAndBusesString)
-        startActivity(intent)
-    }
-    class RouteRecycleView(
-        private val routes: List<PathRouteResult>,
-        private val onItemClick: (PathRouteResult) -> Unit
-    ) : RecyclerView.Adapter<RouteRecycleView.RouteViewHolder>() {
-
-        inner class RouteViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-            val transitCountView: TextView = view.findViewById(R.id.transitCountView)
-            val totalTimeView: TextView = view.findViewById(R.id.totalTimeView)
-            val detailedPathView: TextView = view.findViewById(R.id.detatiledPathView)
-            val mainTransitTypesView: TextView = view.findViewById(R.id.mainTransitTypesView)
+    private fun makeNewPathBtn(){
 
             init {
                 view.setOnClickListener {

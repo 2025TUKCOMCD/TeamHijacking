@@ -16,5 +16,7 @@
     <color name="onSurfaceColor">#000000</color>
     <color name="onBackgroundColor">#FFFFFF</color>
     <color name="splashScreenBackgroundColor">#000000</color>
+    <color name="yellow">#FFD700</color>
+    <color name="gray">#CCCCCC</color>
 </resources>
 
