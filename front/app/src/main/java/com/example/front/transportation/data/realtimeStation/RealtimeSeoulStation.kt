@@ -1,14 +1,14 @@
 package com.example.front.transportation.data.realtimeStation
 
+import com.google.gson.annotations.SerializedName
+
 // 최상위 데이터 구조로, API 응답의 전체 데이터를 포함
-data class RealtimeStation(
+data class RealtimeSeoulStation(
     val msgBody: MsgBody? // 메시지 본문 (실제 데이터)
 )
 
 // 메시지 본문으로 실제 데이터를 포함
-data class MsgBody(
-    val itemList: List<Item>? // 아이템 리스트 (버스 도착 정보)
-)
+
 
 // 버스 도착 정보를 나타내는 데이터 클래스
 data class Item(

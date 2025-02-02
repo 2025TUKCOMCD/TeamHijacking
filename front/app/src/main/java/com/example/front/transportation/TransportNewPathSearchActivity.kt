@@ -24,10 +24,10 @@ class TransportNewPathSearchActivity : AppCompatActivity() {
         binding = ActivityTransportNewPathSearchBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        val startLat = intent.getDoubleExtra("startLat", 37.513841)
-        val startLng = intent.getDoubleExtra("startLng", 127.101823)
-        val endLat = intent.getDoubleExtra("endLat", 37.476813)
-        val endLng = intent.getDoubleExtra("endLng", 126.964156)
+        val startLat = intent.getDoubleExtra("startLat", 37.340174)
+        val startLng = intent.getDoubleExtra("startLng", 126.7335933)
+        val endLat = intent.getDoubleExtra("endLat", 37.340174)
+        val endLng = intent.getDoubleExtra("endLng",127.0900351)
 
         Log.d("현빈", startLat.toString())
         Log.d("현빈", startLng.toString())

@@ -50,14 +50,14 @@ class TransNewPathDetailActivity : AppCompatActivity() {
                 for (busInfoMap in routeStationsAndBuses) {
                     Log.d("TransNewPathDetailActivity", "Bus Info Map: $busInfoMap")
 
-                    val busID = busInfoMap["busID"]
+                    val busNo = busInfoMap["busID"]
                     val startLocalStationID = busInfoMap["startLocalStationID"]?.toInt()
                     val endLocalStationID = busInfoMap["endLocalStationID"]
                     val busLocalBlID = busInfoMap["busLocalBlID"]?.toInt()
                     val startStationInfo = busInfoMap["startStationInfo"]?.toInt()
                     val endStationInfo = busInfoMap["endStationInfo"]
 
-                    Log.d("TransNewPathDetailActivity", "Bus ID: $busID")
+                    Log.d("TransNewPathDetailActivity", "Bus No: $busNo")
                     Log.d("TransNewPathDetailActivity", "Start Local Station ID: $startLocalStationID")
                     Log.d("TransNewPathDetailActivity", "End Local Station ID: $endLocalStationID")
                     Log.d("TransNewPathDetailActivity", "Bus Local BLID: $busLocalBlID")
@@ -66,14 +66,28 @@ class TransNewPathDetailActivity : AppCompatActivity() {
 
                     try {
                         val result = withContext(Dispatchers.IO) {
-                            RealTimeProcessor.fetchRealtimeStation(
-                                stId = startLocalStationID ?: 0,
-                                busRouteId = busLocalBlID ?: 0,
-                                ord = startStationInfo ?: 0,
-                                "json"
-                            )
+                            if (startLocalStationID in 100100001..124900014) {
+                                RealTimeProcessor.fetchRealtimeSeoulStation(
+                                    stId = startLocalStationID ?: 0,
+                                    busRouteId = busLocalBlID ?: 0,
+                                    ord = startStationInfo ?: 0,
+                                    "json"
+                                )
+                            } else {
+                                RealTimeProcessor.fetchRealtimeGyeonGiStation(
+                                    stationId = startLocalStationID ?: 0,
+                                    routeId = busLocalBlID ?: 0,
+                                    ord = startStationInfo ?: 0,
+                                    "json"
+                                )
+                            }
                         }
-                        result?.let { results.addAll(it) }
+
+                        if (result.isNullOrEmpty()) {
+                            tvRouteInfo.append("서비스 지역이 \n 아닙니다.\n")
+                        } else {
+                            results.addAll(result)
+                        }
                     } catch (e: Exception) {
                         Log.e("TransNewPathDetailActivity", "Error occurred while fetching real-time station data", e)
                     }
