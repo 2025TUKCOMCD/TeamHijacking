@@ -77,7 +77,7 @@ class TransNewPathDetailActivity : AppCompatActivity() {
                                 RealTimeProcessor.fetchRealtimeGyeonGiStation(
                                     stationId = startLocalStationID ?: 0,
                                     routeId = busLocalBlID ?: 0,
-                                    ord = startStationInfo ?: 0,
+                                    staOrder = startStationInfo ?: 0,
                                     "json"
                                 )
                             }
@@ -94,9 +94,17 @@ class TransNewPathDetailActivity : AppCompatActivity() {
                 }
 
                 results.forEach { item ->
-                    tvRouteInfo.append("${item["rtNm"]} - ${item["stNm"]}:\n" +
-                            "첫 번째 차량: ${item["arrmsg1"]} (${item["traTime1"]}초)\n" +
-                            "두 번째 차량: ${item["arrmsg2"]} (${item["traTime2"]}초)\n\n")
+                    if (item.containsKey("rtNm")) {
+                        // Seoul data
+                        tvRouteInfo.append("${item["rtNm"]} - ${item["stNm"]}:\n" +
+                                "첫 번째 차량: ${item["arrmsg1"]} (${item["traTime1"]}초)\n" +
+                                "두 번째 차량: ${item["arrmsg2"]} (${item["traTime2"]}초)\n\n")
+                    } else {
+                        // Gyeonggi data
+                        tvRouteInfo.append("${item["stationNm1"]} - ${item["routeName"]}:\n" +
+                                "예상 도착 시간: ${item["predictTimeSec1"]}초\n" +
+                                "두 번째 예상 도착 시간: ${item["predictTime2"]}초\n\n")
+                    }
                 }
             }
         } else {

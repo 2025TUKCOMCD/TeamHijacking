@@ -22,4 +22,14 @@ interface BusService {
         @Query("endOrd") endOrd: Int,
         @Query("resultType") resultType: String
     ): ResponseBody
+
+    @GET("6410000/busarrivalservice/v2/getBusArrivalItemv2")
+    suspend fun getBusArrivalItemv2(
+        @Query("serviceKey") serviceKey: String,
+        @Query("stationId") stationId: Int,
+        @Query("routeId") routeId: Int,
+        @Query("staOrder") staOrder: Int,
+        @Query("format") format: String
+    ): ResponseBody
+
 }

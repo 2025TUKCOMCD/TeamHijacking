@@ -15,7 +15,8 @@ import java.util.concurrent.ConcurrentLinkedQueue
 import java.util.concurrent.TimeUnit
 
 object RealTimeProcessor {
-    private const val BASE_URL = "http://ws.bus.go.kr/api/rest/"
+    private const val BASE_URL_SEOUL = "http://ws.bus.go.kr/api/rest/"
+    private const val BASE_URL_GYEONGGI = "http://apis.data.go.kr/"
     private const val Public_APIKEY: String = BuildConfig.Public_APIKEY
     private val gson = Gson()
     private val client = OkHttpClient.Builder()
@@ -24,20 +25,27 @@ object RealTimeProcessor {
         .writeTimeout(60, TimeUnit.SECONDS)
         .build()
 
-    private val retrofit: Retrofit = Retrofit.Builder()
-        .baseUrl(BASE_URL)
+    private val retrofitSeoul: Retrofit = Retrofit.Builder()
+        .baseUrl(BASE_URL_SEOUL)
         .client(client)
         .addConverterFactory(GsonConverterFactory.create(gson))
         .build()
 
-    private val busService: BusService = retrofit.create(BusService::class.java)
+    private val retrofitGyeonggi: Retrofit = Retrofit.Builder()
+        .baseUrl(BASE_URL_GYEONGGI)
+        .client(client)
+        .addConverterFactory(GsonConverterFactory.create(gson))
+        .build()
+
+    private val busServiceSeoul: BusService = retrofitSeoul.create(BusService::class.java)
+    private val busServiceGyeonggi: BusService = retrofitGyeonggi.create(BusService::class.java)
     private val requestQueue = ConcurrentLinkedQueue<suspend () -> List<Map<String, String>>?>()
 
     suspend fun fetchRealtimeSeoulStation(stId: Int, busRouteId: Int, ord: Int, resultType: String): List<Map<String, String>>? {
         val request = suspend {
             try {
                 val response = withContext(Dispatchers.IO) {
-                    busService.getArrInfoByRoute(Public_APIKEY, stId, busRouteId, ord, resultType)
+                    busServiceSeoul.getArrInfoByRoute(Public_APIKEY, stId, busRouteId, ord, resultType)
                 }
                 val rawJson = response.string()
                 Log.d("RealTimeProcessor", "Raw response received: $rawJson")
@@ -70,11 +78,11 @@ object RealTimeProcessor {
         return processQueue()
     }
 
-    suspend fun fetchRealtimeGyeonGiStation(stationId: Int, routeId: Int, ord: Int, resultType: String): List<Map<String, String>>? {
+    suspend fun fetchRealtimeGyeonGiStation(stationId: Int, routeId: Int, staOrder: Int, format: String): List<Map<String, String>>? {
         val request = suspend {
             try {
                 val response = withContext(Dispatchers.IO) {
-                    busService.getArrInfoByRoute(Public_APIKEY, stationId, routeId, ord, resultType)
+                    busServiceGyeonggi.getBusArrivalItemv2(Public_APIKEY, stationId, routeId, staOrder, format)
                 }
                 val rawJson = response.string()
                 Log.d("RealTimeProcessor", "Raw response received: $rawJson")
@@ -84,14 +92,15 @@ object RealTimeProcessor {
                     Log.e("RealTimeProcessor", "Parsed response or msgBody is null")
                     emptyList<Map<String, String>>() // Return an empty list if the response is not as expected
                 } else {
-                    parsedResponse.response.msgBody.busArrivalItem.map { item ->
+                    val busArrivalItem = parsedResponse.response.msgBody.busArrivalItem
+                    listOf(
                         mapOf(
-                            "stationNm1" to (item.stationNm1 ?: "정보 없음"),
-                            "routeName" to (item.routeName ?: "정보 없음"),
-                            "predictTimeSec1" to (item.predictTimeSec1 ?: "정보 없음"),
-                            "predictTime2" to (item.predictTime2 ?: "정보 없음")
+                            "stationNm1" to (busArrivalItem.stationNm1 ?: "정보 없음"),
+                            "routeName" to (busArrivalItem.routeName ?: "정보 없음"),
+                            "predictTimeSec1" to (busArrivalItem.predictTimeSec1 ?: "정보 없음"),
+                            "predictTime2" to (busArrivalItem.predictTime2 ?: "정보 없음")
                         )
-                    }
+                    )
                 }
             } catch (e: Exception) {
                 Log.e("RealTimeProcessor", "Error while fetching realtime station data", e)
