@@ -1,16 +1,12 @@
 package com.example.front.transportation
 
 import android.annotation.SuppressLint
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
-import android.view.LayoutInflater
-import android.view.ViewGroup
-import android.widget.Button
 import android.widget.LinearLayout
 import android.widget.TextView
-import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
-import androidx.recyclerview.widget.RecyclerView
 import com.example.front.R
 import com.example.front.databinding.ActivityTransportNewPathSearchBinding
 import com.example.front.transportation.processor.RouteProcessor
@@ -18,8 +14,6 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-/*"경로 클릭시" 출력될 화면, 새 경로를 찾는 화면과 구 경로를
-* 재사용할 때 동일하게 사용된다. 피그마의 경로 클릭시 경우 참고.*/
 class TransportNewPathSearchActivity : AppCompatActivity() {
     private lateinit var binding: ActivityTransportNewPathSearchBinding
 
@@ -30,18 +24,10 @@ class TransportNewPathSearchActivity : AppCompatActivity() {
         binding = ActivityTransportNewPathSearchBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        /*사용할 객체 바인딩*/
-        val transitCountView: TextView = binding.transitCountView
-        val totalTimeView: TextView = binding.totalTimeView
-        val detatiledPathView: TextView = binding.detatiledPathView
-        val routeStationAndBusesView: TextView = binding.routeStationsAndBusesView
-        val mainTransitTypesView: TextView = binding.mainTransitTypesView
-        //위도 경도 가져오기
-        //val startLat = 37.340174 val startLng = 126.7335933 val endLat = 37.5414001 val endLng = 127.0900351
-        val startLat = intent.getDoubleExtra("startLat", 37.340174)
-        val startLng = intent.getDoubleExtra("startLng", 126.7335933)
-        val endLat = intent.getDoubleExtra("endLat", 37.340174)
-        val endLng = intent.getDoubleExtra("endLng",127.0900351)
+        val startLat = intent.getDoubleExtra("startLat", 37.513841)
+        val startLng = intent.getDoubleExtra("startLng", 127.101823)
+        val endLat = intent.getDoubleExtra("endLat", 37.476813)
+        val endLng = intent.getDoubleExtra("endLng", 126.964156)
 
         Log.d("현빈", startLat.toString())
         Log.d("현빈", startLng.toString())
@@ -52,35 +38,29 @@ class TransportNewPathSearchActivity : AppCompatActivity() {
             try {
                 val result = RouteProcessor.fetchAndProcessRoutes(startLat, startLng, endLat, endLng)
 
-                result.forEach { route ->
-                    val totalTime = route.totalTime
-                    val transitCount = route.transitCount
-                    val mainTransitTypes = route.mainTransitTypes
-                    val detailedPath = route.detailedPath
-                    val busDetail = route.busDetails
+                val views = listOf(
+                    listOf(binding.transitCountView1, binding.totalTimeView1, binding.detailedPathView1, binding.mainTransitTypesView1),
+                    listOf(binding.transitCountView2, binding.totalTimeView2, binding.detailedPathView2, binding.mainTransitTypesView2),
+                    listOf(binding.transitCountView3, binding.totalTimeView3, binding.detailedPathView3, binding.mainTransitTypesView3)
+                )
 
-                    Log.d("RouteProcessor", "Total Time: $totalTime 분")
-                    Log.d("RouteProcessor", "Transit Count: $transitCount 회")
-                    Log.d("RouteProcessor", "Main Transit Types: $mainTransitTypes")
-                    Log.d("RouteProcessor", "Detailed Path: $detailedPath")
-                    Log.d("RouteProcessor", "busDetail: $busDetail")
+                result.forEachIndexed { index, route ->
+                    if (index < views.size) {
+                        val (transitCountView, totalTimeView, detailedPathView, mainTransitTypesView) = views[index]
 
-                    // 메인 스레드에서 업데이트가 발생하도록 보장
-                    runOnUiThread {
-                        transitCountView.text = getString(R.string.transitCount, transitCount)
-                        totalTimeView.text = "$totalTime 분"
-                        detatiledPathView.text = detailedPath
-                        routeStationAndBusesView.text = "$busDetail"
-                        mainTransitTypesView.text = mainTransitTypes
+                        transitCountView.text = getString(R.string.transitCount, route.transitCount)
+                        totalTimeView.text = "${route.totalTime} 분"
+                        detailedPathView.text = route.detailedPath
+                        mainTransitTypesView.text = route.mainTransitTypes
 
-                        val newPathLinearLayout = findViewById<LinearLayout>(R.id.newPathLinearLayout)
-                        val dynamicBtn = Button(this@TransportNewPathSearchActivity)
-                        val layoutParams = LinearLayout.LayoutParams(
-                            LinearLayout.LayoutParams.MATCH_PARENT,
-                            LinearLayout.LayoutParams.WRAP_CONTENT
-                        )
-                        dynamicBtn.layoutParams = layoutParams
-                        newPathLinearLayout.addView(dynamicBtn)
+                        listOf(
+                            transitCountView to route.transitCount,
+                            totalTimeView to route.totalTime,
+                            detailedPathView to route.detailedPath,
+                            mainTransitTypesView to route.mainTransitTypes
+                        ).forEach { (view, data) ->
+                            addClickListener(view, data, route.busDetails)
+                        }
                     }
                 }
             } catch (e: Exception) {
@@ -88,4 +68,15 @@ class TransportNewPathSearchActivity : AppCompatActivity() {
             }
         }
     }
+
+    private fun addClickListener(view: TextView, data: Any, busDetails: List<String>) {
+    view.setOnClickListener {
+        Log.d("ViewClick", "Clicked: $data")
+        val busDetailsString = busDetails.joinToString(",")
+        val intent = Intent(this, TransNewPathDetailActivity::class.java).apply {
+            putExtra("routeStationsAndBuses", busDetailsString)
+        }
+        startActivity(intent)
+    }
+}
 }

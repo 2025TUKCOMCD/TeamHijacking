@@ -29,6 +29,7 @@ data class SubPath(
     val startName: String?,
     val endName: String?,
     val startID: Int?,
+    val endID: Int?,
     val lane: List<Lane>?, // 사용
     val sectionTime: Int?, //사용
     val startLocalStationID : String?,
@@ -40,6 +41,7 @@ data class Lane(
     val busNo: String?, // 사용
     val type: Int?,
     val busID : Int?, // 사용
+    val busCityCode: Int?, // 사용
     val passStopList: List<PassStopList>
 )
 

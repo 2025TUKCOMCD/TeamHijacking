@@ -14,5 +14,5 @@ data class Result(
 )
 data class Station(
     val idx: Int,                     // 정류장 인덱스
-    val localStationID: String        // 정류장 지역 ID
+    val stationID: Int        // 정류장 지역 ID
 )

@@ -51,24 +51,6 @@ object RouteProcessor {
             }.sortedBy { it.second }
 
             val topPaths = sortedPaths.take(3)
-            // 로그 출력
-            topPaths.forEachIndexed { index, (path, score) ->
-                Log.d("RouteProcessor", "--- 경로 $index 시작 ---")
-                Log.d("RouteProcessor", "Score: $score")
-                Log.d("RouteProcessor", "Transit Count: ${path.info.busTransitCount + path.info.subwayTransitCount} 회")
-                Log.d("RouteProcessor", "Total Time: ${path.info.totalTime} 분")
-                Log.d("RouteProcessor", "Main Transit Types: ${
-                    path.subPath.joinToString(" -> ") { subPath ->
-                        when (subPath.trafficType) {
-                            1 -> "지하철(${subPath.lane?.firstOrNull()?.name})"
-                            2 -> "버스(${subPath.lane?.firstOrNull()?.busNo})"
-                            3 -> "도보 (${subPath.sectionTime ?: 0}분)"
-                            else -> "알 수 없는 교통수단"
-                        }
-                    }
-                }")
-                Log.d("RouteProcessor", "--- 경로 $index 끝 ---")
-            }
 
             // 경로 결과 생성
             val validPaths = topPaths.mapIndexed { index, (path, _) ->
@@ -84,31 +66,38 @@ object RouteProcessor {
                 }
 
                 // 상세 경로
-                val detailedPath = filteredSubPaths.joinToString(" -> ") { subPath ->
+                val detailedPath = filteredSubPaths.map { subPath ->
                     when (subPath.trafficType) {
-                        1 -> "지하철(${subPath.lane?.firstOrNull()?.name})"
-                        2 -> "버스(${subPath.lane?.firstOrNull()?.busNo})"
-                        3 -> "도보(${subPath.sectionTime ?: 0}분)"
+                        1 -> "${subPath.lane?.firstOrNull()?.name} (${subPath.startName}), (${subPath.endName})"
+                        2 -> "${subPath.lane?.firstOrNull()?.busNo}번 (${subPath.startName}), (${subPath.endName})"
+                        3 -> if (subPath.sectionTime ?: 0 > 0) "도보(${subPath.sectionTime}분)" else ""
                         else -> "알 수 없는 교통수단"
                     }
-                }
+                }.filter { it.isNotEmpty() }.joinToString(" -> ")
 
                 // 경로별 busDetails 생성
                 val routeBusDetails = mutableListOf<String>()
                 filteredSubPaths.filter { it.trafficType == 2 }.forEach { subPath ->
                     val busID = subPath.lane?.firstOrNull()?.busID
-                    val startLocalStationID = subPath.startLocalStationID
+                    val startLocalStatiionID = subPath.startLocalStationID
                     val endLocalStationID = subPath.endLocalStationID
-                    if (busID != null && startLocalStationID != null && endLocalStationID != null) {
-                        val busInfo = fetchBusRouteDetails(busID, startLocalStationID, endLocalStationID)
-                        busInfo.forEach { info ->
-                            Log.d("RouteProcessor", "$info")
-                            routeBusDetails.add(info.map { "${it.key}:${it.value}" }
-                                .joinToString(", "))
+                    val startStationID = subPath.startID
+                    val endStationID = subPath.endID
+
+                    if (busID != null && startStationID != null && endStationID != null && startLocalStatiionID != null && endLocalStationID != null) {
+                        val busInfo = fetchBusRouteDetails(busID, startStationID, endStationID, startLocalStatiionID, endLocalStationID)
+                        if (busInfo.isNotEmpty()) {
+                            busInfo.forEach { info ->
+                                Log.d("RouteProcessor", "$info")
+                                routeBusDetails.add(info.map { "${it.key}:${it.value}" }.joinToString(", "))
+                            }
+                        } else {
+                            routeBusDetails.add("버스 상세 정보를 불러올 수 없습니다")
                         }
+                    } else {
+                        routeBusDetails.add("버스 정보 불완전")
                     }
                 }
-
                 // 각 경로별 PathRouteResult 생성
                 PathRouteResult(
                     totalTime = info.totalTime,
@@ -128,13 +117,14 @@ object RouteProcessor {
         }
     }
 
-    private suspend fun fetchBusRouteDetails(busID: Int, startLocalStationID: String, endLocalStationID: String): List<Map<String, String>> {
+    private suspend fun fetchBusRouteDetails(busID: Int, startStationID: Int, endStationID:Int, startLocalStationID: String,endLocalStationID: String): List<Map<String, String>> {
         Log.d("RouteProcessor", "Fetching bus route details for busID $busID")
         return try {
             // 버스 경로 상세 정보 요청
             val response = withContext(Dispatchers.IO) {
                 routeService.busLaneDetail(busID, ODsay_APIKEY)
             }
+
             val rawJson = response.string()
             Log.d("RouteProcessor", "Raw response received: $rawJson")
             // busLaneDetail 파싱
@@ -149,9 +139,9 @@ object RouteProcessor {
 
 
             busLaneDetail.result?.station?.forEach { station ->
-                if (station.localStationID == startLocalStationID) {
+                if (station.stationID == startStationID) {
                     startStationInfo = "${station.idx + 1}"
-                } else if (station.localStationID == endLocalStationID) {
+                } else if (station.stationID == endStationID) {
                     endStationInfo = "${station.idx + 1}"
                 }
             }
