@@ -34,29 +34,35 @@ class TransNewPathDetailActivity : AppCompatActivity() {
         Log.d("TransNewPathDetailActivity", "routeStationsAndBusesString: $routeStationsAndBusesString")
 
         if (routeStationsAndBusesString.isNotEmpty()) {
-            val routeStationsAndBuses = routeStationsAndBusesString.split(",").chunked(6).map { parts ->
-                mapOf(
-                    "busID" to parts[0].split(":")[1].trim(),
-                    "startLocalStationID" to parts[1].split(":")[1].trim(),
-                    "endLocalStationID" to parts[2].split(":")[1].trim(),
-                    "busLocalBlID" to parts[3].split(":")[1].trim(),
-                    "startStationInfo" to parts[4].split(":")[1].trim(),
-                    "endStationInfo" to parts[5].split(":")[1].trim()
-                )
+            val routeStationsAndBuses = routeStationsAndBusesString.split(",").chunked(7).mapNotNull { parts ->
+                if (parts.size == 7) {
+                    mapOf(
+                        "stationName" to parts[0].split(":").getOrNull(1)?.trim().orEmpty(),
+                        "busID" to parts[1].split(":").getOrNull(1)?.trim().orEmpty(),
+                        "startLocalStationID" to parts[2].split(":").getOrNull(1)?.trim().orEmpty(),
+                        "endLocalStationID" to parts[3].split(":").getOrNull(1)?.trim().orEmpty(),
+                        "busLocalBlID" to parts[4].split(":").getOrNull(1)?.trim().orEmpty(),
+                        "startStationInfo" to parts[5].split(":").getOrNull(1)?.trim().orEmpty(),
+                        "endStationInfo" to parts[6].split(":").getOrNull(1)?.trim().orEmpty()
+                    )
+                } else {
+                    null
+                }
             }
 
             CoroutineScope(Dispatchers.Main).launch {
                 val results = mutableListOf<Map<String, String>>()
                 for (busInfoMap in routeStationsAndBuses) {
                     Log.d("TransNewPathDetailActivity", "Bus Info Map: $busInfoMap")
-
+                    val stationName = busInfoMap["stationName"]
                     val busNo = busInfoMap["busID"]
-                    val startLocalStationID = busInfoMap["startLocalStationID"]?.toInt()
+                    val startLocalStationID = busInfoMap["startLocalStationID"]?.toIntOrNull()
                     val endLocalStationID = busInfoMap["endLocalStationID"]
-                    val busLocalBlID = busInfoMap["busLocalBlID"]?.toInt()
-                    val startStationInfo = busInfoMap["startStationInfo"]?.toInt()
+                    val busLocalBlID = busInfoMap["busLocalBlID"]?.toIntOrNull()
+                    val startStationInfo = busInfoMap["startStationInfo"]?.toIntOrNull()
                     val endStationInfo = busInfoMap["endStationInfo"]
 
+                    Log.d("TransNewPathDetailActivity", "Station Name: $stationName")
                     Log.d("TransNewPathDetailActivity", "Bus No: $busNo")
                     Log.d("TransNewPathDetailActivity", "Start Local Station ID: $startLocalStationID")
                     Log.d("TransNewPathDetailActivity", "End Local Station ID: $endLocalStationID")
@@ -68,6 +74,7 @@ class TransNewPathDetailActivity : AppCompatActivity() {
                         val result = withContext(Dispatchers.IO) {
                             if (startLocalStationID in 100100001..124900014) {
                                 RealTimeProcessor.fetchRealtimeSeoulStation(
+                                    stationName = stationName ?: "",
                                     stId = startLocalStationID ?: 0,
                                     busRouteId = busLocalBlID ?: 0,
                                     ord = startStationInfo ?: 0,
@@ -75,6 +82,7 @@ class TransNewPathDetailActivity : AppCompatActivity() {
                                 )
                             } else {
                                 RealTimeProcessor.fetchRealtimeGyeonGiStation(
+                                    stationName = stationName ?: "",
                                     stationId = startLocalStationID ?: 0,
                                     routeId = busLocalBlID ?: 0,
                                     staOrder = startStationInfo ?: 0,
@@ -94,16 +102,28 @@ class TransNewPathDetailActivity : AppCompatActivity() {
                 }
 
                 results.forEach { item ->
+                    val arrivalInfo1 = if (item["arrmsg1"] == "운행종료" || item["predictTime1"].isNullOrEmpty()) {
+                        "도착 정보 없음"
+                    } else {
+                        "${item["arrmsg1"] ?: item["predictTime1"]}초"
+                    }
+
+                    val arrivalInfo2 = if (item["arrmsg2"] == "운행종료" || item["predictTime2"].isNullOrEmpty()) {
+                        "도착 정보 없음"
+                    } else {
+                        "${item["arrmsg2"] ?: item["predictTime2"]}초"
+                    }
+
                     if (item.containsKey("rtNm")) {
                         // Seoul data
-                        tvRouteInfo.append("${item["rtNm"]} - ${item["stNm"]}:\n" +
-                                "첫 번째 차량: ${item["arrmsg1"]} (${item["traTime1"]}초)\n" +
-                                "두 번째 차량: ${item["arrmsg2"]} (${item["traTime2"]}초)\n\n")
+                        tvRouteInfo.append("${item["rtNm"]} - ${item["stationName"]}:\n" +
+                                "첫 번째 차량: $arrivalInfo1\n" +
+                                "두 번째 차량: $arrivalInfo2\n\n")
                     } else {
                         // Gyeonggi data
-                        tvRouteInfo.append("${item["stationNm1"]} - ${item["routeName"]}:\n" +
-                                "예상 도착 시간: ${item["predictTimeSec1"]}초\n" +
-                                "두 번째 예상 도착 시간: ${item["predictTime2"]}초\n\n")
+                        tvRouteInfo.append("${item["routeName"]} - ${item["stationName"]}:\n" +
+                                "첫 번째 차량: $arrivalInfo1\n" +
+                                "두 번째 차량: $arrivalInfo2\n\n")
                     }
                 }
             }

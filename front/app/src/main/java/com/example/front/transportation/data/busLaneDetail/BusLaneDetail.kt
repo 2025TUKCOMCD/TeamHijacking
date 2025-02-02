@@ -13,6 +13,7 @@ data class Result(
     val station: List<Station>    // 정류장 목록
 )
 data class Station(
-    val idx: Int,                     // 정류장 인덱스
+    val idx: Int,
+    val stationName : String, // 정류장 인덱스
     val stationID: Int        // 정류장 지역 ID
 )

@@ -41,9 +41,10 @@ object RealTimeProcessor {
     private val busServiceGyeonggi: BusService = retrofitGyeonggi.create(BusService::class.java)
     private val requestQueue = ConcurrentLinkedQueue<suspend () -> List<Map<String, String>>?>()
 
-    suspend fun fetchRealtimeSeoulStation(stId: Int, busRouteId: Int, ord: Int, resultType: String): List<Map<String, String>>? {
+    suspend fun fetchRealtimeSeoulStation(stationName: String, stId: Int, busRouteId: Int, ord: Int, resultType: String): List<Map<String, String>>? {
         val request = suspend {
             try {
+                Log.d("RealTimeProcessor", "Fetching Seoul station data: stId=$stId, busRouteId=$busRouteId, ord=$ord")
                 val response = withContext(Dispatchers.IO) {
                     busServiceSeoul.getArrInfoByRoute(Public_APIKEY, stId, busRouteId, ord, resultType)
                 }
@@ -57,7 +58,7 @@ object RealTimeProcessor {
                 } else {
                     parsedResponse.msgBody.itemList.map { item ->
                         mapOf(
-                            "stNm" to (item.stNm ?: "정보 없음"),
+                            "stationName" to (stationName ?: "정보 없음"),
                             "rtNm" to (item.rtNm ?: "정보 없음"),
                             "traTime1" to (item.traTime1 ?: "정보 없음"),
                             "isArrive1" to (item.isArrive1 ?: "정보 없음"),
@@ -78,9 +79,10 @@ object RealTimeProcessor {
         return processQueue()
     }
 
-    suspend fun fetchRealtimeGyeonGiStation(stationId: Int, routeId: Int, staOrder: Int, format: String): List<Map<String, String>>? {
+    suspend fun fetchRealtimeGyeonGiStation(stationName: String, stationId: Int, routeId: Int, staOrder: Int, format: String): List<Map<String, String>>? {
         val request = suspend {
             try {
+                Log.d("RealTimeProcessor", "Fetching Gyeonggi station data: stationId=$stationId, routeId=$routeId, staOrder=$staOrder")
                 val response = withContext(Dispatchers.IO) {
                     busServiceGyeonggi.getBusArrivalItemv2(Public_APIKEY, stationId, routeId, staOrder, format)
                 }
@@ -95,7 +97,7 @@ object RealTimeProcessor {
                     val busArrivalItem = parsedResponse.response.msgBody.busArrivalItem
                     listOf(
                         mapOf(
-                            "stationNm1" to (busArrivalItem.stationNm1 ?: "정보 없음"),
+                            "stationName" to (stationName ?: "정보 없음"),
                             "routeName" to (busArrivalItem.routeName ?: "정보 없음"),
                             "predictTimeSec1" to (busArrivalItem.predictTimeSec1 ?: "정보 없음"),
                             "predictTime2" to (busArrivalItem.predictTime2 ?: "정보 없음")

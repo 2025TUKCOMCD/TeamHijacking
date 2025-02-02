@@ -136,12 +136,13 @@ object RouteProcessor {
 
             var startStationInfo: String? = null
             var endStationInfo: String? = null
-
+            var startStationName: String? = null
 
             busLaneDetail.result?.station?.forEach { station ->
                 if (station.stationID == startStationID) {
                     if (startStationInfo == null || station.idx < startStationInfo!!.toInt() - 1) {
                         startStationInfo = "${station.idx + 1}"
+                        startStationName = station.stationName
                     }
                 } else if (station.stationID == endStationID) {
                     endStationInfo = "${station.idx + 1}"
@@ -159,14 +160,15 @@ object RouteProcessor {
 
             if (busLocalBlID != null && startStationInfo != null && endStationInfo != null) {
                 val busInfo = mapOf(
-                "busNo" to busNo.toString(),
-                "startLocalStationID" to (startLocalStationID ?: ""),
-                "endLocalStationID" to (endLocalStationID ?: ""),
-                "busLocalBlID" to (busLocalBlID ?: ""),
-                "startStationInfo" to (startStationInfo ?: ""),
-                "endStationInfo" to (endStationInfo ?: "")
-            )
-            resultList.add(busInfo)
+                    "stationName" to (startStationName ?: ""),
+                    "busNo" to busNo.toString(),
+                    "startLocalStationID" to (startLocalStationID ?: ""),
+                    "endLocalStationID" to (endLocalStationID ?: ""),
+                    "busLocalBlID" to (busLocalBlID ?: ""),
+                    "startStationInfo" to (startStationInfo ?: ""),
+                    "endStationInfo" to (endStationInfo ?: "")
+                )
+                resultList.add(busInfo)
             }
 
             // 결과 리스트 반환
@@ -176,7 +178,6 @@ object RouteProcessor {
             emptyList() // 오류 시 빈 리스트 반환
         }
     }
-
 
     private fun calculateRouteScore(path: Path): Double {
         val info = path.info
