@@ -140,9 +140,20 @@ object RouteProcessor {
 
             busLaneDetail.result?.station?.forEach { station ->
                 if (station.stationID == startStationID) {
-                    startStationInfo = "${station.idx + 1}"
+                    if (startStationInfo == null || station.idx < startStationInfo!!.toInt() - 1) {
+                        startStationInfo = "${station.idx + 1}"
+                    }
                 } else if (station.stationID == endStationID) {
                     endStationInfo = "${station.idx + 1}"
+                }
+            }
+
+            if (startStationInfo != null && endStationInfo != null) {
+                val startIndex = startStationInfo!!.toInt()
+                val endIndex = endStationInfo!!.toInt()
+                if (startIndex >= endIndex) {
+                    Log.e("RouteProcessor", "Invalid station order: startStation index is not less than endStation index")
+                    // Handle the invalid order case here, e.g., by throwing an exception or returning an error
                 }
             }
 
