@@ -2,8 +2,9 @@ package com.example.front.transportation.processor
 
 import android.util.Log
 import com.example.front.BuildConfig
-import com.example.front.transportation.data.realtimeStation.RealtimeGyeonGiStation
-import com.example.front.transportation.data.realtimeStation.RealtimeSeoulStation
+import com.example.front.BuildConfig.Public_Bus_APIKEY
+import com.example.front.transportation.data.realtimeStation.bus.RealtimeGyeonGiStation
+import com.example.front.transportation.data.realtimeStation.bus.RealtimeSeoulStation
 import com.example.front.transportation.service.BusService
 import com.google.gson.Gson
 import kotlinx.coroutines.Dispatchers
@@ -14,10 +15,10 @@ import retrofit2.converter.gson.GsonConverterFactory
 import java.util.concurrent.ConcurrentLinkedQueue
 import java.util.concurrent.TimeUnit
 
-object RealTimeProcessor {
+object BusRealTimeProcessor {
     private const val BASE_URL_SEOUL = "http://ws.bus.go.kr/api/rest/"
     private const val BASE_URL_GYEONGGI = "http://apis.data.go.kr/"
-    private const val Public_APIKEY: String = BuildConfig.Public_APIKEY
+    private const val Public_Bus_APIKEY: String = BuildConfig.Public_Bus_APIKEY
     private val gson = Gson()
     private val client = OkHttpClient.Builder()
         .connectTimeout(60, TimeUnit.SECONDS)
@@ -46,7 +47,7 @@ object RealTimeProcessor {
             try {
                 Log.d("RealTimeProcessor", "Fetching Seoul station data: stId=$stId, busRouteId=$busRouteId, ord=$ord")
                 val response = withContext(Dispatchers.IO) {
-                    busServiceSeoul.getArrInfoByRoute(Public_APIKEY, stId, busRouteId, ord, resultType)
+                    busServiceSeoul.getArrInfoByRoute(Public_Bus_APIKEY, stId, busRouteId, ord, resultType)
                 }
                 val rawJson = response.string()
                 Log.d("RealTimeProcessor", "Raw response received: $rawJson")
@@ -84,7 +85,7 @@ object RealTimeProcessor {
             try {
                 Log.d("RealTimeProcessor", "Fetching Gyeonggi station data: stationId=$stationId, routeId=$routeId, staOrder=$staOrder")
                 val response = withContext(Dispatchers.IO) {
-                    busServiceGyeonggi.getBusArrivalItemv2(Public_APIKEY, stationId, routeId, staOrder, format)
+                    busServiceGyeonggi.getBusArrivalItemv2(Public_Bus_APIKEY, stationId, routeId, staOrder, format)
                 }
                 val rawJson = response.string()
                 Log.d("RealTimeProcessor", "Raw response received: $rawJson")
@@ -95,12 +96,13 @@ object RealTimeProcessor {
                     emptyList<Map<String, String>>() // Return an empty list if the response is not as expected
                 } else {
                     val busArrivalItem = parsedResponse.response.msgBody.busArrivalItem
+
                     listOf(
                         mapOf(
                             "stationName" to (stationName ?: "정보 없음"),
                             "routeName" to (busArrivalItem.routeName ?: "정보 없음"),
-                            "predictTimeSec1" to (busArrivalItem.predictTimeSec1 ?: "정보 없음"),
-                            "predictTime2" to (busArrivalItem.predictTime2 ?: "정보 없음")
+                            "predictTime1" to (busArrivalItem.predictTime1.toString() ?: "정보 없음"),
+                            "predictTime2" to (busArrivalItem.predictTime2.toString() ?: "정보 없음")
                         )
                     )
                 }

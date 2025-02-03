@@ -6,7 +6,7 @@ import android.widget.Button
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import com.example.front.databinding.ActivityTransNewPathDetatilBinding
-import com.example.front.transportation.processor.RealTimeProcessor
+import com.example.front.transportation.processor.BusRealTimeProcessor
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -73,7 +73,7 @@ class TransNewPathDetailActivity : AppCompatActivity() {
                     try {
                         val result = withContext(Dispatchers.IO) {
                             if (startLocalStationID in 100100001..124900014) {
-                                RealTimeProcessor.fetchRealtimeSeoulStation(
+                                BusRealTimeProcessor.fetchRealtimeSeoulStation(
                                     stationName = stationName ?: "",
                                     stId = startLocalStationID ?: 0,
                                     busRouteId = busLocalBlID ?: 0,
@@ -81,7 +81,7 @@ class TransNewPathDetailActivity : AppCompatActivity() {
                                     "json"
                                 )
                             } else {
-                                RealTimeProcessor.fetchRealtimeGyeonGiStation(
+                                BusRealTimeProcessor.fetchRealtimeGyeonGiStation(
                                     stationName = stationName ?: "",
                                     stationId = startLocalStationID ?: 0,
                                     routeId = busLocalBlID ?: 0,
@@ -102,16 +102,33 @@ class TransNewPathDetailActivity : AppCompatActivity() {
                 }
 
                 results.forEach { item ->
-                    val arrivalInfo1 = if (item["arrmsg1"] == "운행종료" || item["predictTime1"].isNullOrEmpty()) {
-                        "도착 정보 없음"
+                    var arrivalInfo1 = ""
+                    if (item.containsKey("rtNm")) {
+                        if (item["arrmsg1"] == "운행종료") {
+                            arrivalInfo1 = "도착 정보 없음"
+                        } else {
+                            arrivalInfo1 = "${item["arrmsg1"] ?: item["predictTime1"]}초"
+                        }
                     } else {
-                        "${item["arrmsg1"] ?: item["predictTime1"]}초"
+                        if (item["predictTime1"].isNullOrEmpty()) {
+                            arrivalInfo1 = "도착 정보 없음"
+                        } else {
+                            arrivalInfo1 = "${item["predictTime1"]}초"
+                        }
                     }
-
-                    val arrivalInfo2 = if (item["arrmsg2"] == "운행종료" || item["predictTime2"].isNullOrEmpty()) {
-                        "도착 정보 없음"
+                    var arrivalInfo2 = ""
+                    if (item.containsKey("rtNm")) {
+                        if (item["arrmsg2"] == "운행종료") {
+                            arrivalInfo2 = "도착 정보 없음"
+                        } else {
+                            arrivalInfo2 = "${item["arrmsg1"] ?: item["predictTime1"]}초"
+                        }
                     } else {
-                        "${item["arrmsg2"] ?: item["predictTime2"]}초"
+                        if (item["predictTime2"].isNullOrEmpty()) {
+                            arrivalInfo2 = "도착 정보 없음"
+                        } else {
+                            arrivalInfo2 = "${item["predictTime2"]}초"
+                        }
                     }
 
                     if (item.containsKey("rtNm")) {
