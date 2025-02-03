@@ -1,3 +1,5 @@
+package com.example.front.audioguide
+
 import android.Manifest
 import android.bluetooth.BluetoothDevice
 import android.bluetooth.BluetoothGatt
