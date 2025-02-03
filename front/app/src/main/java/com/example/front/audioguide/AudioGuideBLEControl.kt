@@ -126,8 +126,30 @@ class AudioGuideBLEControl : AppCompatActivity() {
                     if (characteristic.uuid == UUID.fromString("0003cdd0-0002-1000-8000-00805f9b0131")) {
                         val data = characteristic.value
                         Log.d("BluetoothControl", "데이터 수신: ${data.joinToString { byte -> String.format("%02x", byte) }}")
+
+                        // 데이터 유효성 검사 및 처리
+                        processReceivedData(data)
                     }
                 }
+
+                // 수신된 데이터를 처리하는 함수
+                private fun processReceivedData(data: ByteArray) {
+                    if (data.size == 3 && data[0] == 0x32.toByte()) {  // HEADER 확인 및 데이터 길이 검증
+                        val opcode = data[1]
+                        val payload = data[2]
+
+                        when (payload.toInt() and 0xFF) {  // 부호 없는 정수로 변환 후 처리
+                            0x00 -> Log.d("BluetoothControl", "ACK 수신 완료")
+                            0x01 -> Log.d("BluetoothControl", "NAK 수신 완료")
+                            in 0x10..0xF0 -> Log.d("BluetoothControl", "ACK + 사양 정보: ${String.format("0x%02X", payload)}")
+                            in 0x11..0xF1 -> Log.d("BluetoothControl", "NAK + 사양 정보: ${String.format("0x%02X", payload)}")
+                            else -> Log.w("BluetoothControl", "알 수 없는 데이터 수신: ${String.format("0x%02X", payload)}")
+                        }
+                    } else {
+                        Log.e("BluetoothControl", "잘못된 데이터 형식 또는 HEADER 오류: ${data.joinToString { byte -> String.format("%02x", byte) }}")
+                    }
+                }
+
             })
         } else {
             Log.d("BluetoothControl", "기존 GATT 연결 사용: ${bluetoothGatt?.device?.name} - ${bluetoothGatt?.device?.address}")
