@@ -41,16 +41,7 @@ class AudioGuideBLEConnectActivity : AppCompatActivity() {
     private lateinit var listView: ListView
     private lateinit var scanButton: Button
 
-    //필요한 권한들을 쭉 적어놓음 나중에 사용 예정
-    private val requiredPermissions = arrayOf(
-        Manifest.permission.ACCESS_FINE_LOCATION,
-        Manifest.permission.ACCESS_COARSE_LOCATION,
-        Manifest.permission.BLUETOOTH_ADVERTISE,
-        Manifest.permission.BLUETOOTH_CONNECT,
-        Manifest.permission.BLUETOOTH_SCAN,
-        Manifest.permission.BLUETOOTH,
-        Manifest.permission.BLUETOOTH_ADMIN
-    )
+
     // 블루투스를 활성화 하는지 물어보는 창으로 Intent를 사용하여 사용
     private val activityResultLauncher: ActivityResultLauncher<Intent> =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
@@ -61,28 +52,6 @@ class AudioGuideBLEConnectActivity : AppCompatActivity() {
                 Log.d("Bluetooth", "블루투스 활성화 취소")
             }
         }
-    // 권한을 확인하는 함수로 위에 넣어둔 requiredPermissions들을 토대로 권한 검사
-    private fun checkPermissions() {
-        val rejectedPermissionList = ArrayList<String>()
-        //권한들을 하나씩 검사
-        for (permission in requiredPermissions) {
-            if (ActivityCompat.checkSelfPermission(
-                    this,
-                    permission
-                ) != PackageManager.PERMISSION_GRANTED   //만약 권한이 부여되어있지 않다면
-            ) {
-                Log.d("bluetoothConnect", permission.toString())
-                rejectedPermissionList.add(permission) //rejectedPermissionList에 추가해 둠
-            }
-        }
-        if (rejectedPermissionList.isNotEmpty()) {  //만약 거부된 권한 이 있다면
-            val array = arrayOfNulls<String>(rejectedPermissionList.size)
-            Log.d("bluetoothConnect", "권한요청")
-            ActivityCompat.requestPermissions(this, rejectedPermissionList.toArray(array), 2)  //권한을 요청함
-        } else {
-            Toast.makeText(this, "Bluetooth Permission Success", Toast.LENGTH_SHORT).show()  // 거부된 권한이 없다면 블루투스 권한성공을 출력
-        }
-    }
 
     @SuppressLint("MissingInflatedId")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -115,15 +84,16 @@ class AudioGuideBLEConnectActivity : AppCompatActivity() {
         }
     }
 
-    private fun makeDiscoverable() {  //서로 탐색할 수 있는 블루투스 권한을 요청
-        val discoverableIntent = Intent(BluetoothAdapter.ACTION_REQUEST_DISCOVERABLE).apply {
-            putExtra(BluetoothAdapter.EXTRA_DISCOVERABLE_DURATION, 300)
-        }
-        startActivity(discoverableIntent)
-    }
+//    private fun makeDiscoverable() {  //서로 탐색할 수 있는 블루투스 권한을 요청
+//        val discoverableIntent = Intent(BluetoothAdapter.ACTION_REQUEST_DISCOVERABLE).apply {
+//            putExtra(BluetoothAdapter.EXTRA_DISCOVERABLE_DURATION, 300)
+//        }
+//        startActivity(discoverableIntent)
+//    }
+
+
     /*
     블루투스를 탐색하는 함수
-
      */
     private fun startDiscovery() {
         val filter = IntentFilter().apply {  //IntentFilter를 생성하고 이벤트 3가지를 추가 여기선 BluetoothDevice를 찾을때, BluetoothAdapter를 시작하고 끝낼때를 넣음
@@ -185,43 +155,11 @@ class AudioGuideBLEConnectActivity : AppCompatActivity() {
         }
     }
 
-
-    private val bluetoothGattCallback = object : BluetoothGattCallback() {
-        override fun onConnectionStateChange(gatt: BluetoothGatt, status: Int, newState: Int) {
-            if (newState == BluetoothProfile.STATE_CONNECTED) {
-                Log.d("BluetoothConnect", "GATT 연결 성공: ${gatt.device.name} - ${gatt.device.address}") //Gatt 연결 성공
-                //gatt.discoverServices()  //서비스를 찾는 코드
-                navigateToNextActivity(gatt.device)
-            } else if (newState == BluetoothProfile.STATE_DISCONNECTED) {
-                Log.d("BluetoothConnect", "GATT 연결 해제: ${gatt.device.name} - ${gatt.device.address}")
-            }
-        }
-
-        override fun onServicesDiscovered(gatt: BluetoothGatt, status: Int) {  //만약 서비스를 찾는다면
-            if (status == BluetoothGatt.GATT_SUCCESS) {
-                Log.d("BluetoothConnect", "서비스 검색 성공: ${gatt.device.name}")
-                for (service in gatt.services) {
-                    Log.d("BluetoothConnect", "서비스: ${service.uuid}")  //서비스 및 특성 출력
-                    for (characteristic in service.characteristics) {
-                        Log.d("BluetoothConnect", "  특성: ${characteristic.uuid}")
-                    }
-                }
-            } else {
-                Log.d("Bluetooth", "서비스 검색 실패: ${gatt.device.name}")
-            }
-        }
-    }
-
-
-
     private fun navigateToNextActivity(device: BluetoothDevice) {
         val intent = Intent(this, AudioGuideBLEControl::class.java)
         intent.putExtra("EXTRA_BLUETOOTH_DEVICE", device)
         startActivity(intent)
     }
-
-
-
 
     /*
     연결함수로 device.connectGatt부분이 메인임
@@ -229,10 +167,52 @@ class AudioGuideBLEConnectActivity : AppCompatActivity() {
  */
     private fun connectToDevice(device: BluetoothDevice) {
         bluetoothAdapter?.cancelDiscovery() //어뎁터의 간섭을 막기 위해 탐색을 중지 시킴
-        device.connectGatt(this, false, bluetoothGattCallback) //
         Toast.makeText(this, "${device.name}에 연결 시도 중입니다", Toast.LENGTH_SHORT).show()
         Log.d("Bluetooth", "${device.name} - ${device.address}에 연결 시도 중입니다")
+        navigateToNextActivity(device)
     }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        unregisterReceiver(receiver)
+        Log.d("Bluetooth", "BroadcastReceiver 해제")
+    }
+
+    //----------------------------권한 요청용 코드 -------------------------------
+    //필요한 권한들을 쭉 적어놓음 나중에 사용 예정
+    private val requiredPermissions = arrayOf(
+        Manifest.permission.ACCESS_FINE_LOCATION,
+        Manifest.permission.ACCESS_COARSE_LOCATION,
+        Manifest.permission.BLUETOOTH_ADVERTISE,
+        Manifest.permission.BLUETOOTH_CONNECT,
+        Manifest.permission.BLUETOOTH_SCAN,
+        Manifest.permission.BLUETOOTH,
+        Manifest.permission.BLUETOOTH_ADMIN
+    )
+
+    // 권한을 확인하는 함수로 위에 넣어둔 requiredPermissions들을 토대로 권한 검사
+    private fun checkPermissions() {
+        val rejectedPermissionList = ArrayList<String>()
+        //권한들을 하나씩 검사
+        for (permission in requiredPermissions) {
+            if (ActivityCompat.checkSelfPermission(
+                    this,
+                    permission
+                ) != PackageManager.PERMISSION_GRANTED   //만약 권한이 부여되어있지 않다면
+            ) {
+                Log.d("bluetoothConnect", permission.toString())
+                rejectedPermissionList.add(permission) //rejectedPermissionList에 추가해 둠
+            }
+        }
+        if (rejectedPermissionList.isNotEmpty()) {  //만약 거부된 권한 이 있다면
+            val array = arrayOfNulls<String>(rejectedPermissionList.size)
+            Log.d("bluetoothConnect", "권한요청")
+            ActivityCompat.requestPermissions(this, rejectedPermissionList.toArray(array), 2)  //권한을 요청함
+        } else {
+            Toast.makeText(this, "Bluetooth Permission Success", Toast.LENGTH_SHORT).show()  // 거부된 권한이 없다면 블루투스 권한성공을 출력
+        }
+    }
+
     /*
     권한을 요청해 주는 함수로 권한을 요청하는데 사용
      */
@@ -255,11 +235,5 @@ class AudioGuideBLEConnectActivity : AppCompatActivity() {
                 Log.e("Bluetooth", "필요한 권한 중 일부가 거부되었습니다.")
             }
         }
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        unregisterReceiver(receiver)
-        Log.d("Bluetooth", "BroadcastReceiver 해제")
     }
 }
