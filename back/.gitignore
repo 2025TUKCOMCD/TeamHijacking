@@ -38,3 +38,6 @@ out/
 
 ### application-local.properties
 application-local.properties
+
+### env파일
+.env
