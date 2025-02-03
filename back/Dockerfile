@@ -2,7 +2,7 @@
 FROM gradle:8.0.0-jdk17 AS builder
 
 # Set the working directory
-WORKDIR /app
+WORKDIR /server
 
 # Copy the build.gradle and settings.gradle files
 COPY build.gradle settings.gradle ./
