@@ -1,0 +1,55 @@
+name: Android Watch CI
+
+on:
+  push:
+    branches: [ "main", "watch" ]
+  pull_request:
+    branches: [ "main", "watch" ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    # 리포지토리 checkout 후 JDK17로 설정
+    steps:
+    - uses: actions/checkout@v4
+    - name: set up JDK 17
+      uses: actions/setup-java@v3
+      with:
+        java-version: '17'
+        # JDK 배포판
+        distribution: 'temurin'
+        # gradle 캐싱 활성화
+        cache: gradle
+
+        
+    - name: Cache Gradle dependencies
+      uses: actions/cache@v2
+      with:
+        #캐시할 경로
+        path: ~/.gradle/caches
+        #캐시 키
+        key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
+        restore-keys: |
+          ${{ runner.os }}-gradle-
+
+      #gradlew 스크립트에 실행 권한 부여
+    - name: Grant execute permission for gradlew
+      run: chmod +x gradlew
+      # 프로젝트 빌드
+    - name: Build with Gradle
+      run: ./gradlew build
+
+      # 유닛 테스트 실행
+    - name: Run unit tests
+      run: ./gradlew test
+
+      # 유닛 테스트 결과 저장
+    - name: Upload test results
+      uses: actions/upload-artifact@v2
+      with:
+        name: test-results
+        path: app/build/reports/tests/testDebugUnitTest
+
+    
+
