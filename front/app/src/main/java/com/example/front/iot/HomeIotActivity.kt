@@ -23,36 +23,35 @@ class HomeIotActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_home_iot)
 
-        // 스마트싱스 API 토큰키 연동 (local.properties에 키값 저장)
-        val apiToken = "Bearer ${BuildConfig.SMARTTHINGS_API_TOKEN}"
+        // ✅ SmartThings API 토큰 초기화
+        apiToken = "Bearer ${BuildConfig.SMARTTHINGS_API_TOKEN}"
         deviceControlHelper = DeviceControlHelper(apiToken)
         voiceControlHelper = VoiceControlHelper(this) { command ->
             processVoiceCommand(command)
         }
 
-        //기기 목록 가져오기
+        // 📡 기기 목록 가져오기
         fetchDeviceList()
 
-        //음성 명령 버튼
+        // 🎤 음성 명령 버튼 클릭 시 이벤트 처리
         findViewById<Button>(R.id.btnVoiceControl).setOnClickListener {
             voiceControlHelper.startVoiceRecognition()
         }
     }
 
-
-    // 1. SmartThings API로 기기 목록 가져오기
+    // 1️⃣ SmartThings API로 기기 목록 가져오기
     private fun fetchDeviceList() {
         val apiService = RetrofitClient.instance
-        apiService.getDevices(apiToken).enqueue(object : retrofit2.Callback<DeviceResponse> {
+        apiService.getDevices(apiToken).enqueue(object : Callback<DeviceResponse> {
             override fun onResponse(call: Call<DeviceResponse>, response: Response<DeviceResponse>) {
                 if (response.isSuccessful) {
                     val devices = response.body()?.items.orEmpty()
                     if (devices.isEmpty()) {
-                        Toast.makeText(this@HomeIotActivity, "등록된 기기가 없습니다.", Toast.LENGTH_SHORT)
-                            .show()
-                        Log.w("SmartThings", "No devices found")
+                        Toast.makeText(this@HomeIotActivity, "등록된 기기가 없습니다.", Toast.LENGTH_SHORT).show()
+                        Log.w("SmartThings", "No devices found.")
                     } else {
-                        displayDeviceList(deivces)
+                        displayDeviceList(devices)
+                        Log.d("SmartThings", "Device list loaded successfully.")
                     }
                 } else {
                     val errorMessage = response.errorBody()?.string() ?: "Unknown error"
@@ -68,17 +67,17 @@ class HomeIotActivity : AppCompatActivity() {
         })
     }
 
-    // 2. 기기 목록 표시
+    // 2️⃣ RecyclerView에 기기 목록 표시
     private fun displayDeviceList(devices: List<Device>) {
         val recyclerView = findViewById<RecyclerView>(R.id.recyclerViewDevices)
         recyclerView.layoutManager = LinearLayoutManager(this)
-        recyclerView.adapter = DeviceAdapter (devices) { device, command ->
-            // 사용자가 버튼을 클릭하면 기기 제어 명령 실행
-            sendDeviceCommand(device.deviceId, "swich", command)
+        recyclerView.adapter = DeviceAdapter(devices) { device, command ->
+            // ✅ 버튼 클릭 시 기기 제어 명령 실행
+            sendDeviceCommand(device.deviceId, "switch", command)
         }
     }
 
-    // 3. 기기 제어 명령 보내기
+    // 3️⃣ SmartThings API를 통해 기기 제어 명령 전송
     private fun sendDeviceCommand(deviceId: String, capability: String, command: String) {
         val apiService = RetrofitClient.instance
         val commandBody = CommandBody(
@@ -101,7 +100,15 @@ class HomeIotActivity : AppCompatActivity() {
                 Toast.makeText(this@HomeIotActivity, "네트워크 오류: 명령을 전송할 수 없습니다.", Toast.LENGTH_SHORT).show()
                 Log.e("SmartThings", "Error sending command: ${t.message}")
             }
+        })
+    }
 
+    // 4️⃣ 음성 명령 처리 (예제)
+    private fun processVoiceCommand(command: String) {
+        when {
+            command.contains("조명 켜") -> sendDeviceCommand("your_device_id", "switch", "on")
+            command.contains("조명 꺼") -> sendDeviceCommand("your_device_id", "switch", "off")
+            else -> Toast.makeText(this, "알 수 없는 명령입니다.", Toast.LENGTH_SHORT).show()
         }
     }
 }
