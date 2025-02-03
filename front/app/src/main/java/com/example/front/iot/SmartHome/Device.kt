@@ -4,14 +4,7 @@ data class Device(
     val deviceId: String,
     val label: String,
     val deviceTypeName: String,
-    val components: List<Component>
-)
-
-data class Component(
-    val id: String,
-    val capabilities: List<Capability>
-)
-
-data class Capability(
-    val id: String
+    val components: List<Component>,
+    val manufacturer: String? = null,
+    val location: String? = null
 )

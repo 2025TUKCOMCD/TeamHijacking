@@ -56,23 +56,9 @@
     <option name="autoReloadType" value="NONE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="5a34f773-8c82-4b0a-86d3-a37d3cf6ba80" name="Changes" comment="iot 수정">
-      <change afterPath="$PROJECT_DIR$/front/app/src/main/java/com/example/front/iot/SmartHome/Device.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/caches/deviceStreaming.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/caches/deviceStreaming.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_2025-01-14__3_46__Changes_.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_2025-01-14__5_14__Changes_.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_2025-01-14_오후_3_46_[Changes]/shelved.patch" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_2025-01-14_오후_5_14_[Changes]/shelved.patch" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_2025-01-15__1_22__Changes_.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_2025-01-15_오후_1_22_[Changes]/shelved.patch" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_2025-01-16__1_01__Changes_.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_2025-01-16_오후_1_01_[Changes]/shelved.patch" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_rebase_[Changes]/shelved.patch" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_rebase__Changes_.xml" beforeDir="false" />
+    <list default="true" id="5a34f773-8c82-4b0a-86d3-a37d3cf6ba80" name="Changes" comment="IotActivity 및 데이터 클래스의 Device 추가, Device 어뎁터 추가">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/front/app/src/main/java/com/example/front/iot/HomeIotActivity.kt" beforeDir="false" afterPath="$PROJECT_DIR$/front/app/src/main/java/com/example/front/iot/HomeIotActivity.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/front/app/src/main/java/com/example/front/iot/SmartHome/DeviceAdapter.kt" beforeDir="false" afterPath="$PROJECT_DIR$/front/app/src/main/java/com/example/front/iot/SmartHome/DeviceAdapter.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/front/app/src/main/res/layout/activity_home_iot.xml" beforeDir="false" afterPath="$PROJECT_DIR$/front/app/src/main/res/layout/activity_home_iot.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/front/app/src/main/java/com/example/front/iot/SmartHome/Device.kt" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -645,7 +631,15 @@
       <option name="project" value="LOCAL" />
       <updated>1737361144964</updated>
     </task>
-    <option name="localTasksCounter" value="36" />
+    <task id="LOCAL-00036" summary="IotActivity 및 데이터 클래스의 Device 추가, Device 어뎁터 추가">
+      <option name="closed" value="true" />
+      <created>1738573422233</created>
+      <option name="number" value="00036" />
+      <option name="presentableId" value="LOCAL-00036" />
+      <option name="project" value="LOCAL" />
+      <updated>1738573422233</updated>
+    </task>
+    <option name="localTasksCounter" value="37" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -660,7 +654,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="SettingActivity와 iotActivity 추가, 신호등과 교통안내 기능 클릭 시 검은 화면이 뜨는 이슈가 있으므로 이 점 확인 필요." />
     <MESSAGE value="패키지 수정" />
     <MESSAGE value="데이터 오류 수정" />
     <MESSAGE value="스마트 싱스 연동" />
@@ -685,6 +678,7 @@
     <MESSAGE value="HomeIotActivity 샌드디바이스 추가" />
     <MESSAGE value="HomeIotActivity 수정" />
     <MESSAGE value="iot 수정" />
-    <option name="LAST_COMMIT_MESSAGE" value="iot 수정" />
+    <MESSAGE value="IotActivity 및 데이터 클래스의 Device 추가, Device 어뎁터 추가" />
+    <option name="LAST_COMMIT_MESSAGE" value="IotActivity 및 데이터 클래스의 Device 추가, Device 어뎁터 추가" />
   </component>
 </project>
