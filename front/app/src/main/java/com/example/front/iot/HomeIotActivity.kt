@@ -5,7 +5,8 @@ import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import com.example.front.BuildConfig
 import com.example.front.R
-import com.example.front.data.SmartHome.*
+import com.example.front.iot.data.DeviceResponse
+import com.example.front.iot.processor.RetrofitClient
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
