@@ -13,23 +13,9 @@ interface RouteService {
         @Query("EX") endLng: Double,    // 도착 경도
         @Query("apiKey") apiKey: String // API 키
     ): ResponseBody
-
-    @GET("realtimeStation")
-    suspend fun realtimeStation(
-        @Query("stationID") stationID: Int,
-        @Query("routeIDs") routeIDs: String,
-        @Query("stationBase") stationBase: Int? = 0,
-        @Query("lowBus") lowBus: Int? = 0,
+    @GET("busLaneDetail")
+    suspend fun busLaneDetail(
+        @Query("busID") busID: Int,
         @Query("apiKey") apiKey: String
     ): ResponseBody
-
-    @GET("realtimeRoute")
-    suspend fun realtimeRoute(
-        @Query("busID") busID: String,
-        @Query("busBase") busBase: Int? = 1,
-        @Query("lowBus") lowBus: Int? = 0,
-        @Query("apiKey") apiKey: String
-    ): ResponseBody
-
-
 }
