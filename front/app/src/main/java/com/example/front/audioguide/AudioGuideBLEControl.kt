@@ -1,10 +1,9 @@
-package com.example.front.audioguide
-
 import android.Manifest
 import android.bluetooth.BluetoothDevice
 import android.bluetooth.BluetoothGatt
 import android.bluetooth.BluetoothGattCallback
 import android.bluetooth.BluetoothGattCharacteristic
+import android.bluetooth.BluetoothGattDescriptor
 import android.bluetooth.BluetoothProfile
 import android.content.pm.PackageManager
 import android.os.Bundle
@@ -44,21 +43,22 @@ class AudioGuideBLEControl : AppCompatActivity() {
         // 0.5초의 지연 후 클릭 리스너 설정
         Handler(Looper.getMainLooper()).postDelayed({
             if (bluetoothGatt != null) {
+                //UART 방식의 형태로 되어있어서 데이터를 넣는 부분과 받아오는부분 개발 필요
                 binding.button1.setOnClickListener {
-                    val locationuuid = UUID.fromString("0003cdd0-0000-1000-8000-00805f9b0131")
-                    sendDataToCharacteristic(byteArrayOf(0x00, 0x31, 0x01), locationuuid)
+                    val locationuuid = UUID.fromString("0003cdd0-0001-1000-8000-00805f9b0131")
+                    sendDataToCharacteristic(byteArrayOf(0x31, 0x00, 0x01), locationuuid)
                     Log.d("현빈", "위치 유도")
                 }
 
                 binding.button2.setOnClickListener {
                     val voice_guidanceuuid = UUID.fromString("0003cdd0-0001-1000-8000-00805f9b0131")
-                    sendDataToCharacteristic(byteArrayOf(0x00, 0x31, 0x10),voice_guidanceuuid)
+                    sendDataToCharacteristic(byteArrayOf(0x31, 0x00, 0x02),voice_guidanceuuid)
                     Log.d("현빈", "신호 안내")
                 }
 
                 binding.button3.setOnClickListener {
-                    val voice_requestuuid = UUID.fromString("0003cdd0-0002-1000-8000-00805f9b0131")
-                    sendDataToCharacteristic(byteArrayOf(0x00, 0x31, 0x00),voice_requestuuid)
+                    val voice_requestuuid = UUID.fromString("0003cdd0-0001-1000-8000-00805f9b0131")
+                    sendDataToCharacteristic(byteArrayOf(0x31, 0x00, 0x03),voice_requestuuid)
                     Log.d("현빈", "음성 안내")
                 }
             } else {
@@ -107,8 +107,25 @@ class AudioGuideBLEControl : AppCompatActivity() {
                                 Log.d("BluetoothControl", "  특성: ${characteristic.uuid}") // 특성 출력
                             }
                         }
+
+                        // RX 특성 구독
+                        val rxCharacteristic = gatt.getService(UUID.fromString("0003cdd0-0002-1000-8000-00805f9b0131"))
+                            ?.getCharacteristic(UUID.fromString("0003cdd0-0002-1000-8000-00805f9b0131"))
+                        rxCharacteristic?.let {
+                            gatt.setCharacteristicNotification(it, true)
+                            val descriptor = it.getDescriptor(UUID.fromString("00002902-0000-1000-8000-00805f9b34fb"))
+                            descriptor?.value = BluetoothGattDescriptor.ENABLE_NOTIFICATION_VALUE
+                            gatt.writeDescriptor(descriptor)
+                        }
                     } else {
                         Log.d("Bluetooth", "서비스 검색 실패: ${gatt.device.name}")
+                    }
+                }
+
+                override fun onCharacteristicChanged(gatt: BluetoothGatt, characteristic: BluetoothGattCharacteristic) {
+                    if (characteristic.uuid == UUID.fromString("0003cdd0-0002-1000-8000-00805f9b0131")) {
+                        val data = characteristic.value
+                        Log.d("BluetoothControl", "데이터 수신: ${data.joinToString { byte -> String.format("%02x", byte) }}")
                     }
                 }
             })
