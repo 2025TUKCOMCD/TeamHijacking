@@ -15,6 +15,7 @@ import retrofit2.Callback
 import retrofit2.Response
 
 class HomeIotActivity : AppCompatActivity() {
+
     private lateinit var apiToken: String
     private lateinit var deviceControlHelper: DeviceControlHelper
     private lateinit var voiceControlHelper: VoiceControlHelper
@@ -41,8 +42,7 @@ class HomeIotActivity : AppCompatActivity() {
 
     // 1️⃣ SmartThings API로 기기 목록 가져오기
     private fun fetchDeviceList() {
-        val apiService = RetrofitClient.instance
-        apiService.getDevices(apiToken).enqueue(object : Callback<DeviceResponse> {
+        RetrofitClient.instance.getDevices(apiToken).enqueue(object : Callback<DeviceResponse> {
             override fun onResponse(call: Call<DeviceResponse>, response: Response<DeviceResponse>) {
                 if (response.isSuccessful) {
                     val devices = response.body()?.items.orEmpty()
@@ -54,14 +54,12 @@ class HomeIotActivity : AppCompatActivity() {
                         Log.d("SmartThings", "Device list loaded successfully.")
                     }
                 } else {
-                    val errorMessage = response.errorBody()?.string() ?: "Unknown error"
-                    Toast.makeText(this@HomeIotActivity, "기기 목록을 가져오는 중 오류가 발생했습니다.", Toast.LENGTH_SHORT).show()
-                    Log.e("SmartThings", "Failed to fetch devices: $errorMessage")
+                    handleApiError(response.code(), response.errorBody()?.string())
                 }
             }
 
             override fun onFailure(call: Call<DeviceResponse>, t: Throwable) {
-                Toast.makeText(this@HomeIotActivity, "네트워크 오류: 기기 목록을 가져올 수 없습니다.", Toast.LENGTH_SHORT).show()
+                showToast("네트워크 오류: 기기 목록을 가져올 수 없습니다.")
                 Log.e("SmartThings", "Network error: ${t.message}")
             }
         })
@@ -69,46 +67,65 @@ class HomeIotActivity : AppCompatActivity() {
 
     // 2️⃣ RecyclerView에 기기 목록 표시
     private fun displayDeviceList(devices: List<Device>) {
+        val deviceItems = devices.map { DeviceItem(it, isOnline = true) } // ✅ Device → DeviceItem 변환
         val recyclerView = findViewById<RecyclerView>(R.id.recyclerViewDevices)
         recyclerView.layoutManager = LinearLayoutManager(this)
-        recyclerView.adapter = DeviceAdapter(devices) { device, command ->
-            // ✅ 버튼 클릭 시 기기 제어 명령 실행
+        recyclerView.adapter = DeviceAdapter(deviceItems) { device, command ->
             sendDeviceCommand(device.deviceId, "switch", command)
         }
     }
 
     // 3️⃣ SmartThings API를 통해 기기 제어 명령 전송
     private fun sendDeviceCommand(deviceId: String, capability: String, command: String) {
-        val apiService = RetrofitClient.instance
-        val commandBody = CommandBody(
-            commands = listOf(Command(capability, command))
-        )
+        val commandBody = CommandBody(commands = listOf(Command(capability, command)))
 
-        apiService.sendCommand(deviceId, commandBody, apiToken).enqueue(object : Callback<Unit> {
-            override fun onResponse(call: Call<Unit>, response: Response<Unit>) {
-                if (response.isSuccessful) {
-                    Toast.makeText(this@HomeIotActivity, "명령이 성공적으로 전송되었습니다.", Toast.LENGTH_SHORT).show()
-                    Log.d("SmartThings", "Command sent successfully to deviceId: $deviceId")
-                } else {
-                    val errorMessage = response.errorBody()?.string() ?: "Unknown error"
-                    Toast.makeText(this@HomeIotActivity, "명령 전송 실패: $errorMessage", Toast.LENGTH_SHORT).show()
-                    Log.e("SmartThings", "Failed to send command: ${response.code()} - $errorMessage")
+        RetrofitClient.instance.sendCommand(deviceId, commandBody, apiToken)
+            .enqueue(object : Callback<Unit> {
+                override fun onResponse(call: Call<Unit>, response: Response<Unit>) {
+                    if (response.isSuccessful) {
+                        showToast("명령이 성공적으로 전송되었습니다.")
+                        Log.d("SmartThings", "Command sent successfully to deviceId: $deviceId")
+                    } else {
+                        handleApiError(response.code(), response.errorBody()?.string())
+                    }
                 }
-            }
 
-            override fun onFailure(call: Call<Unit>, t: Throwable) {
-                Toast.makeText(this@HomeIotActivity, "네트워크 오류: 명령을 전송할 수 없습니다.", Toast.LENGTH_SHORT).show()
-                Log.e("SmartThings", "Error sending command: ${t.message}")
-            }
-        })
+                override fun onFailure(call: Call<Unit>, t: Throwable) {
+                    showToast("네트워크 오류: 명령을 전송할 수 없습니다.")
+                    Log.e("SmartThings", "Error sending command: ${t.message}")
+                }
+            })
     }
 
-    // 4️⃣ 음성 명령 처리 (예제)
+    // 4️⃣ 음성 명령 처리
     private fun processVoiceCommand(command: String) {
-        when {
-            command.contains("조명 켜") -> sendDeviceCommand("your_device_id", "switch", "on")
-            command.contains("조명 꺼") -> sendDeviceCommand("your_device_id", "switch", "off")
-            else -> Toast.makeText(this, "알 수 없는 명령입니다.", Toast.LENGTH_SHORT).show()
+        val devices = (findViewById<RecyclerView>(R.id.recyclerViewDevices).adapter as? DeviceAdapter)?.getDeviceList()
+
+        devices?.forEach { device ->
+            when {
+                command.contains("조명 켜", ignoreCase = true) && device.label.contains("조명") ->
+                    sendDeviceCommand(device.deviceId, "switch", "on")
+
+                command.contains("조명 꺼", ignoreCase = true) && device.label.contains("조명") ->
+                    sendDeviceCommand(device.deviceId, "switch", "off")
+            }
+        } ?: showToast("기기 목록을 불러오지 못했습니다.")
+    }
+
+    // 📢 API 오류 처리
+    private fun handleApiError(code: Int, errorMessage: String?) {
+        val message = when (code) {
+            401 -> "인증 오류: API 토큰을 확인하세요."
+            403 -> "권한 오류: 접근 권한이 없습니다."
+            404 -> "요청한 데이터를 찾을 수 없습니다."
+            else -> "알 수 없는 오류: ${errorMessage ?: "No details available."}"
         }
+        showToast(message)
+        Log.e("SmartThings", "API Error ($code): $errorMessage")
+    }
+
+    // 🚀 Toast 메시지 표시
+    private fun showToast(message: String) {
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
     }
 }

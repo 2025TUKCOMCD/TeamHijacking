@@ -96,6 +96,8 @@ dependencies {
 
     // 추가 라이브러리
     implementation("com.github.skydoves:powerspinner:1.2.7")
+    implementation("androidx.compose.ui:ui-test-android:1.7.7")
+    implementation("androidx.compose.foundation:foundation-android:1.7.0")
 
     // 테스트 라이브러리
     androidTestImplementation(platform(libs.compose.bom))
