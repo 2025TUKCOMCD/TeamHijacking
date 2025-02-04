@@ -1,4 +1,4 @@
-package com.example.back.dto;
+package com.example.back.dto.route;
 
 import lombok.Data;
 
@@ -10,5 +10,5 @@ public class RouteResultDTO {
     private int transitCount;
     private String mainTransitType;
     private String detailedPath;
-    private List<String> busDeatils;
+    //private List<String> busDetails;
 }

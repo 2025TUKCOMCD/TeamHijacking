@@ -1,7 +1,7 @@
 package com.example.back.service;
 
-import com.example.back.dto.RouteResultDTO;
-import com.example.back.dto.RouteDTO;
+import com.example.back.dto.route.RouteResultDTO;
+import com.example.back.dto.route.RouteDTO;
 
 
 import java.util.List;
