@@ -2,9 +2,9 @@ name: Android CI
 
 on:
   push:
-    branches: [ "main", "watch" ]
+    branches: [ "main", "develop" ]
   pull_request:
-    branches: [ "main", "watch" ]
+    branches: [ "main", "develop" ]
 
 jobs:
   build:
@@ -16,8 +16,8 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          fetch-depth: 0 # 필요에 따라 설정
-          submodules: true # 필요에 따라 설정
+          fetch-depth: 0
+          submodules: true
 
       - name: Set up JDK ${{ matrix.java-version }}
         uses: actions/setup-java@v3
@@ -34,28 +34,36 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-gradle-
 
+      - name: Create local.properties
+        run: |
+          echo "ODsay_APIKEY=${{ secrets.ODsay_APIKEY }}" > ./front/local.properties
+          echo "Geolocation_APIKEY=${{ secrets.Geolocation_APIKEY }}" >> ./front/local.properties
+          echo "SMARTTHINGS_API_TOKEN=${{ secrets.SMARTTHINGS_API_TOKEN }}" >> ./front/local.properties
+          echo "Public_Bus_APIKEY=${{ secrets.Public_Bus_APIKEY }}" >> ./front/local.properties
+          echo "Public_Subway_APIKEY=${{ secrets.Public_Subway_APIKEY }}" >> ./front/local.properties
+
       - name: Grant execute permission for gradlew
-        working-directory: ./front  # Navigate to the 'front' directory
-        run: chmod +x ./gradlew      # Execute chmod within 'front'
+        working-directory: ./front
+        run: chmod +x ./gradlew
 
       - name: Build with Gradle
-        working-directory: ./front  # Navigate to the 'front' directory
-        run: ./gradlew assembleDebug # Or assembleRelease, adjust as needed
+        working-directory: ./front
+        run: ./gradlew assembleDebug
 
       - name: Run unit tests
-        working-directory: ./front  # Navigate to the 'front' directory
-        run: ./gradlew testDebugUnitTest # Adjust as needed
+        working-directory: ./front
+        run: ./gradlew testDebugUnitTest
 
       - name: Upload test results
         uses: actions/upload-artifact@v4
         if: always()
         with:
           name: test-results
-          path: ./front/app/build/reports/tests/testDebugUnitTest # Corrected path!
+          path: ./front/app/build/reports/tests/testDebugUnitTest
 
       - name: Upload APK (Debug)
         uses: actions/upload-artifact@v4
         if: github.ref == 'refs/heads/main'
         with:
           name: app-debug
-          path: ./front/app/build/outputs/apk/debug/*.apk # Corrected path!
+          path: ./front/app/build/outputs/apk/debug/*.apk
