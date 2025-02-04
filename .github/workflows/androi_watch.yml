@@ -1,25 +1,28 @@
-name: Android Watch CI
+name: Android CI
 
 on:
   push:
-    branches: [ "main", "watch" ]
+    branches: [ "main", "watch" ] # 필요에 따라 브랜치 조정
   pull_request:
-    branches: [ "main", "watch" ]
+    branches: [ "main", "watch" ] # 필요에 따라 브랜치 조정
 
 jobs:
   build:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        java-version: [ '17' ] # 필요에 따라 JDK 버전 조정
 
     steps:
       - uses: actions/checkout@v4
         with:
-          fetch-depth: 0 # 필요에 따라 설정
-          submodules: true # 필요에 따라 설정
+          fetch-depth: 0 # 전체 커밋 기록 가져오기 (선택 사항)
+          submodules: true # 서브모듈 가져오기 (선택 사항)
 
-      - name: Set up JDK 17
+      - name: Set up JDK ${{ matrix.java-version }}
         uses: actions/setup-java@v3
         with:
-          java-version: '17'
+          java-version: ${{ matrix.java-version }}
           distribution: 'temurin'
           cache: gradle
 
@@ -27,24 +30,29 @@ jobs:
         uses: actions/cache@v3
         with:
           path: ~/.gradle/caches
-          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/build.gradle', '**/gradle.properties', '**/settings.gradle', '**/gradle-wrapper.properties') }}
           restore-keys: |
             ${{ runner.os }}-gradle-
 
       - name: Grant execute permission for gradlew
-        working-directory: ./front  # Add this line
         run: chmod +x ./gradlew
 
       - name: Build with Gradle
-        working-directory: ./front  # Add this line
-        run: ./gradlew build
+        run: ./gradlew assembleDebug # 또는 ./gradlew assembleRelease, 필요에 따라 task 변경
 
       - name: Run unit tests
-        working-directory: ./front  # Add this line
-        run: ./gradlew test
+        run: ./gradlew testDebugUnitTest # 필요에 따라 task 변경
 
       - name: Upload test results
         uses: actions/upload-artifact@v4
+        if: always() # 테스트 결과 업로드 (테스트 실패 시에도)
         with:
           name: test-results
-          path: app/build/reports/tests/testDebugUnitTest # 필요에 따라 경로 수정
+          path: ./app/build/reports/tests/testDebugUnitTest # 실제 경로에 맞게 수정
+
+      - name: Upload APK (Debug)
+        uses: actions/upload-artifact@v4
+        if: github.ref == 'refs/heads/main' # main 브랜치인 경우에만 APK 업로드
+        with:
+          name: app-debug
+          path: ./app/build/outputs/apk/debug/*.apk # 실제 경로에 맞게 수정
