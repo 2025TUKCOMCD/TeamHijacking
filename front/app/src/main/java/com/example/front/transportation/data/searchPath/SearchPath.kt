@@ -61,5 +61,5 @@ data class PathRouteResult(
     val transitCount: Int, // 사용
     val mainTransitTypes: String, // 사용
     val detailedPath: String, // 사용
-    val busDetails : List<String>, // 사용
+    val busDetails : List<String> // 사용
 )

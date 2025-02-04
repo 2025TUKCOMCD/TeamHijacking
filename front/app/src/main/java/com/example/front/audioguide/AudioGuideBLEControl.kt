@@ -84,7 +84,7 @@ class AudioGuideBLEControl : AppCompatActivity() {
             connectToBluetoothGatt(device)
         }
     }
-
+    //gatt연결을 시도하는 함수 gatt함수에 연결을 시도한 후에 성공하면 gatt.discoverServices()<-고유 함수로 서비스 및 특성을 탐색한다.
     private fun connectToBluetoothGatt(device: BluetoothDevice) {
         if (bluetoothGatt == null || bluetoothGatt?.device?.address != device.address) {
             bluetoothGatt = device.connectGatt(this, false, object : BluetoothGattCallback() {
@@ -98,7 +98,7 @@ class AudioGuideBLEControl : AppCompatActivity() {
                         bluetoothGatt = null
                     }
                 }
-
+                //일단 임시코드로 만약 연결이 완료 된 상태에선 찾을 필요 없음 서비스 및 특성을 찾으면 uuid를 로그로 찍어주는 코드
                 override fun onServicesDiscovered(gatt: BluetoothGatt, status: Int) {
                     if (status == BluetoothGatt.GATT_SUCCESS) {
                         Log.d("BluetoothControl", "서비스 검색 성공: ${gatt.device.name}")
@@ -110,10 +110,11 @@ class AudioGuideBLEControl : AppCompatActivity() {
                             }
                         }
 
-                        // RX 특성 구독
+                        // RX 특성 구독 - UART방식 소통중 데이터를 받아오는 코드 TX가 입력될때 바로 반환 되기때문에 실시간으로 감지 필요
                         val rxCharacteristic = gatt.getService(UUID.fromString("0003cdd0-0002-1000-8000-00805f9b0131"))
                             ?.getCharacteristic(UUID.fromString("0003cdd0-0002-1000-8000-00805f9b0131"))
                         rxCharacteristic?.let {
+                            //gatt.setCharateristicNotification = "지금부터 이 gatt 함수 중 rxCharacteristic의 변화를 감지 하겠다는 코드
                             gatt.setCharacteristicNotification(it, true)
                             val descriptor = it.getDescriptor(UUID.fromString("00002902-0000-1000-8000-00805f9b34fb"))
                             descriptor?.value = BluetoothGattDescriptor.ENABLE_NOTIFICATION_VALUE
@@ -123,7 +124,7 @@ class AudioGuideBLEControl : AppCompatActivity() {
                         Log.d("Bluetooth", "서비스 검색 실패: ${gatt.device.name}")
                     }
                 }
-
+                //데이터 감지 함수 데이터가 바뀐다면
                 override fun onCharacteristicChanged(gatt: BluetoothGatt, characteristic: BluetoothGattCharacteristic) {
                     if (characteristic.uuid == UUID.fromString("0003cdd0-0002-1000-8000-00805f9b0131")) {
                         val data = characteristic.value
@@ -164,12 +165,12 @@ class AudioGuideBLEControl : AppCompatActivity() {
         Log.d("BluetoothControl",uuid.toString())
         bluetoothGatt?.let { gatt ->
             Log.d("BluetoothControl", "함수 실행전")
-            val characteristic = getTargetCharacteristic(uuid)
+            val characteristic = getTargetCharacteristic(uuid)  //만약 특정 uuid가 존재 한다면
             Log.d("BluetoothControl", "변수지정")
             Log.d("BluetoothControl", "characteristic: $characteristic")
             if (characteristic != null) {
-                characteristic.value = data
-                val success = gatt.writeCharacteristic(characteristic)
+                characteristic.value = data //uuid.value에 원하는 데이터를 입력
+                val success = gatt.writeCharacteristic(characteristic) //후 전송 이 gatt.writeCharacteristic으로 성공 여부 확인후 로그 찍기
                 Log.d("BluetoothControl", "데이터 전송 시도: $success")
                 if (success) {
                     Log.d("BluetoothControl", "데이터 전송 성공")
@@ -182,7 +183,7 @@ class AudioGuideBLEControl : AppCompatActivity() {
         } ?: Log.d("BluetoothControl", "bluetoothGatt 초기화되지 않음")
     }
 
-    // 원하는 특성을 찾는 함수
+    // 원하는 uuid가 포함되어있는지 알려주는함수 포함되어있으면 그 uuid를 반환함
     private fun getTargetCharacteristic(uuid: UUID): BluetoothGattCharacteristic? {
         Log.d("BluetoothControl", "Target함수쪽으로 들어옴")
         // 여기서 원하는 특성 UUID를 사용하여 찾습니다.
