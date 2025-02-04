@@ -2,22 +2,22 @@ name: Android CI
 
 on:
   push:
-    branches: [ "main", "watch" ] # 필요에 따라 브랜치 조정
+    branches: [ "main", "watch" ]
   pull_request:
-    branches: [ "main", "watch" ] # 필요에 따라 브랜치 조정
+    branches: [ "main", "watch" ]
 
 jobs:
   build:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        java-version: [ '17' ] # 필요에 따라 JDK 버전 조정
+        java-version: [ '17' ]
 
     steps:
       - uses: actions/checkout@v4
         with:
-          fetch-depth: 0 # 전체 커밋 기록 가져오기 (선택 사항)
-          submodules: true # 서브모듈 가져오기 (선택 사항)
+          fetch-depth: 0 # 필요에 따라 설정
+          submodules: true # 필요에 따라 설정
 
       - name: Set up JDK ${{ matrix.java-version }}
         uses: actions/setup-java@v3
@@ -35,24 +35,27 @@ jobs:
             ${{ runner.os }}-gradle-
 
       - name: Grant execute permission for gradlew
-        run: chmod +x ./gradlew
+        working-directory: ./front  # Navigate to the 'front' directory
+        run: chmod +x ./gradlew      # Execute chmod within 'front'
 
       - name: Build with Gradle
-        run: ./gradlew assembleDebug # 또는 ./gradlew assembleRelease, 필요에 따라 task 변경
+        working-directory: ./front  # Navigate to the 'front' directory
+        run: ./gradlew assembleDebug # Or assembleRelease, adjust as needed
 
       - name: Run unit tests
-        run: ./gradlew testDebugUnitTest # 필요에 따라 task 변경
+        working-directory: ./front  # Navigate to the 'front' directory
+        run: ./gradlew testDebugUnitTest # Adjust as needed
 
       - name: Upload test results
         uses: actions/upload-artifact@v4
-        if: always() # 테스트 결과 업로드 (테스트 실패 시에도)
+        if: always()
         with:
           name: test-results
-          path: ./app/build/reports/tests/testDebugUnitTest # 실제 경로에 맞게 수정
+          path: ./front/app/build/reports/tests/testDebugUnitTest # Corrected path!
 
       - name: Upload APK (Debug)
         uses: actions/upload-artifact@v4
-        if: github.ref == 'refs/heads/main' # main 브랜치인 경우에만 APK 업로드
+        if: github.ref == 'refs/heads/main'
         with:
           name: app-debug
-          path: ./app/build/outputs/apk/debug/*.apk # 실제 경로에 맞게 수정
+          path: ./front/app/build/outputs/apk/debug/*.apk # Corrected path!
