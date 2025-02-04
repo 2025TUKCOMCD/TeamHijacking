@@ -9,8 +9,6 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    defaults: # 추가
-      working-directory: ./front # 추가
 
     steps:
       - uses: actions/checkout@v4
@@ -34,13 +32,16 @@ jobs:
             ${{ runner.os }}-gradle-
 
       - name: Grant execute permission for gradlew
-        run: chmod +x gradlew # front 폴더 안에서 실행되므로 ./gradlew로 변경 가능
+        working-directory: ./front  # Add this line
+        run: chmod +x ./gradlew
 
       - name: Build with Gradle
-        run: ./gradlew build # front 폴더 안에서 실행
+        working-directory: ./front  # Add this line
+        run: ./gradlew build
 
       - name: Run unit tests
-        run: ./gradlew test # front 폴더 안에서 실행
+        working-directory: ./front  # Add this line
+        run: ./gradlew test
 
       - name: Upload test results
         uses: actions/upload-artifact@v4
