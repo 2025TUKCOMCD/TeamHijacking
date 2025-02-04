@@ -1,4 +1,4 @@
-package com.example.front.transportation.data.realtimeStation
+package com.example.front.transportation.data.realtimeStation.bus
 
 
 data class RealtimeSeoulStation(

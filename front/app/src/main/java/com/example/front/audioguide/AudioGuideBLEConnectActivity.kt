@@ -19,9 +19,7 @@ import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
-import androidx.core.content.ContextCompat
 import com.example.front.R
-import com.example.front.transportation.TransportationMainActivity
 
 class AudioGuideBLEConnectActivity : AppCompatActivity() {
 
@@ -213,27 +211,4 @@ class AudioGuideBLEConnectActivity : AppCompatActivity() {
         }
     }
 
-    /*
-    권한을 요청해 주는 함수로 권한을 요청하는데 사용
-     */
-    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        if (requestCode == 1) {
-            for (i in permissions.indices) {
-                val permission = permissions[i]
-                val grantResult = grantResults[i]
-                if (grantResult == PackageManager.PERMISSION_GRANTED) {
-                    Log.d("Permissions", "$permission 권한이 허용되었습니다.")
-                } else {
-                    Log.e("Permissions", "$permission 권한이 거부되었습니다.")
-                    Toast.makeText(this, "$permission 권한이 거부되었습니다.", Toast.LENGTH_SHORT).show()
-                }
-            }
-            if (grantResults.isNotEmpty() && grantResults.all { it == PackageManager.PERMISSION_GRANTED }) {
-                startDiscovery()
-            } else {
-                Log.e("Bluetooth", "필요한 권한 중 일부가 거부되었습니다.")
-            }
-        }
-    }
 }

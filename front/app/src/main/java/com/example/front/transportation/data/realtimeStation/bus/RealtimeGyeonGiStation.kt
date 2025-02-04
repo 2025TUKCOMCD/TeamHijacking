@@ -1,4 +1,4 @@
-package com.example.front.transportation.data.realtimeStation
+package com.example.front.transportation.data.realtimeStation.bus
 
 data class RealtimeGyeonGiStation(
     val response: Response?
@@ -15,6 +15,6 @@ data class GyeonGiMsgBody(
 data class BusArrivalItem(
     val stationNm1: String?,
     val routeName: String?,
-    val predictTimeSec1: String?,
-    val predictTime2: String?,
+    val predictTime1: String?,
+    val predictTime2: String?
 )

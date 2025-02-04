@@ -75,6 +75,8 @@ object RouteProcessor {
                     }
                 }.filter { it.isNotEmpty() }.joinToString(" -> ")
 
+                // 경로별 subwayDetails 생성
+
                 // 경로별 busDetails 생성
                 val routeBusDetails = mutableListOf<String>()
                 filteredSubPaths.filter { it.trafficType == 2 }.forEach { subPath ->
