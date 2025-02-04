@@ -46,7 +46,7 @@ jobs:
 
       # 유닛 테스트 결과 저장
     - name: Upload test results
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: test-results
         path: app/build/reports/tests/testDebugUnitTest
