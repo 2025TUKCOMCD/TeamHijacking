@@ -16,14 +16,15 @@
         android:orientation="horizontal"
         >
         <TextView
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:minWidth="80dp"
             android:textSize="13sp"
             android:textColor="@android:color/white"
             android:text="@string/default_text"
             android:id="@+id/addressNicknameTextview"
-            android:padding="5dp" />
+            android:padding="5dp"
+            android:layout_weight="1"/>
         <ImageView
             android:layout_width="30dp"
             android:layout_height="30dp"

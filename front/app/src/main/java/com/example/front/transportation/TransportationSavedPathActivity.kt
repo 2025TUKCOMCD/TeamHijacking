@@ -2,8 +2,8 @@ package com.example.front.transportation
 
 import android.content.Intent
 import android.os.Bundle
-import android.view.ContextThemeWrapper
-import android.view.View
+//import android.view.ContextThemeWrapper
+//import android.view.View
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.LinearLayout
@@ -29,15 +29,14 @@ class TransportationSavedPathActivity : AppCompatActivity() {
 
         //각 요소 바인딩, someRootThing은 추후 삭제 필요.
         val someRootThing: LinearLayout = binding.someRootThing
-        val savedPathRootLayout: LinearLayout = binding.savedPathRootLayout
-        val favouritePathStarBtt: ImageView = binding.favouritePathStarBtt
+        //val savedPathRootLayout: LinearLayout = binding.savedPathRootLayout
+        //val favouritePathStarBtt: ImageView = binding.favouritePathStarBtt
         val imsiBtt4: Button = binding.imsiBtt4
 
 
-        //textView에 text 삽입
-        //someRootThing.text="여기에서 텍스트 수정이 가능함"
-
         imsiBtt4.setOnClickListener{
+            /*
+            * 임시 버튼, 서버가 완성되면 서버의 데이터베이스를 순회하며 추가하도록 수정 예정*/
             openView()
         }
 
@@ -49,10 +48,6 @@ class TransportationSavedPathActivity : AppCompatActivity() {
             startActivity(intent)
         }
 
-        favouritePathStarBtt.setOnClickListener{
-            starBtnClickListener(favouritePathStarBtt)
-        }
-
     }
 
     private fun openView() {
@@ -60,12 +55,11 @@ class TransportationSavedPathActivity : AppCompatActivity() {
         * onCreate시 작동하여, database로부터 경로 목록 받아와 그 갯수만큼 버튼 생성.
         * 버튼 생성 function은 하단의 createPathBtt 이용, 순회하며 받아옴 */
 
-
         val inflater = layoutInflater
         val savedPathRootLayout: LinearLayout = findViewById(R.id.transSavedPathLayout)
 
         // trans_saved_button.xml을 inflate해 새로운 LinearLaytou 추가
-        val newLayout  = inflater.inflate(R.layout.trans_saved_path_button, savedPathRootLayout, false) as LinearLayout
+        val newLayout:LinearLayout = inflater.inflate(R.layout.trans_saved_path_button, savedPathRootLayout, false) as LinearLayout
 
         // 동적으로 추가된 뷰의 텍스트 설정
         val addressNicknameTextView: TextView = newLayout.findViewById(R.id.addressNicknameTextview)
@@ -76,6 +70,13 @@ class TransportationSavedPathActivity : AppCompatActivity() {
 
         val destinationTextView: TextView = newLayout.findViewById(R.id.destinationTextView)
         destinationTextView.text = "목적지: 예시목적지"
+
+        val favouritePathStarBtt: ImageView = newLayout.findViewById(R.id.favouritePathStarBtt)
+
+        // 즐겨찾기 버튼 클릭 이벤트 설정
+        favouritePathStarBtt.setOnClickListener {
+            starBtnClickListener(favouritePathStarBtt)
+        }
 
         // savedPathRootLayout에 추가
         savedPathRootLayout.addView(newLayout)
