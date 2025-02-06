@@ -85,20 +85,6 @@ class TransportationSavedPathActivity : AppCompatActivity() {
         savedPathRootLayout.requestLayout()
     }
 
-    private fun createPathBtt(savedPathThing: LinearLayout) {
-        //하... 각 path를 불러오고, text를 설정하는 기능
-        //아예 다른 activity로 만들어서 불러오는게 나을지도 모르겠음..
-        /* todo::
-        *   1. path 지정 btt UIUX 디자인 (완료)
-        *   2. UIUX 개발 (대략 완료? ㅠㅠ)
-        *   3. 해당 버튼을 이 activity에 불러오도록 구현
-        *   4. 그 요소의 text 변경하도록 대략적으로..  */
-
-        val childAddressNickname: TextView
-        //val favouritePathStarBtt: ImageView
-        val departureTextView: TextView
-        val destinationTextView: TextView
-    }
 
     private fun starBtnClickListener(favouritePathStar: ImageView) {
         /*id가 savedPathRootLayout인, 일종의 저장 경로 띄워주기용 view의
@@ -132,14 +118,4 @@ class TransportationSavedPathActivity : AppCompatActivity() {
         }
     }
 
-    private fun whatSavedPath() {
-        /* 동적으로 생성된 LinearLayout- 요소에, 출발지, 목적지, 닉네임 등을 setting하는 함수
-        * 20250124 기준 사용하고 있는 변수는 다음과 같음::
-        *   addressNicknameTextView: TextView = 저장된 경로의 닉네임 삽입
-        *   favouritePathStarBtt: ImageView = 즐겨찾기 버튼,
-        *   departureTextView: TextView = 출발지 Text를 set할 곳
-        *   destinationTextView: TextView = 도착지 Text를 set할 곳
-        * todo::
-        *    1. 경로 정렬하도록 하는 function */
-    }
 }
