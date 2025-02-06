@@ -2,6 +2,9 @@ package com.example.front.transportation
 
 import android.content.Intent
 import android.os.Bundle
+import android.view.ContextThemeWrapper
+import android.view.View
+import android.widget.Button
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
@@ -22,15 +25,21 @@ class TransportationSavedPathActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
 
         binding = ActivityTransportationSavedPathBinding.inflate(layoutInflater)
-        setContentView(binding.main)
+        setContentView(binding.root)
 
         //각 요소 바인딩, someRootThing은 추후 삭제 필요.
-        val someRootThing: TextView = binding.someRootThing
+        val someRootThing: LinearLayout = binding.someRootThing
         val savedPathRootLayout: LinearLayout = binding.savedPathRootLayout
         val favouritePathStarBtt: ImageView = binding.favouritePathStarBtt
+        val imsiBtt4: Button = binding.imsiBtt4
+
 
         //textView에 text 삽입
-        someRootThing.text="여기에서 텍스트 수정이 가능함"
+        //someRootThing.text="여기에서 텍스트 수정이 가능함"
+
+        imsiBtt4.setOnClickListener{
+            openView()
+        }
 
         someRootThing.setOnClickListener{
             //일단 한 번 읽어주고
@@ -41,8 +50,6 @@ class TransportationSavedPathActivity : AppCompatActivity() {
         }
 
         favouritePathStarBtt.setOnClickListener{
-            //임시로 이 곳에 구현, 동적 버튼 생성/ 각 버튼에 대한 구분이 가능해지면
-            //이 역시 function으로 바꾸어 각 경로에 대해서만 작용하도록 바꾸어야 함
             starBtnClickListener(favouritePathStarBtt)
         }
 
@@ -52,6 +59,29 @@ class TransportationSavedPathActivity : AppCompatActivity() {
         /*추후 TransSavedPathActivity가 열릴 시 작동할 function,
         * onCreate시 작동하여, database로부터 경로 목록 받아와 그 갯수만큼 버튼 생성.
         * 버튼 생성 function은 하단의 createPathBtt 이용, 순회하며 받아옴 */
+
+
+        val inflater = layoutInflater
+        val savedPathRootLayout: LinearLayout = findViewById(R.id.transSavedPathLayout)
+
+        // trans_saved_button.xml을 inflate해 새로운 LinearLaytou 추가
+        val newLayout  = inflater.inflate(R.layout.trans_saved_path_button, savedPathRootLayout, false) as LinearLayout
+
+        // 동적으로 추가된 뷰의 텍스트 설정
+        val addressNicknameTextView: TextView = newLayout.findViewById(R.id.addressNicknameTextview)
+        addressNicknameTextView.text = "새로운 경로"
+
+        val departureTextView: TextView = newLayout.findViewById(R.id.departureTextView)
+        departureTextView.text = "출발지: 예시출발지"
+
+        val destinationTextView: TextView = newLayout.findViewById(R.id.destinationTextView)
+        destinationTextView.text = "목적지: 예시목적지"
+
+        // savedPathRootLayout에 추가
+        savedPathRootLayout.addView(newLayout)
+
+        //레이아웃 갱신
+        savedPathRootLayout.requestLayout()
     }
 
     private fun createPathBtt(savedPathThing: LinearLayout) {
