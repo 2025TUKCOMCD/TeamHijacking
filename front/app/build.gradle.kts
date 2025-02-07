@@ -101,6 +101,7 @@ dependencies {
 
     // 추가 라이브러리
     implementation("com.github.skydoves:powerspinner:1.2.7")
+    implementation("com.google.firebase:firebase-crashlytics-buildtools:3.0.2")
 
     // 테스트 라이브러리
     androidTestImplementation(platform(libs.compose.bom))
