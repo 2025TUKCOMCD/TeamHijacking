@@ -24,6 +24,7 @@
         android:contentDescription="@string/profileText"
         android:background="@drawable/setting_view"
         android:textColor="@android:color/black"
+        android:id="@+id/settingProfile"
         />
     <TextView
         android:layout_width="match_parent"
@@ -38,6 +39,7 @@
         android:contentDescription="@string/thisVersionText"
         android:background="@drawable/setting_view"
         android:textColor="@android:color/black"
+        android:id="@+id/settingNewestVersion"
         />
     <TextView
         android:layout_width="match_parent"
@@ -52,6 +54,7 @@
         android:contentDescription="@string/faqText"
         android:background="@drawable/setting_view"
         android:textColor="@android:color/black"
+        android:id="@+id/settingFAQ"
          />
     <TextView
         android:layout_width="match_parent"
