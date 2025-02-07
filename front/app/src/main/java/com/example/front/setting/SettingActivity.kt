@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import com.example.front.databinding.ActivitySettingBinding
-import org.w3c.dom.Text
 
 class SettingActivity : AppCompatActivity() {
 
