@@ -76,7 +76,7 @@ class MainActivity : AppCompatActivity() {
                 playEndSound()
                 announceAccessibility("화면의 끝에 도달했습니다.") // TalkBack 지원 추가
             } else if (diff > 0) {
-
+                hasReachedEnd = false // 스크롤이 다시 올라가면 다시 감지 가능하도록 설정
             }
         }
     }
