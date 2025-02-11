@@ -112,13 +112,14 @@ class AudioGuideBLEControl : AppCompatActivity() {
                         }
 
                         // RX 특성 구독 - UART방식 소통중 데이터를 받아오는 코드 TX가 입력될때 바로 반환 되기때문에 실시간으로 감지 필요
-                        val rxCharacteristic = gatt.getService(UUID.fromString("0003cdd0-0002-1000-8000-00805f9b0131"))
-                            ?.getCharacteristic(UUID.fromString("0003cdd0-0002-1000-8000-00805f9b0131"))
+                        val rxCharacteristic = gatt.getService(UUID.fromString("0003cdd0-0000-1000-8000-00805f9b0131"))
+                            ?.getCharacteristic(UUID.fromString("0003cdd2-0000-1000-8000-00805f9b0131"))
                         rxCharacteristic?.let {
                             //gatt.setCharateristicNotification = "지금부터 이 gatt 함수 중 rxCharacteristic의 변화를 감지 하겠다는 코드
                             gatt.setCharacteristicNotification(it, true)
+                            //CCCD ->( Client Charateristic Configuration Descriptor) 의 역할을 함 즉 특정 Characteristic의 Notification 및 Indication을 활성화 및 비활성화 하는 코드
                             val descriptor = it.getDescriptor(UUID.fromString("00002902-0000-1000-8000-00805f9b34fb"))
-                            descriptor?.value = BluetoothGattDescriptor.ENABLE_NOTIFICATION_VALUE
+                            descriptor?.value = BluetoothGattDescriptor.ENABLE_NOTIFICATION_VALUE //이게 0x0001 즉 Notification 활성화 코드
                             gatt.writeDescriptor(descriptor)
                         }
                     } else {
@@ -196,48 +197,19 @@ class AudioGuideBLEControl : AppCompatActivity() {
     }
 
     // 데이터 전송 함수
-    private fun sendDataToCharacteristic(data: ByteArray, uuid: UUID) {
-        Log.d("BluetoothControl", "함수입성")
-        Log.d("BluetoothControl",uuid.toString())
+    private fun sendDataToCharacteristic(data: ByteArray) {
         bluetoothGatt?.let { gatt ->
-            Log.d("BluetoothControl", "함수 실행전")
-            val characteristic = getTargetCharacteristic(uuid)  //만약 특정 uuid가 존재 한다면
-            Log.d("BluetoothControl", "변수지정")
-            Log.d("BluetoothControl", "characteristic: $characteristic")
-            if (characteristic != null) {
-                characteristic.value = data //uuid.value에 원하는 데이터를 입력
-                val success = gatt.writeCharacteristic(characteristic) //후 전송 이 gatt.writeCharacteristic으로 성공 여부 확인후 로그 찍기
-                Log.d("BluetoothControl", "데이터 전송 시도: $success")
+            val txCharacteristic = gatt.getService(UUID.fromString("0003cdd0-0000-1000-8000-00805f9b0131"))
+                ?.getCharacteristic(UUID.fromString("0003cdd1-0000-1000-8000-00805f9b0131")) // UART TX Characteristic UUID 사용
+            txCharacteristic?.let {
+                it.value = data
+                val success = gatt.writeCharacteristic(it)
                 if (success) {
                     Log.d("BluetoothControl", "데이터 전송 성공")
                 } else {
                     Log.d("BluetoothControl", "데이터 전송 실패")
                 }
-            } else {
-                Log.d("BluetoothControl", "특성 찾기 실패")
-            }
+            } ?: Log.d("BluetoothControl", "UART TX Characteristic 찾기 실패")
         } ?: Log.d("BluetoothControl", "bluetoothGatt 초기화되지 않음")
-    }
-
-    // 원하는 uuid가 포함되어있는지 알려주는함수 포함되어있으면 그 uuid를 반환함
-    private fun getTargetCharacteristic(uuid: UUID): BluetoothGattCharacteristic? {
-        Log.d("BluetoothControl", "Target함수쪽으로 들어옴")
-        // 여기서 원하는 특성 UUID를 사용하여 찾습니다.
-        val targetUUID = uuid
-
-        Log.d("BluetoothControl", "UUID지정")
-        bluetoothGatt?.let { gatt ->
-            Log.d("BluetoothControl", "GATT 서비스 수: ${gatt.services.size}")
-            for (service in gatt.services) {
-                Log.d("BluetoothControl", "서비스: ${service.uuid}")
-                for (characteristic in service.characteristics) {
-                    Log.d("BluetoothControl", "  특성: ${characteristic.uuid}")
-                    if (characteristic.uuid == targetUUID) {
-                        return characteristic
-                    }
-                }
-            }
-        }
-        return null
     }
 }
