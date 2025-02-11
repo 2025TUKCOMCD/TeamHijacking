@@ -68,6 +68,9 @@ class MainActivity : AppCompatActivity() {
     // ✅ 스크롤이 끝에 도달하면 소리 재생 및 TalkBack 이벤트 트리거
     private fun detectScrollEnd(scrollView: ScrollView) {
         scrollView.viewTreeObserver.addOnScrollChangedListener {
+            val view = scrollView.getChildAt(scrollView.childCount - 1)
+            val diff = view.bottom - (scrollView.height + scrollView.scrollY)
+
 
         }
     }
