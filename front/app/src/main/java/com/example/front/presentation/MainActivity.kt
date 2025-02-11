@@ -85,5 +85,10 @@ class MainActivity : AppCompatActivity() {
     // ✅ 1~3초 길이의 wav 파일 재생 (res/raw/end_reached.wav 파일 필요)
     private fun playEndSound() {
         mediaPlayer?.release() // 기존 재생 중인 미디어 플레이어 해제
+        mediaPlayer = MediaPlayer.create(this, R.raw.end_reached) // res/raw/end_reached.wav 파일 재생
+        mediaPlayer?.start()
     }
+
+    // ✅ TalkBack을 통해 "화면의 끝에 도달했습니다"를 읽어줌
+
 }

@@ -61,7 +61,7 @@
     <option name="autoReloadType" value="NONE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="5a34f773-8c82-4b0a-86d3-a37d3cf6ba80" name="Changes" comment="main 스크롤 이벤트 트리거 추가">
+    <list default="true" id="5a34f773-8c82-4b0a-86d3-a37d3cf6ba80" name="Changes" comment="test wav 파일 재생 함수 추가">
       <change beforePath="$PROJECT_DIR$/front/app/src/main/java/com/example/front/presentation/MainActivity.kt" beforeDir="false" afterPath="$PROJECT_DIR$/front/app/src/main/java/com/example/front/presentation/MainActivity.kt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -708,7 +708,31 @@
       <option name="project" value="LOCAL" />
       <updated>1739256939744</updated>
     </task>
-    <option name="localTasksCounter" value="45" />
+    <task id="LOCAL-00045" summary="main 스크롤 이벤트 트리거 talkback 지원 추가">
+      <option name="closed" value="true" />
+      <created>1739257185976</created>
+      <option name="number" value="00045" />
+      <option name="presentableId" value="LOCAL-00045" />
+      <option name="project" value="LOCAL" />
+      <updated>1739257185976</updated>
+    </task>
+    <task id="LOCAL-00046" summary="main 스크롤 이벤트 트리거 함수 수정">
+      <option name="closed" value="true" />
+      <created>1739257278711</created>
+      <option name="number" value="00046" />
+      <option name="presentableId" value="LOCAL-00046" />
+      <option name="project" value="LOCAL" />
+      <updated>1739257278711</updated>
+    </task>
+    <task id="LOCAL-00047" summary="test wav 파일 재생 함수 추가">
+      <option name="closed" value="true" />
+      <created>1739257464682</created>
+      <option name="number" value="00047" />
+      <option name="presentableId" value="LOCAL-00047" />
+      <option name="project" value="LOCAL" />
+      <updated>1739257464682</updated>
+    </task>
+    <option name="localTasksCounter" value="48" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -723,9 +747,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="xml 파일 수정2" />
-    <MESSAGE value="etc." />
-    <MESSAGE value="API 키값 변경" />
     <MESSAGE value="Iot 데이터 폴더 위치 변경 및 Iot 액티비티 작업" />
     <MESSAGE value="Iot 액티비티 기능 작업" />
     <MESSAGE value="Iot 데이터 추가 및 어뎁터 클래스 추가" />
@@ -748,6 +769,9 @@
     <MESSAGE value="main 스크롤 끝 감지 및 소리 재생 기능 추가" />
     <MESSAGE value="main 스크롤 이벤트 트리거" />
     <MESSAGE value="main 스크롤 이벤트 트리거 추가" />
-    <option name="LAST_COMMIT_MESSAGE" value="main 스크롤 이벤트 트리거 추가" />
+    <MESSAGE value="main 스크롤 이벤트 트리거 talkback 지원 추가" />
+    <MESSAGE value="main 스크롤 이벤트 트리거 함수 수정" />
+    <MESSAGE value="test wav 파일 재생 함수 추가" />
+    <option name="LAST_COMMIT_MESSAGE" value="test wav 파일 재생 함수 추가" />
   </component>
 </project>
