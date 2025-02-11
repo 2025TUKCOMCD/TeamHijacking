@@ -93,6 +93,12 @@ class MainActivity : AppCompatActivity() {
     private fun announceAccessibility(message: String) {
         val accessibilityManager = getSystemService(ACCESSIBILITY_SERVICE) as AccessibilityManager
         if (accessibilityManager.isEnabled) {
+            val event = AccessibilityEvent.obtain().apply {
+                eventType = AccessibilityEvent.TYPE_ANNOUNCEMENT
+                className = javaClass.name
+                packageName = packageName
+                text.add(message)
+            }
 
         }
     }
