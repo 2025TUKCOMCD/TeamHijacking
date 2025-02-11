@@ -12,6 +12,7 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.util.Log
+import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
@@ -142,14 +143,49 @@ class AudioGuideBLEControl : AppCompatActivity() {
                         val payload = data[2]
 
                         when (payload.toInt() and 0xFF) {  // 부호 없는 정수로 변환 후 처리
-                            0x00 -> Log.d("BluetoothControl", "ACK 수신 완료")
-                            0x01 -> Log.d("BluetoothControl", "NAK 수신 완료")
-                            in 0x10..0xF0 -> Log.d("BluetoothControl", "ACK + 사양 정보: ${String.format("0x%02X", payload)}")
-                            in 0x11..0xF1 -> Log.d("BluetoothControl", "NAK + 사양 정보: ${String.format("0x%02X", payload)}")
-                            else -> Log.w("BluetoothControl", "알 수 없는 데이터 수신: ${String.format("0x%02X", payload)}")
+                            0x00 -> {
+                                Log.d("BluetoothControl", "ACK 수신 완료")
+                                runOnUiThread{
+                                    Toast.makeText(this@AudioGuideBLEControl, "ACK 수신 완료",Toast.LENGTH_SHORT).show()
+                                }
+                            }
+                            0x01 -> {
+                                Log.d("BluetoothControl", "NAK 수신 완료")
+                                runOnUiThread{
+                                    Toast.makeText(this@AudioGuideBLEControl, "NAK 수신 완료",Toast.LENGTH_SHORT).show()
+                                }
+                            }
+                            in 0x10..0xF0 -> {
+                                Log.d(
+                                    "BluetoothControl",
+                                    "ACK + 사양 정보: ${String.format("0x%02X", payload)}"
+                                )
+                                runOnUiThread {
+                                    Toast.makeText(
+                                        this@AudioGuideBLEControl,
+                                        "ACK + 사양 정보: ${String.format("0x%02X", payload)}",
+                                        Toast.LENGTH_SHORT
+                                    ).show()
+                                }
+                            }
+                            in 0x11..0xF1 -> {
+                                Log.d("BluetoothControl", "NAK + 사양 정보: ${String.format("0x%02X", payload)}")
+                                runOnUiThread{
+                                    Toast.makeText(this@AudioGuideBLEControl, "NAK + 사양 정보: ${String.format("0x%02X", payload)}",Toast.LENGTH_SHORT).show()
+                                }
+                            }
+                            else -> {
+                                Log.w("BluetoothControl", "알 수 없는 데이터 수신: ${String.format("0x%02X", payload)}")
+                                runOnUiThread{
+                                    Toast.makeText(this@AudioGuideBLEControl, "잘못된 데이터 수신: ${String.format("0x%02X", payload)}}",Toast.LENGTH_SHORT).show()
+                                }
+                            }
                         }
                     } else {
                         Log.e("BluetoothControl", "잘못된 데이터 형식 또는 HEADER 오류: ${data.joinToString { byte -> String.format("%02x", byte) }}")
+                        runOnUiThread{
+                            Toast.makeText(this@AudioGuideBLEControl, "잘못된 데이터 형식 또는 HEADER 오류: ${data.joinToString{byte->String.format("%02x",byte)}}",Toast.LENGTH_SHORT).show()
+                        }
                     }
                 }
 
