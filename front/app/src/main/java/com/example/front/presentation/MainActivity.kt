@@ -71,7 +71,13 @@ class MainActivity : AppCompatActivity() {
             val view = scrollView.getChildAt(scrollView.childCount - 1)
             val diff = view.bottom - (scrollView.height + scrollView.scrollY)
 
+            if (diff == 0 && !hasReachedEnd) {
+                hasReachedEnd = true // 이미 도달했는지 확인하여 중복 실행 방지
+                playEndSound()
+                announceAccessibility("화면의 끝에 도달했습니다.") // TalkBack 지원 추가
+            } else if (diff > 0) {
 
+            }
         }
     }
 

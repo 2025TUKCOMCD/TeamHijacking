@@ -61,7 +61,7 @@
     <option name="autoReloadType" value="NONE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="5a34f773-8c82-4b0a-86d3-a37d3cf6ba80" name="Changes" comment="main 스크롤 끝 감지 및 소리 재생 기능 추가">
+    <list default="true" id="5a34f773-8c82-4b0a-86d3-a37d3cf6ba80" name="Changes" comment="main 스크롤 이벤트 트리거 추가">
       <change beforePath="$PROJECT_DIR$/front/app/src/main/java/com/example/front/presentation/MainActivity.kt" beforeDir="false" afterPath="$PROJECT_DIR$/front/app/src/main/java/com/example/front/presentation/MainActivity.kt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -692,7 +692,23 @@
       <option name="project" value="LOCAL" />
       <updated>1739256499765</updated>
     </task>
-    <option name="localTasksCounter" value="43" />
+    <task id="LOCAL-00043" summary="main 스크롤 이벤트 트리거">
+      <option name="closed" value="true" />
+      <created>1739256708198</created>
+      <option name="number" value="00043" />
+      <option name="presentableId" value="LOCAL-00043" />
+      <option name="project" value="LOCAL" />
+      <updated>1739256708198</updated>
+    </task>
+    <task id="LOCAL-00044" summary="main 스크롤 이벤트 트리거 추가">
+      <option name="closed" value="true" />
+      <created>1739256939744</created>
+      <option name="number" value="00044" />
+      <option name="presentableId" value="LOCAL-00044" />
+      <option name="project" value="LOCAL" />
+      <updated>1739256939744</updated>
+    </task>
+    <option name="localTasksCounter" value="45" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -707,8 +723,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="데이터 패키지 오류 수정" />
-    <MESSAGE value="그래들 코드 리펙토링2" />
     <MESSAGE value="xml 파일 수정2" />
     <MESSAGE value="etc." />
     <MESSAGE value="API 키값 변경" />
@@ -732,6 +746,8 @@
     <MESSAGE value="Main import 부분 추가" />
     <MESSAGE value="main 종점 도달 변수 추가" />
     <MESSAGE value="main 스크롤 끝 감지 및 소리 재생 기능 추가" />
-    <option name="LAST_COMMIT_MESSAGE" value="main 스크롤 끝 감지 및 소리 재생 기능 추가" />
+    <MESSAGE value="main 스크롤 이벤트 트리거" />
+    <MESSAGE value="main 스크롤 이벤트 트리거 추가" />
+    <option name="LAST_COMMIT_MESSAGE" value="main 스크롤 이벤트 트리거 추가" />
   </component>
 </project>
