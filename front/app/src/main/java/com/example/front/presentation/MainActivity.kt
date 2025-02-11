@@ -34,6 +34,10 @@ class MainActivity : AppCompatActivity() {
         val audioGuideButton: ImageButton = binding.btnAudioGuide
         val iotHomeButton: ImageButton = binding.btnIotHome
         val settingButton: ImageButton = binding.btnSetting
+        val scrollView: ScrollView = binding.root.findViewById(R.id.scrollView) // 스크롤뷰 가져오기
+
+        // 🚀 스크롤 끝 감지 및 소리 재생 기능 추가
+        detectScrollEnd(scrollView)
 
         // 각 버튼의 클릭 이벤트 처리
         transportButton.setOnClickListener {
