@@ -48,20 +48,17 @@ class AudioGuideBLEControl : AppCompatActivity() {
             if (bluetoothGatt != null) {
                 //UART 방식의 형태로 되어있어서 데이터를 넣는 부분과 받아오는부분 개발 필요
                 binding.button1.setOnClickListener {
-                    val locationuuid = UUID.fromString("0003cdd0-0001-1000-8000-00805f9b0131")
-                    sendDataToCharacteristic(byteArrayOf(0x31, 0x00, 0x01), locationuuid)
+                    sendDataToCharacteristic(byteArrayOf(0x31, 0x00, 0x01))
                     Log.d("현빈", "위치 유도")
                 }
 
                 binding.button2.setOnClickListener {
-                    val voice_guidanceuuid = UUID.fromString("0003cdd0-0001-1000-8000-00805f9b0131")
-                    sendDataToCharacteristic(byteArrayOf(0x31, 0x00, 0x02),voice_guidanceuuid)
+                    sendDataToCharacteristic(byteArrayOf(0x31, 0x00, 0x02))
                     Log.d("현빈", "신호 안내")
                 }
 
                 binding.button3.setOnClickListener {
-                    val voice_requestuuid = UUID.fromString("0003cdd0-0001-1000-8000-00805f9b0131")
-                    sendDataToCharacteristic(byteArrayOf(0x31, 0x00, 0x03),voice_requestuuid)
+                    sendDataToCharacteristic(byteArrayOf(0x31, 0x00, 0x03))
                     Log.d("현빈", "음성 안내")
                 }
             } else {
@@ -198,6 +195,7 @@ class AudioGuideBLEControl : AppCompatActivity() {
 
     // 데이터 전송 함수
     private fun sendDataToCharacteristic(data: ByteArray) {
+        Log.d("현빈", "함수입성")
         bluetoothGatt?.let { gatt ->
             val txCharacteristic = gatt.getService(UUID.fromString("0003cdd0-0000-1000-8000-00805f9b0131"))
                 ?.getCharacteristic(UUID.fromString("0003cdd1-0000-1000-8000-00805f9b0131")) // UART TX Characteristic UUID 사용
