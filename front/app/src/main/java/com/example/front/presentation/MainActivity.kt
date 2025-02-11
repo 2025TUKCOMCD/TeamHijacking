@@ -99,7 +99,12 @@ class MainActivity : AppCompatActivity() {
                 packageName = packageName
                 text.add(message)
             }
-
+            accessibilityManager.sendAccessibilityEvent(event)
         }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        mediaPlayer?.release() // 액티비티 종료 시 리소스 해제
     }
 }
