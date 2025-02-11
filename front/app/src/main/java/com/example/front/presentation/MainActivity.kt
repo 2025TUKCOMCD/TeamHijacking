@@ -90,5 +90,10 @@ class MainActivity : AppCompatActivity() {
     }
 
     // ✅ TalkBack을 통해 "화면의 끝에 도달했습니다"를 읽어줌
+    private fun announceAccessibility(message: String) {
+        val accessibilityManager = getSystemService(ACCESSIBILITY_SERVICE) as AccessibilityManager
+        if (accessibilityManager.isEnabled) {
 
+        }
+    }
 }
