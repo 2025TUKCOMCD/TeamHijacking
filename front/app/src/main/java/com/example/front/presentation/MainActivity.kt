@@ -1,10 +1,15 @@
 package com.example.front.presentation
 
 import android.content.Intent
+import android.media.MediaPlayer
 import android.os.Bundle
-//import android.widget.Button
+import android.view.ViewTreeObserver
+import android.view.accessibility.AccessibilityEvent
+import android.view.accessibility.AccessibilityManager
 import android.widget.ImageButton
+import android.widget.ScrollView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import com.example.front.audioguide.AudioGuideActivity
 import com.example.front.databinding.ActivityMainBinding
 import com.example.front.iot.HomeIotActivity
