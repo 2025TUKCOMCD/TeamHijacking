@@ -14,4 +14,4 @@
 .externalNativeBuild
 .cxx
 gradle.properties
-android/app/build
+android/app/build/
