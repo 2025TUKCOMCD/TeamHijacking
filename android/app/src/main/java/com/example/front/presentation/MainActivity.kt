@@ -1,17 +1,20 @@
 package com.example.front.presentation
 
-import android.R
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import androidx.viewpager2.widget.ViewPager2
+import com.example.front.presentation.Iot.Iot_page01
+import com.example.front.presentation.Iot.Iot_page02
+import com.example.front.presentation.Iot.Iot_page03
 import com.example.front.presentation.databinding.ActivityMainBinding
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 
 // FragmentStateAdapter
+//프래그먼트 화면 이동하게 해주는 코드
 class MyPagerAdapter(fragmentActivity: FragmentActivity) : FragmentStateAdapter(fragmentActivity) {
     override fun getItemCount(): Int = 3
 
@@ -37,7 +40,8 @@ class MainActivity : AppCompatActivity() {
         val pagerAdapter = MyPagerAdapter(this)
         viewPager.adapter = pagerAdapter
 
-        val tabLayout: TabLayout = binding.tabLayout // 선택 사항
+        //탭 레이아웃으로 아래쪽에 나오는 버튼 이름을 일단 설정해둠
+        val tabLayout: TabLayout = binding.tabLayout //
         TabLayoutMediator(tabLayout, viewPager) { tab, position ->
             tab.text = "Tab ${position + 1}"
         }.attach()
