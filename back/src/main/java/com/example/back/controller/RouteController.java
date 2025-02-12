@@ -1,5 +1,6 @@
 package com.example.back.controller;
 
+import com.example.back.dto.ResultDTO;
 import com.example.back.dto.route.RouteDTO;
 import com.example.back.dto.route.RouteResultDTO;
 import com.example.back.service.RouteService;
@@ -16,10 +17,15 @@ public class RouteController {
     @Autowired
     private RouteService routeService;
 
+    @GetMapping("/health")
+    public ResponseEntity<String> healthCheck() {
+        return ResponseEntity.ok("OK");
+    }
+
     @PostMapping("/route")
-    public ResponseEntity<List<RouteResultDTO>> getRoute(@RequestBody RouteDTO routeDTO) {
+    public ResponseEntity<List<ResultDTO>> getRoute(@RequestBody RouteDTO routeDTO) {
         System.out.println("🔍 요청 도착: " + routeDTO);
-        List<RouteResultDTO> response = routeService.fetchAndProcessRoutes(routeDTO);
+        List<ResultDTO> response = routeService.fetchAndProcessRoutes(routeDTO);
         System.out.println("📦 응답: " + response);
         return ResponseEntity.ok(response);
     }
