@@ -43,7 +43,20 @@ class MainActivity : AppCompatActivity() {
         //탭 레이아웃으로 아래쪽에 나오는 버튼 이름을 일단 설정해둠
         val tabLayout: TabLayout = binding.tabLayout //
         TabLayoutMediator(tabLayout, viewPager) { tab, position ->
-            tab.text = "Tab ${position + 1}"
+            when (position) {
+                0 -> {
+                    tab.setIcon(R.drawable.ic_home) // 홈 아이콘 설정
+                    tab.text = "홈" // 텍스트 (선택 사항)
+                }
+                1 -> {
+                    tab.setIcon(R.drawable.ic_add) // + 아이콘 설정
+                    tab.text = "추가" // 텍스트 (선택 사항)
+                }
+                2 -> {
+                    tab.setIcon(R.drawable.ic_settings) // 제어 아이콘 설정
+                    tab.text = "제어" // 텍스트 (선택 사항)
+                }
+            }
         }.attach()
     }
 }
