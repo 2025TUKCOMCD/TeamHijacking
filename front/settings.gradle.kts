@@ -21,3 +21,4 @@ dependencyResolutionManagement {
 
 rootProject.name = "front"
 include(":app")
+include(":android2")
