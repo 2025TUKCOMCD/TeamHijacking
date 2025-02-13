@@ -65,6 +65,7 @@ class AudioGuideBLEConnectActivity : AppCompatActivity() {
         devices = ArrayList()
         arrayAdapter = ArrayAdapter(this, android.R.layout.simple_list_item_1, deviceList)
         listView.adapter = arrayAdapter
+
         //만약 스캔버튼을 누르면
         scanButton.setOnClickListener {
             if (bluetoothAdapter?.isEnabled == true) {  //만약 blutoothAdapter가 사용가능하다면
@@ -123,11 +124,14 @@ class AudioGuideBLEConnectActivity : AppCompatActivity() {
                     device?.let {
                         val deviceName = it.name ?: "Unknown"  //만약 이름이 없다면 Unknown으로 지정
                         val deviceAddress = it.address  //기기의 맥주소를 받아옴
-                        deviceList.add("$deviceName - $deviceAddress")  //deviceList에 Name과 Address 순서대로 저장
-                        devices.add(it) // devices에 기기 추가
-                        arrayAdapter.notifyDataSetChanged() //UI를 다시그리게 arrayAdapter에 알려줌
-                        Log.d("Bluetooth", "블루투스 기기 발견: $deviceName - $deviceAddress")  //로그및 토스
-                        Toast.makeText(this@AudioGuideBLEConnectActivity, "발견된 기기: $deviceName", Toast.LENGTH_SHORT).show()
+                        if(deviceName.startsWith("B",ignoreCase=true)){
+                            deviceList.add("$deviceName - $deviceAddress")  //deviceList에 Name과 Address 순서대로 저장
+                            devices.add(it) // devices에 기기 추가
+                            arrayAdapter.notifyDataSetChanged() //UI를 다시그리게 arrayAdapter에 알려줌
+                            Log.d("Bluetooth", "블루투스 기기 발견: $deviceName - $deviceAddress")  //로그및 토스
+                            Toast.makeText(this@AudioGuideBLEConnectActivity, "발견된 기기: $deviceName", Toast.LENGTH_SHORT).show()
+
+                        }
                     }
                 }
             }
@@ -168,7 +172,7 @@ class AudioGuideBLEConnectActivity : AppCompatActivity() {
             Manifest.permission.BLUETOOTH_ADVERTISE,
             Manifest.permission.BLUETOOTH_ADMIN,  //관리자 정도의 기능 제공 일단 ADMIN으로 씀
             //  Manifest.permission.BLUETOOTH,  //간단한 기능 제공
-           // Manifest.permission.ACCESS_FINE_LOCATION // 필요에 따라 추가
+            // Manifest.permission.ACCESS_FINE_LOCATION // 필요에 따라 추가
         )
     } else {
         arrayOf(
