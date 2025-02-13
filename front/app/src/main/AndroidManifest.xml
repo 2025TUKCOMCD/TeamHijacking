@@ -92,7 +92,7 @@
 
         <meta-data
             android:name="com.google.android.wearable.standalone"
-            android:value="true" /> <!-- MainActivity 선언 -->
+            android:value="false" /> <!-- 시계 앱이 비독립형임을 선업 하는 코드 -->
         <activity
             android:name=".presentation.MainActivity"
             android:exported="true"
