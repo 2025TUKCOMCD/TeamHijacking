@@ -2,7 +2,6 @@ package com.example.back.controller;
 
 import com.example.back.dto.ResultDTO;
 import com.example.back.dto.route.RouteDTO;
-import com.example.back.dto.route.RouteResultDTO;
 import com.example.back.service.RouteService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;

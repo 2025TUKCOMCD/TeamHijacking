@@ -14,5 +14,4 @@ public class ResultDTO {
     private List<Integer> busRouteId;
     private String predictTime1;
     private String predictTime2;
-
 }
