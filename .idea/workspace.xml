@@ -61,8 +61,10 @@
     <option name="autoReloadType" value="NONE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="5a34f773-8c82-4b0a-86d3-a37d3cf6ba80" name="Changes" comment="메인 xml 파일 &quot;스크롤 뷰 id&quot; 추가">
+    <list default="true" id="5a34f773-8c82-4b0a-86d3-a37d3cf6ba80" name="Changes" comment="main 액티비티 오류 수정 및 wav 파일 추가">
+      <change beforePath="$PROJECT_DIR$/.idea/caches/deviceStreaming.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/caches/deviceStreaming.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/front/app/src/main/res/layout/activity_home_iot.xml" beforeDir="false" afterPath="$PROJECT_DIR$/front/app/src/main/res/layout/activity_home_iot.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -179,7 +181,7 @@
     &quot;git-widget-placeholder&quot;: &quot;watch-yeon&quot;,
     &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
     &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;C:/Users/klmot/AndroidStudioProjects/TeamHijacking/front&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/klmot/AndroidStudioProjects/TeamHijacking/front/app/src/main/res/raw&quot;,
     &quot;project.structure.last.edited&quot;: &quot;Suggestions&quot;,
     &quot;project.structure.proportion&quot;: &quot;0.17&quot;,
     &quot;project.structure.side.proportion&quot;: &quot;0.2&quot;,
@@ -188,6 +190,7 @@
 }</component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\klmot\AndroidStudioProjects\TeamHijacking\front\app\src\main\res\raw" />
       <recent name="C:\Users\klmot\AndroidStudioProjects\TeamHijacking\front" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
@@ -355,14 +358,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1735374590430</updated>
-    </task>
-    <task id="LOCAL-00004" summary="build.gradle 파일에 buildConfig = true 추가. buildFeatures에서 나는 오류 제거 위함">
-      <option name="closed" value="true" />
-      <created>1736395141961</created>
-      <option name="number" value="00004" />
-      <option name="presentableId" value="LOCAL-00004" />
-      <option name="project" value="LOCAL" />
-      <updated>1736395141961</updated>
     </task>
     <task id="LOCAL-00005" summary="[dev]&#10;AudioGuideActivity에 button layout 추가">
       <option name="closed" value="true" />
@@ -748,7 +743,15 @@
       <option name="project" value="LOCAL" />
       <updated>1739258229991</updated>
     </task>
-    <option name="localTasksCounter" value="53" />
+    <task id="LOCAL-00053" summary="main 액티비티 오류 수정 및 wav 파일 추가">
+      <option name="closed" value="true" />
+      <created>1739258788101</created>
+      <option name="number" value="00053" />
+      <option name="presentableId" value="LOCAL-00053" />
+      <option name="project" value="LOCAL" />
+      <updated>1739258788103</updated>
+    </task>
+    <option name="localTasksCounter" value="54" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -763,7 +766,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="DeviceControlHelper 추가" />
     <MESSAGE value="DeviceControlHelper 수정" />
     <MESSAGE value="VoiceControlHelper 클래스 추가" />
     <MESSAGE value="VoiceControlHelper 클래스 수정" />
@@ -788,6 +790,7 @@
     <MESSAGE value="(Test) TalkBack을 통해 화면의 끝에 도달했음을 알리는 함수 수정" />
     <MESSAGE value="액티비티 종료 시 리소스 해제 onDestroy 함수 추가" />
     <MESSAGE value="메인 xml 파일 &quot;스크롤 뷰 id&quot; 추가" />
-    <option name="LAST_COMMIT_MESSAGE" value="메인 xml 파일 &quot;스크롤 뷰 id&quot; 추가" />
+    <MESSAGE value="main 액티비티 오류 수정 및 wav 파일 추가" />
+    <option name="LAST_COMMIT_MESSAGE" value="main 액티비티 오류 수정 및 wav 파일 추가" />
   </component>
 </project>
