@@ -1,5 +1,6 @@
 package com.example.front.Login
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.widget.ImageButton
@@ -7,6 +8,9 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import com.example.front.databinding.ActivityLoginBinding
 import com.example.front.MainActivity
+import java.io.File
+import java.io.FileInputStream
+import java.util.Properties
 
 class LoginActivity : AppCompatActivity() {
     private lateinit var binding: ActivityLoginBinding
@@ -35,4 +39,15 @@ class LoginActivity : AppCompatActivity() {
     fun isUserLogin(){
 
     }
+
+    /*fun getApiKeyFromLocalProperties(context: Context): String {
+        val properties = Properties()
+        val localPropertiesFile = File(context.applicationInfo.dataDir, "../local.properties")
+
+        if (localPropertiesFile.exists()) {
+            properties.load(FileInputStream(localPropertiesFile))
+        }
+
+        return properties.getProperty("KAKAO_NATIVE_API_KEY", "")
+    }*/
 }

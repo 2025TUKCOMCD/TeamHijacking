@@ -15,5 +15,6 @@
         android:contentDescription="@string/login"
         android:src="@drawable/kakao_login_large_narrow"
         android:minHeight="30dp"
-        android:minWidth="122dp"/>
+        android:minWidth="122dp"
+        android:layout_margin="30dp"/>
 </LinearLayout>

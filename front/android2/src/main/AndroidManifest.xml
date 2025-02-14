@@ -10,25 +10,26 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.Front">
-        <activity
-            android:name=".Iot.Iot_page03"
-            android:exported="false" />
-        <activity
-            android:name=".Iot.Iot_page02"
-            android:exported="false" />
-        <activity
-            android:name=".Iot.Iot_page01"
-            android:exported="false" />
+        android:theme="@style/Theme.Front"
+        android:name=".MyApplication">
+
         <activity
             android:name=".Login.LoginActivity"
             android:exported="true" >
             <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
+                <action android:name="android.intent.action.VIEW" />
                 <category android:name="android.intent.category.LAUNCHER" />
+
+                <!-- https://quessr.tistory.com/84 를 참고하여 작성한,
+                카카오톡 로그인 구현을 위한 코드-->
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:host="oauth"
+                    android:scheme="kakao1638cec80abf113d47fdc29e5cd25fa1" />
+                <!-- api 바로 들어갔는데 이거 수정해야함 -->
             </intent-filter>
         </activity>
+
         <activity
             android:name=".MainActivity"
             android:exported="false">
