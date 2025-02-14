@@ -9,13 +9,26 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Front">
         <activity
-            android:name=".MainActivity"
-            android:exported="true">
+            android:name=".Iot.Iot_page03"
+            android:exported="false" />
+        <activity
+            android:name=".Iot.Iot_page02"
+            android:exported="false" />
+        <activity
+            android:name=".Iot.Iot_page01"
+            android:exported="false" />
+        <activity
+            android:name=".Login.LoginActivity"
+            android:exported="true" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+        <activity
+            android:name=".MainActivity"
+            android:exported="false">
         </activity>
     </application>
 
