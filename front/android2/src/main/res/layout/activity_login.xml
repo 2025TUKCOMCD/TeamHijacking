@@ -7,9 +7,13 @@
     android:orientation="vertical"
     tools:context=".Login.LoginActivity">
 
-    <Button
+    <ImageButton
         android:id="@+id/login_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="로그인" />
+        android:text="@string/login"
+        android:contentDescription="@string/login"
+        android:src="@drawable/kakao_login_large_narrow"
+        android:minHeight="30dp"
+        android:minWidth="122dp"/>
 </LinearLayout>
