@@ -103,6 +103,10 @@ dependencies {
     implementation("com.github.skydoves:powerspinner:1.2.7")
     implementation("com.google.firebase:firebase-crashlytics-buildtools:3.0.2")
 
+    implementation ("com.google.android.gms:play-services-wearable:18.1.0") // 데이터 레이블 사용 가능하게 해주는 코드
+    implementation ("androidx.wear:wear:1.3.0") //Wear OS 전용 UI(곡선 리스트, BoxInsetLayout 등) 사용 가능
+
+
     // 테스트 라이브러리
     androidTestImplementation(platform(libs.compose.bom))
     androidTestImplementation(libs.ui.test.junit4)

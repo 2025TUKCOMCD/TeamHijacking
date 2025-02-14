@@ -2,6 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
     <!-- 필요한 권한 -->
+    <uses-permission android:name="com.google.android.permission.PROVIDE_BACKGROUND" /><!-- 백그라운드 동기화 권한 -->
     <uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-permission android:name="android.permission.INTERNET" /> <!-- Wear OS 지원 -->
     <uses-feature android:name="android.hardware.type.watch" /> <!-- 정밀 위치 권한 요청 -->
