@@ -13,7 +13,7 @@ android {
     val localProperties = Properties().apply {
         load(project.rootProject.file("local.properties").inputStream())
     }
-    val kakao_native_api_key = localProperties.getProperty("KAKAO_NATIVE_API_KEY", "")
+    val kakao_native_api_key = localProperties.getProperty("kakao_native_api_key", "")
 
     defaultConfig {
         applicationId = "com.example.front"
@@ -68,10 +68,11 @@ dependencies {
     implementation(libs.constraintlayout)
     implementation(libs.play.services.wearable)
     testImplementation(libs.junit)
+    implementation("com.kakao.sdk:v2-user:2.20.6")
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso.core)
     implementation("androidx.compose.runtime:runtime:1.5.2")
     implementation("com.google.android.gms:play-services-location:21.0.1")
     implementation ("com.google.android.gms:play-services-wearable:18.1.0") // 데이터 레이블 사용 가능하게 해주는 코드
-    implementation (libs.v2.user) // 카카오 로그인
+    //implementation ("libs.v2.user") // 카카오 로그인
 }
