@@ -18,7 +18,7 @@
             <category android:name="android.intent.category.DEFAULT" />
             <category android:name="android.intent.category.BROWSABLE" />
             <data android:host="oauth"
-                android:scheme="${kakao_native_api_key}" />
+                android:scheme="${KAKAO_NATIVE_API_KEY}"/>
         </intent-filter>
     </activity>
 

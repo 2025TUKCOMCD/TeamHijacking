@@ -28,7 +28,7 @@ android {
         buildConfigField("String", "KAKAO_NATIVE_API_KEY", "\"$KAKAO_NATIVE_API_KEY\"")
 
         defaultConfig {
-            manifestPlaceholders["kakao_native_api_key"] = KAKAO_NATIVE_API_KEY
+            manifestPlaceholders["KAKAO_NATIVE_API_KEY"] = KAKAO_NATIVE_API_KEY
         }
     }
     buildFeatures {
