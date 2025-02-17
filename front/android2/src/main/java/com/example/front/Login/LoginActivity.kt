@@ -1,19 +1,19 @@
 package com.example.front.Login
 
-import android.content.Context
+//import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.widget.ImageButton
 import android.widget.Toast
-import androidx.activity.enableEdgeToEdge
+//import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import com.example.front.databinding.ActivityLoginBinding
 import com.example.front.MainActivity
 import com.kakao.sdk.auth.model.OAuthToken
 import com.kakao.sdk.user.UserApiClient
-import java.io.File
-import java.io.FileInputStream
-import java.util.Properties
+//import java.io.File
+//import java.io.FileInputStream
+//import java.util.Properties
 
 class LoginActivity : AppCompatActivity() {
     private lateinit var binding: ActivityLoginBinding
@@ -83,9 +83,9 @@ class LoginActivity : AppCompatActivity() {
         }
     }
 
-    //TODO:: 로그인 여부를 자동 확인하는 func 구현 필요
+    /*TODO:: 로그인 여부를 자동 확인하는 func 구현 필요
     fun isUserLogin(){
 
-    }
+    }*/
 
 }

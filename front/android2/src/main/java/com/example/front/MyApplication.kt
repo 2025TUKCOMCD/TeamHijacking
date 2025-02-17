@@ -1,7 +1,7 @@
-package com.example.front;
+package com.example.front
 
-import android.app.Application;
-import android.content.Context;
+import android.app.Application
+//import android.content.Context
 import android.util.Log
 import com.kakao.sdk.common.KakaoSdk
 import com.kakao.sdk.common.util.Utility
@@ -16,7 +16,7 @@ class MyApplication: Application() {
     override fun onCreate() {
         super.onCreate()
 
-        var keyHash = Utility.getKeyHash(this)
+        val keyHash = Utility.getKeyHash(this)
         Log.d("키 확인", keyHash)
         //카카오 SDK 초기화, 네이티브 앱 키를 사용해 SDK를 초기화
         KakaoSdk.init(this, BuildConfig.KAKAO_NATIVE_API_KEY)
