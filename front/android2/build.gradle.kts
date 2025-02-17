@@ -13,7 +13,7 @@ android {
     val localProperties = Properties().apply {
         load(project.rootProject.file("local.properties").inputStream())
     }
-    val kakao_native_api_key = localProperties.getProperty("kakao_native_api_key", "")
+    val KAKAO_NATIVE_API_KEY = localProperties.getProperty("KAKAO_NATIVE_API_KEY", "")
 
     defaultConfig {
         applicationId = "com.example.front"
@@ -25,10 +25,10 @@ android {
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
         // BuildConfig 필드에 API 키 추가
-        buildConfigField("String", "kakao_native_api_key", "\"$kakao_native_api_key\"")
+        buildConfigField("String", "KAKAO_NATIVE_API_KEY", "\"$KAKAO_NATIVE_API_KEY\"")
 
         defaultConfig {
-            manifestPlaceholders["kakao_native_api_key"] = kakao_native_api_key
+            manifestPlaceholders["kakao_native_api_key"] = KAKAO_NATIVE_API_KEY
         }
     }
     buildFeatures {
@@ -39,8 +39,8 @@ android {
     }
     buildTypes {
         debug {
-            buildConfigField("String", "kakao_native_api_key",
-                localProperties["kakao_native_api_key"].toString()
+            buildConfigField("String", "KAKAO_NATIVE_API_KEY",
+                localProperties["KAKAO_NATIVE_API_KEY"].toString()
             )
         }
         release {

@@ -14,6 +14,6 @@ class MyApplication: Application() {
         super.onCreate()
 
         //카카오 SDK 초기화, 네이티브 앱 키를 사용해 SDK를 초기화
-        KakaoSdk.init(this, BuildConfig.kakao_native_api_key)
+        KakaoSdk.init(this, BuildConfig.KAKAO_NATIVE_API_KEY)
     }
 }
