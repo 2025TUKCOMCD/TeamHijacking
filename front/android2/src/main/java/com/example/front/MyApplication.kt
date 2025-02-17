@@ -2,6 +2,7 @@ package com.example.front;
 
 import android.app.Application;
 import android.content.Context;
+import com.kakao.sdk.common.KakaoSdk
 
 /*https://uroa.tistory.com/43
    전역 변수? 를 공유하기 위한 Application Class.
