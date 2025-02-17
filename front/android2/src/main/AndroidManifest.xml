@@ -25,7 +25,7 @@
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
                 <data android:host="oauth"
-                    android:scheme="kakao1638cec80abf113d47fdc29e5cd25fa1" />
+                    android:scheme="${kakao_native_api_key}" />
                 <!-- api 바로 들어갔는데 이거 수정해야함 -->
             </intent-filter>
         </activity>

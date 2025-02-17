@@ -26,6 +26,11 @@ android {
 
         // BuildConfig 필드에 API 키 추가
         buildConfigField("String", "kakao_native_api_key", "\"$kakao_native_api_key\"")
+        buildConfigField("String", "kakao_native_app_url", "\"$kakao_native_api_key\"")
+
+        defaultConfig {
+            manifestPlaceholders["kakao_native_api_key"] = kakao_native_api_key
+        }
     }
     buildFeatures {
         compose = true
