@@ -14,10 +14,11 @@ import com.google.android.gms.tasks.Task
 import com.google.android.gms.wearable.DataItem
 import com.google.android.gms.wearable.PutDataMapRequest
 import com.google.android.gms.wearable.Wearable
+import com.google.android.gms.common.api.ApiException
 
 class Iot_page01 : Fragment() {
 
-    private val TAG = "Iot_page01" // 로그 태그 추가
+    private val TAG = "Iot_page01"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -35,7 +36,7 @@ class Iot_page01 : Fragment() {
         val dataBtn = view.findViewById<Button>(R.id.data_btn1)
 
         dataBtn.setOnClickListener {
-            sendData(requireContext(), "key1", "value2")
+            sendData(requireContext(), "key1", "value2") // Wear OS 기기 여부 확인 없이 바로 데이터 전송
         }
     }
 
@@ -49,13 +50,17 @@ class Iot_page01 : Fragment() {
         val putDataTask: Task<DataItem> = dataClient.putDataItem(putDataReq)
 
         putDataTask.addOnSuccessListener {
-            // 데이터 전송 성공
             Log.d(TAG, "데이터 전송 성공: $key = $value")
             Toast.makeText(context, "데이터 전송 성공", Toast.LENGTH_SHORT).show()
         }.addOnFailureListener { exception ->
-            // 데이터 전송 실패
-            Log.e(TAG, "데이터 전송 실패", exception)
-            Toast.makeText(context, "데이터 전송 실패", Toast.LENGTH_SHORT).show()
+            Log.e(TAG, "데이터 전송 실패: ${exception.message}", exception)
+            Toast.makeText(context, "데이터 전송 실패: ${exception.message}", Toast.LENGTH_SHORT).show()
+
+            if (exception is ApiException) {
+                val apiException = exception as ApiException
+                Log.e(TAG, "API Exception Status Code: ${apiException.statusCode}")
+                // 필요에 따라 추가적인 오류 처리 로직 구현 (예: 특정 상태 코드에 따른 다른 UI 표시)
+            }
         }
     }
 }

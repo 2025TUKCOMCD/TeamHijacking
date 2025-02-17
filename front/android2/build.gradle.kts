@@ -26,10 +26,8 @@ android {
 
         // BuildConfig 필드에 API 키 추가
         buildConfigField("String", "KAKAO_NATIVE_API_KEY", "\"$KAKAO_NATIVE_API_KEY\"")
+        manifestPlaceholders["KAKAO_NATIVE_API_KEY"] = KAKAO_NATIVE_API_KEY
 
-        defaultConfig {
-            manifestPlaceholders["KAKAO_NATIVE_API_KEY"] = KAKAO_NATIVE_API_KEY
-        }
     }
     buildFeatures {
         compose = true
