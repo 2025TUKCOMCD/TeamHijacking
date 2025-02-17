@@ -192,7 +192,7 @@ public class RouteServiceImpl implements RouteService {
                 List<BusArriveProcessDTO.arriveDetail> arriveDetails = fetchAndBusArrive(startLocalStationID, busLocalBlID, startStationInfo);
                 String predictTime1 = null;
                 String predictTime2 = null;
-                if (!arriveDetails.isEmpty() && !arriveDetails.get(0).getMsgBody().getItemList().isEmpty()) {
+                if (arriveDetails != null && arriveDetails.get(0).getMsgBody() != null && arriveDetails.get(0).getMsgBody().getItemList() != null) {
                     BusArriveProcessDTO.Item firstItem = arriveDetails.get(0).getMsgBody().getItemList().get(0);
                     predictTime1 = firstItem.getArrmsg1();
                     predictTime2 = firstItem.getArrmsg2();
