@@ -2,6 +2,7 @@ package com.example.front.transportation
 
 import android.content.Intent
 import android.os.Bundle
+import android.widget.Button
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
@@ -9,8 +10,7 @@ import androidx.appcompat.app.AppCompatActivity
 import com.example.front.R
 import com.example.front.databinding.ActivityTransportationSavedPathBinding
 
-    /* onCreate()시, 저장된 경로를 데이터베이스로부터 받아오는 whatSavedPath() 함수를 이용해
-    *  버튼 생성 필요 */
+    /* onCreate()시, 저장된 경로를 데이터베이스로부터 받아오는 whatSavedPath() 함수를 이용해 버튼 생성 필요 */
 class TransportationSavedPathActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityTransportationSavedPathBinding
@@ -22,52 +22,69 @@ class TransportationSavedPathActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
 
         binding = ActivityTransportationSavedPathBinding.inflate(layoutInflater)
-        setContentView(binding.main)
+        setContentView(binding.root)
 
         //각 요소 바인딩, someRootThing은 추후 삭제 필요.
-        val someRootThing: TextView = binding.someRootThing
-        val savedPathRootLayout: LinearLayout = binding.savedPathRootLayout
-        val favouritePathStarBtt: ImageView = binding.favouritePathStarBtt
+        val someRootThing: LinearLayout = binding.someRootThing
+        val imsiBtt4: Button = binding.imsiBtt4
 
-        //textView에 text 삽입
-        someRootThing.text="여기에서 텍스트 수정이 가능함"
+
+        imsiBtt4.setOnClickListener{
+            /* 임시 버튼, 서버가 완성되면 서버의 데이터베이스를 순회하며 추가하도록 수정 예정*/
+            openView()
+        }
 
         someRootThing.setOnClickListener{
-            //일단 한 번 읽어주고
-            //세부 정보로 넘어감
+            //일단 한 번 읽어주고 세부 정보로 넘어감
             // 새로운 경로 탐색 버튼 클릭 시 실행할 로직
+            /* TODO::
+               1. intent 전달 시에 매개변수로 여러가지 전달하여, 그에 맞게 TransportNewPathSearchActivity가
+               수정되도록 코드 바꾸어야 함.
+            * */
             val intent = Intent(this, TransportNewPathSearchActivity::class.java)
             startActivity(intent)
         }
 
-        favouritePathStarBtt.setOnClickListener{
-            //임시로 이 곳에 구현, 동적 버튼 생성/ 각 버튼에 대한 구분이 가능해지면
-            //이 역시 function으로 바꾸어 각 경로에 대해서만 작용하도록 바꾸어야 함
-            starBtnClickListener(favouritePathStarBtt)
-        }
-
     }
 
-    private fun openView() {
+    private fun openView(
+            addressNicknameText: String = "새로운 경로",
+            departureText: String = "임시 출발지",
+            destinationText: String = "임시 목적지",
+            favouritePathStarValue: Boolean = false) {
         /*추후 TransSavedPathActivity가 열릴 시 작동할 function,
         * onCreate시 작동하여, database로부터 경로 목록 받아와 그 갯수만큼 버튼 생성.
         * 버튼 생성 function은 하단의 createPathBtt 이용, 순회하며 받아옴 */
+
+        val inflater = layoutInflater
+        val savedPathRootLayout: LinearLayout = findViewById(R.id.transSavedPathLayout)
+
+        // trans_saved_button.xml을 inflate해 새로운 LinearLaytout 추가
+        val newLayout:LinearLayout = inflater.inflate(R.layout.trans_saved_path_button, savedPathRootLayout, false) as LinearLayout
+
+        // 동적으로 추가된 뷰 설정
+        val addressNicknameTextView: TextView = newLayout.findViewById(R.id.addressNicknameTextview)
+        val departureTextView: TextView = newLayout.findViewById(R.id.departureTextView)
+        val destinationTextView: TextView = newLayout.findViewById(R.id.destinationTextView)
+        val favouritePathStarBtt: ImageView = newLayout.findViewById(R.id.favouritePathStarBtt)
+
+        //각 변수에 text 설정
+        addressNicknameTextView.text = addressNicknameText
+        departureTextView.text = "출발지: "+departureText
+        destinationTextView.text = "목적지: "+destinationText
+
+        // 즐겨찾기 버튼 클릭 이벤트 설정
+        favouritePathStarBtt.setOnClickListener {
+            starBtnClickListener(favouritePathStarBtt)
+        }
+
+        // savedPathRootLayout에 추가
+        savedPathRootLayout.addView(newLayout)
+
+        //레이아웃 갱신
+        savedPathRootLayout.requestLayout()
     }
 
-    private fun createPathBtt(savedPathThing: LinearLayout) {
-        //하... 각 path를 불러오고, text를 설정하는 기능
-        //아예 다른 activity로 만들어서 불러오는게 나을지도 모르겠음..
-        /* todo::
-        *   1. path 지정 btt UIUX 디자인 (완료)
-        *   2. UIUX 개발 (대략 완료? ㅠㅠ)
-        *   3. 해당 버튼을 이 activity에 불러오도록 구현
-        *   4. 그 요소의 text 변경하도록 대략적으로..  */
-
-        val childAddressNickname: TextView
-        //val favouritePathStarBtt: ImageView
-        val departureTextView: TextView
-        val destinationTextView: TextView
-    }
 
     private fun starBtnClickListener(favouritePathStar: ImageView) {
         /*id가 savedPathRootLayout인, 일종의 저장 경로 띄워주기용 view의
@@ -101,14 +118,4 @@ class TransportationSavedPathActivity : AppCompatActivity() {
         }
     }
 
-    private fun whatSavedPath() {
-        /* 동적으로 생성된 LinearLayout- 요소에, 출발지, 목적지, 닉네임 등을 setting하는 함수
-        * 20250124 기준 사용하고 있는 변수는 다음과 같음::
-        *   addressNicknameTextView: TextView = 저장된 경로의 닉네임 삽입
-        *   favouritePathStarBtt: ImageView = 즐겨찾기 버튼,
-        *   departureTextView: TextView = 출발지 Text를 set할 곳
-        *   destinationTextView: TextView = 도착지 Text를 set할 곳
-        * todo::
-        *    1. 경로 정렬하도록 하는 function */
-    }
 }
