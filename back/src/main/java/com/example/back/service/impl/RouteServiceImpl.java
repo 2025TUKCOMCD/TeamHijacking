@@ -21,6 +21,7 @@ import java.util.*;
 import java.util.concurrent.*;
 import java.util.stream.Collectors;
 
+
 @Service
 public class RouteServiceImpl implements RouteService {
     private final String ODsayBaseURL = "https://api.odsay.com/v1/api/";
@@ -55,7 +56,7 @@ public class RouteServiceImpl implements RouteService {
     private final RouteApi routeApi = OdsayRetrofit.create(RouteApi.class);
     private final BusApi busApi = SeoulRetrofit.create(BusApi.class);
 
-    private final ExecutorService executorService = Executors.newFixedThreadPool(3);
+    private final ExecutorService executorService = Executors.newFixedThreadPool(10);
 
     private double calculateRouteScore(RouteProcessDTO.Path path) {
         RouteProcessDTO.Info info = path.getInfo();
@@ -98,6 +99,7 @@ public class RouteServiceImpl implements RouteService {
                                 .limit(3)
                                 .map(Map.Entry::getKey)
                                 .collect(Collectors.toList());
+                        System.out.println("🔍 최종 경로: " + sortedPaths);
 
                         CompletableFuture<List<ResultDTO>> futureResult = asyncRouteDetails(sortedPaths);
                         return futureResult.join();
@@ -169,95 +171,144 @@ public class RouteServiceImpl implements RouteService {
                 .collect(Collectors.joining(" | "));
     }
 
-    private ResultDTO result(RouteProcessDTO.Path path) {
-        ResultDTO resultDTO = new ResultDTO();
-        resultDTO.setTotalTime(path.getInfo().getTotalTime());
-        resultDTO.setTransitCount(
-                path.getInfo().getBusTransitCount() + path.getInfo().getSubwayTransitCount()
-        );
-        resultDTO.setMainTransitType(mapTransitType(path.getPathType()));
-        resultDTO.setDetailedPath(mapDetailedPath(path.getSubPath()));
-        resultDTO.setDetailTrans(mapDetailTrans(path.getSubPath()));
-
-        List<CompletableFuture<Void>> busDetailFutures = new ArrayList<>();
-        List<Integer> busIndices = new ArrayList<>();
-
-        for (int i = 0; i < path.getSubPath().size(); i++) {
-            RouteProcessDTO.SubPath subPath = path.getSubPath().get(i);
-            if (subPath.getTrafficType() == 2) { // 버스
-                final int index = i;
+    private CompletableFuture<Map.Entry<Integer, Map<String, Object>>> processTrafficType2Async(RouteProcessDTO.SubPath subPath, int index) {
+        return CompletableFuture.supplyAsync(() -> {
+            try {
                 int busID = subPath.getLane().get(0).getBusID();
                 int startID = subPath.getStartID();
                 int endID = subPath.getEndID();
                 int busLocalBlID = subPath.getLane().get(0).getBusLocalBlID();
                 int startLocalStationID = subPath.getStartLocalStationID();
 
-                if (busID != 0 && startID != 0 && endID != 0) {
-                    // 비동기
-                    CompletableFuture<Void> busInfoFuture = fetchBusLaneDetail(busID)
-                            .thenAcceptAsync(busDetailProcess -> {
-                                if (busDetailProcess != null) {
-                                    List<Integer> stationInfos = compareStationIDs(busDetailProcess, startID, endID);
-                                    if (!stationInfos.isEmpty() && stationInfos.get(0) != -1) {
-                                        int startStationInfo = stationInfos.get(0);
-                                        int endStationInfo = stationInfos.get(1);
-                                        List<Integer> middleStationInfos = stationInfos.subList(2, stationInfos.size());
-                                        resultDTO.setBusRouteId(middleStationInfos);
+                // fetchBusLaneDetail 함수 호출
+                BusDetailProcessDTO.BusLaneDetail busDetail = fetchBusLaneDetail(busID);
 
-                                        List<BusArriveProcessDTO.arriveDetail> arriveDetails = fetchAndBusArrive(startLocalStationID, busLocalBlID, startStationInfo);
-                                        if (!arriveDetails.isEmpty() && !arriveDetails.get(0).getMsgBody().getItemList().isEmpty()) {
-                                            BusArriveProcessDTO.Item firstItem = arriveDetails.get(0).getMsgBody().getItemList().get(0);
-                                            resultDTO.setPredictTime1(firstItem.getArrmsg1());
-                                            resultDTO.setPredictTime2(firstItem.getArrmsg2());
-                                        } else {
-                                            resultDTO.setPredictTime1(null);
-                                            resultDTO.setPredictTime2(null);
-                                        }
-                                    }
-                                }
-                            }, executorService)
-                            .exceptionally(ex -> {
-                                ex.printStackTrace();
-                                return null; // 예외 발생 시 null 반환
-                            });
+                // compareStationIDs 함수 호출
+                List<Integer> stationInfos = compareStationIDs(busDetail, startID, endID);
 
-                    busDetailFutures.add(busInfoFuture);
-                    busIndices.add(index);
+                int startStationInfo = stationInfos.get(0);
+                int endStationInfo = stationInfos.get(1);
+                List<Integer> middleStationInfos = stationInfos.subList(2, stationInfos.size());
+                List<BusArriveProcessDTO.arriveDetail> arriveDetails = fetchAndBusArrive(startLocalStationID, busLocalBlID, startStationInfo);
+                String predictTime1 = null;
+                String predictTime2 = null;
+                if (!arriveDetails.isEmpty() && !arriveDetails.get(0).getMsgBody().getItemList().isEmpty()) {
+                    BusArriveProcessDTO.Item firstItem = arriveDetails.get(0).getMsgBody().getItemList().get(0);
+                    predictTime1 = firstItem.getArrmsg1();
+                    predictTime2 = firstItem.getArrmsg2();
+                } else {
+                    predictTime1 = "서비스 지역 아님";
+                    predictTime2 = "서비스 지역 아님";
                 }
+
+                // 결과를 Map으로 저장
+                Map<String, Object> dataMap = new HashMap<>();
+                dataMap.put("startStationInfo", startStationInfo);
+                dataMap.put("endStationInfo", endStationInfo);
+                dataMap.put("middleStationInfos", middleStationInfos);
+                dataMap.put("predictTime1", predictTime1);
+                dataMap.put("predictTime2", predictTime2);
+
+                return new AbstractMap.SimpleEntry<>(index, dataMap);
+            } catch (IOException e) {
+                e.printStackTrace();
+                return null;
+            }
+        }, executorService);
+    }
+
+
+
+    private CompletableFuture<Map.Entry<Integer, Map<String, Object>>> processTrafficType3Async(RouteProcessDTO.SubPath subPath, int index) {
+        return CompletableFuture.supplyAsync(() -> {
+            // trafficType 3에 대한 비동기 작업 로직 구현
+            System.out.println("Processing TrafficType 3 SubPath: " + subPath + " with index: " + index);
+            return new AbstractMap.SimpleEntry<>(index, null);
+        }, executorService);
+    }
+
+
+    private ResultDTO result(RouteProcessDTO.Path path) {
+        // path별 pathType, info, subPathList 처리
+        int pathType = path.getPathType();
+        RouteProcessDTO.Info info = path.getInfo();
+        List<RouteProcessDTO.SubPath> subPathList = path.getSubPath();
+
+        // ResultDTO 객체 생성
+        ResultDTO resultDTO = new ResultDTO();
+        resultDTO.setTotalTime(info.getTotalTime());
+        resultDTO.setTransitCount(
+                info.getBusTransitCount() + info.getSubwayTransitCount()
+        );
+        resultDTO.setMainTransitType(mapTransitType(pathType));
+        resultDTO.setDetailedPath(mapDetailedPath(subPathList));
+        resultDTO.setDetailTrans(mapDetailTrans(subPathList));
+
+        List<CompletableFuture<Map.Entry<Integer, Map<String, Object>>>> futureList = new ArrayList<>();
+
+        for (int i = 0; i < subPathList.size(); i++) {
+            RouteProcessDTO.SubPath subPath = subPathList.get(i);
+            int index = i; // 현재 인덱스 저장
+
+            if (subPath.getTrafficType() == 2) {
+                CompletableFuture<Map.Entry<Integer, Map<String, Object>>> future = processTrafficType2Async(subPath, index);
+                futureList.add(future);
+            } else if (subPath.getTrafficType() == 3) {
+                CompletableFuture<Map.Entry<Integer, Map<String, Object>>> future = processTrafficType3Async(subPath, index);
+                futureList.add(future);
             }
         }
 
-        // 모든 비동기 작업 완료 후 결과 수집
-        CompletableFuture.allOf(busDetailFutures.toArray(new CompletableFuture[0])).join();
+        // 모든 비동기 작업이 완료될 때까지 기다림
+        CompletableFuture.allOf(futureList.toArray(new CompletableFuture[0])).join();
 
-        System.out.println(resultDTO);
-        // 모든 비동기 작업 중 하나라도 null이면 resultDTO를 null로 설정
+        // 비동기 작업 결과 처리 (인덱스를 사용하여 원래 순서 유지)
+        futureList.forEach(future -> {
+            try {
+                Map.Entry<Integer, Map<String, Object>> result = future.get();
+                // index 추출
+                int subPathIndex = result.getKey();
+                RouteProcessDTO.SubPath processedSubPath = subPathList.get(subPathIndex);
+                Map<String, Object> dataMap = result.getValue();
+
+                // subPath 데이터를 ResultDTO에 설정
+                if (processedSubPath.getTrafficType() == 2) {
+                    resultDTO.getRouteIds().add((List<Integer>) dataMap.get("middleStationInfos"));
+                    resultDTO.getPredictTimes1().add((String) dataMap.get("predictTime1"));
+                    resultDTO.getPredictTimes2().add((String) dataMap.get("predictTime2"));
+                } else if (processedSubPath.getTrafficType() == 3) {
+                    // 예시: 교통 유형이 2인 경우
+
+                }
+
+                System.out.println("처리 완료된 subPath 인덱스: " + subPathIndex);
+            } catch (InterruptedException | ExecutionException e) {
+                e.printStackTrace();
+            }
+        });
+
+
 
         return resultDTO;
     }
 
 
 
-    private CompletableFuture<BusDetailProcessDTO.BusLaneDetail> fetchBusLaneDetail(int busID) {
-        return CompletableFuture.supplyAsync(() -> {
-            try {
-                Call<ResponseBody> call = routeApi.busLaneDetail(busID, Odsay_apiKey);
-                ResponseBody responseBody = call.execute().body();
+    private BusDetailProcessDTO.BusLaneDetail fetchBusLaneDetail(int busID) throws IOException {
+        Call<ResponseBody> call = routeApi.busLaneDetail(busID, Odsay_apiKey);
+        ResponseBody responseBody = call.execute().body();
 
-                if (responseBody != null) {
-                    String rawJson = responseBody.string();
-                    BusDetailProcessDTO.BusLaneDetail parsedResponse = gson.fromJson(rawJson, BusDetailProcessDTO.BusLaneDetail.class);
-                    return parsedResponse != null ? parsedResponse : new BusDetailProcessDTO.BusLaneDetail();
-                }
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
+        if (responseBody != null) {
+            String rawJson = responseBody.string();
+            BusDetailProcessDTO.BusLaneDetail parsedResponse = gson.fromJson(rawJson, BusDetailProcessDTO.BusLaneDetail.class);
+            return parsedResponse != null ? parsedResponse : new BusDetailProcessDTO.BusLaneDetail();
+        } else {
             return new BusDetailProcessDTO.BusLaneDetail();
-        }, executorService);
+        }
     }
 
+
     private List<Integer> compareStationIDs(BusDetailProcessDTO.BusLaneDetail busDetailProcess, int startID, int endID) {
-        System.out.println(busDetailProcess);
 
         Integer startStationIndex = null;
         Integer endStationIndex = null;
@@ -315,10 +366,11 @@ public class RouteServiceImpl implements RouteService {
             if (responseBody != null) {
                 String rawJson = responseBody.string();
                 BusArriveProcessDTO.arriveDetail parsedResponse = gson.fromJson(rawJson, BusArriveProcessDTO.arriveDetail.class);
-                System.out.println(parsedResponse);
 
                 // 리스트 형태로 반환
                 return parsedResponse != null ? List.of(parsedResponse) : List.of();
+            }else {
+                return List.of();
             }
         } catch (IOException | JsonSyntaxException e) {
             e.printStackTrace();
