@@ -41,7 +41,7 @@ jobs:
           echo "SMARTTHINGS_API_TOKEN=${{ secrets.SMARTTHINGS_API_TOKEN }}" >> ./front/local.properties
           echo "Public_Bus_APIKEY=${{ secrets.Public_Bus_APIKEY }}" >> ./front/local.properties
           echo "Public_Subway_APIKEY=${{ secrets.Public_Subway_APIKEY }}" >> ./front/local.properties
-          echo "KAKAO_NATIVE_API_KEY"=${{ secrets.KAKAO_NATIVE_API_KEY }}" >> ./front/local.properties
+          echo "KAKAO_NATIVE_API_KEY=${{ secrets.KAKAO_NATIVE_API_KEY }}" >> ./front/local.properties
 
       - name: Grant execute permission for gradlew
         working-directory: ./front
