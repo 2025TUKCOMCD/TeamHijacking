@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
     <!-- 필요한 권한 -->
     <uses-permission android:name="com.google.android.permission.PROVIDE_BACKGROUND" /><!-- 백그라운드 동기화 권한 -->
     <uses-permission android:name="android.permission.WAKE_LOCK" />
@@ -33,58 +32,71 @@
         <activity
             android:name=".transportation.TransRealtimeLocationActivity"
             android:exported="false"
+            android:taskAffinity=""
             android:theme="@style/Transportation_Main_Theme" />
         <activity
             android:name=".audioguide.AudioGuideBLEControl"
             android:exported="false"
+            android:taskAffinity=""
             android:theme="@style/Transportation_Main_Theme"  />
         <activity
             android:name=".audioguide.AudioGuideBLEConnectActivity"
             android:exported="false"
+            android:taskAffinity=""
             android:theme="@style/Transportation_Main_Theme" />
         <activity
             android:name=".transportation.TransportInfrmationActivity"
             android:exported="false"
+            android:taskAffinity=""
             android:theme="@style/Transportation_Main_Theme" />
-        <activity
+       <!-- <activity
             android:name=".transportation.dialog.TransSavedDialog"
             android:exported="false"
-            android:theme="@style/Transportation_Main_Theme" />
+            android:theme="@style/Transportation_Main_Theme" />-->
         <activity
             android:name=".transportation.TransportDoyouWantSaveActivity"
             android:exported="false"
+            android:taskAffinity=""
             android:theme="@style/Transportation_Main_Theme" />
         <activity
             android:name=".transportation.TransportNewPathSearchActivity"
             android:exported="false"
+            android:taskAffinity=""
             android:theme="@style/Transportation_Main_Theme" />
         <activity
             android:name=".transportation.TransNewPathDetailActivity"
             android:exported="false"
+            android:taskAffinity=""
             android:theme="@style/Transportation_Main_Theme" />
         <activity
             android:name=".transportation.TransportationNewPathActivity"
             android:exported="false"
+            android:taskAffinity=""
             android:theme="@style/Transportation_Main_Theme" />
         <activity
             android:name=".transportation.TransportationSavedPathActivity"
             android:exported="false"
+            android:taskAffinity=""
             android:theme="@style/Transportation_Main_Theme" />
         <activity
             android:name=".iot.HomeIotActivity"
             android:exported="false"
+            android:taskAffinity=""
             android:theme="@style/Transportation_Main_Theme" />
         <activity
             android:name=".setting.SettingActivity"
             android:exported="false"
+            android:taskAffinity=""
             android:theme="@style/Transportation_Main_Theme" />
         <activity
             android:name=".audioguide.AudioGuideActivity"
             android:exported="false"
+            android:taskAffinity=""
             android:theme="@style/Transportation_Main_Theme" /> <!-- 화면설정시에 Theme이 설정되어있지 않으면 화면 호출시에 오류가 남 화면 늘릴시마다 설정해 주어야 할듯 -->
         <activity
             android:name=".transportation.TransportationMainActivity"
             android:exported="false"
+            android:taskAffinity=""
             android:theme="@style/Transportation_Main_Theme" />
 
         <uses-library
@@ -97,6 +109,7 @@
         <activity
             android:name=".presentation.MainActivity"
             android:exported="true"
+            android:taskAffinity=""
             android:theme="@style/MainActivityTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -106,9 +119,10 @@
         </activity>
         <service
             android:name=".iot.DataListenerService"
-            android:exported="true">  <intent-filter>
-            <action android:name="com.google.android.gms.wearable.BIND_LISTENER" />
-        </intent-filter>
+            android:exported="true">
+            <intent-filter>
+                <action android:name="com.google.android.gms.wearable.BIND_LISTENER" />
+            </intent-filter>
         </service>
 
 
