@@ -8,6 +8,18 @@ import android.util.Log
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
 
+
+
+
+
+
+
+
+
+
+//----------------------------권한 요청용 코드 -------------------------------
+//필요한 권한들을 쭉 적어놓음 나중에 사용 예정
+//버전에 따라 요구해야 하는 permission 구분
 private val requiredPermissions = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
     arrayOf(
         Manifest.permission.BLUETOOTH_SCAN,

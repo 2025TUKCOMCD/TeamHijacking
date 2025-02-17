@@ -20,6 +20,16 @@ import com.example.front.databinding.ActivityAudioGuideBlecontrolBinding
 import java.util.UUID
 
 class AudioGuideBLEControl : AppCompatActivity() {
+    //전송할 데이터를 기능에 따라 변수 이름 지정
+    private var position_derrivation = byteArrayOf(0x31, 0x00, 0x01)
+    private var signal_guide = byteArrayOf(0x31, 0x00, 0x02)
+    private var audio_guide = byteArrayOf(0x31, 0x00, 0x03)
+    //사용할 서비스 및 특성을 기능에 따라 변수 이름 지정
+    private var serviceUUID = UUID.fromString("0003cdd0-0000-1000-8000-00805f9b0131")
+    private var txCharacteristicUUID = UUID.fromString("0003cdd2-0000-1000-8000-00805f9b0131")
+    private var rxCharacteristicUUID = UUID.fromString("0003cdd1-0000-1000-8000-00805f9b0131")
+    private var cccdUUID = UUID.fromString("00002902-0000-1000-8000-00805f9b34fb")
+
 
     private lateinit var binding: ActivityAudioGuideBlecontrolBinding
     private var bluetoothGatt: BluetoothGatt? = null
@@ -48,17 +58,17 @@ class AudioGuideBLEControl : AppCompatActivity() {
             if (bluetoothGatt != null) {
                 //UART 방식의 형태로 되어있어서 데이터를 넣는 부분과 받아오는부분 개발 필요
                 binding.button1.setOnClickListener {
-                    sendDataToCharacteristic(byteArrayOf(0x31, 0x00, 0x01))
+                    sendDataToCharacteristic(position_derrivation)
                     Log.d("현빈", "위치 유도")
                 }
 
                 binding.button2.setOnClickListener {
-                    sendDataToCharacteristic(byteArrayOf(0x31, 0x00, 0x02))
+                    sendDataToCharacteristic(signal_guide)
                     Log.d("현빈", "신호 안내")
                 }
 
                 binding.button3.setOnClickListener {
-                    sendDataToCharacteristic(byteArrayOf(0x31, 0x00, 0x03))
+                    sendDataToCharacteristic(audio_guide)
                     Log.d("현빈", "음성 안내")
                 }
             } else {
@@ -109,13 +119,13 @@ class AudioGuideBLEControl : AppCompatActivity() {
                         }
 
                         // RX 특성 구독 - UART방식 소통중 데이터를 받아오는 코드 TX가 입력될때 바로 반환 되기때문에 실시간으로 감지 필요
-                        val rxCharacteristic = gatt.getService(UUID.fromString("0003cdd0-0000-1000-8000-00805f9b0131"))
-                            ?.getCharacteristic(UUID.fromString("0003cdd2-0000-1000-8000-00805f9b0131"))
+                        val rxCharacteristic = gatt.getService(serviceUUID)
+                            ?.getCharacteristic(rxCharacteristicUUID)
                         rxCharacteristic?.let {
                             //gatt.setCharateristicNotification = "지금부터 이 gatt 함수 중 rxCharacteristic의 변화를 감지 하겠다는 코드
                             gatt.setCharacteristicNotification(it, true)
                             //CCCD ->( Client Charateristic Configuration Descriptor) 의 역할을 함 즉 특정 Characteristic의 Notification 및 Indication을 활성화 및 비활성화 하는 코드
-                            val descriptor = it.getDescriptor(UUID.fromString("00002902-0000-1000-8000-00805f9b34fb"))
+                            val descriptor = it.getDescriptor(cccdUUID)
                             descriptor?.value = BluetoothGattDescriptor.ENABLE_NOTIFICATION_VALUE //이게 0x0001 즉 Notification 활성화 코드
                             gatt.writeDescriptor(descriptor)
                         }
@@ -125,7 +135,7 @@ class AudioGuideBLEControl : AppCompatActivity() {
                 }
                 //데이터 감지 함수 데이터가 바뀐다면
                 override fun onCharacteristicChanged(gatt: BluetoothGatt, characteristic: BluetoothGattCharacteristic) {
-                    if (characteristic.uuid == UUID.fromString("0003cdd0-0002-1000-8000-00805f9b0131")) {
+                    if (characteristic.uuid == rxCharacteristicUUID) {
                         val data = characteristic.value
                         Log.d("BluetoothControl", "데이터 수신: ${data.joinToString { byte -> String.format("%02x", byte) }}")
 
@@ -197,8 +207,8 @@ class AudioGuideBLEControl : AppCompatActivity() {
     private fun sendDataToCharacteristic(data: ByteArray) {
         Log.d("현빈", "함수입성")
         bluetoothGatt?.let { gatt ->
-            val txCharacteristic = gatt.getService(UUID.fromString("0003cdd0-0000-1000-8000-00805f9b0131"))
-                ?.getCharacteristic(UUID.fromString("0003cdd1-0000-1000-8000-00805f9b0131")) // UART TX Characteristic UUID 사용
+            val txCharacteristic = gatt.getService(serviceUUID)
+                ?.getCharacteristic(txCharacteristicUUID) // UART TX Characteristic UUID 사용
             txCharacteristic?.let {
                 it.value = data
                 val success = gatt.writeCharacteristic(it)
