@@ -22,9 +22,9 @@
         android:name=".Login.LoginActivity"
         android:exported="true">
         <intent-filter>
-            <action android:name="android.intent.action.MAIN" />
+            <action android:name="android.intent.action.MAIN" />  <!--  -->
             <category android:name="android.intent.category.LAUNCHER" />
-            <action android:name="android.intent.action.VIEW" />
+            <action android:name="android.intent.action.VIEW" />  <!-- 데이터를 보여주는 기능일 시에 선언 -->
             <category android:name="android.intent.category.DEFAULT" />
             <category android:name="android.intent.category.BROWSABLE" />
             <data android:host="oauth"
