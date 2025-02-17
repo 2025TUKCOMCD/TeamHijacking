@@ -9,12 +9,14 @@
 
     <ImageButton
         android:id="@+id/login_button"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/login"
-        android:contentDescription="@string/login"
-        android:src="@drawable/kakao_login_large_narrow"
-        android:minHeight="30dp"
+        android:layout_margin="30dp"
+        android:background="@android:color/transparent"
+        android:contentDescription="@string/kakaologin_contentDescription"
         android:minWidth="122dp"
-        android:layout_margin="30dp"/>
+        android:minHeight="30dp"
+        android:scaleType="fitCenter"
+        android:src="@drawable/kakao_login_large_narrow"
+        android:text="@string/login" />
 </LinearLayout>
