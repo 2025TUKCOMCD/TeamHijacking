@@ -21,17 +21,15 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import com.example.front.R
 import com.example.front.audioguide.checkPermissions
+import com.example.front.databinding.ActivityAudioGuideBleconnectBinding
 
 class AudioGuideBLEConnectActivity : AppCompatActivity() {
 
+    private lateinit var binding: ActivityAudioGuideBleconnectBinding
     //BluetoothManager를 받아옴
-    private val bluetoothManager: BluetoothManager by lazy {
-        getSystemService(BluetoothManager::class.java)
-    }
+    private val bluetoothManager: BluetoothManager by lazy { getSystemService(BluetoothManager::class.java) }
     //BlutoothAdapter를 받아옴
-    private val bluetoothAdapter: BluetoothAdapter? by lazy {
-        bluetoothManager.adapter
-    }
+    private val bluetoothAdapter: BluetoothAdapter? by lazy { bluetoothManager.adapter }
 
     //사용할 변수들 1. 어댑터 배열 2. 장치리스트 3.장치 4. 리스트뷰(장치들이 하나씩 들어갈 예정) 5. 스캔 시작버튼
     private lateinit var arrayAdapter: ArrayAdapter<String>
@@ -55,13 +53,14 @@ class AudioGuideBLEConnectActivity : AppCompatActivity() {
     @SuppressLint("MissingInflatedId")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_audio_guide_bleconnect)
+        binding = ActivityAudioGuideBleconnectBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
         checkPermissions(this)  //권한을 검사 및 없다면 요청
 
         //사용할 객체들을 받아옴
-        listView = findViewById(R.id.listView)
-        scanButton = findViewById(R.id.scanButton)
+        listView = binding.listView
+        scanButton = binding.scanButton
         deviceList = ArrayList()
         devices = ArrayList()
         arrayAdapter = ArrayAdapter(this, android.R.layout.simple_list_item_1, deviceList)
@@ -123,21 +122,12 @@ class AudioGuideBLEConnectActivity : AppCompatActivity() {
                             arrayAdapter.notifyDataSetChanged() //UI를 다시그리게 arrayAdapter에 알려줌
                             Log.d("Bluetooth", "블루투스 기기 발견: $deviceName - $deviceAddress")  //로그및 토스
                             Toast.makeText(this@AudioGuideBLEConnectActivity, "발견된 기기: $deviceName", Toast.LENGTH_SHORT).show()
-
                         }
                     }
                 }
             }
         }
     }
-    //화면 이동 함수("device를 객체로 가지고 와서 putExtra로 저장시킨다")
-    private fun navigateToNextActivity(device: BluetoothDevice) {
-        val intent = Intent(this, AudioGuideBLEControl::class.java)
-        intent.putExtra("EXTRA_BLUETOOTH_DEVICE", device)
-        Log.d("bludtooth", "navigatetonext호출")
-        startActivity(intent)
-    }
-
     /*
     연결함수로 device.connectGatt부분이 메인임
     Gatt함수 자동 재연결을 false로 하였고 bludtoothGattCallback을 넣어서 GATT과의 연결 상태 및 서비스 등을 발견하게 해줌
@@ -146,7 +136,7 @@ class AudioGuideBLEConnectActivity : AppCompatActivity() {
         bluetoothAdapter?.cancelDiscovery() //어뎁터의 간섭을 막기 위해 탐색을 중지 시킴
         Toast.makeText(this, "${device.name}에 연결 시도 중입니다", Toast.LENGTH_SHORT).show()
         Log.d("Bluetooth", "${device.name} - ${device.address}에 연결 시도 중입니다")
-        navigateToNextActivity(device)
+        navigateToNextActivity(device, this)
     }
 
     override fun onDestroy() {
@@ -154,7 +144,6 @@ class AudioGuideBLEConnectActivity : AppCompatActivity() {
         unregisterReceiver(receiver)
         Log.d("Bluetooth", "BroadcastReceiver 해제")
     }
-
 
 }
 
