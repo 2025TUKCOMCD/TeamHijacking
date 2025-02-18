@@ -10,5 +10,5 @@ public class RouteResultDTO {
     private int transitCount;
     private String mainTransitType;
     private String detailedPath;
-    //private List<String> busDetails;
+    private String DetailTrans;
 }
