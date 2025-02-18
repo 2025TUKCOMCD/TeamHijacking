@@ -26,9 +26,6 @@ private var cccdUUID = UUID.fromString("00002902-0000-1000-8000-00805f9b34fb")
 
 var bluetoothGatt: BluetoothGatt? = null
 
-
-
-
 //----------------------------권한 요청용 코드 -------------------------------
 //필요한 권한들을 쭉 적어놓음 나중에 사용 예정
 //api30을 기준으로 요구해야 하는 permission 구분

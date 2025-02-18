@@ -38,15 +38,15 @@ class AudioGuideBLEControl : AppCompatActivity() {
         Log.d("현빈", "하고 있는건가3")
         //UART 방식의 형태로 되어있어서 데이터를 넣는 부분과 받아오는부분 개발 필요
         binding.button1.setOnClickListener {
-            bluetoothGatt?.let { it1 -> sendDataToCharacteristic(position_derrivation, it1) }
+            sendDataToCharacteristic(position_derrivation, bluetoothGatt!!)
             Log.d("현빈", "위치 유도")
         }
         binding.button2.setOnClickListener {
-            bluetoothGatt?.let { it1 -> sendDataToCharacteristic(signal_guide, it1) }
+            sendDataToCharacteristic(signal_guide, bluetoothGatt!!)
             Log.d("현빈", "신호 안내")
         }
         binding.button3.setOnClickListener {
-            bluetoothGatt?.let { it1 -> sendDataToCharacteristic(audio_guide, it1) }
+            sendDataToCharacteristic(audio_guide, bluetoothGatt!!)
             Log.d("현빈", "음성 안내")
         }
     }
