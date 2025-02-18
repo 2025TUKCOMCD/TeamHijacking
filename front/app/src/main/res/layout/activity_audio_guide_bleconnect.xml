@@ -6,6 +6,7 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/backgroundDark"
     tools:context=".presentation.MainActivity">
 
     <ScrollView
@@ -34,7 +35,6 @@
                 android:layout_height="600dp"
                 android:layout_below="@+id/scanButton"
                 android:layout_marginTop="16dp"
-                android:divider="@android:color/darker_gray"
                 android:dividerHeight="1dp"/>
 
         </LinearLayout>
