@@ -19,7 +19,7 @@ class BleCustomAdapter(context: Context, deviceList: List<BluetoothDevice>) : Ar
 
         val device = getItem(position)
         val deviceName = view?.findViewById<TextView>(R.id.ble_name)
-        deviceName?.text = device?.name ?: "Unknown Device"
+        deviceName?.text = device?.name
 
         val deviceAddress = view?.findViewById<TextView>(R.id.ble_address)
         deviceAddress?.text = device?.address

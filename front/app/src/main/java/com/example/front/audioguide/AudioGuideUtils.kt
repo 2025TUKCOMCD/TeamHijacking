@@ -11,6 +11,8 @@ import android.bluetooth.BluetoothProfile
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Build
+import android.os.Handler
+import android.os.Looper
 import android.util.Log
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
@@ -55,11 +57,7 @@ fun checkPermissions(activity: Activity) : Boolean {
     val rejectedPermissionList = ArrayList<String>()
     //권한들을 하나씩 검사
     for (permission in requiredPermissions) {
-        if (ActivityCompat.checkSelfPermission(
-                activity,
-                permission
-            ) != PackageManager.PERMISSION_GRANTED   //만약 권한이 부여되어있지 않다면
-        ) {
+        if (ActivityCompat.checkSelfPermission(activity, permission) != PackageManager.PERMISSION_GRANTED) {//만약 권한이 부여되어있지 않다
             Log.d("bluetoothConnect", permission.toString())
             rejectedPermissionList.add(permission) //rejectedPermissionList에 추가해 둠
         }
@@ -77,7 +75,7 @@ fun checkPermissions(activity: Activity) : Boolean {
 /*
 기능 1. 기기를 클릭했을 시에 AudioGuideBLEControl.kt 로 화면 이동을 시켜주는 함수
  */
-fun navigateToNextActivity(device: BluetoothDevice,activity: Activity) {
+fun navigateToAudioGuideBLEControl(device: BluetoothDevice,activity: Activity) {
     val intent = Intent(activity, AudioGuideBLEControl::class.java)
     intent.putExtra("EXTRA_BLUETOOTH_DEVICE", device)
     Log.d("bludtooth", "navigatetonext호출")
