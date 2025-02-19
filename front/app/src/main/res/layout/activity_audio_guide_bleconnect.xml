@@ -6,6 +6,7 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/backgroundDark"
     tools:context=".presentation.MainActivity">
 
     <ScrollView
@@ -21,11 +22,13 @@
             android:layout_height="200dp"
             android:orientation="vertical">
 
-            <Button
+            <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/scanButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="스캔 시작"
+                android:textColor="@color/cardview_light_background"
+                android:background="@drawable/rounded_button_black"
                 android:layout_gravity="center"
                 android:layout_marginTop="16dp"/>
             <ListView
@@ -34,7 +37,6 @@
                 android:layout_height="600dp"
                 android:layout_below="@+id/scanButton"
                 android:layout_marginTop="16dp"
-                android:divider="@android:color/darker_gray"
                 android:dividerHeight="1dp"/>
 
         </LinearLayout>

@@ -4,7 +4,7 @@ import lombok.Data;
 
 import java.util.List;
 
-@Data
+
 public class RouteProcessDTO {
     @Data
     public static class SearchPath {
@@ -38,22 +38,23 @@ public class RouteProcessDTO {
         private Double distance;
         private String startName;
         private String endName;
-        private Integer startID;
-        private Integer endID;
+        private int startID;
+        private int endID;
         private List<Lane> lane; // 사용
-        private Integer sectionTime; // 사용
-        private String startLocalStationID;
+        private int sectionTime; // 사용
+        private int startLocalStationID;
         private PassStopList passStopList;
-        private String endLocalStationID;
+        private int endLocalStationID;
     }
 
     @Data
     public static class Lane {
         private String name; // 사용
         private String busNo; // 사용
-        private Integer type;
-        private Integer busID; // 사용
-        private Integer busCityCode; // 사용
+        private int type;
+        private int busID; // 사용
+        private int busCityCode; // 사용
+        private int busLocalBlID;
         private List<PassStopList> passStopList;
     }
 
@@ -64,7 +65,7 @@ public class RouteProcessDTO {
 
     @Data
     public static class Stations {
-        private Integer stationID; // 사용
+        private int stationID; // 사용
         private String stationName;
         private String stationNumber;
         private String stationType;

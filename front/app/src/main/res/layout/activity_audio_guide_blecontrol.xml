@@ -24,14 +24,14 @@
             android:id="@+id/button2"
             android:layout_width="60dp"
             android:layout_height="60dp"
-            android:background="@drawable/voice_request"/>
+            android:background="@drawable/audio_guide"/>
 
         <ImageButton
             android:layout_gravity="bottom"
             android:id="@+id/button3"
             android:layout_width="60dp"
             android:layout_height="60dp"
-            android:background="@drawable/voice_guidance"/>
+            android:background="@drawable/signal_guide"/>
     </LinearLayout>
     <LinearLayout
         android:layout_width="match_parent"
