@@ -9,14 +9,9 @@ import java.util.List;
 public class ResultDTO {
     private int totalTime;
     private int transitCount;
-    private String mainTransitType;
-    private String detailedPath;
-    private String detailTrans;
-    private List<List<Integer>> RouteIds = new ArrayList<>(); // 여러 버스의 버스 경로 ID 리스트
-    private List<String> predictTimes1 = new ArrayList<>(); // 여러 버스의 predictTime1 리스트
-    private List<String> predictTimes2 = new ArrayList<>(); // 여러 버스의 predictTime2 리스트
-    private List<String> busErrors = new ArrayList<>();
-    public void addBusDetail(String error) {
-        busErrors.add(error);
-    }
+    private String mainTransitType; // 1: 지하철, 2: 버스, 3: 버스+지하철 순서 나열
+    private List<Integer> pathTransitType = new ArrayList<>(); // (1: 지하철, 2: 버스, 3: 도보) 순서 나열
+    private List<String> TransitTypeNo; // 지하철, 버스, 도보 번호 순서 나열
+    // 구조화된 처리
+    private List<RouteIdSetDTO> routeIds = new ArrayList<>(); // 여러 버스의 버스 경로 ID 리스트를 구조화된 형태로 저장
 }

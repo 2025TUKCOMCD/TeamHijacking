@@ -43,8 +43,8 @@ public class RouteProcessDTO {
         private List<Lane> lane; // 사용
         private int sectionTime; // 사용
         private int startLocalStationID;
-        private PassStopList passStopList;
         private int endLocalStationID;
+        private PassStopList passStopList;
     }
 
     @Data
@@ -55,21 +55,21 @@ public class RouteProcessDTO {
         private int busID; // 사용
         private int busCityCode; // 사용
         private int busLocalBlID;
-        private List<PassStopList> passStopList;
+
     }
 
     @Data
     public static class PassStopList {
-        private List<Stations> Stations; // 사용
+        private List<Station> stations; // 사용
     }
 
     @Data
-    public static class Stations {
+    public static class Station {
         private int stationID; // 사용
         private String stationName;
         private String stationNumber;
         private String stationType;
-        private String localStationID; // 사용
+        private int localStationID; // 사용
     }
 
 
