@@ -1,5 +1,7 @@
 package com.example.front.iot
 
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.widget.Button
@@ -64,7 +66,7 @@ class HomeIotActivity : AppCompatActivity() {
         })
     }
 
-    // 2️⃣ RecyclerView에 기기 목록 표시
+    // 2️⃣ RecyclerView에 기기 목록 표시 및 제어 기능 추가
     private fun displayDeviceList(devices: List<Device>) {
         val deviceItems = devices.map { DeviceItem(it, isOnline = true) } // ✅ Device → DeviceItem 변환
         val recyclerView = findViewById<RecyclerView>(R.id.recyclerViewDevices)
@@ -94,6 +96,19 @@ class HomeIotActivity : AppCompatActivity() {
                     Log.e("SmartThings", "Error sending command: ${t.message}")
                 }
             })
+    }
+
+    // ✅ SmartThings 앱 열기 (없으면 Play Store로 이동)
+    private fun openSmartThingsApp() {
+        try {
+            val intent = packageManager.getLaunchIntentForPackage("com.samsung.android.oneconnect")
+            if (intent != null) {
+                startActivity(intent) // 스마트싱스 앱 실행
+            } else {
+                val playStoreIntent = Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=com.samsung.android.oneconnect"))
+
+            }
+        }
     }
 
     // 4️⃣ 음성 명령 처리
