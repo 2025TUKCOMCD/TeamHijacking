@@ -22,6 +22,8 @@
             android:layout_height="wrap_content"
             android:text="기기 추가"
             android:layout_gravity="center"
+            android:backgroundTint="@android:color/holo_blue_light"
+            android:textColor="@android:color/white"
 
         <!-- 음성 명령 시작 버튼 -->
         <Button
