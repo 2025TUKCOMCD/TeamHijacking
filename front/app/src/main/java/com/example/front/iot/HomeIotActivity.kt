@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.util.Log
 import android.widget.Button
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -43,7 +44,7 @@ class HomeIotActivity : AppCompatActivity() {
         }
     }
 
-    // 1️⃣ SmartThings API로 기기 목록 가져오기
+    // SmartThings API로 기기 목록 가져오기
     private fun fetchDeviceList() {
         RetrofitClient.instance.getDevices(apiToken).enqueue(object : Callback<DeviceResponse> {
             override fun onResponse(call: Call<DeviceResponse>, response: Response<DeviceResponse>) {
@@ -67,7 +68,7 @@ class HomeIotActivity : AppCompatActivity() {
         })
     }
 
-    // 2️⃣ RecyclerView에 기기 목록 표시 및 제어 기능 추가
+    // RecyclerView에 기기 목록 표시 및 제어 기능 추가
     private fun displayDeviceList(devices: List<Device>) {
         val deviceItems = devices.map { DeviceItem(it, isOnline = true) } // ✅ Device → DeviceItem 변환
         val recyclerView = findViewById<RecyclerView>(R.id.recyclerViewDevices)
@@ -77,7 +78,7 @@ class HomeIotActivity : AppCompatActivity() {
         }
     }
 
-    // 3️⃣ SmartThings API를 통해 기기 제어 명령 전송
+    // SmartThings API를 통해 기기 제어 명령 전송
     private fun sendDeviceCommand(deviceId: String, capability: String, command: String) {
         val commandBody = CommandBody(commands = listOf(Command(capability, command)))
 
@@ -99,6 +100,16 @@ class HomeIotActivity : AppCompatActivity() {
             })
     }
 
+    // ✅ SmartThings 앱에서 기기 등록을 유도하는 다이얼로그 추가
+    private fun showNoDeviceDialog() {
+        AlertDialog.Builder(this)
+            .setTitle("등록된 기기가 없습니다")
+            .setMessage("SmartThings 앱으로 이동하여 기기를 추가하시겠습니까?")
+            .setPositiveButton("예") { _, _ -> openSmartThingsApp() }
+            .setNegativeButton("아니오") { dialog, _ -> dialog.dismiss() }
+            .show()
+    }
+
     // ✅ SmartThings 앱 열기 (없으면 Play Store로 이동)
     private fun openSmartThingsApp() {
         try {
@@ -114,7 +125,7 @@ class HomeIotActivity : AppCompatActivity() {
         }
     }
 
-    // 4️⃣ 음성 명령 처리
+    // 음성 명령 처리
     private fun processVoiceCommand(command: String) {
         val devices = (findViewById<RecyclerView>(R.id.recyclerViewDevices).adapter as? DeviceAdapter)?.getDeviceList()
 
