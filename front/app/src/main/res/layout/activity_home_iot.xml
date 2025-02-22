@@ -15,6 +15,12 @@
         android:gravity="center"
         android:padding="16dp">
 
+        <!-- 기기 추가 버튼 -->
+        <Button
+            android:id="@+id/btnAddDevice"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+
         <!-- 음성 명령 시작 버튼 -->
         <Button
             android:id="@+id/btnVoiceControl"
@@ -35,17 +41,6 @@
             android:visibility="gone"
             android:textColor="@android:color/darker_gray"
             android:layout_marginTop="16dp"/>
-
-        <!-- 기기 등록 버튼 -->
-        <Button
-            android:id="@+id/btnAddDevice"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="새 기기 추가"
-            android:layout_gravity="center"
-            android:visibility="gone"
-            android:padding="12dp"
-            android:layout_marginTop="8dp"/>
 
         <!-- 기기 목록 RecyclerView -->
         <androidx.recyclerview.widget.RecyclerView
