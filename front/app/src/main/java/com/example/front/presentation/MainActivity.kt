@@ -20,8 +20,6 @@ import com.example.front.transportation.TransportationMainActivity
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
-    private var mediaPlayer: MediaPlayer? = null
-    private var hasReachedEnd = false // 스크롤 끝 도달 여부 확인 변수
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
