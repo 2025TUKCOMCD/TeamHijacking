@@ -36,18 +36,6 @@
             android:layout_gravity="center"
             android:padding="12dp"/>
 
-        <!-- 기기가 없을 때 메시지 (Empty View) -->
-        <TextView
-            android:id="@+id/tvNoDevices"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="등록된 기기가 없습니다.\n새 기기를 추가해주세요."
-            android:textSize="16sp"
-            android:gravity="center"
-            android:visibility="gone"
-            android:textColor="@android:color/darker_gray"
-            android:layout_marginTop="16dp"/>
-
         <!-- 기기 목록 RecyclerView -->
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerViewDevices"
