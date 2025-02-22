@@ -47,8 +47,7 @@ class HomeIotActivity : AppCompatActivity() {
                 if (response.isSuccessful) {
                     val devices = response.body()?.items.orEmpty()
                     if (devices.isEmpty()) {
-                        Toast.makeText(this@HomeIotActivity, "등록된 기기가 없습니다.", Toast.LENGTH_SHORT).show()
-                        Log.w("SmartThings", "No devices found.")
+                        showNoDeviceDialog()
                     } else {
                         displayDeviceList(devices)
                         Log.d("SmartThings", "Device list loaded successfully.")
