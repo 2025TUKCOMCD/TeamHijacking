@@ -1,5 +1,6 @@
 package com.example.front.iot
 
+import android.content.ActivityNotFoundException
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
@@ -106,8 +107,10 @@ class HomeIotActivity : AppCompatActivity() {
                 startActivity(intent) // 스마트싱스 앱 실행
             } else {
                 val playStoreIntent = Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=com.samsung.android.oneconnect"))
-
+                startActivity(playStoreIntent)
             }
+        } catch (e: ActivityNotFoundException) {
+            showToast("SmartThings 앱을 실행할 수 없습니다.")
         }
     }
 
