@@ -1,10 +1,13 @@
 package com.example.front.transportation
 
 import android.annotation.SuppressLint
+import android.content.Intent
 import android.os.Bundle
+import android.os.Parcelable
 import android.view.View
 import android.widget.LinearLayout
 import android.widget.ProgressBar
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import com.example.front.R
@@ -14,7 +17,6 @@ import com.example.front.transportation.data.searchPath.Route
 
 import androidx.activity.viewModels
 
-import androidx.activity.viewModels
 
 class TransportNewPathSearchActivity : AppCompatActivity() {
     private lateinit var binding: ActivityTransportNewPathSearchBinding
@@ -64,6 +66,7 @@ class TransportNewPathSearchActivity : AppCompatActivity() {
         val route2Views = listOf(binding.transitCountView2, binding.totalTimeView2, binding.detailedPathView2, binding.mainTransitTypesView2)
         val route3Views = listOf(binding.transitCountView3, binding.totalTimeView3, binding.detailedPathView3, binding.mainTransitTypesView3)
 
+        val routeLayouts = listOf(binding.someRootLayout1, binding.someRootLayout2, binding.someRootLayout3)
         val routeViews = listOf(route1Views, route2Views, route3Views)
 
         routes.forEachIndexed { index, route ->
@@ -73,6 +76,16 @@ class TransportNewPathSearchActivity : AppCompatActivity() {
                 transitCountView.text = getString(R.string.transitCount, route.transitCount)
                 totalTimeView.text = "${route.totalTime} 분"
                 mainTransitTypesView.text = route.mainTransitType
+
+                // Set click listener for each route layout
+                routeLayouts[index].setOnClickListener {
+                    // Handle click event
+                    val intent = Intent(this, TransportInfrmationActivity::class.java)
+                    intent.putIntegerArrayListExtra("pathTransitType", ArrayList(route.pathTransitType))
+                    intent.putStringArrayListExtra("transitTypeNo", ArrayList(route.transitTypeNo))
+                    intent.putParcelableArrayListExtra("routeIds", ArrayList(route.routeIds.map { it as Parcelable }))
+                    startActivity(intent)
+                }
             }
         }
     }

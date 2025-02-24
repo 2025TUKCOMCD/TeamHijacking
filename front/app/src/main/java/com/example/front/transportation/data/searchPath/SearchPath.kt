@@ -1,5 +1,7 @@
 package com.example.front.transportation.data.searchPath
 
+import android.os.Parcel
+import android.os.Parcelable
 
 data class RouteRequest(
     val startLat: Double,
@@ -8,23 +10,52 @@ data class RouteRequest(
     val endLng: Double
 )
 
-
 data class Route(
-    val totalTime : Int,
-    val transitCount : Int,
-    val mainTransitType: String, // 1: 지하철, 2: 버스, 3: 버스+지하철 순서 나열
-    val pathTransitType: List<Int>,  // (1: 지하철, 2: 버스, 3: 도보) 순서 나열
-    val transitTypeNo: List<String>,  // 지하철, 버스, 도보 번호 순서 나열
-
-    // 구조화된 처리
-    val routeIds: List<RouteId> // 여러 버스의 버스 경로 ID 리스트를 구조화된 형태로 저장
+    val totalTime: Int,
+    val transitCount: Int,
+    val mainTransitType: String,
+    val pathTransitType: List<Int>,
+    val transitTypeNo: List<String>,
+    val routeIds: List<RouteId>
 )
 
 data class RouteId(
-    val busLocalBlID : List<Int>, // 버스 로컬 블 ID 리스트
-    val startStationInfo : Int,
-    val endStationInfo : Int,
-    val stationInfo: List<Int>, // 정류장 정보 리스트
-    val predictTimes1: List<String>, // 여러 버스의 predictTime1 리스트
-    val predictTimes2: List<String> // 여러 버스의 predictTime2 리스트
-)
+    val busLocalBlID: List<Int>,
+    val startStationInfo: Int,
+    val endStationInfo: Int,
+    val stationInfo: List<Int>,
+    val predictTimes1: List<String>,
+    val predictTimes2: List<String>
+) : Parcelable {
+    constructor(parcel: Parcel) : this(
+        parcel.createIntArray()?.toList() ?: emptyList(),
+        parcel.readInt(),
+        parcel.readInt(),
+        parcel.createIntArray()?.toList() ?: emptyList(),
+        parcel.createStringArrayList() ?: emptyList(),
+        parcel.createStringArrayList() ?: emptyList()
+    )
+
+    override fun writeToParcel(parcel: Parcel, flags: Int) {
+        parcel.writeIntArray(busLocalBlID.toIntArray())
+        parcel.writeInt(startStationInfo)
+        parcel.writeInt(endStationInfo)
+        parcel.writeIntArray(stationInfo.toIntArray())
+        parcel.writeStringList(predictTimes1)
+        parcel.writeStringList(predictTimes2)
+    }
+
+    override fun describeContents(): Int {
+        return 0
+    }
+
+    companion object CREATOR : Parcelable.Creator<RouteId> {
+        override fun createFromParcel(parcel: Parcel): RouteId {
+            return RouteId(parcel)
+        }
+
+        override fun newArray(size: Int): Array<RouteId?> {
+            return arrayOfNulls(size)
+        }
+    }
+}
