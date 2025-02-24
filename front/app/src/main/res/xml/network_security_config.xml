@@ -3,5 +3,6 @@
     <domain-config cleartextTrafficPermitted="true">
         <domain includeSubdomains="true">ws.bus.go.kr</domain>
         <domain includeSubdomains="true">apis.data.go.kr</domain>
+        <domain includeSubdomains="true">3.222.123.76</domain>
     </domain-config>
 </network-security-config>

@@ -18,6 +18,7 @@ android {
     val SMARTTHINGS_API_TOKEN = localProperties.getProperty("SMARTTHINGS_API_TOKEN", "")
     val Public_Bus_APIKEY = localProperties.getProperty("Public_Bus_APIKEY", "")
     val Public_Subway_APIKEY = localProperties.getProperty("Public_Subway_APIKEY", "")
+    val Host_URL = localProperties.getProperty("Host_URL", "")
     defaultConfig {
         applicationId = "com.example.front"
         minSdk = 30
@@ -33,6 +34,9 @@ android {
         buildConfigField("String", "SMARTTHINGS_API_TOKEN", "\"$SMARTTHINGS_API_TOKEN\"")
         buildConfigField("String", "Public_Bus_APIKEY", "\"$Public_Bus_APIKEY\"")
         buildConfigField("String", "Public_Subway_APIKEY", "\"$Public_Subway_APIKEY\"")
+        buildConfigField("String", "Host_URL", "\"$Host_URL\"")
+
+
     }
 
     buildTypes {

@@ -32,6 +32,8 @@ class TransportInfrmationActivity : AppCompatActivity() {
         binding = ActivityTransportInfrmationBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        val routeIds = intent.getStringExtra("routeIds")
+
         //바인딩
         val imsiBtt2: Button = binding.imsiBtt2
         val imsiBtt3: Button = binding.imsiBtt3
