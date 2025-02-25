@@ -24,6 +24,8 @@ class HomeIotActivity : AppCompatActivity() {
     private lateinit var deviceControlHelper: DeviceControlHelper
     private lateinit var voiceControlHelper: VoiceControlHelper
 
+    private var deviceList: List<Device> = emptyList()  // ✅ 기기 목록을 저장하는 변수 추가
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_home_iot)
@@ -42,7 +44,18 @@ class HomeIotActivity : AppCompatActivity() {
         findViewById<Button>(R.id.btnVoiceControl).setOnClickListener {
             voiceControlHelper.startVoiceRecognition()
         }
+
+        // ✅ 기기 상태 조회 버튼 클릭 이벤트 추가
+        findViewById<Button>(R.id.btnCheckDeviceStatus).setOnClickListener {
+            if (deviceList.isNotEmpty()) {
+                val firstDevice = deviceList[0]  // 예제로 첫 번째 기기의 상태를 조회
+                fetchDeviceStatus(firstDevice.deviceId)
+            } else {
+                Toast.makeText(this, "조회할 기기가 없습니다.", Toast.LENGTH_SHORT).show()
+            }
+        }
     }
+
 
     // SmartThings API로 기기 목록 가져오기
     private fun fetchDeviceList() {
