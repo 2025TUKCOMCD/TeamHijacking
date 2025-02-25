@@ -21,3 +21,7 @@ data class TemperatureStatus(
 data class ContactSensorStatus(
     val contact: ValueStatus
 )
+
+data class ValueStatus(
+    val value: String
+)
