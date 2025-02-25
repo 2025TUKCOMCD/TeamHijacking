@@ -1,6 +1,7 @@
 package com.example.front.audioguide
 
 import android.bluetooth.BluetoothDevice
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
@@ -66,6 +67,12 @@ class AudioGuideBLEControl : AppCompatActivity() {
                 Log.d("BluetoothControl", "Gatt 연결 안됨")
             }
         }
+        //임시 기능 이전 화면으로 돌아가게 만듦 나중엔 수정 예정
+        binding.nextButton.setOnClickListener{
+            val intent = Intent(this, AudioGuideBLEConnectActivity::class.java)
+            startActivity(intent)
+        }
+
     }
 
     override fun onDestroy() {
