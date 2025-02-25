@@ -4,3 +4,12 @@ data class DeviceStatusResponse(
     val components: Map<String, ComponentStatus>
 )
 
+data class ComponentStatus(
+    val switch: SwitchStatus?,
+    val temperatureMeasurement: TemperatureStatus?,
+    val contactSensor: ContactSensorStatus?
+)
+
+data class SwitchStatus(
+    val switch: ValueStatus
+)
