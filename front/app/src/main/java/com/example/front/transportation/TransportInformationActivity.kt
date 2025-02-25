@@ -15,13 +15,12 @@ import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
-import androidx.core.location.LocationManagerCompat.getCurrentLocation
 import com.example.front.R
 import com.example.front.databinding.TransSavedConfirmDialogBinding
 import com.example.front.databinding.TransSavedDialogBinding
 
 //교통 안내용 Activity
-class TransportInfrmationActivity : AppCompatActivity() {
+class TransportInformationActivity : AppCompatActivity() {
 
     private lateinit var binding : ActivityTransportInfrmationBinding
     //imageSwitcher에 사용할 imageView 배열 선언
@@ -35,7 +34,7 @@ class TransportInfrmationActivity : AppCompatActivity() {
         binding = ActivityTransportInfrmationBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        val intent = Intent(this, TransportInfrmationActivity::class.java)
+        val intent = Intent(this, TransportInformationActivity::class.java)
 
         val pathTransitType = intent.getIntegerArrayListExtra("pathTransitType")
         val transitTypeNo = intent.getStringArrayListExtra("transitTypeNo")

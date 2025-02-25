@@ -7,7 +7,6 @@ import android.os.Parcelable
 import android.view.View
 import android.widget.LinearLayout
 import android.widget.ProgressBar
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import com.example.front.R
@@ -80,7 +79,7 @@ class TransportNewPathSearchActivity : AppCompatActivity() {
                 // Set click listener for each route layout
                 routeLayouts[index].setOnClickListener {
                     // Handle click event
-                    val intent = Intent(this, TransportInfrmationActivity::class.java)
+                    val intent = Intent(this, TransportInformationActivity::class.java)
                     intent.putIntegerArrayListExtra("pathTransitType", ArrayList(route.pathTransitType))
                     intent.putStringArrayListExtra("transitTypeNo", ArrayList(route.transitTypeNo))
                     intent.putParcelableArrayListExtra("routeIds", ArrayList(route.routeIds.map { it as Parcelable }))
