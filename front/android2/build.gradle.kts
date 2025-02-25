@@ -36,11 +36,6 @@ android {
         buildConfig = true
     }
     buildTypes {
-        debug {
-            buildConfigField("String", "KAKAO_NATIVE_API_KEY",
-                localProperties["KAKAO_NATIVE_API_KEY"].toString()
-            )
-        }
         release {
             isMinifyEnabled = false
             proguardFiles(
