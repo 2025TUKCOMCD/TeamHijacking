@@ -61,14 +61,9 @@
     <option name="autoReloadType" value="NONE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="5a34f773-8c82-4b0a-86d3-a37d3cf6ba80" name="Changes" comment="build.gradle 파일에 buildConfig = true 추가. buildFeatures에서 나는 오류 제거 위함">
-      <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/gradle.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/gradle.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+    <list default="true" id="5a34f773-8c82-4b0a-86d3-a37d3cf6ba80" name="Changes" comment="그래들 버전 충돌 해결 및 메인 액티비티 롤백">
       <change beforePath="$PROJECT_DIR$/.idea/other.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/other.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/front/app/build.gradle.kts" beforeDir="false" afterPath="$PROJECT_DIR$/front/app/build.gradle.kts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/front/gradle/libs.versions.toml" beforeDir="false" afterPath="$PROJECT_DIR$/front/gradle/libs.versions.toml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -155,12 +150,12 @@
     &quot;assignee&quot;: &quot;Ret751&quot;
   }
 }</component>
-  <component name="GithubPullRequestsUISettings">{
-  &quot;selectedUrlAndAccountId&quot;: {
-    &quot;url&quot;: &quot;https://github.com/2025TUKCOMCD/TeamHijacking.git&quot;,
-    &quot;accountId&quot;: &quot;635811e0-693f-444d-a7e4-f06e776b7810&quot;
+  <component name="GithubPullRequestsUISettings"><![CDATA[{
+  "selectedUrlAndAccountId": {
+    "url": "https://github.com/2025TUKCOMCD/TeamHijacking.git",
+    "accountId": "241ebd2d-4fa9-4528-a56f-2227874f1028"
   }
-}</component>
+}]]></component>
   <component name="MarkdownSettingsMigration">
     <option name="stateVersion" value="1" />
   </component>
@@ -173,33 +168,33 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "Android App.front.app.executor": "Run",
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.cidr.known.project.marker": "true",
-    "RunOnceActivity.readMode.enableVisualFormatting": "true",
-    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
-    "cf.first.check.clang-format": "false",
-    "cidr.known.project.marker": "true",
-    "com.google.services.firebase.aqiPopupShown": "true",
-    "dart.analysis.tool.window.visible": "false",
-    "git-widget-placeholder": "watch-yeon",
-    "ignore.virus.scanning.warn.message": "true",
-    "kotlin-language-version-configured": "true",
-    "last_opened_file_path": "C:/Users/klmot/AndroidStudioProjects/TeamHijacking/front/app/src/main/res/raw",
-    "project.structure.last.edited": "Project",
-    "project.structure.proportion": "0.17",
-    "project.structure.side.proportion": "0.2",
-    "show.migrate.to.gradle.popup": "false"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;Android App.front.app.executor&quot;: &quot;Run&quot;,
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.cidr.known.project.marker&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.readMode.enableVisualFormatting&quot;: &quot;true&quot;,
+    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
+    &quot;cf.first.check.clang-format&quot;: &quot;false&quot;,
+    &quot;cidr.known.project.marker&quot;: &quot;true&quot;,
+    &quot;com.google.services.firebase.aqiPopupShown&quot;: &quot;true&quot;,
+    &quot;dart.analysis.tool.window.visible&quot;: &quot;false&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;watch-yeon&quot;,
+    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
+    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/klmot/AndroidStudioProjects/TeamHijacking/front/app/src/main/res/raw&quot;,
+    &quot;project.structure.last.edited&quot;: &quot;Project&quot;,
+    &quot;project.structure.proportion&quot;: &quot;0.17&quot;,
+    &quot;project.structure.side.proportion&quot;: &quot;0.2&quot;,
+    &quot;show.migrate.to.gradle.popup&quot;: &quot;false&quot;
   },
-  "keyToStringList": {
-    "kotlin-gradle-user-dirs": [
-      "C:\\Users\\klmot\\.gradle"
+  &quot;keyToStringList&quot;: {
+    &quot;kotlin-gradle-user-dirs&quot;: [
+      &quot;C:\\Users\\klmot\\.gradle&quot;
     ]
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="C:\Users\klmot\AndroidStudioProjects\TeamHijacking\front\app\src\main\res\raw" />
@@ -398,14 +393,6 @@
       <option name="presentableId" value="LOCAL-00008" />
       <option name="project" value="LOCAL" />
       <updated>1736751416004</updated>
-    </task>
-    <task id="LOCAL-00009" summary="패키지 수정">
-      <option name="closed" value="true" />
-      <created>1736403002109</created>
-      <option name="number" value="00009" />
-      <option name="presentableId" value="LOCAL-00009" />
-      <option name="project" value="LOCAL" />
-      <updated>1736403002109</updated>
     </task>
     <task id="LOCAL-00010" summary="데이터 오류 수정">
       <option name="closed" value="true" />
@@ -759,7 +746,15 @@
       <option name="project" value="LOCAL" />
       <updated>1739258788103</updated>
     </task>
-    <option name="localTasksCounter" value="54" />
+    <task id="LOCAL-00054" summary="그래들 버전 충돌 해결 및 메인 액티비티 롤백">
+      <option name="closed" value="true" />
+      <created>1739953941575</created>
+      <option name="number" value="00054" />
+      <option name="presentableId" value="LOCAL-00054" />
+      <option name="project" value="LOCAL" />
+      <updated>1739953941575</updated>
+    </task>
+    <option name="localTasksCounter" value="55" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -774,7 +769,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="DeviceControlHelper 수정" />
     <MESSAGE value="VoiceControlHelper 클래스 추가" />
     <MESSAGE value="VoiceControlHelper 클래스 수정" />
     <MESSAGE value="HomeIotActivity 디스플레이리스트 추가" />
@@ -799,6 +793,7 @@
     <MESSAGE value="액티비티 종료 시 리소스 해제 onDestroy 함수 추가" />
     <MESSAGE value="메인 xml 파일 &quot;스크롤 뷰 id&quot; 추가" />
     <MESSAGE value="main 액티비티 오류 수정 및 wav 파일 추가" />
-    <option name="LAST_COMMIT_MESSAGE" value="main 액티비티 오류 수정 및 wav 파일 추가" />
+    <MESSAGE value="그래들 버전 충돌 해결 및 메인 액티비티 롤백" />
+    <option name="LAST_COMMIT_MESSAGE" value="그래들 버전 충돌 해결 및 메인 액티비티 롤백" />
   </component>
 </project>
