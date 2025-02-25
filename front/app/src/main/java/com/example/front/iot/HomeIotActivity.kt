@@ -63,6 +63,8 @@ class HomeIotActivity : AppCompatActivity() {
             override fun onResponse(call: Call<DeviceResponse>, response: Response<DeviceResponse>) {
                 if (response.isSuccessful) {
                     val devices = response.body()?.items.orEmpty()
+                    deviceList = devices  // ✅ 기기 목록 업데이트
+
                     if (devices.isEmpty()) {
                         showNoDeviceDialog()
                     } else {
