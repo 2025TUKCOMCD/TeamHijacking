@@ -13,3 +13,11 @@ data class ComponentStatus(
 data class SwitchStatus(
     val switch: ValueStatus
 )
+
+data class TemperatureStatus(
+    val temperature: ValueStatus
+)
+
+data class ContactSensorStatus(
+    val contact: ValueStatus
+)
