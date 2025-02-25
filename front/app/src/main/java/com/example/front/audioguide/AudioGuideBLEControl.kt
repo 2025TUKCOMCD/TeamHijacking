@@ -69,8 +69,7 @@ class AudioGuideBLEControl : AppCompatActivity() {
         }
         //임시 기능 이전 화면으로 돌아가게 만듦 나중엔 수정 예정
         binding.nextButton.setOnClickListener{
-            val intent = Intent(this, AudioGuideBLEConnectActivity::class.java)
-            startActivity(intent)
+            finish()
         }
 
     }
