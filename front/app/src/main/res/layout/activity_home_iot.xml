@@ -27,6 +27,15 @@
             android:padding="8dp"
             android:layout_marginBottom="8dp"/>
 
+        <Button
+            android:id="@+id/btnCheckDeviceStatus"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="기기 상태 조회"
+            android:layout_gravity="center"
+            android:layout_marginTop="10dp"/>
+
+
         <!-- 음성 명령 시작 버튼 -->
         <Button
             android:id="@+id/btnVoiceControl"

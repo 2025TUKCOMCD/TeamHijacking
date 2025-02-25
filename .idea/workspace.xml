@@ -61,9 +61,7 @@
     <option name="autoReloadType" value="NONE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="5a34f773-8c82-4b0a-86d3-a37d3cf6ba80" name="Changes" comment="상태 조회 응답 데이터 추가">
-      <change beforePath="$PROJECT_DIR$/front/app/src/main/java/com/example/front/iot/SmartHome/SmartThingsApiService.kt" beforeDir="false" afterPath="$PROJECT_DIR$/front/app/src/main/java/com/example/front/iot/SmartHome/SmartThingsApiService.kt" afterDir="false" />
-    </list>
+    <list default="true" id="5a34f773-8c82-4b0a-86d3-a37d3cf6ba80" name="Changes" comment="상태 조회 응답 코드 추가" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -360,14 +358,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1735374590430</updated>
-    </task>
-    <task id="LOCAL-00010" summary="데이터 오류 수정">
-      <option name="closed" value="true" />
-      <created>1736751580559</created>
-      <option name="number" value="00010" />
-      <option name="presentableId" value="LOCAL-00010" />
-      <option name="project" value="LOCAL" />
-      <updated>1736751580559</updated>
     </task>
     <task id="LOCAL-00011" summary="스마트 싱스 연동">
       <option name="closed" value="true" />
@@ -753,7 +743,15 @@
       <option name="project" value="LOCAL" />
       <updated>1740506573698</updated>
     </task>
-    <option name="localTasksCounter" value="59" />
+    <task id="LOCAL-00059" summary="상태 조회 응답 코드 추가">
+      <option name="closed" value="true" />
+      <created>1740508679746</created>
+      <option name="number" value="00059" />
+      <option name="presentableId" value="LOCAL-00059" />
+      <option name="project" value="LOCAL" />
+      <updated>1740508679746</updated>
+    </task>
+    <option name="localTasksCounter" value="60" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -768,7 +766,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="HomeIotActivity 디스플레이리스트 추가" />
     <MESSAGE value="HomeIotActivity 샌드디바이스 추가" />
     <MESSAGE value="HomeIotActivity 수정" />
     <MESSAGE value="iot 수정" />
@@ -793,6 +790,7 @@
     <MESSAGE value="그래들 버전 충돌 해결 및 메인 액티비티 롤백" />
     <MESSAGE value="상태 조회 응답 데이터 클래스 생성" />
     <MESSAGE value="상태 조회 응답 데이터 추가" />
-    <option name="LAST_COMMIT_MESSAGE" value="상태 조회 응답 데이터 추가" />
+    <MESSAGE value="상태 조회 응답 코드 추가" />
+    <option name="LAST_COMMIT_MESSAGE" value="상태 조회 응답 코드 추가" />
   </component>
 </project>
