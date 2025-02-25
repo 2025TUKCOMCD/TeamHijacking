@@ -100,6 +100,42 @@ class HomeIotActivity : AppCompatActivity() {
             })
     }
 
+    // 상태 조회 기능 추가
+    fun fetchDeviceStatus(deviceId: String) {
+        val apiService = RetrofitClient.instance
+        apiService.getDeviceStatus(deviceId, "Bearer ${BuildConfig.SMARTTHINGS_API_TOKEN}")
+            .enqueue(object : Callback<DeviceStatusResponse> {
+                override fun onResponse(call: Call<DeviceStatusResponse>, response: Response<DeviceStatusResponse>) {
+                    if (response.isSuccessful) {
+                        val deviceStatus = response.body()
+                        deviceStatus?.let {
+                            val switchStatus = it.components["main"]?.switch?.switch?.value ?: "Unknown"
+                            val temperature = it.components["main"]?.temperatureMeasurement?.temperature?.value ?: "N/A"
+                            val contactStatus = it.components["main"]?.contactSensor?.contact?.value ?: "Unknown"
+
+                            val statusMessage = """
+                            전원 상태: $switchStatus
+                            온도: $temperature
+                            문 개폐 상태: $contactStatus
+                        """.trimIndent()
+
+                            Toast.makeText(this@HomeIotActivity, statusMessage, Toast.LENGTH_LONG).show()
+                        }
+                    } else {
+                        val errorMessage = response.errorBody()?.string() ?: "Unknown error"
+                        Toast.makeText(this@HomeIotActivity, "상태 조회 실패: $errorMessage", Toast.LENGTH_SHORT).show()
+                        Log.e("SmartThings", "Failed to fetch device status: $errorMessage")
+                    }
+                }
+
+                override fun onFailure(call: Call<DeviceStatusResponse>, t: Throwable) {
+                    Toast.makeText(this@HomeIotActivity, "네트워크 오류: 상태를 가져올 수 없습니다.", Toast.LENGTH_SHORT).show()
+                    Log.e("SmartThings", "Network error: ${t.message}")
+                }
+            })
+    }
+
+
     // ✅ SmartThings 앱에서 기기 등록을 유도하는 다이얼로그 추가
     private fun showNoDeviceDialog() {
         AlertDialog.Builder(this)

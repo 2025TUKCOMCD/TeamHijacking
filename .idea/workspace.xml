@@ -61,9 +61,8 @@
     <option name="autoReloadType" value="NONE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="5a34f773-8c82-4b0a-86d3-a37d3cf6ba80" name="Changes" comment="그래들 버전 충돌 해결 및 메인 액티비티 롤백">
-      <change beforePath="$PROJECT_DIR$/.idea/other.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/other.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+    <list default="true" id="5a34f773-8c82-4b0a-86d3-a37d3cf6ba80" name="Changes" comment="상태 조회 응답 데이터 추가">
+      <change beforePath="$PROJECT_DIR$/front/app/src/main/java/com/example/front/iot/SmartHome/SmartThingsApiService.kt" beforeDir="false" afterPath="$PROJECT_DIR$/front/app/src/main/java/com/example/front/iot/SmartHome/SmartThingsApiService.kt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -361,38 +360,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1735374590430</updated>
-    </task>
-    <task id="LOCAL-00005" summary="[dev]&#10;AudioGuideActivity에 button layout 추가">
-      <option name="closed" value="true" />
-      <created>1736745236112</created>
-      <option name="number" value="00005" />
-      <option name="presentableId" value="LOCAL-00005" />
-      <option name="project" value="LOCAL" />
-      <updated>1736745236112</updated>
-    </task>
-    <task id="LOCAL-00006" summary="[dev]&#10;AudioGuideActivity에 SetonClickListener 추가">
-      <option name="closed" value="true" />
-      <created>1736745773656</created>
-      <option name="number" value="00006" />
-      <option name="presentableId" value="LOCAL-00006" />
-      <option name="project" value="LOCAL" />
-      <updated>1736745773656</updated>
-    </task>
-    <task id="LOCAL-00007" summary="[dev]&#10;TransportationMainActivity 디자인 변경">
-      <option name="closed" value="true" />
-      <created>1736749820571</created>
-      <option name="number" value="00007" />
-      <option name="presentableId" value="LOCAL-00007" />
-      <option name="project" value="LOCAL" />
-      <updated>1736749820571</updated>
-    </task>
-    <task id="LOCAL-00008" summary="[dev]&#10;UIUX에 사용할(transportationsaved root) 이미지(xml,png) 파일 추가">
-      <option name="closed" value="true" />
-      <created>1736751416004</created>
-      <option name="number" value="00008" />
-      <option name="presentableId" value="LOCAL-00008" />
-      <option name="project" value="LOCAL" />
-      <updated>1736751416004</updated>
     </task>
     <task id="LOCAL-00010" summary="데이터 오류 수정">
       <option name="closed" value="true" />
@@ -754,7 +721,39 @@
       <option name="project" value="LOCAL" />
       <updated>1739953941575</updated>
     </task>
-    <option name="localTasksCounter" value="55" />
+    <task id="LOCAL-00055" summary="상태 조회 응답 데이터 클래스 생성">
+      <option name="closed" value="true" />
+      <created>1740506530486</created>
+      <option name="number" value="00055" />
+      <option name="presentableId" value="LOCAL-00055" />
+      <option name="project" value="LOCAL" />
+      <updated>1740506530486</updated>
+    </task>
+    <task id="LOCAL-00056" summary="상태 조회 응답 데이터 추가">
+      <option name="closed" value="true" />
+      <created>1740506550652</created>
+      <option name="number" value="00056" />
+      <option name="presentableId" value="LOCAL-00056" />
+      <option name="project" value="LOCAL" />
+      <updated>1740506550652</updated>
+    </task>
+    <task id="LOCAL-00057" summary="상태 조회 응답 데이터 추가">
+      <option name="closed" value="true" />
+      <created>1740506563187</created>
+      <option name="number" value="00057" />
+      <option name="presentableId" value="LOCAL-00057" />
+      <option name="project" value="LOCAL" />
+      <updated>1740506563187</updated>
+    </task>
+    <task id="LOCAL-00058" summary="상태 조회 응답 데이터 추가">
+      <option name="closed" value="true" />
+      <created>1740506573698</created>
+      <option name="number" value="00058" />
+      <option name="presentableId" value="LOCAL-00058" />
+      <option name="project" value="LOCAL" />
+      <updated>1740506573698</updated>
+    </task>
+    <option name="localTasksCounter" value="59" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -769,8 +768,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="VoiceControlHelper 클래스 추가" />
-    <MESSAGE value="VoiceControlHelper 클래스 수정" />
     <MESSAGE value="HomeIotActivity 디스플레이리스트 추가" />
     <MESSAGE value="HomeIotActivity 샌드디바이스 추가" />
     <MESSAGE value="HomeIotActivity 수정" />
@@ -794,6 +791,8 @@
     <MESSAGE value="메인 xml 파일 &quot;스크롤 뷰 id&quot; 추가" />
     <MESSAGE value="main 액티비티 오류 수정 및 wav 파일 추가" />
     <MESSAGE value="그래들 버전 충돌 해결 및 메인 액티비티 롤백" />
-    <option name="LAST_COMMIT_MESSAGE" value="그래들 버전 충돌 해결 및 메인 액티비티 롤백" />
+    <MESSAGE value="상태 조회 응답 데이터 클래스 생성" />
+    <MESSAGE value="상태 조회 응답 데이터 추가" />
+    <option name="LAST_COMMIT_MESSAGE" value="상태 조회 응답 데이터 추가" />
   </component>
 </project>

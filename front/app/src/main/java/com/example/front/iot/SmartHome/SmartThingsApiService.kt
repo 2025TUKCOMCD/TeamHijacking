@@ -19,4 +19,11 @@ interface SmartThingsApiService {
         @Body command: CommandBody,
         @Header("Authorization") token: String
     ): Call<Unit>
+
+    @GET("devices/{deviceId}/status")
+    fun getDeviceStatus(
+        @Path("deviceId") deviceId: String,
+        @Header("Authorization") token: String
+    ): Call<DeviceStatusResponse>
+
 }
