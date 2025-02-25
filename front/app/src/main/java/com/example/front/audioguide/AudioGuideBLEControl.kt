@@ -35,17 +35,22 @@ class AudioGuideBLEControl : AppCompatActivity() {
             }
         }
         //UART 방식의 형태로 되어있어서 데이터를 넣는 부분과 받아오는부분 개발 필요
-        binding.button1.setOnClickListener {
-            sendDataToCharacteristic(position_derrivation, bluetoothGatt!!)
-            Log.d("현빈", "위치 유도")
+        if (bluetoothGattState) {
+            binding.button1.setOnClickListener {
+                sendDataToCharacteristic(position_derrivation, bluetoothGatt!!)
+                Log.d("현빈", "위치 유도")
+            }
+            binding.button2.setOnClickListener {
+                sendDataToCharacteristic(signal_guide, bluetoothGatt!!)
+                Log.d("현빈", "신호 안내")
+            }
+            binding.button3.setOnClickListener {
+                sendDataToCharacteristic(audio_guide, bluetoothGatt!!)
+                Log.d("현빈", "음성 안내")
+            }
         }
-        binding.button2.setOnClickListener {
-            sendDataToCharacteristic(signal_guide, bluetoothGatt!!)
-            Log.d("현빈", "신호 안내")
-        }
-        binding.button3.setOnClickListener {
-            sendDataToCharacteristic(audio_guide, bluetoothGatt!!)
-            Log.d("현빈", "음성 안내")
+        else{
+            Log.d("BluetoothControl", "gatt 연결 안됨")
         }
     }
 

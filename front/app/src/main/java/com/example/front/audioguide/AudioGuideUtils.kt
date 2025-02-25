@@ -11,8 +11,6 @@ import android.bluetooth.BluetoothProfile
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Build
-import android.os.Handler
-import android.os.Looper
 import android.util.Log
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
@@ -25,8 +23,11 @@ private var txCharacteristicUUID = UUID.fromString("0003cdd2-0000-1000-8000-0080
 private var rxCharacteristicUUID = UUID.fromString("0003cdd1-0000-1000-8000-00805f9b0131")
 private var cccdUUID = UUID.fromString("00002902-0000-1000-8000-00805f9b34fb")
 
-
+//통신을 위한 Gatt 객체
 var bluetoothGatt: BluetoothGatt? = null
+
+//Gatt통신 상태 확인을 위한 변수
+var bluetoothGattState = false
 
 //----------------------------권한 요청용 코드 -------------------------------
 //필요한 권한들을 쭉 적어놓음 나중에 사용 예정
@@ -72,6 +73,15 @@ fun checkPermissions(activity: Activity) : Boolean {
     }
 }
 
+fun connectToDevice(device: BluetoothDevice, activity: Activity) {
+    val deviceName = device.name ?: "Unknown"
+    val deviceAddress = device.address
+    Toast.makeText(activity, "$deviceName 에 연결 시도 중입니다", Toast.LENGTH_SHORT).show()
+    Log.d("Bluetooth", "$deviceName - ${deviceAddress}에 연결 시도 중입니다")
+    navigateToAudioGuideBLEControl(device, activity)
+}
+
+
 /*
 기능 1. 기기를 클릭했을 시에 AudioGuideBLEControl.kt 로 화면 이동을 시켜주는 함수
  */
@@ -115,10 +125,12 @@ fun connectToBluetoothGatt(device: BluetoothDevice, activity: Activity) {
                 if (newState == BluetoothProfile.STATE_CONNECTED) {
                     Log.d("BluetoothControl", "GATT 연결 성공: ${gatt.device.name} - ${gatt.device.address}") // GATT 연결 성공
                     Log.d("현빈", "하고 있는건가1")
+                    bluetoothGattState = true
                     gatt.discoverServices() // 서비스 찾기 시작
                 } else if (newState == BluetoothProfile.STATE_DISCONNECTED) {
                     Log.d("BluetoothControl", "GATT 연결 해제: ${gatt.device.name} - ${gatt.device.address} 및 재연결 시도" )
                     bluetoothGatt = null
+                    bluetoothGattState = false
                     connectToBluetoothGatt(device, activity)
                 }
             }
