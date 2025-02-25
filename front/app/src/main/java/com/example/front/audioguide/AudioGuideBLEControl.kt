@@ -31,14 +31,6 @@ class AudioGuideBLEControl : AppCompatActivity() {
         bluetoothGattDisconnected = false
         connectToBluetoothGatt(device!!, this)
 
-//        device?.let {
-//            if(checkPermissions(this)){
-//                connectToBluetoothGatt(device, this)
-//            }
-//            else{
-//                Log.d("BluetoothControl", " 권한 없음")
-//            }
-//        }
         //UART 방식의 형태로 되어있어서 데이터를 넣는 부분과 받아오는부분 개발 필요
         binding.button1.setOnClickListener {
             if (bluetoothGattState) {
