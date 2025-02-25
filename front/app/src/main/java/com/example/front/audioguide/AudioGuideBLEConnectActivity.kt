@@ -35,8 +35,6 @@ class AudioGuideBLEConnectActivity : AppCompatActivity() {
         override fun onScanResult(callbackType: Int, result: ScanResult) {
 
             val device = result.device
-            val broadcast = result.scanRecord?.bytes
-            val uuid = result.scanRecord?.serviceUuids
 //
 //            if (device.name != null && device.name.startsWith("G")&& !devices.contains(device)) {
 //                devices.add(device)
@@ -48,12 +46,12 @@ class AudioGuideBLEConnectActivity : AppCompatActivity() {
                     val deviceName = device.name ?: "Unknown"
                     devices.add(device)
                     arrayAdapter.notifyDataSetChanged()
-                    Log.d("BLE", "Found BLE device: $deviceName - ${device.address}")
+                    Log.d("bluetoothconnect", "Found BLE device: $deviceName - ${device.address}")
                     Toast.makeText(this@AudioGuideBLEConnectActivity, "발견된 기기: $deviceName", Toast.LENGTH_SHORT).show()
                 }
         }
         override fun onScanFailed(errorCode: Int) {
-            Log.e("BLE", "Scan failed with error code: $errorCode")
+            Log.e("bluetoothconnect", "Scan failed with error code: $errorCode")
         }
     }
 

@@ -24,8 +24,7 @@ repositories {
 }
 
 dependencies {
-	// db
-	//implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+	//spring
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	implementation 'org.springframework.boot:spring-boot-starter-actuator'
 	developmentOnly 'org.springframework.boot:spring-boot-devtools'
@@ -37,7 +36,10 @@ dependencies {
 	implementation("com.squareup.okhttp3:logging-interceptor:4.12.0")
 	implementation("org.simpleframework:simple-xml:2.7.1")
 	implementation("com.squareup.retrofit2:converter-simplexml:2.9.0")
-
+	// db
+	// implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+	// runtimeOnly 'com.mysql:mysql-connector-java'
+	// implementation 'mysql:mysql-connector-java:8.0.33'
 	// lombok
 	compileOnly 'org.projectlombok:lombok'
 	annotationProcessor 'org.projectlombok:lombok'
