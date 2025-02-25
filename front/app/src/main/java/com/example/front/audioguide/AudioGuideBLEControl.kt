@@ -3,6 +3,7 @@ package com.example.front.audioguide
 import android.bluetooth.BluetoothDevice
 import android.os.Bundle
 import android.util.Log
+import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import com.example.front.databinding.ActivityAudioGuideBlecontrolBinding
@@ -35,22 +36,32 @@ class AudioGuideBLEControl : AppCompatActivity() {
             }
         }
         //UART 방식의 형태로 되어있어서 데이터를 넣는 부분과 받아오는부분 개발 필요
-        if (bluetoothGattState) {
-            binding.button1.setOnClickListener {
+        binding.button1.setOnClickListener {
+            if (bluetoothGattState) {
                 sendDataToCharacteristic(position_derrivation, bluetoothGatt!!)
                 Log.d("현빈", "위치 유도")
             }
-            binding.button2.setOnClickListener {
+            else{
+                Log.d("BluetoothControl", "Gatt 연결 안됨")
+            }
+        }
+        binding.button2.setOnClickListener {
+            if (bluetoothGattState) {
                 sendDataToCharacteristic(signal_guide, bluetoothGatt!!)
                 Log.d("현빈", "신호 안내")
             }
-            binding.button3.setOnClickListener {
+            else{
+                Log.d("BluetoothControl", "Gatt 연결 안됨")
+            }
+        }
+        binding.button3.setOnClickListener {
+            if (bluetoothGattState) {
                 sendDataToCharacteristic(audio_guide, bluetoothGatt!!)
                 Log.d("현빈", "음성 안내")
             }
-        }
-        else{
-            Log.d("BluetoothControl", "gatt 연결 안됨")
+            else{
+                Log.d("BluetoothControl", "Gatt 연결 안됨")
+            }
         }
     }
 
