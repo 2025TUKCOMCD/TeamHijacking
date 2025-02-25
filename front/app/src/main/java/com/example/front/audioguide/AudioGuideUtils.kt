@@ -74,7 +74,9 @@ fun checkPermissions(activity: Activity) : Boolean {
         return true  // 거부된 권한이 없다면 블루투스 권한성공을 출력
     }
 }
-
+/*
+기능 1. 특정블루투스기기를 가지고 다음 화면으로 넘어가게 해준다.
+ */
 fun connectToDevice(device: BluetoothDevice, activity: Activity) {
     val deviceName = device.name ?: "Unknown"
     val deviceAddress = device.address
@@ -82,7 +84,6 @@ fun connectToDevice(device: BluetoothDevice, activity: Activity) {
     Log.d("Bluetooth", "$deviceName - ${deviceAddress}에 연결 시도 중입니다")
     navigateToAudioGuideBLEControl(device, activity)
 }
-
 
 /*
 기능 1. 기기를 클릭했을 시에 AudioGuideBLEControl.kt 로 화면 이동을 시켜주는 함수
@@ -120,6 +121,7 @@ fun sendDataToCharacteristic(data: ByteArray, bluetoothGatt : BluetoothGatt) {
 기능 2. bluetooth 기기의 기능중 Uart 방식 의 rx 부분에 대해 데이터 변화를 감지 해 준다.
 기능 3. bluetooth 기기의 기능중 rx 데이터 변화가 감지 되면 Toast 및 로그로 그 결과를 출력 해 준다.
  */
+
 fun connectToBluetoothGatt(device: BluetoothDevice, activity: Activity) {
     if (bluetoothGatt == null || bluetoothGatt?.device?.address != device.address) {
         bluetoothGatt = device.connectGatt(activity, false, object : BluetoothGattCallback() {
