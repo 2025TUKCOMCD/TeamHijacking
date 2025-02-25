@@ -38,7 +38,7 @@ private val requiredPermissions = if (Build.VERSION.SDK_INT >= Build.VERSION_COD
         Manifest.permission.BLUETOOTH_ADVERTISE,
         Manifest.permission.BLUETOOTH_ADMIN,  //관리자 정도의 기능 제공 일단 ADMIN으로 씀
         //  Manifest.permission.BLUETOOTH,  //간단한 기능 제공
-        // Manifest.permission.ACCESS_FINE_LOCATION // 필요에 따라 추가
+        Manifest.permission.ACCESS_FINE_LOCATION // 필요에 따라 추가
     )
 } else {
     arrayOf(
