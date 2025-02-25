@@ -28,6 +28,8 @@ var bluetoothGatt: BluetoothGatt? = null
 
 //Gatt통신 상태 확인을 위한 변수
 var bluetoothGattState = false
+//화면 나갔을시에 연결 해제를 위한 변수
+var bluetoothGattDisconnected = false
 
 //----------------------------권한 요청용 코드 -------------------------------
 //필요한 권한들을 쭉 적어놓음 나중에 사용 예정
@@ -126,12 +128,15 @@ fun connectToBluetoothGatt(device: BluetoothDevice, activity: Activity) {
                     Log.d("BluetoothControl", "GATT 연결 성공: ${gatt.device.name} - ${gatt.device.address}") // GATT 연결 성공
                     Log.d("현빈", "하고 있는건가1")
                     bluetoothGattState = true
+                    bluetoothGattDisconnected = false
                     gatt.discoverServices() // 서비스 찾기 시작
                 } else if (newState == BluetoothProfile.STATE_DISCONNECTED) {
                     Log.d("BluetoothControl", "GATT 연결 해제: ${gatt.device.name} - ${gatt.device.address} 및 재연결 시도" )
                     bluetoothGatt = null
                     bluetoothGattState = false
-                    connectToBluetoothGatt(device, activity)
+                    if (!bluetoothGattDisconnected) {
+                        connectToBluetoothGatt(device, activity)
+                    }
                 }
             }
             //일단 임시코드로 만약 연결이 완료 된 상태에선 찾을 필요 없음 서비스 및 특성을 찾으면 uuid를 로그로 찍어주는 코드

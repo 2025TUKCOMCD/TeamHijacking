@@ -27,14 +27,17 @@ class AudioGuideBLEControl : AppCompatActivity() {
         Log.d("BluetoothControl", "객체 받아오기")
         Log.d("BluetoothControl", device.toString())
 
-        device?.let {
-            if(checkPermissions(this)){
-                connectToBluetoothGatt(device, this)
-            }
-            else{
-                Log.d("BluetoothControl", " 권한 없음")
-            }
-        }
+        bluetoothGattDisconnected = false
+        connectToBluetoothGatt(device!!, this)
+
+//        device?.let {
+//            if(checkPermissions(this)){
+//                connectToBluetoothGatt(device, this)
+//            }
+//            else{
+//                Log.d("BluetoothControl", " 권한 없음")
+//            }
+//        }
         //UART 방식의 형태로 되어있어서 데이터를 넣는 부분과 받아오는부분 개발 필요
         binding.button1.setOnClickListener {
             if (bluetoothGattState) {
@@ -63,6 +66,12 @@ class AudioGuideBLEControl : AppCompatActivity() {
                 Log.d("BluetoothControl", "Gatt 연결 안됨")
             }
         }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        bluetoothGattDisconnected = true
+        bluetoothGatt?.disconnect()
     }
 
 }
