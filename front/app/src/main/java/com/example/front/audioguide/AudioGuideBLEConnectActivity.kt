@@ -44,9 +44,10 @@ class AudioGuideBLEConnectActivity : AppCompatActivity() {
 //            }
             if(!devices.contains(device)){
                     val deviceName = device.name ?: "Unknown"
+                    val deviceAddress = device.address
                     devices.add(device)
                     arrayAdapter.notifyDataSetChanged()
-                    Log.d("bluetoothconnect", "Found BLE device: $deviceName - ${device.address}")
+                    Log.d("bluetoothconnect", "Found BLE device: $deviceName - ${deviceAddress}")
                     Toast.makeText(this@AudioGuideBLEConnectActivity, "발견된 기기: $deviceName", Toast.LENGTH_SHORT).show()
                 }
         }
@@ -100,8 +101,9 @@ class AudioGuideBLEConnectActivity : AppCompatActivity() {
     private fun connectToDevice(device: BluetoothDevice) {
         stopBLEScan()
         val deviceName = device.name ?: "Unknown"
+        val deviceAddress = device.address
         Toast.makeText(this, "$deviceName 에 연결 시도 중입니다", Toast.LENGTH_SHORT).show()
-        Log.d("Bluetooth", "$deviceName - ${device.address}에 연결 시도 중입니다")
+        Log.d("Bluetooth", "$deviceName - ${deviceAddress}에 연결 시도 중입니다")
         navigateToAudioGuideBLEControl(device, this)
     }
 
