@@ -30,8 +30,8 @@ class LoginActivity : AppCompatActivity() {
 
             //TODO:: 로그인이 끝난 후 실행될 수 있도록 조정할 것
             kakaoLogin()
-            intent = Intent(this, MainActivity::class.java)
-            startActivity(intent)
+           // intent = Intent(this, MainActivity::class.java)
+            //startActivity(intent)
 
         }
     }

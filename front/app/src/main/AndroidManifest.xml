@@ -39,7 +39,7 @@
             android:name=".audioguide.AudioGuideBLEControl"
             android:exported="false"
             android:taskAffinity=""
-            android:theme="@style/Transportation_Main_Theme" />
+            android:theme="@style/Transportation_Main_Theme"  />
         <activity
             android:name=".audioguide.AudioGuideBLEConnectActivity"
             android:exported="false"
