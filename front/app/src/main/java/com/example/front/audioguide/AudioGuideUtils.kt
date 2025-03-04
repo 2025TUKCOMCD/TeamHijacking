@@ -11,8 +11,6 @@ import android.bluetooth.BluetoothProfile
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Build
-import android.os.Handler
-import android.os.Looper
 import android.util.Log
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
@@ -25,8 +23,13 @@ private var txCharacteristicUUID = UUID.fromString("0003cdd2-0000-1000-8000-0080
 private var rxCharacteristicUUID = UUID.fromString("0003cdd1-0000-1000-8000-00805f9b0131")
 private var cccdUUID = UUID.fromString("00002902-0000-1000-8000-00805f9b34fb")
 
-
+//통신을 위한 Gatt 객체
 var bluetoothGatt: BluetoothGatt? = null
+
+//Gatt통신 상태 확인을 위한 변수
+var bluetoothGattState = false
+//화면 나갔을시에 연결 해제를 위한 변수
+var bluetoothGattDisconnected = false
 
 //----------------------------권한 요청용 코드 -------------------------------
 //필요한 권한들을 쭉 적어놓음 나중에 사용 예정
@@ -38,7 +41,7 @@ private val requiredPermissions = if (Build.VERSION.SDK_INT >= Build.VERSION_COD
         Manifest.permission.BLUETOOTH_ADVERTISE,
         Manifest.permission.BLUETOOTH_ADMIN,  //관리자 정도의 기능 제공 일단 ADMIN으로 씀
         //  Manifest.permission.BLUETOOTH,  //간단한 기능 제공
-        // Manifest.permission.ACCESS_FINE_LOCATION // 필요에 따라 추가
+        Manifest.permission.ACCESS_FINE_LOCATION // 필요에 따라 추가
     )
 } else {
     arrayOf(
@@ -70,6 +73,16 @@ fun checkPermissions(activity: Activity) : Boolean {
     } else {
         return true  // 거부된 권한이 없다면 블루투스 권한성공을 출력
     }
+}
+/*
+기능 1. 특정블루투스기기를 가지고 다음 화면으로 넘어가게 해준다.
+ */
+fun connectToDevice(device: BluetoothDevice, activity: Activity) {
+    val deviceName = device.name ?: "Unknown"
+    val deviceAddress = device.address
+    Toast.makeText(activity, "$deviceName 에 연결 시도 중입니다", Toast.LENGTH_SHORT).show()
+    Log.d("Bluetooth", "$deviceName - ${deviceAddress}에 연결 시도 중입니다")
+    navigateToAudioGuideBLEControl(device, activity)
 }
 
 /*
@@ -108,6 +121,7 @@ fun sendDataToCharacteristic(data: ByteArray, bluetoothGatt : BluetoothGatt) {
 기능 2. bluetooth 기기의 기능중 Uart 방식 의 rx 부분에 대해 데이터 변화를 감지 해 준다.
 기능 3. bluetooth 기기의 기능중 rx 데이터 변화가 감지 되면 Toast 및 로그로 그 결과를 출력 해 준다.
  */
+
 fun connectToBluetoothGatt(device: BluetoothDevice, activity: Activity) {
     if (bluetoothGatt == null || bluetoothGatt?.device?.address != device.address) {
         bluetoothGatt = device.connectGatt(activity, false, object : BluetoothGattCallback() {
@@ -115,11 +129,16 @@ fun connectToBluetoothGatt(device: BluetoothDevice, activity: Activity) {
                 if (newState == BluetoothProfile.STATE_CONNECTED) {
                     Log.d("BluetoothControl", "GATT 연결 성공: ${gatt.device.name} - ${gatt.device.address}") // GATT 연결 성공
                     Log.d("현빈", "하고 있는건가1")
+                    bluetoothGattState = true
+                    bluetoothGattDisconnected = false
                     gatt.discoverServices() // 서비스 찾기 시작
                 } else if (newState == BluetoothProfile.STATE_DISCONNECTED) {
                     Log.d("BluetoothControl", "GATT 연결 해제: ${gatt.device.name} - ${gatt.device.address} 및 재연결 시도" )
                     bluetoothGatt = null
-                    connectToBluetoothGatt(device, activity)
+                    bluetoothGattState = false
+                    if (!bluetoothGattDisconnected) {
+                        connectToBluetoothGatt(device, activity)
+                    }
                 }
             }
             //일단 임시코드로 만약 연결이 완료 된 상태에선 찾을 필요 없음 서비스 및 특성을 찾으면 uuid를 로그로 찍어주는 코드

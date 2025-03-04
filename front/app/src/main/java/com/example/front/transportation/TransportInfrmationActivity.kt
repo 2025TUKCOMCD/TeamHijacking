@@ -1,6 +1,9 @@
 package com.example.front.transportation
 
+import android.content.Intent
+import android.location.Location
 import android.os.Bundle
+import android.os.Parcelable
 import android.text.TextUtils
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
@@ -12,6 +15,7 @@ import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
+import androidx.core.location.LocationManagerCompat.getCurrentLocation
 import com.example.front.R
 import com.example.front.databinding.TransSavedConfirmDialogBinding
 import com.example.front.databinding.TransSavedDialogBinding
@@ -26,11 +30,17 @@ class TransportInfrmationActivity : AppCompatActivity() {
     private var imgIndex = 0
     private lateinit var transInfoImgSwitcher: ImageSwitcher
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityTransportInfrmationBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        val intent = Intent(this, TransportInfrmationActivity::class.java)
+
+        val pathTransitType = intent.getIntegerArrayListExtra("pathTransitType")
+        val transitTypeNo = intent.getStringArrayListExtra("transitTypeNo")
+        val routeIds = intent.getParcelableArrayListExtra<Parcelable>("routeIds")
+        // mainTransitType를 통해 이미지를 변경하도록 구현
 
         //바인딩
         val imsiBtt2: Button = binding.imsiBtt2
@@ -40,7 +50,8 @@ class TransportInfrmationActivity : AppCompatActivity() {
         //imageSwitcher에 imageView 설정하여 이미지 표시
         initTransImgSwitcher()
 
-       //다이얼로그를 띄우기 위한 임시 버튼, 추후 삭제 예정.
+        // 주석처리된 임시 버튼
+        /*
         imsiBtt2.setOnClickListener {
             transSavedDialogShow()
         }
@@ -48,10 +59,41 @@ class TransportInfrmationActivity : AppCompatActivity() {
         imsiBtt3.setOnClickListener {
             whatIsNext(++imgIndex)
         }
+        */
+
+        updateButtonImages(pathTransitType)
+
+    }
+
+    private fun updateButtonImages(pathTransitType: List<Int>?) {
+        if (pathTransitType == null) return
+
+        val currentLocation = getCurrentLocation() // Implement this method to get the current location
+
+        pathTransitType.forEachIndexed { index, type ->
+            if (isCurrentLocationOnRoute(currentLocation, index)) {
+                when (type) {
+                    1 -> binding.imsiBtt2.setBackgroundResource(R.drawable.train_btt)
+                    2 -> binding.imsiBtt2.setBackgroundResource(R.drawable.bus_btt)
+                    3 -> binding.imsiBtt2.setBackgroundResource(R.drawable.human_btt)
+                }
+            }
+        }
+    }
+
+    private fun isCurrentLocationOnRoute(currentLocation: Location, index: Int): Boolean {
+        // Implement logic to check if the current location is on the route at the given index
+        // This is a placeholder implementation
+        return true
+    }
+
+    private fun getCurrentLocation(): Location {
+        // Implement logic to get the current location
+        // This is a placeholder implementation
+        return Location("provider")
     }
 
     /* dialog 관련 function */
-
     private fun transSavedDialogShow(){
         // 뷰 바인딩 확인
         val transSavedDialogBinding = try {
@@ -97,7 +139,6 @@ class TransportInfrmationActivity : AppCompatActivity() {
 
     //다이얼로그의 yes 버튼 클릭 시 동작되어야 할 코드.
     private fun transSavedNicknameDialogShow(){
-
         val transSavedConfirmDialogBinding = try {
             TransSavedConfirmDialogBinding.inflate(layoutInflater)
         } catch (e: Exception) {
@@ -157,7 +198,7 @@ class TransportInfrmationActivity : AppCompatActivity() {
         transInfoImgSwitcher.setImageResource(transInfoImgArray[imgIndex])
     }
 
-        /* 교통 안내 변경 시, 버스, 지하철, ... 에 따라 사진 바뀌도록 구현 */
+    /* 교통 안내 변경 시, 버스, 지하철, ... 에 따라 사진 바뀌도록 구현 */
     private fun whatIsNext(index:Int = 0) {
         //만약 배열의 크기보다 크다면 0으로 바꾼다.
         if(index>=transInfoImgArray.size) {
@@ -167,6 +208,6 @@ class TransportInfrmationActivity : AppCompatActivity() {
             transInfoImgSwitcher.setImageResource(transInfoImgArray[index])
         }
 
-            return;
+        return;
     }
 }

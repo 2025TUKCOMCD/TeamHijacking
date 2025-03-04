@@ -32,6 +32,7 @@
                 android:textSize="16sp"
                 android:padding="8dp"
                 android:gravity="center" />
+
             <Button
                 android:id="@+id/btn_select_route"
                 android:layout_width="wrap_content"
