@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
 import android.os.Parcelable
+import android.util.Log
 import android.view.View
 import android.widget.LinearLayout
 import android.widget.ProgressBar
@@ -15,6 +16,7 @@ import com.example.front.transportation.data.searchPath.Route
 
 
 import androidx.activity.viewModels
+import com.example.front.transportation.data.searchPath.RouteId
 
 
 class TransportNewPathSearchActivity : AppCompatActivity() {
@@ -78,11 +80,12 @@ class TransportNewPathSearchActivity : AppCompatActivity() {
 
                 // Set click listener for each route layout
                 routeLayouts[index].setOnClickListener {
-                    // Handle click event
+
+                    // Create the Intent and add data
                     val intent = Intent(this, TransportInformationActivity::class.java)
                     intent.putIntegerArrayListExtra("pathTransitType", ArrayList(route.pathTransitType))
                     intent.putStringArrayListExtra("transitTypeNo", ArrayList(route.transitTypeNo))
-                    intent.putParcelableArrayListExtra("routeIds", ArrayList(route.routeIds.map { it as Parcelable }))
+                    intent.putExtra("routeIds", ArrayList(route.routeIds))
                     startActivity(intent)
                 }
             }
