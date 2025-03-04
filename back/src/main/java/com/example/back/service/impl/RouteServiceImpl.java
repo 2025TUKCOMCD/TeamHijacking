@@ -90,7 +90,6 @@ public class RouteServiceImpl implements RouteService {
             ResponseBody responseBody = call.execute().body();
             if (responseBody != null) {
                 String rawJson = responseBody.string();
-                System.out.println("🔍 검색 결과: " + rawJson);
                 RouteProcessDTO.SearchPath parsedResponse = gson.fromJson(rawJson, RouteProcessDTO.SearchPath.class);
                 if (parsedResponse != null && parsedResponse.getResult() != null) {
                     List<RouteProcessDTO.Path> paths = parsedResponse.getResult().getPath();
@@ -98,10 +97,9 @@ public class RouteServiceImpl implements RouteService {
                         List<RouteProcessDTO.Path> sortedPaths = paths.stream()
                                 .map(path -> new AbstractMap.SimpleEntry<>(path, calculateRouteScore(path)))
                                 .sorted(Map.Entry.comparingByValue())
-//                                .limit(3)
+                                .limit(3)
                                 .map(Map.Entry::getKey)
                                 .collect(Collectors.toList());
-                        System.out.println("🔍 최종 경로: " + sortedPaths);
 
                         CompletableFuture<List<ResultDTO>> futureResult = asyncRouteDetails(sortedPaths);
                         return futureResult.join();
@@ -177,12 +175,15 @@ public class RouteServiceImpl implements RouteService {
     private CompletableFuture<Map.Entry<Integer, Map<String, Object>>> processTrafficType2Async(RouteProcessDTO.SubPath subPath, int index) {
         return CompletableFuture.supplyAsync(() -> {
             try {
-                System.out.println(subPath);
                 int busID = subPath.getLane().get(0).getBusID();
                 int startID = subPath.getStartID();
                 int endID = subPath.getEndID();
+                Double startX = subPath.getStartX();
+                Double startY = subPath.getStartY();
                 int busLocalBlID = subPath.getLane().get(0).getBusLocalBlID();
                 int startLocalStationID = subPath.getStartLocalStationID();
+                String predictTime1 ;
+                String predictTime2 ;
 
                     // fetchBusLaneDetail 함수 호출
                 BusDetailProcessDTO.BusLaneDetail busDetail = fetchBusLaneDetail(busID);
@@ -195,9 +196,6 @@ public class RouteServiceImpl implements RouteService {
 
                 List<BusArriveProcessDTO.arriveDetail> arriveDetails = fetchAndBusArrive(startLocalStationID, busLocalBlID, startStationInfo);
 
-                String predictTime1 ;
-                String predictTime2 ;
-
                 if (arriveDetails != null && arriveDetails.get(0).getMsgBody() != null && arriveDetails.get(0).getMsgBody().getItemList() != null) {
                     BusArriveProcessDTO.Item firstItem = arriveDetails.get(0).getMsgBody().getItemList().get(0);
                     predictTime1 = firstItem.getArrmsg1();
@@ -207,7 +205,6 @@ public class RouteServiceImpl implements RouteService {
                     predictTime2 = "서비스 지역 아님";
                 }
                 List<RouteProcessDTO.Station> stations = subPath.getPassStopList().getStations();
-                System.out.println(stations);
                 // 결과를 Map으로 저장
                 Map<String, Object> dataMap = new HashMap<>();
                 dataMap.put("busLocalBlID", busLocalBlID);
@@ -216,7 +213,8 @@ public class RouteServiceImpl implements RouteService {
                 for (RouteProcessDTO.Station station : stations) {
                     stationRoute.add(station.getLocalStationID());
                 }
-
+                dataMap.put("startX",startX);
+                dataMap.put("startY",startY);
                 dataMap.put("stationInfo", stationRoute);
                 dataMap.put("startStationInfo", startStationInfo);
                 dataMap.put("endStationInfo", endStationInfo);
@@ -281,7 +279,6 @@ public class RouteServiceImpl implements RouteService {
                 futureList.add(future);
             }
         }
-
         // 모든 비동기 작업이 완료될 때까지 기다림
         CompletableFuture.allOf(futureList.toArray(new CompletableFuture[0])).join();
 
@@ -297,14 +294,18 @@ public class RouteServiceImpl implements RouteService {
                 // subPath 데이터를 ResultDTO에 설정
                 if (processedSubPath.getTrafficType() == 2) {
                     RouteIdSetDTO routeIdSetDTO = new RouteIdSetDTO();
-                    routeIdSetDTO.getBusLocalBlID().add((Integer) dataMap.get("busLocalBlID"));
+                    routeIdSetDTO.setBusLocalBlID((Integer) dataMap.get("busLocalBlID"));
+                    routeIdSetDTO.setStartX((Double) dataMap.get("startX"));
+                    routeIdSetDTO.setStartY((Double) dataMap.get("startY"));
                     routeIdSetDTO.setStartStationInfo((Integer) dataMap.get("startStationInfo"));
                     routeIdSetDTO.setEndStationInfo((Integer) dataMap.get("endStationInfo"));
                     routeIdSetDTO.getStationInfo().addAll((List<Integer>) dataMap.get("stationInfo"));
                     routeIdSetDTO.getPredictTimes1().add((String) dataMap.get("predictTime1"));
                     routeIdSetDTO.getPredictTimes2().add((String) dataMap.get("predictTime2"));
                     resultDTO.getRouteIds().add(routeIdSetDTO);
-                    // 예시: 교통 유형이 2인 경우
+                    // 교통 유형이 2인 경우
+                }else if(processedSubPath.getTrafficType() == 3){
+                    // 교통 유형 3일 경우 처리
                 }
 
                 System.out.println("처리 완료된 subPath 인덱스: " + subPathIndex);
