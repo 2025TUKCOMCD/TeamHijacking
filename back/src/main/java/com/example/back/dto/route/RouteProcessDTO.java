@@ -57,7 +57,7 @@ public class RouteProcessDTO {
         private int busID; // 사용
         private int busCityCode; // 사용
         private int busLocalBlID;
-
+        private int subwayCode;
     }
 
     @Data

@@ -28,7 +28,6 @@ public class RouteServiceImpl implements RouteService {
     private final String ODsayBaseURL = "https://api.odsay.com/v1/api/";
     private final String SeoulBaseURL = "http://ws.bus.go.kr/api/rest/";
 
-
     @Value("${ODsay.apikey}")
     private String Odsay_apiKey;
 
@@ -231,11 +230,20 @@ public class RouteServiceImpl implements RouteService {
 
 
 
-    private CompletableFuture<Map.Entry<Integer, Map<String, Object>>> processTrafficType3Async(RouteProcessDTO.SubPath subPath, int index) {
+    private CompletableFuture<Map.Entry<Integer, Map<String, Object>>> processTrafficType1Async(RouteProcessDTO.SubPath subPath, int index) {
         return CompletableFuture.supplyAsync(() -> {
-            // trafficType 3에 대한 비동기 작업 로직 구현
-            // System.out.println("Processing TrafficType 3 SubPath: " + subPath + " with index: " + index);
-            return new AbstractMap.SimpleEntry<>(index, null);
+            Double startX = subPath.getStartX();
+            Double startY = subPath.getStartY();
+            int subwayCode = subPath.getLane().get(0).getSubwayCode();
+
+            List<RouteProcessDTO.Station> stations = subPath.getPassStopList().getStations();
+            Map<String, Object> dataMap = new HashMap<>();
+            List<Integer> stationRoute = new ArrayList<>();
+            for (RouteProcessDTO.Station station : stations) {
+                stationRoute.add(station.getLocalStationID());
+            }
+
+            return new AbstractMap.SimpleEntry<>(index, dataMap);
         }, executorService);
     }
 
@@ -261,9 +269,8 @@ public class RouteServiceImpl implements RouteService {
                 info.getBusTransitCount() + info.getSubwayTransitCount()
         );
         resultDTO.setMainTransitType(mapTransitType(pathType));
-        resultDTO.setPathTransitType(mapPath(subPathList));
-
         resultDTO.setTransitTypeNo(mapDetailedTrans(subPathList));
+        resultDTO.setPathTransitType(mapPath(subPathList));
         // 비동기 처리
         List<CompletableFuture<Map.Entry<Integer, Map<String, Object>>>> futureList = new ArrayList<>();
 
@@ -271,11 +278,12 @@ public class RouteServiceImpl implements RouteService {
             RouteProcessDTO.SubPath subPath = subPathList.get(i);
             int index = i; // 현재 인덱스 저장
 
-            if (subPath.getTrafficType() == 2) {
-                CompletableFuture<Map.Entry<Integer, Map<String, Object>>> future = processTrafficType2Async(subPath, index);
+            if (subPath.getTrafficType() == 1) {
+                CompletableFuture<Map.Entry<Integer, Map<String, Object>>> future = processTrafficType1Async(subPath, index);
                 futureList.add(future);
-            } else if (subPath.getTrafficType() == 3) {
-                CompletableFuture<Map.Entry<Integer, Map<String, Object>>> future = processTrafficType3Async(subPath, index);
+            }
+            else if (subPath.getTrafficType() == 2) {
+                CompletableFuture<Map.Entry<Integer, Map<String, Object>>> future = processTrafficType2Async(subPath, index);
                 futureList.add(future);
             }
         }

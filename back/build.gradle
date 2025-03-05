@@ -37,9 +37,10 @@ dependencies {
 	implementation("org.simpleframework:simple-xml:2.7.1")
 	implementation("com.squareup.retrofit2:converter-simplexml:2.9.0")
 	// db
-	// implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
-	// runtimeOnly 'com.mysql:mysql-connector-java'
-	// implementation 'mysql:mysql-connector-java:8.0.33'
+	implementation 'org.springframework.boot:spring-boot-starter-web'
+	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+	runtimeOnly 'mysql:mysql-connector-java:8.0.33'
+	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	// lombok
 	compileOnly 'org.projectlombok:lombok'
 	annotationProcessor 'org.projectlombok:lombok'
