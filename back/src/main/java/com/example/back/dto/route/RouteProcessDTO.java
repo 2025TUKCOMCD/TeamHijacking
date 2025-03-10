@@ -38,6 +38,8 @@ public class RouteProcessDTO {
         private Double distance;
         private String startName;
         private String endName;
+        private Double startX;
+        private Double startY;
         private int startID;
         private int endID;
         private List<Lane> lane; // 사용
@@ -55,7 +57,7 @@ public class RouteProcessDTO {
         private int busID; // 사용
         private int busCityCode; // 사용
         private int busLocalBlID;
-
+        private int subwayCode;
     }
 
     @Data
