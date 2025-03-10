@@ -10,6 +10,8 @@
     <string name="btn_position_derrivation">음성 유도 기능입니다. 신호기 및 음성유도기에서 음성이 나옵니다.</string>
     <string name="btn_signal_guide">신호 안내 기능입니다. 신호기의 현재 신호에 대한 음성이 나옵니다.</string>
     <string name="btn_audio_guides">음성 안내 기능입니다. 음향신호기의 설치 위치정보가 나옵니다.</string>
+    <string name="btn_scan_start">주변에 있는 스마트 음향신호기들을 검색합니다.</string>
+
     <string name="btn_iot_home">iot 스마트홈</string>
     <string name="btn_setting">설정</string>
     <string name="btn_transport_description">교통안내 기능입니다. 자세한 설명이 필요하시다면 꾹 누르십시오.</string>
