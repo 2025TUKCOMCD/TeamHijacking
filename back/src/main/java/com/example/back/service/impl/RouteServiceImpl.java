@@ -7,17 +7,21 @@ import com.example.back.dto.RouteIdSetDTO;
 import com.example.back.dto.bus.arrive.BusArriveProcessDTO;
 import com.example.back.dto.bus.detail.BusDetailProcessDTO;
 import com.example.back.dto.route.*;
+import com.example.back.repository.TimeTableRepository;
 import com.example.back.service.RouteService;
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 import okhttp3.OkHttpClient;
 import okhttp3.ResponseBody;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import retrofit2.Call;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 import java.io.IOException;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.concurrent.*;
 import java.util.stream.Collectors;
@@ -28,11 +32,16 @@ public class RouteServiceImpl implements RouteService {
     private final String ODsayBaseURL = "https://api.odsay.com/v1/api/";
     private final String SeoulBaseURL = "http://ws.bus.go.kr/api/rest/";
 
+    // 데이터베이스 연동
+    @Autowired
+    private TimeTableRepository timeTableRepository;
+
     @Value("${ODsay.apikey}")
     private String Odsay_apiKey;
 
     @Value(("${Public_Bus_APIKEY}"))
     private String Seoul_apiKey;
+
 
     private final Gson gson = new Gson();
     private final OkHttpClient client = new OkHttpClient.Builder()
@@ -200,13 +209,13 @@ public class RouteServiceImpl implements RouteService {
                     predictTime1 = firstItem.getArrmsg1();
                     predictTime2 = firstItem.getArrmsg2();
                 } else {
-                    predictTime1 = "서비스 지역 아님";
-                    predictTime2 = "서비스 지역 아님";
+                    predictTime1 = "null";
+                    predictTime2 = "null";
                 }
                 List<RouteProcessDTO.Station> stations = subPath.getPassStopList().getStations();
                 // 결과를 Map으로 저장
                 Map<String, Object> dataMap = new HashMap<>();
-                dataMap.put("busLocalBlID", busLocalBlID);
+                dataMap.put("TransportLocalID", busLocalBlID);
                 List<Integer> stationRoute = new ArrayList<>();
 
                 for (RouteProcessDTO.Station station : stations) {
@@ -232,19 +241,76 @@ public class RouteServiceImpl implements RouteService {
 
     private CompletableFuture<Map.Entry<Integer, Map<String, Object>>> processTrafficType1Async(RouteProcessDTO.SubPath subPath, int index) {
         return CompletableFuture.supplyAsync(() -> {
+            int updnLine;
             Double startX = subPath.getStartX();
             Double startY = subPath.getStartY();
+            String startName = subPath.getStartName();
             int subwayCode = subPath.getLane().get(0).getSubwayCode();
-
+            int wayCode = subPath.getWayCode(); // 1: 상행, 2: 하행
             List<RouteProcessDTO.Station> stations = subPath.getPassStopList().getStations();
+            // 결과를 Map으로 저장
             Map<String, Object> dataMap = new HashMap<>();
-            List<Integer> stationRoute = new ArrayList<>();
+
+            List<String> stationRoute = new ArrayList<>();
+
             for (RouteProcessDTO.Station station : stations) {
-                stationRoute.add(station.getLocalStationID());
+                stationRoute.add(station.getStationName());
+            }
+
+            Map<Integer, Integer> subwayCodeToCity = new HashMap<>();
+
+            // 서울 지하철 코드 매핑
+            for (int code : new int[]{1, 2, 3, 4, 5, 6, 7, 8, 9, 91, 101, 102, 104, 107, 108, 109, 110, 112, 113, 114, 115, 116, 117, 21, 22}) {
+                subwayCodeToCity.put(code, 10); // 서울: 10
+            }
+
+            // 부산 지하철 코드 매핑
+            for (int code : new int[]{71, 72, 73, 74, 78, 79}) {
+                subwayCodeToCity.put(code, 20); // 부산: 20
+            }
+
+            // 대구 지하철 코드 매핑
+            for (int code : new int[]{41, 42, 43, 48}) {
+                subwayCodeToCity.put(code, 30); // 대구: 30
+            }
+
+            // 광주 지하철 코드 매핑
+            subwayCodeToCity.put(51, 40); // 광주: 40
+
+            // 대전 지하철 코드 매핑
+            subwayCodeToCity.put(31, 50); // 대전: 50
+
+            int city = subwayCodeToCity.getOrDefault(subwayCode,0);
+
+            List<Integer> specialSeoulCodes = Arrays.asList(110, 115, 21, 22);
+
+            if (city == 10 && specialSeoulCodes.contains(subwayCode)) {
+                timeArrive(subwayCode); // 특수한 서울 코드
+            } else if (city == 10) {
+                realTimeArrive(subwayCode); // 나머지 서울 코드
+            } else if (city == 20 || city == 30 || city == 40 || city == 50) {
+                timeArrive(subwayCode); // 부산, 대구, 광주, 대전
+            } else {
+                System.out.println("Unknown subway code");
             }
 
             return new AbstractMap.SimpleEntry<>(index, dataMap);
         }, executorService);
+    }
+
+    public static void timeArrive(int subwayCode) {
+        LocalTime now = LocalTime.now();
+
+        // 원하는 시간 포맷 설정
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm:ss");
+        String formattedTime = now.format(formatter);
+
+        System.out.println("현재 시간: " + formattedTime);
+
+    }
+
+    public static void realTimeArrive(int subwayCode) {
+
     }
 
 
@@ -302,14 +368,14 @@ public class RouteServiceImpl implements RouteService {
                 // subPath 데이터를 ResultDTO에 설정
                 if (processedSubPath.getTrafficType() == 2) {
                     RouteIdSetDTO routeIdSetDTO = new RouteIdSetDTO();
-                    routeIdSetDTO.setBusLocalBlID((Integer) dataMap.get("busLocalBlID"));
+                    routeIdSetDTO.setTransportLocalID((Integer) dataMap.get("TransportLocalID"));
                     routeIdSetDTO.setStartX((Double) dataMap.get("startX"));
                     routeIdSetDTO.setStartY((Double) dataMap.get("startY"));
                     routeIdSetDTO.setStartStationInfo((Integer) dataMap.get("startStationInfo"));
                     routeIdSetDTO.setEndStationInfo((Integer) dataMap.get("endStationInfo"));
                     routeIdSetDTO.getStationInfo().addAll((List<Integer>) dataMap.get("stationInfo"));
-                    routeIdSetDTO.getPredictTimes1().add((String) dataMap.get("predictTime1"));
-                    routeIdSetDTO.getPredictTimes2().add((String) dataMap.get("predictTime2"));
+                    routeIdSetDTO.setPredictTimes1((String) dataMap.get("predictTime1"));
+                    routeIdSetDTO.setPredictTimes2((String) dataMap.get("predictTime2"));
                     resultDTO.getRouteIds().add(routeIdSetDTO);
                     // 교통 유형이 2인 경우
                 }else if(processedSubPath.getTrafficType() == 3){

@@ -40,6 +40,7 @@ public class RouteProcessDTO {
         private String endName;
         private Double startX;
         private Double startY;
+        private int wayCode;
         private int startID;
         private int endID;
         private List<Lane> lane; // 사용
@@ -73,6 +74,4 @@ public class RouteProcessDTO {
         private String stationType;
         private int localStationID; // 사용
     }
-
-
 }
