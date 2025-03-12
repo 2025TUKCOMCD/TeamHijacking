@@ -22,7 +22,10 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 import java.io.IOException;
 import java.sql.Time;
+import java.time.DayOfWeek;
 import java.time.LocalTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.concurrent.*;
@@ -241,92 +244,125 @@ public class RouteServiceImpl implements RouteService {
 
     private CompletableFuture<Map.Entry<Integer, Map<String, Object>>> processTrafficType1Async(RouteProcessDTO.SubPath subPath, int index) {
         return CompletableFuture.supplyAsync(() -> {
-            int updnLine;
-            Double startX = subPath.getStartX();
-            Double startY = subPath.getStartY();
             String startName = subPath.getStartName();
             int subwayCode = subPath.getLane().get(0).getSubwayCode();
-            int wayCode = subPath.getWayCode(); // 1: 상행, 2: 하행
+            System.out.println("지하철 코드: " + subwayCode);
 
-            List<RouteProcessDTO.Station> stations = subPath.getPassStopList().getStations();
-            // 결과를 Map으로 저장
             Map<String, Object> dataMap = new HashMap<>();
-
-            List<String> stationRoute = new ArrayList<>();
-
-            for (RouteProcessDTO.Station station : stations) {
-                stationRoute.add(station.getStationName());
-            }
-
-            Map<Integer, Integer> subwayCodeToCity = new HashMap<>();
-
-            // 서울 지하철 코드 매핑
-            for (int code : new int[]{1, 2, 3, 4, 5, 6, 7, 8, 9, 91, 101, 102, 104, 107, 108, 109, 110, 112, 113, 114, 115, 116, 117, 21, 22}) {
-                subwayCodeToCity.put(code, 10); // 서울: 10
-            }
-
-            // 부산 지하철 코드 매핑
-            for (int code : new int[]{71, 72, 73, 74, 78, 79}) {
-                subwayCodeToCity.put(code, 20); // 부산: 20
-            }
-
-            // 대구 지하철 코드 매핑
-            for (int code : new int[]{41, 42, 43, 48}) {
-                subwayCodeToCity.put(code, 30); // 대구: 30
-            }
-
-            // 광주 지하철 코드 매핑
-            subwayCodeToCity.put(51, 40); // 광주: 40
-
-            // 대전 지하철 코드 매핑
-            subwayCodeToCity.put(31, 50); // 대전: 50
-
-            int city = subwayCodeToCity.getOrDefault(subwayCode,0);
-
-            List<Integer> specialSeoulCodes = Arrays.asList(110, 115, 21, 22);
-
-            List<TimeTable> predictTimeList = timeArrive(subwayCode, startName);
-
-            // 가장 가까운 도착 시간 변수
             Time predictTime1 = null;
             Time predictTime2 = null;
 
-            if (city == 10 && specialSeoulCodes.contains(subwayCode)) {
-                predictTimeList = timeArrive(subwayCode, startName); // 특수한 서울 코드
-            } else if (city == 10) {
-                realTimeArrive(subwayCode); // 나머지 서울 코드
-            } else if (city == 20 || city == 30 || city == 40 || city == 50) {
-                predictTimeList = timeArrive(subwayCode, startName); // 부산, 대구, 광주, 대전
+            // 지하철 코드별 도시 매핑
+            Map<Integer, Integer> subwayCodeToCity = getSubwayCodeToCityMapping();
+            int city = subwayCodeToCity.getOrDefault(subwayCode, 0);
+
+            // 조건에 따라 데이터베이스 검색 실행
+            List<TimeTable> predictTimeList = null;
+            if (city == 10) { // 서울 지하철
+                if (isSpecialSeoulCode(subwayCode)) {
+                    predictTimeList = timeArrive(subwayCode, startName);
+                } else {
+                    realTimeArrive(subwayCode);
+                }
+            } else if (city == 20 || city == 30 || city == 40 || city == 50) { // 부산, 대구, 광주, 대전
+                predictTimeList = timeArrive(subwayCode, startName);
             } else {
-                System.out.println("Unknown subway code");
+                System.out.println("Unknown subway code: " + subwayCode);
             }
-            // 리스트에서 첫 번째와 두 번째 도착 시간을 추출
+
+            // 결과 처리 (도착 시간 추출)
             if (predictTimeList != null && !predictTimeList.isEmpty()) {
-                if (predictTimeList.size() > 0) {
-                    predictTime1 = predictTimeList.get(0).getArrival_Time(); // 첫 번째 도착 시간
-                }
-                if (predictTimeList.size() > 1) {
-                    predictTime2 = predictTimeList.get(1).getArrival_Time(); // 두 번째 도착 시간
-                }
+                System.out.println("Predict Time List: " + predictTimeList);
+                predictTime1 = predictTimeList.size() > 0 ? predictTimeList.get(0).getArrival_Time() : null;
+                predictTime2 = predictTimeList.size() > 1 ? predictTimeList.get(1).getArrival_Time() : null;
             }
-            // 결과 데이터를 Map에 저장
+
+            // 결과 저장
             dataMap.put("predictTime1", predictTime1);
             System.out.println("첫 번째 도착 시간: " + predictTime1);
             dataMap.put("predictTime2", predictTime2);
             System.out.println("두 번째 도착 시간: " + predictTime2);
+
             return new AbstractMap.SimpleEntry<>(index, dataMap);
         }, executorService);
     }
 
+    // 서울 지하철 특수 코드 확인
+    private boolean isSpecialSeoulCode(int subwayCode) {
+        List<Integer> specialSeoulCodes = Arrays.asList(110, 115, 21, 22);
+        return specialSeoulCodes.contains(subwayCode);
+    }
+
+    // 데이터베이스 호출
     public List<TimeTable> timeArrive(int subwayCode, String startName) {
-        Time currentTime = Time.valueOf(LocalTime.now()); // 현재 시간을 Time 객체로 변환
-        // Repository 호출하여 가장 가까운 두 개의 도착 정보를 가져옴
-        return timeTableRepository.findTop2PreviousSubwayByRouteIdAndStationName(subwayCode, startName, currentTime);
+        // 서울 시간 기준 현재 시간 가져오기
+        ZoneId seoulZoneId = ZoneId.of("Asia/Seoul");
+        LocalTime seoulTime = ZonedDateTime.now(seoulZoneId).toLocalTime();
+        Time currentTime = Time.valueOf(seoulTime);
+
+        // 현재 요일에 따른 Day_Type 계산
+        String currentDayType = getCurrentDayType(subwayCode);
+        System.out.println("현재 요일 타입: " + currentDayType);
+
+        // Repository 호출하여 현재 시간 이후의 도착 정보를 가져오기
+        return timeTableRepository.findNextSubwayByRouteIdAndStationNameAndDayType(
+                subwayCode, startName, currentTime, currentDayType
+        );
+    }
+
+    private String getCurrentDayType(int subwayCode) {
+        // 서울 시간 기준 현재 요일 계산
+        ZoneId seoulZoneId = ZoneId.of("Asia/Seoul");
+        DayOfWeek currentDay = ZonedDateTime.now(seoulZoneId).getDayOfWeek();
+
+        // 주말 또는 평일 판단
+        if (currentDay == DayOfWeek.SATURDAY || currentDay == DayOfWeek.SUNDAY) {
+            // 특정 route_id에서 토요일과 일요일을 구분
+            if (isWeekendRoute(subwayCode)) {
+                if (currentDay == DayOfWeek.SATURDAY) {
+                    return "sat"; // 토요일
+                } else {
+                    return "sun"; // 일요일
+                }
+            } else {
+                return "wknd"; // 주말 (공통)
+            }
+        } else {
+            return "wkdy"; // 평일
+        }
+    }
+
+    // 특정 route_id가 주말에 토요일과 일요일을 구분해야 하는지 확인
+    private boolean isWeekendRoute(int subwayCode) {
+        List<Integer> weekendSpecificRoutes = Arrays.asList(71, 72, 73, 74, 41, 42, 43, 51, 110);
+        return weekendSpecificRoutes.contains(subwayCode);
     }
 
 
-    public static void realTimeArrive(int subwayCode) {
+    public void realTimeArrive(int subwayCode) {
+        // 실시간 도착 정보 API 호출
+    }
+    // 지하철 코드 - 도시 매핑 메서드
+    private Map<Integer, Integer> getSubwayCodeToCityMapping() {
+        Map<Integer, Integer> subwayCodeToCity = new HashMap<>();
+        // 서울 지하철
+        for (int code : new int[]{1, 2, 3, 4, 5, 6, 7, 8, 9, 91, 101, 102, 104, 107, 108, 109, 110, 112, 113, 114, 115, 116, 117, 21, 22}) {
+            subwayCodeToCity.put(code, 10);
+        }
+        // 부산
+        for (int code : new int[]{71, 72, 73, 74, 78, 79}) {
+            subwayCodeToCity.put(code, 20);
+        }
+        // 대구
+        for (int code : new int[]{41, 42, 43, 48}) {
+            subwayCodeToCity.put(code, 30);
+        }
+        // 광주
+        subwayCodeToCity.put(51, 40);
+        // 대전
+        subwayCodeToCity.put(31, 50);
 
+        return subwayCodeToCity;
     }
 
 
@@ -394,7 +430,8 @@ public class RouteServiceImpl implements RouteService {
                     routeIdSetDTO.setPredictTimes2((String) dataMap.get("predictTime2"));
                     resultDTO.getRouteIds().add(routeIdSetDTO);
                     // 교통 유형이 2인 경우
-                }else if(processedSubPath.getTrafficType() == 3){
+                }else if(processedSubPath.getTrafficType() == 1){
+
                     // 교통 유형 3일 경우 처리
                 }
 
