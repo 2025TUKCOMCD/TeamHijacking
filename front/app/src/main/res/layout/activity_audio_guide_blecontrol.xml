@@ -17,6 +17,7 @@
             android:id="@+id/button1"
             android:layout_width="60dp"
             android:layout_height="60dp"
+            android:contentDescription="@string/btn_position_derrivation"
             android:background="@drawable/position_derivation"/>
 
         <ImageButton
@@ -24,6 +25,7 @@
             android:id="@+id/button2"
             android:layout_width="60dp"
             android:layout_height="60dp"
+            android:contentDescription="@string/btn_signal_guide"
             android:background="@drawable/audio_guide"/>
 
         <ImageButton
@@ -31,6 +33,7 @@
             android:id="@+id/button3"
             android:layout_width="60dp"
             android:layout_height="60dp"
+            android:contentDescription="@string/btn_audio_guides"
             android:background="@drawable/signal_guide"/>
     </LinearLayout>
     <LinearLayout
