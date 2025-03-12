@@ -2,6 +2,7 @@ package com.example.back.service.impl;
 
 import com.example.back.api.BusApi;
 import com.example.back.api.RouteApi;
+import com.example.back.domain.TimeTable;
 import com.example.back.dto.ResultDTO;
 import com.example.back.dto.RouteIdSetDTO;
 import com.example.back.dto.bus.arrive.BusArriveProcessDTO;
@@ -20,6 +21,7 @@ import retrofit2.Call;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 import java.io.IOException;
+import java.sql.Time;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
@@ -237,8 +239,6 @@ public class RouteServiceImpl implements RouteService {
         }, executorService);
     }
 
-
-
     private CompletableFuture<Map.Entry<Integer, Map<String, Object>>> processTrafficType1Async(RouteProcessDTO.SubPath subPath, int index) {
         return CompletableFuture.supplyAsync(() -> {
             int updnLine;
@@ -247,6 +247,7 @@ public class RouteServiceImpl implements RouteService {
             String startName = subPath.getStartName();
             int subwayCode = subPath.getLane().get(0).getSubwayCode();
             int wayCode = subPath.getWayCode(); // 1: 상행, 2: 하행
+
             List<RouteProcessDTO.Station> stations = subPath.getPassStopList().getStations();
             // 결과를 Map으로 저장
             Map<String, Object> dataMap = new HashMap<>();
@@ -284,30 +285,45 @@ public class RouteServiceImpl implements RouteService {
 
             List<Integer> specialSeoulCodes = Arrays.asList(110, 115, 21, 22);
 
+            List<TimeTable> predictTimeList = timeArrive(subwayCode, startName);
+
+            // 가장 가까운 도착 시간 변수
+            Time predictTime1 = null;
+            Time predictTime2 = null;
+
             if (city == 10 && specialSeoulCodes.contains(subwayCode)) {
-                timeArrive(subwayCode); // 특수한 서울 코드
+                predictTimeList = timeArrive(subwayCode, startName); // 특수한 서울 코드
             } else if (city == 10) {
                 realTimeArrive(subwayCode); // 나머지 서울 코드
             } else if (city == 20 || city == 30 || city == 40 || city == 50) {
-                timeArrive(subwayCode); // 부산, 대구, 광주, 대전
+                predictTimeList = timeArrive(subwayCode, startName); // 부산, 대구, 광주, 대전
             } else {
                 System.out.println("Unknown subway code");
             }
-
+            // 리스트에서 첫 번째와 두 번째 도착 시간을 추출
+            if (predictTimeList != null && !predictTimeList.isEmpty()) {
+                if (predictTimeList.size() > 0) {
+                    predictTime1 = predictTimeList.get(0).getArrival_Time(); // 첫 번째 도착 시간
+                }
+                if (predictTimeList.size() > 1) {
+                    predictTime2 = predictTimeList.get(1).getArrival_Time(); // 두 번째 도착 시간
+                }
+            }
+            // 결과 데이터를 Map에 저장
+            dataMap.put("predictTime1", predictTime1);
+            System.out.println("첫 번째 도착 시간: " + predictTime1);
+            dataMap.put("predictTime2", predictTime2);
+            System.out.println("두 번째 도착 시간: " + predictTime2);
             return new AbstractMap.SimpleEntry<>(index, dataMap);
         }, executorService);
     }
 
-    public static void timeArrive(int subwayCode) {
-        LocalTime now = LocalTime.now();
-
-        // 원하는 시간 포맷 설정
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm:ss");
-        String formattedTime = now.format(formatter);
-
-        System.out.println("현재 시간: " + formattedTime);
-
+    public List<TimeTable> timeArrive(int subwayCode, String startName) {
+        Time currentTime = Time.valueOf(LocalTime.now()); // 현재 시간을 Time 객체로 변환
+        // Repository 호출하여 가장 가까운 두 개의 도착 정보를 가져옴
+        return timeTableRepository.findTop2PreviousSubwayByRouteIdAndStationName(subwayCode, startName, currentTime);
     }
+
 
     public static void realTimeArrive(int subwayCode) {
 
@@ -390,8 +406,6 @@ public class RouteServiceImpl implements RouteService {
 
         return resultDTO;
     }
-
-
 
     private BusDetailProcessDTO.BusLaneDetail fetchBusLaneDetail(int busID) throws IOException {
         Call<ResponseBody> call = routeApi.busLaneDetail(busID, Odsay_apiKey);
