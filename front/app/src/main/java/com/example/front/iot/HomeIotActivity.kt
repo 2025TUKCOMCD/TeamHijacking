@@ -248,7 +248,7 @@ class HomeIotActivity : AppCompatActivity() {
                 }
 
                 override fun onFailure(call: Call<Unit>, t: Throwable) {
-                    showToast("네트워크 오류:")
+                    showToast("네트워크 오류: ${t.message}")
                 }
             })
     }
