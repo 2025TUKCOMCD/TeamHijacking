@@ -60,6 +60,11 @@ class HomeIotActivity : AppCompatActivity() {
             setBrightness("deviceId", 50) // 50% 밝기 설정
         }
 
+        //채도 설정
+        findViewById<Button>(R.id.btnColor).setOnClickListener {
+            setColor("deviceId", 20, 80) // 색조(Hue) 20, 채도(Saturation) 80 설정
+        }
+
         // ✅ 기기 상태 조회 버튼 클릭 이벤트 추가
         findViewById<Button>(R.id.btnCheckDeviceStatus).setOnClickListener {
             if (deviceList.isNotEmpty()) {
