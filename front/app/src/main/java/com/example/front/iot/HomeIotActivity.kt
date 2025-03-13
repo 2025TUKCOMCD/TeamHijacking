@@ -55,7 +55,10 @@ class HomeIotActivity : AppCompatActivity() {
             sendDeviceCommand("deviceId", "switch", "off")
         }
 
-
+        //광도 설정
+        findViewById<Button>(R.id.btnBrightness).setOnClickListener {
+            setBrightness("deviceId", 50) // 50% 밝기 설정
+        }
 
         // ✅ 기기 상태 조회 버튼 클릭 이벤트 추가
         findViewById<Button>(R.id.btnCheckDeviceStatus).setOnClickListener {
