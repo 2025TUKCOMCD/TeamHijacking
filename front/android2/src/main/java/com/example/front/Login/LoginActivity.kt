@@ -3,6 +3,7 @@ package com.example.front.Login
 //import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.widget.ImageButton
 import android.widget.Toast
 //import androidx.activity.enableEdgeToEdge
@@ -14,6 +15,7 @@ import com.kakao.sdk.user.UserApiClient
 //import java.io.File
 //import java.io.FileInputStream
 //import java.util.Properties
+import com.kakao.sdk.common.util.Utility
 
 class LoginActivity : AppCompatActivity() {
     private lateinit var binding: ActivityLoginBinding
@@ -34,11 +36,37 @@ class LoginActivity : AppCompatActivity() {
             //startActivity(intent)
 
         }
+
+
+        /*카카오톡 로그인용, 해시 발급을 위한 코드,
+          참고:: https://onlyfor-me-blog.tistory.com/296
+          아래로 내릴 것을 조언 받았음..
+         */
+
+        val keyHash = Utility.getKeyHash(this)
+        Log.e("해시키", keyHash)
     }
 
 
     /* 카카오톡 앱을 통해 로그인할 수 있는지 확인하고, 카카오톡이 설치되지 않은 경우에는 카카오 계정으로 로그인한다. */
     private fun kakaoLogin(){
+
+        /*********************************************************************************
+         * 1. 처음 로그인인지 기존 로그인 자료가 있는지?
+         * 1.1. 처음 로그인의 경우
+         * 1.1.1. SEND : GET /oauth/authorize ===>
+         * 1.1.2. RETURN : 카카오 계정 로그인 요청 <===
+         * 1.1.3. SEND : 카카오 계정 로그인 ===>
+         * 1.1.3.1. 사용자 인증 앱 설정 확인
+         * 1.1.4. RETURN : 동의 화면 출력 <===
+         * 1.1.5. SEND : 동의 하고 계속하기 ===>
+         * 1.1.5.1. RETURN : 302 REdirect URI로 전달
+         * 1.2. 토큰 받기
+         * 1.2.1.1. POST /oauth/token
+         * 1.2.2. 토큰 발급
+         * 1.3. 사용자 로그인 처리
+         *
+         *********************************************************************************/
 
         //로그인 성공 여부를 확인한 후, 로그인에 성공하면 fetchKaKaoUserInfo를 호출해 사용자 정보를 요청한다.
         val callback: (OAuthToken?, Throwable?) -> Unit = { token, error ->

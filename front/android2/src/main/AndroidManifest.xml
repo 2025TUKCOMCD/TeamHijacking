@@ -16,6 +16,7 @@
     android:theme="@style/Theme.Front"
     android:name=".MyApplication">
 
+        <!-- 카카오 인증을 위한.,.  -->
     <activity
         android:name=".Login.LoginActivity"
         android:exported="true">

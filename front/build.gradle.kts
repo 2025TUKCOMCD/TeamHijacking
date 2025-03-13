@@ -4,3 +4,12 @@ plugins {
     alias(libs.plugins.jetbrainsKotlinAndroid) apply false
     //id("org.jetbrains.kotlin.android") version "1.9.24" apply false
 }
+
+/*
+allprojects {
+    repositories {
+        google()
+        mavenCentral()
+        maven { url "https://devrepo.kakao.com/nexus/content/groups/public/" }
+    }
+}*/
