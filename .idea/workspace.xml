@@ -61,7 +61,7 @@
     <option name="autoReloadType" value="NONE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="5a34f773-8c82-4b0a-86d3-a37d3cf6ba80" name="Changes" comment="광도 버튼 추가">
+    <list default="true" id="5a34f773-8c82-4b0a-86d3-a37d3cf6ba80" name="Changes" comment="광도 조절 API 호출 수정">
       <change beforePath="$PROJECT_DIR$/front/app/src/main/java/com/example/front/iot/HomeIotActivity.kt" beforeDir="false" afterPath="$PROJECT_DIR$/front/app/src/main/java/com/example/front/iot/HomeIotActivity.kt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -359,38 +359,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1735374590430</updated>
-    </task>
-    <task id="LOCAL-00023" summary="Iot 액티비티 기능 작업">
-      <option name="closed" value="true" />
-      <created>1737002459479</created>
-      <option name="number" value="00023" />
-      <option name="presentableId" value="LOCAL-00023" />
-      <option name="project" value="LOCAL" />
-      <updated>1737002459479</updated>
-    </task>
-    <task id="LOCAL-00024" summary="Iot 데이터 추가 및 어뎁터 클래스 추가">
-      <option name="closed" value="true" />
-      <created>1737003809151</created>
-      <option name="number" value="00024" />
-      <option name="presentableId" value="LOCAL-00024" />
-      <option name="project" value="LOCAL" />
-      <updated>1737003809151</updated>
-    </task>
-    <task id="LOCAL-00025" summary="Smart싱스 API 서비스 인터페이스 수정">
-      <option name="closed" value="true" />
-      <created>1737003965550</created>
-      <option name="number" value="00025" />
-      <option name="presentableId" value="LOCAL-00025" />
-      <option name="project" value="LOCAL" />
-      <updated>1737003965550</updated>
-    </task>
-    <task id="LOCAL-00026" summary="Smart싱스 API 서비스 인터페이스 수정2">
-      <option name="closed" value="true" />
-      <created>1737004221796</created>
-      <option name="number" value="00026" />
-      <option name="presentableId" value="LOCAL-00026" />
-      <option name="project" value="LOCAL" />
-      <updated>1737004221796</updated>
     </task>
     <task id="LOCAL-00027" summary="DeviceControlHelper 추가">
       <option name="closed" value="true" />
@@ -752,7 +720,39 @@
       <option name="project" value="LOCAL" />
       <updated>1741833890761</updated>
     </task>
-    <option name="localTasksCounter" value="72" />
+    <task id="LOCAL-00072" summary="채도 버튼 추가">
+      <option name="closed" value="true" />
+      <created>1741833920234</created>
+      <option name="number" value="00072" />
+      <option name="presentableId" value="LOCAL-00072" />
+      <option name="project" value="LOCAL" />
+      <updated>1741833920234</updated>
+    </task>
+    <task id="LOCAL-00073" summary="광도 조절 API 호출">
+      <option name="closed" value="true" />
+      <created>1741834018477</created>
+      <option name="number" value="00073" />
+      <option name="presentableId" value="LOCAL-00073" />
+      <option name="project" value="LOCAL" />
+      <updated>1741834018477</updated>
+    </task>
+    <task id="LOCAL-00074" summary="광도 조절 API 호출 수정">
+      <option name="closed" value="true" />
+      <created>1741834505554</created>
+      <option name="number" value="00074" />
+      <option name="presentableId" value="LOCAL-00074" />
+      <option name="project" value="LOCAL" />
+      <updated>1741834505554</updated>
+    </task>
+    <task id="LOCAL-00075" summary="광도 조절 API 호출 수정">
+      <option name="closed" value="true" />
+      <created>1741834559828</created>
+      <option name="number" value="00075" />
+      <option name="presentableId" value="LOCAL-00075" />
+      <option name="project" value="LOCAL" />
+      <updated>1741834559828</updated>
+    </task>
+    <option name="localTasksCounter" value="76" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -767,10 +767,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="main 종점 도달 변수 추가" />
-    <MESSAGE value="main 스크롤 끝 감지 및 소리 재생 기능 추가" />
-    <MESSAGE value="main 스크롤 이벤트 트리거" />
-    <MESSAGE value="main 스크롤 이벤트 트리거 추가" />
     <MESSAGE value="main 스크롤 이벤트 트리거 talkback 지원 추가" />
     <MESSAGE value="main 스크롤 이벤트 트리거 함수 수정" />
     <MESSAGE value="test wav 파일 재생 함수 추가" />
@@ -802,6 +798,9 @@
     <MESSAGE value="스위치 on/off 추가" />
     <MESSAGE value="스위치 on/off 수정" />
     <MESSAGE value="광도 버튼 추가" />
-    <option name="LAST_COMMIT_MESSAGE" value="광도 버튼 추가" />
+    <MESSAGE value="채도 버튼 추가" />
+    <MESSAGE value="광도 조절 API 호출" />
+    <MESSAGE value="광도 조절 API 호출 수정" />
+    <option name="LAST_COMMIT_MESSAGE" value="광도 조절 API 호출 수정" />
   </component>
 </project>

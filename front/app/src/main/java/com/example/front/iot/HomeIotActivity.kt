@@ -231,6 +231,28 @@ class HomeIotActivity : AppCompatActivity() {
             })
     }
 
+    // ✅ 색상(채도) 조절 API 호출
+    private fun setColor(deviceId: String, hue: Int, saturation: Int) {
+        val commandBody = CommandBody(commands = listOf(
+            Command("colorControl", "{\"hue\": $hue, \"saturation\": $saturation}")
+        ))
+
+        RetrofitClient.instance.setColor(deviceId, commandBody, apiToken)
+            .enqueue(object : Callback<Unit> {
+                override fun onResponse(call: Call<Unit>, response: Response<Unit>) {
+                    if (response.isSuccessful) {
+                        showToast("색상 변경 성공")
+                    } else {
+                        showToast("색상 변경 실패: ${response.code()}")
+                    }
+                }
+
+                override fun onFailure(call: Call<Unit>, t: Throwable) {
+                    showToast("네트워크 오류:")
+                }
+            })
+    }
+
     // 📢 API 오류 처리
     private fun handleApiError(code: Int, errorMessage: String?) {
         val message = when (code) {
