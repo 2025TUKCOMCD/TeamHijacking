@@ -211,6 +211,11 @@ class HomeIotActivity : AppCompatActivity() {
         } ?: showToast("기기 목록을 불러오지 못했습니다.")
     }
 
+    // ✅ 광도 조절 API 호출
+    private fun setBrightness(deviceId: String, brightness: Int) {
+
+    }
+
     // 📢 API 오류 처리
     private fun handleApiError(code: Int, errorMessage: String?) {
         val message = when (code) {
