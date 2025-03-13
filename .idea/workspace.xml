@@ -61,9 +61,7 @@
     <option name="autoReloadType" value="NONE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="5a34f773-8c82-4b0a-86d3-a37d3cf6ba80" name="Changes" comment="광도 API 수정">
-      <change beforePath="$PROJECT_DIR$/front/app/src/main/java/com/example/front/iot/SmartHome/SmartThingsApiService.kt" beforeDir="false" afterPath="$PROJECT_DIR$/front/app/src/main/java/com/example/front/iot/SmartHome/SmartThingsApiService.kt" afterDir="false" />
-    </list>
+    <list default="true" id="5a34f773-8c82-4b0a-86d3-a37d3cf6ba80" name="Changes" comment="채도 API 추가" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -359,14 +357,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1735374590430</updated>
-    </task>
-    <task id="LOCAL-00019" summary="etc.">
-      <option name="closed" value="true" />
-      <created>1736923430279</created>
-      <option name="number" value="00019" />
-      <option name="presentableId" value="LOCAL-00019" />
-      <option name="project" value="LOCAL" />
-      <updated>1736923430279</updated>
     </task>
     <task id="LOCAL-00020" summary="etc.">
       <option name="closed" value="true" />
@@ -752,7 +742,15 @@
       <option name="project" value="LOCAL" />
       <updated>1741833203918</updated>
     </task>
-    <option name="localTasksCounter" value="68" />
+    <task id="LOCAL-00068" summary="채도 API 추가">
+      <option name="closed" value="true" />
+      <created>1741833316422</created>
+      <option name="number" value="00068" />
+      <option name="presentableId" value="LOCAL-00068" />
+      <option name="project" value="LOCAL" />
+      <updated>1741833316422</updated>
+    </task>
+    <option name="localTasksCounter" value="69" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -767,7 +765,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="SmartHome 데이터 DeviceResponse 클래스 안의 데이터 분리" />
     <MESSAGE value="Command 데이터 추가" />
     <MESSAGE value="device_item.xml 추가, 어뎁터 수정, Iot액티비티 수정, DeviceItem 데이터 클래스 추가" />
     <MESSAGE value="Main import 부분 추가" />
@@ -802,6 +799,7 @@
     <MESSAGE value="IoT 상태조회 부분 롤백" />
     <MESSAGE value="광도 API 추가" />
     <MESSAGE value="광도 API 수정" />
-    <option name="LAST_COMMIT_MESSAGE" value="광도 API 수정" />
+    <MESSAGE value="채도 API 추가" />
+    <option name="LAST_COMMIT_MESSAGE" value="채도 API 추가" />
   </component>
 </project>

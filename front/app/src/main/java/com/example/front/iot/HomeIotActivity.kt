@@ -45,6 +45,13 @@ class HomeIotActivity : AppCompatActivity() {
             voiceControlHelper.startVoiceRecognition()
         }
 
+        //스위치 on
+        findViewById<Button>(R.id.btnTurnOn).setOnClickListener {
+            sendDeviceCommand("deviceId", "switch", "on")
+        }
+
+        //스위치 off
+
         // ✅ 기기 상태 조회 버튼 클릭 이벤트 추가
         findViewById<Button>(R.id.btnCheckDeviceStatus).setOnClickListener {
             if (deviceList.isNotEmpty()) {
