@@ -224,6 +224,10 @@ class HomeIotActivity : AppCompatActivity() {
                         showToast("밝기 조절 실패: ${response.code()}")
                     }
                 }
+
+                override fun onFailure(call: Call<Unit>, t: Throwable) {
+                    showToast("네트워크 오류: ${t.message}")
+                }
             })
     }
 
