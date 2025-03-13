@@ -26,4 +26,10 @@ interface SmartThingsApiService {
         @Header("Authorization") token: String
     ): Call<DeviceStatusResponse>
 
+    // ✅ 무드등 밝기(광도) 조절 API
+    @POST("v1/devices/{deviceId}/commands")
+    fun setBrightness(
+
+    )
+
 }
