@@ -80,7 +80,10 @@ class HomeIotActivity : AppCompatActivity() {
     // SmartThings API로 기기 목록 가져오기
     private fun fetchDeviceList() {
         RetrofitClient.instance.getDevices(apiToken).enqueue(object : Callback<DeviceResponse> {
-            override fun onResponse(call: Call<DeviceResponse>, response: Response<DeviceResponse>) {
+            override fun onResponse(
+                call: Call<DeviceResponse>,
+                response: Response<DeviceResponse>
+            ) {
                 if (response.isSuccessful) {
                     val devices = response.body()?.items.orEmpty()
                     deviceList = devices  // ✅ 기기 목록 업데이트
@@ -105,7 +108,8 @@ class HomeIotActivity : AppCompatActivity() {
 
     // RecyclerView에 기기 목록 표시 및 제어 기능 추가
     private fun displayDeviceList(devices: List<Device>) {
-        val deviceItems = devices.map { DeviceItem(it, isOnline = true) } // ✅ Device → DeviceItem 변환
+        val deviceItems =
+            devices.map { DeviceItem(it, isOnline = true) } // ✅ Device → DeviceItem 변환
         val recyclerView = findViewById<RecyclerView>(R.id.recyclerViewDevices)
         recyclerView.layoutManager = LinearLayoutManager(this)
         recyclerView.adapter = DeviceAdapter(deviceItems) { device, command ->
@@ -140,13 +144,20 @@ class HomeIotActivity : AppCompatActivity() {
         val apiService = RetrofitClient.instance
         apiService.getDeviceStatus(deviceId, "Bearer ${BuildConfig.SMARTTHINGS_API_TOKEN}")
             .enqueue(object : Callback<DeviceStatusResponse> {
-                override fun onResponse(call: Call<DeviceStatusResponse>, response: Response<DeviceStatusResponse>) {
+                override fun onResponse(
+                    call: Call<DeviceStatusResponse>,
+                    response: Response<DeviceStatusResponse>
+                ) {
                     if (response.isSuccessful) {
                         val deviceStatus = response.body()
                         deviceStatus?.let {
-                            val switchStatus = it.components["main"]?.switch?.switch?.value ?: "Unknown"
-                            val temperature = it.components["main"]?.temperatureMeasurement?.temperature?.value ?: "N/A"
-                            val contactStatus = it.components["main"]?.contactSensor?.contact?.value ?: "Unknown"
+                            val switchStatus =
+                                it.components["main"]?.switch?.switch?.value ?: "Unknown"
+                            val temperature =
+                                it.components["main"]?.temperatureMeasurement?.temperature?.value
+                                    ?: "N/A"
+                            val contactStatus =
+                                it.components["main"]?.contactSensor?.contact?.value ?: "Unknown"
 
                             val statusMessage = """
                             전원 상태: $switchStatus
@@ -154,17 +165,26 @@ class HomeIotActivity : AppCompatActivity() {
                             문 개폐 상태: $contactStatus
                         """.trimIndent()
 
-                            Toast.makeText(this@HomeIotActivity, statusMessage, Toast.LENGTH_LONG).show()
+                            Toast.makeText(this@HomeIotActivity, statusMessage, Toast.LENGTH_LONG)
+                                .show()
                         }
                     } else {
                         val errorMessage = response.errorBody()?.string() ?: "Unknown error"
-                        Toast.makeText(this@HomeIotActivity, "상태 조회 실패: $errorMessage", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(
+                            this@HomeIotActivity,
+                            "상태 조회 실패: $errorMessage",
+                            Toast.LENGTH_SHORT
+                        ).show()
                         Log.e("SmartThings", "Failed to fetch device status: $errorMessage")
                     }
                 }
 
                 override fun onFailure(call: Call<DeviceStatusResponse>, t: Throwable) {
-                    Toast.makeText(this@HomeIotActivity, "네트워크 오류: 상태를 가져올 수 없습니다.", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(
+                        this@HomeIotActivity,
+                        "네트워크 오류: 상태를 가져올 수 없습니다.",
+                        Toast.LENGTH_SHORT
+                    ).show()
                     Log.e("SmartThings", "Network error: ${t.message}")
                 }
             })
@@ -188,7 +208,10 @@ class HomeIotActivity : AppCompatActivity() {
             if (intent != null) {
                 startActivity(intent) // 스마트싱스 앱 실행
             } else {
-                val playStoreIntent = Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=com.samsung.android.oneconnect"))
+                val playStoreIntent = Intent(
+                    Intent.ACTION_VIEW,
+                    Uri.parse("market://details?id=com.samsung.android.oneconnect")
+                )
                 startActivity(playStoreIntent)
             }
         } catch (e: ActivityNotFoundException) {
@@ -198,7 +221,8 @@ class HomeIotActivity : AppCompatActivity() {
 
     // 음성 명령 처리
     private fun processVoiceCommand(command: String) {
-        val devices = (findViewById<RecyclerView>(R.id.recyclerViewDevices).adapter as? DeviceAdapter)?.getDeviceList()
+        val devices =
+            (findViewById<RecyclerView>(R.id.recyclerViewDevices).adapter as? DeviceAdapter)?.getDeviceList()
 
         devices?.forEach { device ->
             when {
@@ -213,7 +237,8 @@ class HomeIotActivity : AppCompatActivity() {
 
     // ✅ 광도 조절 API 호출
     private fun setBrightness(deviceId: String, brightness: Int) {
-        val commandBody = CommandBody(commands = listOf(Commnad("switchLevel", brightness.toString())))
+        val commandBody =
+            CommandBody(commands = listOf(Commnad("switchLevel", brightness.toString())))
 
         RetrofitClient.instance.setBrightness(deviceId, commandBody, apiToken)
             .enqueue(object : Callback<Unit> {
@@ -233,9 +258,11 @@ class HomeIotActivity : AppCompatActivity() {
 
     // ✅ 색상(채도) 조절 API 호출
     private fun setColor(deviceId: String, hue: Int, saturation: Int) {
-        val commandBody = CommandBody(commands = listOf(
-            Command("colorControl", "{\"hue\": $hue, \"saturation\": $saturation}")
-        ))
+        val commandBody = CommandBody(
+            commands = listOf(
+                Command("colorControl", "{\"hue\": $hue, \"saturation\": $saturation}")
+            )
+        )
 
         RetrofitClient.instance.setColor(deviceId, commandBody, apiToken)
             .enqueue(object : Callback<Unit> {
@@ -252,6 +279,7 @@ class HomeIotActivity : AppCompatActivity() {
                 }
             })
     }
+
 
     // 📢 API 오류 처리
     private fun handleApiError(code: Int, errorMessage: String?) {
