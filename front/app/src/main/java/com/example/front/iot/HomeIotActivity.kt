@@ -51,6 +51,11 @@ class HomeIotActivity : AppCompatActivity() {
         }
 
         //스위치 off
+        findViewById<Button>(R.id.btnTurnOff).setOnClickListener {
+            sendDeviceCommand("deviceId", "switch", "off")
+        }
+
+
 
         // ✅ 기기 상태 조회 버튼 클릭 이벤트 추가
         findViewById<Button>(R.id.btnCheckDeviceStatus).setOnClickListener {
