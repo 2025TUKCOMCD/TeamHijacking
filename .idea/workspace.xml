@@ -61,10 +61,8 @@
     <option name="autoReloadType" value="NONE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="5a34f773-8c82-4b0a-86d3-a37d3cf6ba80" name="Changes" comment="IoT 상태조회 부분 롤백">
-      <change beforePath="$PROJECT_DIR$/.idea/caches/deviceStreaming.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/caches/deviceStreaming.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+    <list default="true" id="5a34f773-8c82-4b0a-86d3-a37d3cf6ba80" name="Changes" comment="광도 API 수정">
+      <change beforePath="$PROJECT_DIR$/front/app/src/main/java/com/example/front/iot/SmartHome/SmartThingsApiService.kt" beforeDir="false" afterPath="$PROJECT_DIR$/front/app/src/main/java/com/example/front/iot/SmartHome/SmartThingsApiService.kt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -361,22 +359,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1735374590430</updated>
-    </task>
-    <task id="LOCAL-00017" summary="etc.">
-      <option name="closed" value="true" />
-      <created>1736837325066</created>
-      <option name="number" value="00017" />
-      <option name="presentableId" value="LOCAL-00017" />
-      <option name="project" value="LOCAL" />
-      <updated>1736837325066</updated>
-    </task>
-    <task id="LOCAL-00018" summary="xml 파일 수정2">
-      <option name="closed" value="true" />
-      <created>1736837784419</created>
-      <option name="number" value="00018" />
-      <option name="presentableId" value="LOCAL-00018" />
-      <option name="project" value="LOCAL" />
-      <updated>1736837784419</updated>
     </task>
     <task id="LOCAL-00019" summary="etc.">
       <option name="closed" value="true" />
@@ -754,7 +736,23 @@
       <option name="project" value="LOCAL" />
       <updated>1741251970721</updated>
     </task>
-    <option name="localTasksCounter" value="66" />
+    <task id="LOCAL-00066" summary="광도 API 추가">
+      <option name="closed" value="true" />
+      <created>1741832925926</created>
+      <option name="number" value="00066" />
+      <option name="presentableId" value="LOCAL-00066" />
+      <option name="project" value="LOCAL" />
+      <updated>1741832925927</updated>
+    </task>
+    <task id="LOCAL-00067" summary="광도 API 수정">
+      <option name="closed" value="true" />
+      <created>1741833203918</created>
+      <option name="number" value="00067" />
+      <option name="presentableId" value="LOCAL-00067" />
+      <option name="project" value="LOCAL" />
+      <updated>1741833203918</updated>
+    </task>
+    <option name="localTasksCounter" value="68" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -769,8 +767,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="iot 수정" />
-    <MESSAGE value="IotActivity 및 데이터 클래스의 Device 추가, Device 어뎁터 추가" />
     <MESSAGE value="SmartHome 데이터 DeviceResponse 클래스 안의 데이터 분리" />
     <MESSAGE value="Command 데이터 추가" />
     <MESSAGE value="device_item.xml 추가, 어뎁터 수정, Iot액티비티 수정, DeviceItem 데이터 클래스 추가" />
@@ -804,6 +800,8 @@
     <MESSAGE value="상태 조회 응답 코드 추가" />
     <MESSAGE value="상태 조회 버튼 추가" />
     <MESSAGE value="IoT 상태조회 부분 롤백" />
-    <option name="LAST_COMMIT_MESSAGE" value="IoT 상태조회 부분 롤백" />
+    <MESSAGE value="광도 API 추가" />
+    <MESSAGE value="광도 API 수정" />
+    <option name="LAST_COMMIT_MESSAGE" value="광도 API 수정" />
   </component>
 </project>

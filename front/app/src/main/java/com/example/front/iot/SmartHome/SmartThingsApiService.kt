@@ -34,4 +34,11 @@ interface SmartThingsApiService {
         @Header("Authorization") token: String
     ): Call<Unit>
 
+    // ✅ 무드등 색상(채도) 조절 API
+    @POST("v1/devices/{deviceId}/commands")
+    fun setColor(
+        @Path("deviceId") deviceId: String,
+        @Body command: CommandBody,
+        @Header("Authorization") token: String
+    ): Call<Unit>
 }
