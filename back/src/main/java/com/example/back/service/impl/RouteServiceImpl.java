@@ -2,12 +2,16 @@ package com.example.back.service.impl;
 
 import com.example.back.api.BusApi;
 import com.example.back.api.RouteApi;
+import com.example.back.api.SubwayApi;
+import com.example.back.domain.Station;
 import com.example.back.domain.TimeTable;
 import com.example.back.dto.ResultDTO;
 import com.example.back.dto.RouteIdSetDTO;
 import com.example.back.dto.bus.arrive.BusArriveProcessDTO;
 import com.example.back.dto.bus.detail.BusDetailProcessDTO;
 import com.example.back.dto.route.*;
+import com.example.back.dto.subway.arrive.SubwayArriveProcessDTO;
+import com.example.back.repository.StationRepository;
 import com.example.back.repository.TimeTableRepository;
 import com.example.back.service.RouteService;
 import com.google.gson.Gson;
@@ -18,6 +22,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import retrofit2.Call;
+import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 import java.io.IOException;
@@ -32,17 +37,32 @@ import java.util.stream.Collectors;
 @Service
 public class RouteServiceImpl implements RouteService {
     private final String ODsayBaseURL = "https://api.odsay.com/v1/api/";
-    private final String SeoulBaseURL = "http://ws.bus.go.kr/api/rest/";
+    private final String Seoul_BusBaseURL = "http://ws.bus.go.kr/api/rest/";
+    private final String Seoul_SubwayBaseURL = "http://swopenAPI.seoul.go.kr/api/subway/";
 
+    // odsay Key -> 서울 Key로 변환
+   private static final Map<Integer, Integer> subwayCodeMap = Map.ofEntries(
+            Map.entry(1, 1001), Map.entry(2, 1002), Map.entry(3, 1003), Map.entry(4, 1004),
+            Map.entry(5, 1005), Map.entry(6, 1006), Map.entry(7, 1007), Map.entry(8, 1008),
+            Map.entry(9, 1009), Map.entry(91, 1032), Map.entry(104, 1063), Map.entry(101, 1065),
+            Map.entry(108, 1067), Map.entry(116, 1075), Map.entry(109, 1077), Map.entry(112, 1081),
+            Map.entry(113, 1092), Map.entry(114, 1093), Map.entry(117, 1094)
+    );
     // 데이터베이스 연동
     @Autowired
     private TimeTableRepository timeTableRepository;
+
+    @Autowired
+    private StationRepository stationRepository;
 
     @Value("${ODsay.apikey}")
     private String Odsay_apiKey;
 
     @Value(("${Public_Bus_APIKEY}"))
-    private String Seoul_apiKey;
+    private String Seoul_Bus_apiKey;
+
+    @Value(("${Public_Subway_APIKEY}"))
+    private String Seoul_Subway_apiKey;
 
 
     private final Gson gson = new Gson();
@@ -58,14 +78,21 @@ public class RouteServiceImpl implements RouteService {
             .addConverterFactory(GsonConverterFactory.create(gson))
             .build();
 
-    private final Retrofit SeoulRetrofit = new Retrofit.Builder()
-            .baseUrl(SeoulBaseURL)
+    private final Retrofit BusRetrofit = new Retrofit.Builder()
+            .baseUrl(Seoul_BusBaseURL)
+            .client(client)
+            .addConverterFactory(GsonConverterFactory.create(gson))
+            .build();
+
+    private final Retrofit SubwayRetrofit = new Retrofit.Builder()
+            .baseUrl(Seoul_SubwayBaseURL)
             .client(client)
             .addConverterFactory(GsonConverterFactory.create(gson))
             .build();
 
     private final RouteApi routeApi = OdsayRetrofit.create(RouteApi.class);
-    private final BusApi busApi = SeoulRetrofit.create(BusApi.class);
+    private final BusApi busApi = BusRetrofit.create(BusApi.class);
+    private final SubwayApi subwayApi = SubwayRetrofit.create(SubwayApi.class);
 
     private final ExecutorService executorService = Executors.newFixedThreadPool(10);
 
@@ -249,6 +276,9 @@ public class RouteServiceImpl implements RouteService {
             int subwayCode = subPath.getLane().get(0).getSubwayCode();
             // 노선 이름
             String subwayLineName = subPath.getLane().get(0).getName();
+            // 노선 방향
+            String direction = subPath.getLane().get(0).getSubwayCode() == 1 ? "상행" : "하행";
+
             // 시작 주소
             double startX = subPath.getStartX();
             double startY = subPath.getStartY();
@@ -261,7 +291,8 @@ public class RouteServiceImpl implements RouteService {
                 transferStations.add(station.getStationName());
             }
 
-            // 결과 데이터를 저장할 Map 생성
+            String secondStation = transferStations.size() > 1 ? transferStations.get(1) : null;
+            // 결과 데이터를 저장할 Map 생성            // 결과 데이터를 저장할 Map 생성
             Map<String, Object> dataMap = new HashMap<>();
 
             // 지하철 도시 코드 확인
@@ -274,7 +305,7 @@ public class RouteServiceImpl implements RouteService {
                 if (isSpecialSeoulCode(subwayCode)) {
                     predictTimeList = timeArrive(subwayCode, startName);
                 } else {
-                    realTimeArrive(subwayCode);
+                    realTimeArrive(subwayCode,startName,secondStation,direction );
                 }
             } else if (city == 20 || city == 30 || city == 40 || city == 50) { // 부산, 대구, 광주, 대전
                 predictTimeList = timeArrive(subwayCode, startName);
@@ -286,8 +317,8 @@ public class RouteServiceImpl implements RouteService {
             Time Time1 = null;
             Time Time2 = null;
 
-            long predictTime1 = 0;
-            long predictTime2 = 0;
+            String predictTime1String = null;
+            String predictTime2String = null;
 
             if (predictTimeList != null && !predictTimeList.isEmpty()) {
                 System.out.println("Predict Time List: " + predictTimeList);
@@ -298,15 +329,22 @@ public class RouteServiceImpl implements RouteService {
 
                 if (Time1 != null) {
                     LocalTime arrivalTime1 = Time1.toLocalTime();
-                    predictTime1 = java.time.Duration.between(seoulTime.toLocalTime(), arrivalTime1).toMinutes();
-                    System.out.println("첫 번째 도착 시간까지: " + predictTime1 + "분 후");
+                    long predictTime1 = java.time.Duration.between(seoulTime.toLocalTime(), arrivalTime1).toMinutes();
+
+                    // predictTime1을 String으로 변환
+                    predictTime1String = "첫 번째 도착 시간까지: " + predictTime1 + "분 후";
+                    System.out.println(predictTime1String);
                 }
 
                 if (Time2 != null) {
                     LocalTime arrivalTime2 = Time2.toLocalTime();
-                    predictTime2 = java.time.Duration.between(seoulTime.toLocalTime(), arrivalTime2).toMinutes();
-                    System.out.println("두 번째 도착 시간까지: " + predictTime2 + "분 후");
+                    long predictTime2 = java.time.Duration.between(seoulTime.toLocalTime(), arrivalTime2).toMinutes();
+
+                    // predictTime2를 String으로 변환
+                    predictTime2String = "두 번째 도착 시간까지: " + predictTime2 + "분 후";
+                    System.out.println(predictTime2String);
                 }
+
             }
 
             // 결과를 Map으로 저장
@@ -315,8 +353,8 @@ public class RouteServiceImpl implements RouteService {
             dataMap.put("startX",startX);
             dataMap.put("startY",startY);
             dataMap.put("transferStations",transferStations);
-            dataMap.put("predictTime1", predictTime1);
-            dataMap.put("predictTime2", predictTime2);
+            dataMap.put("predictTime1", predictTime1String);
+            dataMap.put("predictTime2", predictTime2String);
             return new AbstractMap.SimpleEntry<>(index, dataMap);
         }, executorService);
     }
@@ -382,9 +420,66 @@ public class RouteServiceImpl implements RouteService {
     }
 
 
-    public void realTimeArrive(int subwayCode) {
-        // 실시간 도착 정보 API 호출
+    public void realTimeArrive(int subwayCode, String startName, String secondName, String direction) {
+        // 지하철 코드 변환
+        int convertedSubwayCode = convertSubwayCode(subwayCode);
+
+        // 데이터베이스에서 statn_id 조회
+        List<Integer> result = stationRepository.findStationsByApiIdAndStationName(startName, convertedSubwayCode);
+
+        // statn_id 추출 및 로직 작성
+        if (result != null && !result.isEmpty()) {
+            int statn_id = result.get(0); // 첫 번째 결과 가져오기
+
+            // 도착 정보 조회
+            List<SubwayArriveProcessDTO.RealtimeArrival> realtimeArrivals = fetchAndSubwayArrive(startName);
+            if (realtimeArrivals != null && !realtimeArrivals.isEmpty()) {
+                // 특정 statnId에 해당하는 데이터 필터링
+                String statnIdToFilter = String.valueOf(statn_id); // 필터링할 statnId
+                List<SubwayArriveProcessDTO.RealtimeArrival> filteredArrivals = filterArrivalsByStatnId(
+                        realtimeArrivals, statnIdToFilter);
+
+                // 필터링된 결과에서 방향과 다음 역 필터링
+                List<SubwayArriveProcessDTO.RealtimeArrival> directionFilteredArrivals = filteredArrivals.stream()
+                        .filter(arrival -> arrival.getUpdnLine().equals(direction)) // 사용자가 원하는 방향
+                        .filter(arrival -> arrival.getTrainLineNm().contains(secondName)) // 다음 역(secondName) 포함
+                        .toList();
+
+                // 결과 출력
+                if (!filteredArrivals.isEmpty()) {
+                    System.out.println("사용자가 원하는 방향의 도착 정보:");
+                    filteredArrivals.forEach(arrival -> {
+                        System.out.println("다음역: " + arrival.getTrainLineNm());
+                        System.out.println("도착 메시지: " + arrival.getArvlMsg2());
+                    });
+                } else {
+                    System.out.println("해당 방향의 도착 정보가 없습니다.");
+                }
+            } else {
+                System.out.println("No matching stations found.");
+            }
+
+            // 추가 로직
+        } else {
+            System.out.println("No matching stations found.");
+        }
     }
+
+    public List<SubwayArriveProcessDTO.RealtimeArrival> filterArrivalsByStatnId(
+            List<SubwayArriveProcessDTO.RealtimeArrival> arrivalList,
+            String statnId) {
+        // 필터링 조건: statnId가 같은 항목만 추출
+        return arrivalList.stream()
+                .filter(arrival -> arrival.getStatnId().equals(statnId)) // statnId 일치 여부 확인
+                .toList(); // 결과를 리스트로 반환
+    }
+
+
+    private int convertSubwayCode(int subwayCode) {
+        return subwayCodeMap.getOrDefault(subwayCode, 0);
+    }
+
+
     // 지하철 코드 - 도시 매핑 메서드
     private Map<Integer, Integer> getSubwayCodeToCityMapping() {
         Map<Integer, Integer> subwayCodeToCity = new HashMap<>();
@@ -468,7 +563,8 @@ public class RouteServiceImpl implements RouteService {
                     routeIdSetDTO.setStartY((Double) dataMap.get("startY"));
                     routeIdSetDTO.setStartStationInfo((Integer) dataMap.get("startStationInfo"));
                     routeIdSetDTO.setEndStationInfo((Integer) dataMap.get("endStationInfo"));
-                    routeIdSetDTO.getStationInfo().addAll((List<Integer>) dataMap.get("stationInfo"));
+                    routeIdSetDTO.getTransferStations().addAll((List<String>) dataMap.get("transferStations"));
+                    routeIdSetDTO.setStationInfo((List<Integer>) dataMap.get("stationInfo"));
                     routeIdSetDTO.setPredictTimes1((String) dataMap.get("predictTime1"));
                     routeIdSetDTO.setPredictTimes2((String) dataMap.get("predictTime2"));
                     resultDTO.getRouteIds().add(routeIdSetDTO);
@@ -546,7 +642,7 @@ public class RouteServiceImpl implements RouteService {
     public List<BusArriveProcessDTO.arriveDetail> fetchAndBusArrive(int stId, int busRouteId, int ord) {
         try {
             Call<ResponseBody> call = busApi.getArrInfoByRoute(
-                    Seoul_apiKey,
+                    Seoul_Bus_apiKey,
                     stId,
                     busRouteId,
                     ord,
@@ -566,5 +662,33 @@ public class RouteServiceImpl implements RouteService {
             e.printStackTrace();
         }
         return List.of(); // 예외 상황에서도 빈 리스트 반환
+    }
+
+    public List<SubwayArriveProcessDTO.RealtimeArrival> fetchAndSubwayArrive(String stationName) {
+        try {
+            // Retrofit 호출
+            System.out.println("Station Name: " + stationName);
+            Call<ResponseBody> call = subwayApi.getRealtimeStationArrival(Seoul_Subway_apiKey, stationName);
+            Response<ResponseBody> response = call.execute(); // 동기 호출
+
+            // API 응답 확인
+            if (response.isSuccessful() && response.body() != null) {
+                ResponseBody responseBody = response.body();
+                String rawJson = responseBody.string();
+                SubwayArriveProcessDTO subwayArriveProcessDTO = gson.fromJson(rawJson, SubwayArriveProcessDTO.class);
+
+                // 도착 정보 리스트 반환
+                return subwayArriveProcessDTO.getRealtimeArrivalList();
+            } else {
+                // API 호출 실패 시 로그 출력
+                System.err.println("API 호출 실패 - 상태 코드: " + response.code());
+                System.err.println("응답 메시지: " + response.message());
+            }
+        } catch (IOException e) {
+            // 예외 처리
+            System.err.println("API 호출 중 예외 발생: " + e.getMessage());
+        }
+        // 오류 발생 시 빈 리스트 반환
+        return List.of();
     }
 }
