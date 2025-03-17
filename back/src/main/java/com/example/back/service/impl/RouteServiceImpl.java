@@ -3,7 +3,6 @@ package com.example.back.service.impl;
 import com.example.back.api.BusApi;
 import com.example.back.api.RouteApi;
 import com.example.back.api.SubwayApi;
-import com.example.back.domain.Station;
 import com.example.back.domain.TimeTable;
 import com.example.back.dto.ResultDTO;
 import com.example.back.dto.RouteIdSetDTO;
@@ -28,7 +27,6 @@ import retrofit2.converter.gson.GsonConverterFactory;
 import java.io.IOException;
 import java.sql.Time;
 import java.time.*;
-import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.concurrent.*;
 import java.util.stream.Collectors;
@@ -96,6 +94,7 @@ public class RouteServiceImpl implements RouteService {
 
     private final ExecutorService executorService = Executors.newFixedThreadPool(10);
 
+    // 경로 점수 계산
     private double calculateRouteScore(RouteProcessDTO.Path path) {
         RouteProcessDTO.Info info = path.getInfo();
 
@@ -113,6 +112,7 @@ public class RouteServiceImpl implements RouteService {
                 (0.1 * walkFactor);
     }
 
+    // 경로 상세 정보 조회
     @Override
     public List<ResultDTO> fetchAndProcessRoutes(RouteDTO routeDTO) {
         try {
@@ -151,6 +151,7 @@ public class RouteServiceImpl implements RouteService {
     }
 
 
+    // 비동기 경로 상세 정보 조회
     private CompletableFuture<List<ResultDTO>> asyncRouteDetails(List<RouteProcessDTO.Path> paths) {
         // path별 비동기 처리
         // result 함수를 CompletableFuture로 감싸고, executorService를 사용하여 병렬로 처리
@@ -161,6 +162,7 @@ public class RouteServiceImpl implements RouteService {
                 .thenApply(v -> futureList.stream().map(CompletableFuture::join).collect(Collectors.toList()));
     }
 
+    // 경로 대중교통 정보(지하철, 버스, 버스+지하철)
     private String mapTransitType(int pathType) {
         switch (pathType) {
             case 1:
@@ -173,6 +175,8 @@ public class RouteServiceImpl implements RouteService {
                 return "알 수 없음";
         }
     }
+
+    // 경로 대중교통 정보(지하철, 버스, 도보)
     private List<Integer> mapPath(List<RouteProcessDTO.SubPath> subPaths) {
         return subPaths.stream()
                 .map(subPath -> {
@@ -209,65 +213,7 @@ public class RouteServiceImpl implements RouteService {
                 .collect(Collectors.toList());
     }
 
-    private CompletableFuture<Map.Entry<Integer, Map<String, Object>>> processTrafficType2Async(RouteProcessDTO.SubPath subPath, int index) {
-        return CompletableFuture.supplyAsync(() -> {
-            try {
-                int busID = subPath.getLane().get(0).getBusID();
-                int startID = subPath.getStartID();
-                int endID = subPath.getEndID();
-                Double startX = subPath.getStartX();
-                Double startY = subPath.getStartY();
-                int busLocalBlID = subPath.getLane().get(0).getBusLocalBlID();
-                int startLocalStationID = subPath.getStartLocalStationID();
-                String predictTime1 ;
-                String predictTime2 ;
-
-                    // fetchBusLaneDetail 함수 호출
-                BusDetailProcessDTO.BusLaneDetail busDetail = fetchBusLaneDetail(busID);
-
-                // compareStationIDs 함수 호출
-                List<Integer> stationInfos = compareStationIDs(busDetail, startID, endID);
-
-                int startStationInfo = stationInfos.get(0);
-                int endStationInfo = stationInfos.get(1);
-
-                List<BusArriveProcessDTO.arriveDetail> arriveDetails = fetchAndBusArrive(startLocalStationID, busLocalBlID, startStationInfo);
-
-                if (arriveDetails != null && arriveDetails.get(0).getMsgBody() != null && arriveDetails.get(0).getMsgBody().getItemList() != null) {
-                    BusArriveProcessDTO.Item firstItem = arriveDetails.get(0).getMsgBody().getItemList().get(0);
-                    predictTime1 = firstItem.getArrmsg1();
-                    predictTime2 = firstItem.getArrmsg2();
-                } else {
-                    predictTime1 = "null";
-                    predictTime2 = "null";
-                }
-                List<RouteProcessDTO.Station> stations = subPath.getPassStopList().getStations();
-                // 결과를 Map으로 저장
-                Map<String, Object> dataMap = new HashMap<>();
-                dataMap.put("TransportLocalID", busLocalBlID);
-                List<Integer> stationRoute = new ArrayList<>();
-                List<String> transferStations = new ArrayList<>();
-
-                for (RouteProcessDTO.Station station : stations) {
-                    stationRoute.add(station.getLocalStationID());
-                    transferStations.add(station.getStationName());
-                }
-                dataMap.put("startX",startX);
-                dataMap.put("startY",startY);
-                dataMap.put("stationInfo", stationRoute);
-                dataMap.put("transferStations", transferStations);
-                dataMap.put("startStationInfo", startStationInfo);
-                dataMap.put("endStationInfo", endStationInfo);
-                dataMap.put("predictTime1", predictTime1);
-                dataMap.put("predictTime2", predictTime2);
-                return new AbstractMap.SimpleEntry<>(index, dataMap);
-            } catch (IOException e) {
-                e.printStackTrace();
-                return null;
-            }
-        }, executorService);
-    }
-
+    // 지하철 도착 정보 처리
     private CompletableFuture<Map.Entry<Integer, Map<String, Object>>> processTrafficType1Async(RouteProcessDTO.SubPath subPath, int index) {
         return CompletableFuture.supplyAsync(() -> {
             // 첫번째 역 이름
@@ -359,12 +305,75 @@ public class RouteServiceImpl implements RouteService {
         }, executorService);
     }
 
+    // 버스 도착 정보 처리
+    private CompletableFuture<Map.Entry<Integer, Map<String, Object>>> processTrafficType2Async(RouteProcessDTO.SubPath subPath, int index) {
+        return CompletableFuture.supplyAsync(() -> {
+            try {
+                int busID = subPath.getLane().get(0).getBusID();
+                int startID = subPath.getStartID();
+                int endID = subPath.getEndID();
+                Double startX = subPath.getStartX();
+                Double startY = subPath.getStartY();
+                int busLocalBlID = subPath.getLane().get(0).getBusLocalBlID();
+                int startLocalStationID = subPath.getStartLocalStationID();
+                String predictTime1 ;
+                String predictTime2 ;
+
+                    // fetchBusLaneDetail 함수 호출
+                BusDetailProcessDTO.BusLaneDetail busDetail = fetchBusLaneDetail(busID);
+
+                // compareStationIDs 함수 호출
+                List<Integer> stationInfos = compareStationIDs(busDetail, startID, endID);
+
+                int startStationInfo = stationInfos.get(0);
+                int endStationInfo = stationInfos.get(1);
+
+                List<BusArriveProcessDTO.arriveDetail> arriveDetails = fetchAndBusArrive(startLocalStationID, busLocalBlID, startStationInfo);
+
+                if (arriveDetails != null && arriveDetails.get(0).getMsgBody() != null && arriveDetails.get(0).getMsgBody().getItemList() != null) {
+                    BusArriveProcessDTO.Item firstItem = arriveDetails.get(0).getMsgBody().getItemList().get(0);
+                    predictTime1 = firstItem.getArrmsg1();
+                    predictTime2 = firstItem.getArrmsg2();
+                } else {
+                    predictTime1 = "null";
+                    predictTime2 = "null";
+                }
+                List<RouteProcessDTO.Station> stations = subPath.getPassStopList().getStations();
+                // 결과를 Map으로 저장
+                Map<String, Object> dataMap = new HashMap<>();
+                dataMap.put("TransportLocalID", busLocalBlID);
+                List<Integer> stationRoute = new ArrayList<>();
+                List<String> transferStations = new ArrayList<>();
+
+                for (RouteProcessDTO.Station station : stations) {
+                    stationRoute.add(station.getLocalStationID());
+                    transferStations.add(station.getStationName());
+                }
+                dataMap.put("startX",startX);
+                dataMap.put("startY",startY);
+                dataMap.put("stationInfo", stationRoute);
+                dataMap.put("transferStations", transferStations);
+                dataMap.put("startStationInfo", startStationInfo);
+                dataMap.put("endStationInfo", endStationInfo);
+                dataMap.put("predictTime1", predictTime1);
+                dataMap.put("predictTime2", predictTime2);
+                return new AbstractMap.SimpleEntry<>(index, dataMap);
+            } catch (IOException e) {
+                e.printStackTrace();
+                return null;
+            }
+        }, executorService);
+    }
+
+
+
     // 서울 지하철 특수 코드 확인
     private boolean isSpecialSeoulCode(int subwayCode) {
         List<Integer> specialSeoulCodes = Arrays.asList(110, 115, 21, 22);
         return specialSeoulCodes.contains(subwayCode);
     }
 
+    // 서울 지하철 현재 시간 가져오기
     public static Time getSeoulCurrentTime() {
         // 서울 시간대를 ZoneId로 정의
         ZoneId seoulZoneId = ZoneId.of("Asia/Seoul");
@@ -376,7 +385,7 @@ public class RouteServiceImpl implements RouteService {
         return Time.valueOf(seoulTime);
     }
 
-
+    // 서울 지하철 도착 정보 조회
     public List<TimeTable> timeArrive(int subwayCode, String startName) {
         // 서울 시간 기준 현재 시간 가져오기
         Time seoulTime = getSeoulCurrentTime();
@@ -391,6 +400,7 @@ public class RouteServiceImpl implements RouteService {
         );
     }
 
+    // 현재 요일 계산
     private String getCurrentDayType(int subwayCode) {
         // 서울 시간 기준 현재 요일 계산
         ZoneId seoulZoneId = ZoneId.of("Asia/Seoul");
@@ -420,6 +430,7 @@ public class RouteServiceImpl implements RouteService {
     }
 
 
+    // 서울 지하철 실시간 도착 정보 조회
     public void realTimeArrive(int subwayCode, String startName, String secondName, String direction) {
         // 지하철 코드 변환
         int convertedSubwayCode = convertSubwayCode(subwayCode);
@@ -465,6 +476,7 @@ public class RouteServiceImpl implements RouteService {
         }
     }
 
+    // 서울 지하철 statnId 비교
     public List<SubwayArriveProcessDTO.RealtimeArrival> filterArrivalsByStatnId(
             List<SubwayArriveProcessDTO.RealtimeArrival> arrivalList,
             String statnId) {
@@ -475,6 +487,7 @@ public class RouteServiceImpl implements RouteService {
     }
 
 
+    // 오디세이 -> 서울 지하철 노선 코드 변환
     private int convertSubwayCode(int subwayCode) {
         return subwayCodeMap.getOrDefault(subwayCode, 0);
     }
@@ -592,6 +605,7 @@ public class RouteServiceImpl implements RouteService {
         return resultDTO;
     }
 
+    // Odsay 버스 상세 정보 조회
     private BusDetailProcessDTO.BusLaneDetail fetchBusLaneDetail(int busID) throws IOException {
         Call<ResponseBody> call = routeApi.busLaneDetail(busID, Odsay_apiKey);
         ResponseBody responseBody = call.execute().body();
@@ -605,7 +619,7 @@ public class RouteServiceImpl implements RouteService {
         }
     }
 
-
+    // 정류장 ID 비교
     private List<Integer> compareStationIDs(BusDetailProcessDTO.BusLaneDetail busDetailProcess, int startID, int endID) {
         List<Integer> startIndices = new ArrayList<>();
         List<Integer> endIndices = new ArrayList<>();
@@ -639,6 +653,7 @@ public class RouteServiceImpl implements RouteService {
         return stationInfos;
     }
 
+    // 서울 버스 도착 정보 조회
     public List<BusArriveProcessDTO.arriveDetail> fetchAndBusArrive(int stId, int busRouteId, int ord) {
         try {
             Call<ResponseBody> call = busApi.getArrInfoByRoute(
@@ -664,6 +679,7 @@ public class RouteServiceImpl implements RouteService {
         return List.of(); // 예외 상황에서도 빈 리스트 반환
     }
 
+    // 서울 지하철 도착 정보 조회
     public List<SubwayArriveProcessDTO.RealtimeArrival> fetchAndSubwayArrive(String stationName) {
         try {
             // Retrofit 호출

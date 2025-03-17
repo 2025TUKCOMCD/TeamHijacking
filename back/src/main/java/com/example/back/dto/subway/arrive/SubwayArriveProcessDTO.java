@@ -1,10 +1,7 @@
 package com.example.back.dto.subway.arrive;
 
-import com.example.back.dto.bus.arrive.BusArriveProcessDTO;
-import com.example.back.dto.route.RouteProcessDTO;
 import lombok.Data;
 
-import lombok.Data;
 import java.util.List;
 
 @Data
