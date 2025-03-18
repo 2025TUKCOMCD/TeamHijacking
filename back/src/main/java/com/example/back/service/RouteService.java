@@ -8,5 +8,4 @@ import java.util.List;
 
 public interface RouteService {
     List<ResultDTO> fetchAndProcessRoutes(RouteDTO routeDTO);
-
 }

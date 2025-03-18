@@ -18,6 +18,7 @@ android {
     val SMARTTHINGS_API_TOKEN = localProperties.getProperty("SMARTTHINGS_API_TOKEN", "")
     val Public_Bus_APIKEY = localProperties.getProperty("Public_Bus_APIKEY", "")
     val Public_Subway_APIKEY = localProperties.getProperty("Public_Subway_APIKEY", "")
+    val Host_URL = localProperties.getProperty("Host_URL", "")
     defaultConfig {
         applicationId = "com.example.front"
         minSdk = 30
@@ -33,6 +34,9 @@ android {
         buildConfigField("String", "SMARTTHINGS_API_TOKEN", "\"$SMARTTHINGS_API_TOKEN\"")
         buildConfigField("String", "Public_Bus_APIKEY", "\"$Public_Bus_APIKEY\"")
         buildConfigField("String", "Public_Subway_APIKEY", "\"$Public_Subway_APIKEY\"")
+        buildConfigField("String", "Host_URL", "\"$Host_URL\"")
+
+
     }
 
     buildTypes {
@@ -104,7 +108,10 @@ dependencies {
     implementation("com.google.firebase:firebase-crashlytics-buildtools:3.0.2")
 
     implementation ("com.google.android.gms:play-services-wearable:18.1.0") // 데이터 레이블 사용 가능하게 해주는 코드
-    implementation ("androidx.wear:wear:1.3.0") //Wear OS 전용 UI(곡선 리스트, BoxInsetLayout 등) 사용 가능
+    implementation ("androidx.wear:wear:1.3.0")
+    implementation(libs.lifecycle.livedata.ktx)
+    implementation(libs.lifecycle.viewmodel.ktx)
+    implementation(libs.fragment.ktx) //Wear OS 전용 UI(곡선 리스트, BoxInsetLayout 등) 사용 가능
 
 
     // 테스트 라이브러리

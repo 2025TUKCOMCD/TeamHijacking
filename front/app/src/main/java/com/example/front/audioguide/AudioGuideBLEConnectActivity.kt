@@ -8,6 +8,7 @@ import android.bluetooth.le.ScanCallback
 import android.bluetooth.le.ScanFilter
 import android.bluetooth.le.ScanResult
 import android.bluetooth.le.ScanSettings
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.widget.Button
@@ -31,30 +32,6 @@ class AudioGuideBLEConnectActivity : AppCompatActivity() {
 
     // 스캐너와 콜백 객체를 정의합니다.
     private val scanner by lazy { bluetoothAdapter?.bluetoothLeScanner }
-    private val scanCallback = object : ScanCallback() {
-        override fun onScanResult(callbackType: Int, result: ScanResult) {
-
-            val device = result.device
-//
-//            if (device.name != null && device.name.startsWith("G")&& !devices.contains(device)) {
-//                devices.add(device)
-//                arrayAdapter.notifyDataSetChanged()
-//                Log.d("BLE", "Found BLE device: ${device.name} - ${device.address}")
-//                Toast.makeText(this@AudioGuideBLEConnectActivity, "발견된 기기: ${device.name}", Toast.LENGTH_SHORT).show()
-//            }
-            if(!devices.contains(device)){
-                    val deviceName = device.name ?: "Unknown"
-                    val deviceAddress = device.address
-                    devices.add(device)
-                    arrayAdapter.notifyDataSetChanged()
-                    Log.d("bluetoothconnect", "Found BLE device: $deviceName - ${deviceAddress}")
-                    Toast.makeText(this@AudioGuideBLEConnectActivity, "발견된 기기: $deviceName", Toast.LENGTH_SHORT).show()
-                }
-        }
-        override fun onScanFailed(errorCode: Int) {
-            Log.e("bluetoothconnect", "Scan failed with error code: $errorCode")
-        }
-    }
 
     @SuppressLint("MissingInflatedId")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -80,9 +57,29 @@ class AudioGuideBLEConnectActivity : AppCompatActivity() {
         }
 
         listView.setOnItemClickListener { _, _, position, _ ->
-            connectToDevice(devices[position])
-            Log.d("Bluetooth", "기기 선택됨: ${devices[position].name ?: "Unknown"} - ${devices[position].address}")
+            stopBLEScan()
+            val selectedDevice = devices[position]
+            val deviceName = selectedDevice.name ?: "Unknown"
+
+            // 기기 이름에 따라 다른 Activity 시작
+            when {
+                deviceName.startsWith("AGH") -> {
+                    connectToDevice(selectedDevice, this)
+                }
+                deviceName.startsWith("BGH") -> {
+                    connectToDevice(selectedDevice, this)
+                }
+                else -> {
+                    connectToDevice(selectedDevice, this) // 기본 연결 처리
+                    Log.d("Bluetooth", "기기 선택됨: $deviceName - ${selectedDevice.address}")
+                }
+            }
         }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        stopBLEScan()
     }
 
     private fun startBLEScan() {
@@ -98,17 +95,21 @@ class AudioGuideBLEConnectActivity : AppCompatActivity() {
         scanner?.stopScan(scanCallback)
     }
 
-    private fun connectToDevice(device: BluetoothDevice) {
-        stopBLEScan()
-        val deviceName = device.name ?: "Unknown"
-        val deviceAddress = device.address
-        Toast.makeText(this, "$deviceName 에 연결 시도 중입니다", Toast.LENGTH_SHORT).show()
-        Log.d("Bluetooth", "$deviceName - ${deviceAddress}에 연결 시도 중입니다")
-        navigateToAudioGuideBLEControl(device, this)
-    }
+    private val scanCallback = object : ScanCallback() {
+        override fun onScanResult(callbackType: Int, result: ScanResult) {
+            val device = result.device
+            if ((device.name != null && device.name.startsWith("AGH") && !devices.contains(device)) ||
+                (device.name != null && device.name.startsWith("BGH") && !devices.contains(device))
+            ) {
+                devices.add(device)
+                arrayAdapter.notifyDataSetChanged()
+                Log.d("BLE", "Found BLE device: ${device.name} - ${device.address}")
+                Toast.makeText(this@AudioGuideBLEConnectActivity, "발견된 기기: ${device.name}", Toast.LENGTH_SHORT).show()
+            }
+        }
 
-    override fun onDestroy() {
-        super.onDestroy()
-        stopBLEScan()
+        override fun onScanFailed(errorCode: Int) {
+            Log.e("bluetoothconnect", "Scan failed with error code: $errorCode")
+        }
     }
 }
