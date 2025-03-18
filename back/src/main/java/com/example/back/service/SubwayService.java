@@ -49,19 +49,10 @@ public class SubwayService {
         return subwayCodeMap.getOrDefault(subwayCode, 0);
     }
 
-    // 서울 지하철 도착 정보 필터링
-    public List<SubwayArriveProcessDTO.RealtimeArrival> filterArrivalsByStatnId(
-            List<SubwayArriveProcessDTO.RealtimeArrival> arrivalList,
-            String statnId) {
-        // 필터링 조건: statnId가 같은 항목만 추출
-        return arrivalList.stream()
-                .filter(arrival -> arrival.getStatnId().equals(statnId)) // statnId 일치 여부 확인
-                .toList(); // 결과를 리스트로 반환
-    }
 
     // 서울 지하철 특수 코드 확인
     public boolean isSpecialSeoulCode(int subwayCode) {
-        List<Integer> specialSeoulCodes = Arrays.asList(110, 115, 21, 22);
+        List<Integer> specialSeoulCodes = Arrays.asList(110, 115, 21, 22, 107);
         return specialSeoulCodes.contains(subwayCode);
     }
 
