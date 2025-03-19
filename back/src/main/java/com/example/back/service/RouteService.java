@@ -353,6 +353,7 @@ public class RouteService{
             dataMap.put("subwayLineName", subwayLineName );
             dataMap.put("startX",startX);
             dataMap.put("startY",startY);
+            dataMap.put("trainDirection", direction);
             dataMap.put("transferStations",transferStations);
             dataMap.put("predictTime1", predictTime1String);
             dataMap.put("predictTime2", predictTime2String);
@@ -504,6 +505,7 @@ public class RouteService{
                     routeIdSetDTO.setSubwayLineName((String) dataMap.get("subwayLineName"));
                     routeIdSetDTO.setStartX((Double) dataMap.get("startX"));
                     routeIdSetDTO.setStartY((Double) dataMap.get("startY"));
+                    routeIdSetDTO.setTrainDirection((String) dataMap.get("trainDirection"));
                     routeIdSetDTO.getTransferStations().addAll((List<String>) dataMap.get("transferStations"));
                     routeIdSetDTO.setPredictTimes1((String) dataMap.get("predictTime1"));
                     routeIdSetDTO.setPredictTimes2((String) dataMap.get("predictTime2"));
