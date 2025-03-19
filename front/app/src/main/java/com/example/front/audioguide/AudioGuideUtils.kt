@@ -75,7 +75,7 @@ fun checkPermissions(activity: Activity) : Boolean {
     }
 }
 /*
-기능 1. 특정블루투스기기를 가지고 다음 화면으로 넘어가게 해준다.
+기능 1. 특정블루투스기기를 가지고 다음 음성유도기 화면으로 넘어가게 해준다.
  */
 fun connectToDevice(device: BluetoothDevice, activity: Activity) {
     val deviceName = device.name ?: "Unknown"
@@ -90,6 +90,27 @@ fun connectToDevice(device: BluetoothDevice, activity: Activity) {
  */
 fun navigateToAudioGuideBLEControl(device: BluetoothDevice,activity: Activity) {
     val intent = Intent(activity, AudioGuideBLEControl::class.java)
+    intent.putExtra("EXTRA_BLUETOOTH_DEVICE", device)
+    Log.d("bludtooth", "navigatetonext호출")
+    activity.startActivity(intent)
+}
+
+/*
+기능 1. 특정블루투스기기를 가지고 다음 음향신호기 화면으로 넘어가게 해준다.
+ */
+fun connectToSignalDevice(device: BluetoothDevice, activity: Activity) {
+    val deviceName = device.name ?: "Unknown"
+    val deviceAddress = device.address
+    Toast.makeText(activity, "$deviceName 에 연결 시도 중입니다", Toast.LENGTH_SHORT).show()
+    Log.d("Bluetooth", "$deviceName - ${deviceAddress}에 연결 시도 중입니다")
+    navigateToAudioSignalMuchineBLEControl(device, activity)
+}
+
+/*
+기능 1. 기기를 클릭했을 시에 AudioSignalMuchineBLEControl 로 화면 이동을 시켜주는 함수
+ */
+fun navigateToAudioSignalMuchineBLEControl(device: BluetoothDevice,activity: Activity) {
+    val intent = Intent(activity, AudioSignalMuchineBLEControl::class.java)
     intent.putExtra("EXTRA_BLUETOOTH_DEVICE", device)
     Log.d("bludtooth", "navigatetonext호출")
     activity.startActivity(intent)

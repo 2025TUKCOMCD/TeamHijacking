@@ -64,9 +64,11 @@ class AudioGuideBLEConnectActivity : AppCompatActivity() {
             // 기기 이름에 따라 다른 Activity 시작
             when {
                 deviceName.startsWith("AGH") -> {
-                    connectToDevice(selectedDevice, this)
+                    //음향신호기 Control로 이동
+                    connectToSignalDevice(selectedDevice, this)
                 }
                 deviceName.startsWith("BGH") -> {
+                    //음성유도기 Control로 이동
                     connectToDevice(selectedDevice, this)
                 }
                 else -> {
