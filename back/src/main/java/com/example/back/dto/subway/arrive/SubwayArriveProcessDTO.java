@@ -31,8 +31,6 @@ public class SubwayArriveProcessDTO {
         private String bstatnNm;
         private String arvlMsg2;
         private String arvlMsg3;
-        private String arvlCd;
-        private String barvlDt; // "도착까지 남은 시간" 필드
-        private String recptnDt; // "수신 시간" 필드
+
     }
 }

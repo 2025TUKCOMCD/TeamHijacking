@@ -1,8 +1,5 @@
 package com.example.back.service;
 
-
-import com.example.back.domain.TimeTable;
-import com.example.back.dto.subway.arrive.SubwayArriveProcessDTO;
 import org.springframework.stereotype.Service;
 
 import java.sql.Time;
