@@ -61,8 +61,10 @@
     <option name="autoReloadType" value="NONE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="5a34f773-8c82-4b0a-86d3-a37d3cf6ba80" name="Changes" comment="광도 조절 API 호출 수정">
-      <change beforePath="$PROJECT_DIR$/front/app/src/main/java/com/example/front/iot/HomeIotActivity.kt" beforeDir="false" afterPath="$PROJECT_DIR$/front/app/src/main/java/com/example/front/iot/HomeIotActivity.kt" afterDir="false" />
+    <list default="true" id="5a34f773-8c82-4b0a-86d3-a37d3cf6ba80" name="Changes" comment="채도 조절 API 호출 수정">
+      <change beforePath="$PROJECT_DIR$/.idea/caches/deviceStreaming.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/caches/deviceStreaming.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/front/app/src/main/res/layout/activity_home_iot.xml" beforeDir="false" afterPath="$PROJECT_DIR$/front/app/src/main/res/layout/activity_home_iot.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -359,30 +361,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1735374590430</updated>
-    </task>
-    <task id="LOCAL-00027" summary="DeviceControlHelper 추가">
-      <option name="closed" value="true" />
-      <created>1737004672777</created>
-      <option name="number" value="00027" />
-      <option name="presentableId" value="LOCAL-00027" />
-      <option name="project" value="LOCAL" />
-      <updated>1737004672777</updated>
-    </task>
-    <task id="LOCAL-00028" summary="DeviceControlHelper 수정">
-      <option name="closed" value="true" />
-      <created>1737005179571</created>
-      <option name="number" value="00028" />
-      <option name="presentableId" value="LOCAL-00028" />
-      <option name="project" value="LOCAL" />
-      <updated>1737005179571</updated>
-    </task>
-    <task id="LOCAL-00029" summary="VoiceControlHelper 클래스 추가">
-      <option name="closed" value="true" />
-      <created>1737005670983</created>
-      <option name="number" value="00029" />
-      <option name="presentableId" value="LOCAL-00029" />
-      <option name="project" value="LOCAL" />
-      <updated>1737005670983</updated>
     </task>
     <task id="LOCAL-00030" summary="VoiceControlHelper 클래스 수정">
       <option name="closed" value="true" />
@@ -752,7 +730,31 @@
       <option name="project" value="LOCAL" />
       <updated>1741834559828</updated>
     </task>
-    <option name="localTasksCounter" value="76" />
+    <task id="LOCAL-00076" summary="채도 조절 API 호출">
+      <option name="closed" value="true" />
+      <created>1741835103081</created>
+      <option name="number" value="00076" />
+      <option name="presentableId" value="LOCAL-00076" />
+      <option name="project" value="LOCAL" />
+      <updated>1741835103081</updated>
+    </task>
+    <task id="LOCAL-00077" summary="채도 조절 API 호출 수정">
+      <option name="closed" value="true" />
+      <created>1741835132918</created>
+      <option name="number" value="00077" />
+      <option name="presentableId" value="LOCAL-00077" />
+      <option name="project" value="LOCAL" />
+      <updated>1741835132918</updated>
+    </task>
+    <task id="LOCAL-00078" summary="채도 조절 API 호출 수정">
+      <option name="closed" value="true" />
+      <created>1741835238955</created>
+      <option name="number" value="00078" />
+      <option name="presentableId" value="LOCAL-00078" />
+      <option name="project" value="LOCAL" />
+      <updated>1741835238955</updated>
+    </task>
+    <option name="localTasksCounter" value="79" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -767,9 +769,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="main 스크롤 이벤트 트리거 talkback 지원 추가" />
-    <MESSAGE value="main 스크롤 이벤트 트리거 함수 수정" />
-    <MESSAGE value="test wav 파일 재생 함수 추가" />
     <MESSAGE value="test wav 파일 재생 함수 추가 수정" />
     <MESSAGE value="(Test) TalkBack을 통해 화면의 끝에 도달했음을 알리는 함수 추가" />
     <MESSAGE value="(Test) TalkBack을 통해 화면의 끝에 도달했음을 알리는 함수 수정" />
@@ -801,6 +800,8 @@
     <MESSAGE value="채도 버튼 추가" />
     <MESSAGE value="광도 조절 API 호출" />
     <MESSAGE value="광도 조절 API 호출 수정" />
-    <option name="LAST_COMMIT_MESSAGE" value="광도 조절 API 호출 수정" />
+    <MESSAGE value="채도 조절 API 호출" />
+    <MESSAGE value="채도 조절 API 호출 수정" />
+    <option name="LAST_COMMIT_MESSAGE" value="채도 조절 API 호출 수정" />
   </component>
 </project>

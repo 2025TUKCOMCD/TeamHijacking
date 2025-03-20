@@ -35,6 +35,25 @@
             android:layout_marginTop="16dp"
             android:layout_gravity="center_horizontal"/>
 
+        <Button
+            android:id="@+id/btnTurnOn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="무드등 켜기" />
+
+        <Button
+            android:id="@+id/btnTurnOff"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="무드등 끄기" />
+
+        <Button
+            android:id="@+id/btnBrightness"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="밝기 조절 (50%)" />
+
+
 
         <!-- 음성 명령 시작 버튼 -->
         <Button
