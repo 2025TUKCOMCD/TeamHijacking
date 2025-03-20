@@ -14,9 +14,11 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.Front">
+        android:theme="@style/Theme.Front"
+        android:usesCleartextTraffic="true">
 
         <!-- 카카오 인증을 위한.,. -->
+
         <activity
             android:name=".login.LoginActivity"
             android:exported="true">
@@ -36,6 +38,20 @@
         <activity
             android:name=".MainActivity"
             android:exported="false" />
+
+        <!-- 카카오 인증을 위한 AuthCodeHandlerActivity 설정 -->
+        <activity
+            android:name="com.kakao.sdk.auth.AuthCodeHandlerActivity"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data
+                    android:host="oauth"
+                    android:scheme="kakao1638cec80abf113d47fdc29e5cd25fa1" /> <!-- YOUR_NATIVE_APP_KEY 부분을 네이티브 앱 키로 변경 -->
+            </intent-filter>
+        </activity>
     </application>
 
 </manifest>

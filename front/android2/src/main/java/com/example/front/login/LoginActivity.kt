@@ -1,7 +1,6 @@
 package com.example.front.login
 
-//import android.content.Context
-import android.content.Intent
+
 import android.os.Bundle
 import android.util.Log
 import android.widget.ImageButton
@@ -9,7 +8,6 @@ import android.widget.Toast
 //import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import com.example.front.databinding.ActivityLoginBinding
-import com.example.front.MainActivity
 import com.kakao.sdk.auth.model.OAuthToken
 import com.kakao.sdk.user.UserApiClient
 //import java.io.File

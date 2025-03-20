@@ -20,7 +20,7 @@ dependencyResolutionManagement {
         maven("https://jitpack.io") { // JitPack 저장소 추가
             name = "jitpack" // 저장소 이름 (선택적)
         }
-        maven("https://devrepo.kakao.com/nexus/content/groups/public/") { // 카카오 저장소 추가
+        maven(url = "https://devrepo.kakao.com/nexus/content/groups/public/") { // 카카오 저장소 추가
             name = "kakao" // 저장소 이름 (선택적)
         }
     }
