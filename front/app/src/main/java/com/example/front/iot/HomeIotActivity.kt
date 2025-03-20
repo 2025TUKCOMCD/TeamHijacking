@@ -238,7 +238,7 @@ class HomeIotActivity : AppCompatActivity() {
     // ✅ 광도 조절 API 호출
     private fun setBrightness(deviceId: String, brightness: Int) {
         val commandBody =
-            CommandBody(commands = listOf(Commnad("switchLevel", brightness.toString())))
+            CommandBody(commands = listOf(Command("switchLevel", brightness.toString())))
 
         RetrofitClient.instance.setBrightness(deviceId, commandBody, apiToken)
             .enqueue(object : Callback<Unit> {
