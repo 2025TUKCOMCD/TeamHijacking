@@ -11,7 +11,6 @@ import android.widget.ScrollView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import com.example.front.R
-import com.example.front.audioguide.AudioGuideActivity
 import com.example.front.audioguide.AudioGuideBLEConnectActivity
 import com.example.front.databinding.ActivityMainBinding
 import com.example.front.iot.HomeIotActivity
