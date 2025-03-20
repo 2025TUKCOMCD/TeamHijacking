@@ -61,9 +61,7 @@
     <option name="autoReloadType" value="NONE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="5a34f773-8c82-4b0a-86d3-a37d3cf6ba80" name="Changes" comment="채도 조절 API 호출 수정">
-      <change beforePath="$PROJECT_DIR$/.idea/caches/deviceStreaming.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/caches/deviceStreaming.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+    <list default="true" id="5a34f773-8c82-4b0a-86d3-a37d3cf6ba80" name="Changes" comment="무드등 전원 버튼과 밝기 조절 버튼 추가">
       <change beforePath="$PROJECT_DIR$/front/app/src/main/res/layout/activity_home_iot.xml" beforeDir="false" afterPath="$PROJECT_DIR$/front/app/src/main/res/layout/activity_home_iot.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -361,14 +359,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1735374590430</updated>
-    </task>
-    <task id="LOCAL-00030" summary="VoiceControlHelper 클래스 수정">
-      <option name="closed" value="true" />
-      <created>1737006010755</created>
-      <option name="number" value="00030" />
-      <option name="presentableId" value="LOCAL-00030" />
-      <option name="project" value="LOCAL" />
-      <updated>1737006010755</updated>
     </task>
     <task id="LOCAL-00031" summary="HomeIotActivity 수정">
       <option name="closed" value="true" />
@@ -754,7 +744,15 @@
       <option name="project" value="LOCAL" />
       <updated>1741835238955</updated>
     </task>
-    <option name="localTasksCounter" value="79" />
+    <task id="LOCAL-00079" summary="무드등 전원 버튼과 밝기 조절 버튼 추가">
+      <option name="closed" value="true" />
+      <created>1742432397807</created>
+      <option name="number" value="00079" />
+      <option name="presentableId" value="LOCAL-00079" />
+      <option name="project" value="LOCAL" />
+      <updated>1742432397808</updated>
+    </task>
+    <option name="localTasksCounter" value="80" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -769,7 +767,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="test wav 파일 재생 함수 추가 수정" />
     <MESSAGE value="(Test) TalkBack을 통해 화면의 끝에 도달했음을 알리는 함수 추가" />
     <MESSAGE value="(Test) TalkBack을 통해 화면의 끝에 도달했음을 알리는 함수 수정" />
     <MESSAGE value="액티비티 종료 시 리소스 해제 onDestroy 함수 추가" />
@@ -802,6 +799,7 @@
     <MESSAGE value="광도 조절 API 호출 수정" />
     <MESSAGE value="채도 조절 API 호출" />
     <MESSAGE value="채도 조절 API 호출 수정" />
-    <option name="LAST_COMMIT_MESSAGE" value="채도 조절 API 호출 수정" />
+    <MESSAGE value="무드등 전원 버튼과 밝기 조절 버튼 추가" />
+    <option name="LAST_COMMIT_MESSAGE" value="무드등 전원 버튼과 밝기 조절 버튼 추가" />
   </component>
 </project>

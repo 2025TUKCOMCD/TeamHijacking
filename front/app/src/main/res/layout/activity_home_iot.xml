@@ -51,8 +51,13 @@
             android:id="@+id/btnBrightness"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="밝기 조절 (50%)" />
+            android:text="밝기 조절" />
 
+        <Button
+            android:id="@+id/btnColor"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="색상 변경"/>
 
 
         <!-- 음성 명령 시작 버튼 -->
