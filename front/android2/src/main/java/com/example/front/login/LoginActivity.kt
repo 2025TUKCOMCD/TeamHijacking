@@ -1,4 +1,4 @@
-package com.example.front.login
+package com.example.front.Login
 
 //import android.content.Context
 import android.content.Intent
@@ -29,9 +29,19 @@ class LoginActivity : AppCompatActivity() {
         val loginButton: ImageButton = binding.loginButton
 
         loginButton.setOnClickListener {
-            Log.d("login", "로그인 버튼 눌림")
+
+            //TODO:: 로그인이 끝난 후 실행될 수 있도록 조정할 것
             kakaoLogin()
+           // intent = Intent(this, MainActivity::class.java)
+            //startActivity(intent)
+
         }
+
+
+        /*카카오톡 로그인용, 해시 발급을 위한 코드,
+          참고:: https://onlyfor-me-blog.tistory.com/296
+          아래로 내릴 것을 조언 받았음..
+         */
 
         val keyHash = Utility.getKeyHash(this)
         Log.e("해시키", keyHash)
@@ -39,7 +49,7 @@ class LoginActivity : AppCompatActivity() {
 
 
     /* 카카오톡 앱을 통해 로그인할 수 있는지 확인하고, 카카오톡이 설치되지 않은 경우에는 카카오 계정으로 로그인한다. */
-    private fun kakaoLogin() {
+    private fun kakaoLogin(){
 
         /*********************************************************************************
          * 1. 처음 로그인인지 기존 로그인 자료가 있는지?
@@ -59,71 +69,33 @@ class LoginActivity : AppCompatActivity() {
          *********************************************************************************/
 
         //로그인 성공 여부를 확인한 후, 로그인에 성공하면 fetchKaKaoUserInfo를 호출해 사용자 정보를 요청한다.
-        /*val callback: (OAuthToken?, Throwable?) -> Unit = { token, error ->
-            Log.d("login", "callback 호출됨")  // 추가
+        val callback: (OAuthToken?, Throwable?) -> Unit = { token, error ->
             if (error != null) {
                 Toast.makeText(this, "로그인 실패: ${error.message}", Toast.LENGTH_SHORT).show()
-                Log.e("login", "로그인 실패 ${error.message}")
             } else if (token != null) {
                 Toast.makeText(this, "로그인 성공", Toast.LENGTH_SHORT).show()
-                Log.d("login", "로그인 성공")
                 fetchKakaoUserInfo()
-            } else {
-                Log.e("login", "알 수 없는 로그인 오류 발생")
             }
-        }*/
-
-        try {
-            // 카카오톡 설치 여부 확인 후 로그인 실행
-            if (UserApiClient.instance.isKakaoTalkLoginAvailable(this)) {
-                Log.d("login", "카카오톡이 설치되어 있음")
-                UserApiClient.instance.loginWithKakaoTalk(this) { token, error ->
-                    Log.d("login", "callback 실행됨 - loginWithKaKaoTalk")
-                    handleLoginResult(token, error)
-                }
-            } else {
-                Log.d("login", "카카오톡이 설치되어 있지 않음, 계정 로그인 시도")
-                UserApiClient.instance.loginWithKakaoAccount(this) { token, error ->
-                    Log.d("login", "callback 실행됨 - loginWithKakaoAccount")
-                    handleLoginResult(token, error)
-                }
-            }
-        } catch (e: Exception) {
-            Log.e("login", "로그인 실행 중 예외 발생: ${e.message}")
         }
-    }
 
-
-    //이전 코드에서 callBack 함수가 제대로 작동되지 않음을 확인, 이를 개선하기 위해 callback을 분리함. callback->handleLoginResult()
-    private fun handleLoginResult(token:OAuthToken?, error: Throwable?) {
-        Log.d("login", "callback 호출됨")  // 추가
-        if (error != null) {
-            Toast.makeText(this, "로그인 실패: ${error.message}", Toast.LENGTH_SHORT).show()
-            Log.e("login", "로그인 실패 ${error.message}")
-        } else if (token != null) {
-            Toast.makeText(this, "로그인 성공", Toast.LENGTH_SHORT).show()
-            Log.d("login", "로그인 성공")
-            fetchKakaoUserInfo()
+        // 카카오톡 설치 여부 확인 후 로그인 실행
+        if (UserApiClient.instance.isKakaoTalkLoginAvailable(this)) {
+            UserApiClient.instance.loginWithKakaoTalk(this, callback = callback)
         } else {
-            Log.e("login", "알 수 없는 로그인 오류 발생")
+            UserApiClient.instance.loginWithKakaoAccount(this, callback = callback)
         }
+
     }
 
     /* UserAPiClient.instance.me() 메소드를 호출하면 현재 로그인한 사용자의 정보 받아올 수 있음.
-       사용자 정보를 활용한 추가 로직 구현 가능 */
+    * 사용자 정보를 활용한 추가 로직 구현 가능 */
     private fun fetchKakaoUserInfo() {
-        Log.d("login", "fetchKakaoUserInfo() 실행됨")
-
         UserApiClient.instance.me { user, error ->
             if (error != null) {
                 Toast.makeText(this, "사용자 정보 요청 실패: ${error.message}", Toast.LENGTH_SHORT).show()
-                Log.e("login","사용자 정보 요청 실패: ${error.message}")
-            } else if (user == null) {
-                Log.e("login", "사용자 정보가 null")
-            } else {
+            } else if (user != null) {
                 Toast.makeText(this, "사용자 정보 요청 성공: ${user.kakaoAccount?.profile?.nickname}", Toast.LENGTH_SHORT).show()
-                //사용자 정보를 활용하여 추가 로직 구현 가능
-                //TODO:: 추가 로직 구현
+                // 사용자 정보를 활용하여 추가 로직 구현 가능
             }
         }
     }

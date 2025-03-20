@@ -56,11 +56,7 @@
     <option name="autoReloadType" value="NONE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="5a34f773-8c82-4b0a-86d3-a37d3cf6ba80" name="Changes" comment="코드병합">
-      <change beforePath="$PROJECT_DIR$/.idea/caches/deviceStreaming.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/caches/deviceStreaming.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/front/android2/src/main/java/com/example/front/Login/LoginActivity.kt" beforeDir="false" afterPath="$PROJECT_DIR$/front/android2/src/main/java/com/example/front/Login/LoginActivity.kt" afterDir="false" />
-    </list>
+    <list default="true" id="5a34f773-8c82-4b0a-86d3-a37d3cf6ba80" name="Changes" comment="커밋1" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -426,14 +422,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1735374590430</updated>
-    </task>
-    <task id="LOCAL-00034" summary="HomeIotActivity 수정">
-      <option name="closed" value="true" />
-      <created>1737012429402</created>
-      <option name="number" value="00034" />
-      <option name="presentableId" value="LOCAL-00034" />
-      <option name="project" value="LOCAL" />
-      <updated>1737012429402</updated>
     </task>
     <task id="LOCAL-00035" summary="iot 수정">
       <option name="closed" value="true" />
@@ -819,7 +807,15 @@
       <option name="project" value="LOCAL" />
       <updated>1742447237438</updated>
     </task>
-    <option name="localTasksCounter" value="83" />
+    <task id="LOCAL-00083" summary="커밋1">
+      <option name="closed" value="true" />
+      <created>1742447985344</created>
+      <option name="number" value="00083" />
+      <option name="presentableId" value="LOCAL-00083" />
+      <option name="project" value="LOCAL" />
+      <updated>1742447985344</updated>
+    </task>
+    <option name="localTasksCounter" value="84" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -834,7 +830,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="main 액티비티 오류 수정 및 wav 파일 추가" />
     <MESSAGE value="메인 액티비티 코드 수정" />
     <MESSAGE value="IoT UI 수정" />
     <MESSAGE value="IoT UI 버튼 색 추가" />
@@ -866,6 +861,7 @@
     <MESSAGE value="Main액티비티 부분 불필요 코드 정리" />
     <MESSAGE value="코드병합 커밋" />
     <MESSAGE value="코드병합" />
-    <option name="LAST_COMMIT_MESSAGE" value="코드병합" />
+    <MESSAGE value="커밋1" />
+    <option name="LAST_COMMIT_MESSAGE" value="커밋1" />
   </component>
 </project>
