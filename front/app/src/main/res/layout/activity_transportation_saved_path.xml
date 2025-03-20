@@ -1,11 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".transportation.TransportationSavedPathActivity">
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:minHeight="400dp"
+    android:minWidth="170dp"
+    tools:context=".transportation.TransportationSavedPathActivity"
+    android:background="@color/backgroundDark"
+    android:textAlignment="center">
 
     <ScrollView
         android:layout_width="0dp"
@@ -13,29 +18,85 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent">
+        app:layout_constraintEnd_toEndOf="parent"
+        >
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:padding="16dp"
-            android:gravity="center_horizontal">
+            android:gravity="center_horizontal"
+            android:id="@+id/transSavedPathLayout">
 
-            <TextView
-                android:id="@+id/some_root_thing"
-                android:layout_width="match_parent"
+            <!-- 임시 버튼, 추후 삭제 예정 -->
+            <LinearLayout
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="@android:color/white"
-                android:textSize="16sp"
-                android:padding="8dp"
-                android:gravity="center"
-                android:contentDescription=""
-                android:background="@drawable/box_border"
-                android:text="@string/default_text" />
+                android:background="@drawable/some_chip"
+                android:id="@+id/someRootThing"
+                android:padding="10dp"
+                android:orientation="vertical"
+                android:layout_marginTop="5dp">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:minHeight="30dp"
+                    android:orientation="horizontal"
+                    >
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:minWidth="80dp"
+                        android:textSize="13sp"
+                        android:textColor="@android:color/white"
+                        android:text="@string/default_text"
+                        android:id="@+id/addressNicknameTextview1"
+                        android:padding="5dp"
+                        android:layout_weight="1"/>
+                    <ImageView
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:contentDescription="@string/favouritePathStarBtt"
+                        android:src="@drawable/star"
+                        android:scaleType="fitStart"
+                        android:background="@android:color/transparent"
+                        android:padding="5dp"
+                        android:layout_marginEnd="5dp"
+                        android:id="@+id/favouritePathStarBtt1"
+                        app:tint="#cccccc" />
+                </LinearLayout>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingLeft="5dp"
+                    android:paddingRight="5dp"
+                    android:id="@+id/departureTextView1"
+                    android:text="출발지: 한국공학대학교"
+                    android:textColor="@android:color/white"
+                    android:textSize="12sp" />
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingLeft="5dp"
+                    android:paddingRight="5dp"
+                    android:id="@+id/destinationTextView1"
+                    android:text="목적지: 래미안 이스트 팰리스 1.2단지"
+                    android:textColor="@android:color/white"
+                    android:textSize="12sp" />
+            </LinearLayout>
+
+            <!-- 동적 생성이 가능한지 테스트하기 위한 임시 버튼 -->
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/imsiBtt4"
+                android:text="임시버튼, 클릭 시 하나 추가됨"
+                />
 
         </LinearLayout>
 
-    </ScrollView>
 
+    </ScrollView>
 </androidx.constraintlayout.widget.ConstraintLayout>

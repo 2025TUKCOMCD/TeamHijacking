@@ -1,70 +1,91 @@
 package com.example.front.transportation
 
+import android.annotation.SuppressLint
+import android.content.Intent
 import android.os.Bundle
-import android.util.Log
-import androidx.activity.enableEdgeToEdge
+import android.os.Parcelable
+import android.view.View
+import android.widget.LinearLayout
+import android.widget.ProgressBar
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
-import androidx.databinding.adapters.ViewBindingAdapter.setPadding
+import androidx.lifecycle.Observer
 import com.example.front.R
 import com.example.front.databinding.ActivityTransportNewPathSearchBinding
-import com.example.front.databinding.ActivityTransportationMainBinding
-import com.example.front.transportation.processor.RouteProcessor
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
+import com.example.front.transportation.data.searchPath.Route
 
-/*"경로 클릭시" 출력될 화면, 새 경로를 찾는 화면과 구 경로를
-* 재사용할 때 동일하게 사용된다. 피그마의 경로 클릭시 경우 참고.*/
+
+import androidx.activity.viewModels
+
+
 class TransportNewPathSearchActivity : AppCompatActivity() {
     private lateinit var binding: ActivityTransportNewPathSearchBinding
+    private val routeViewModel: RouteViewModel by viewModels()
 
+    @SuppressLint("SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        setContentView(R.layout.activity_transport_new_path_search)
         binding = ActivityTransportNewPathSearchBinding.inflate(layoutInflater)
-        val startLat = 37.340174
-        val startLng = 126.7335933
-        val endLat = 37.5414001
-        val endLng = 127.0900351
+        setContentView(binding.root)
 
-        CoroutineScope(Dispatchers.Main).launch {
-            try {
-                val result = RouteProcessor.fetchAndProcessRoutes(startLat, startLng, endLat, endLng)
-// 결과 분리 및 로그 출력 + 버튼 생성
-                result.forEach { route ->
-                    // 각각의 값 분리
-                    val routeStationsAndBuses = route.routeStationsAndBuses
-                    val totalTime = route.totalTime
-                    val transitCount = route.transitCount
-                    val mainTransitTypes = route.mainTransitTypes
-                    val detailedPath = route.detailedPath
+        val startLat = intent.getDoubleExtra("startLat", 37.340174)
+        val startLng = intent.getDoubleExtra("startLng", 126.7335933)
+        val endLat = intent.getDoubleExtra("endLat", 37.340174)
+        val endLng = intent.getDoubleExtra("endLng", 127.0900351)
 
-                    // 로그 출력
-                    Log.d("RouteProcessor", "routeStationsAndBuses = $routeStationsAndBuses")
-                    Log.d("RouteProcessor", "Total Time: $totalTime 분")
-                    Log.d("RouteProcessor", "Transit Count: $transitCount 회")
-                    Log.d("RouteProcessor", "Main Transit Types: $mainTransitTypes")
-                    Log.d("RouteProcessor", "Detailed Path: $detailedPath")
+        val loadingSpinner = findViewById<ProgressBar>(R.id.loadingSpinner)
+        val dataLayout = findViewById<LinearLayout>(R.id.newPathLinearLayout)
 
-                    // 동적 버튼 생성
-//
-//                        setOnClickListener {
-//                            CoroutineScope(Dispatchers.Main).launch {
-//                                val realtimeResult =
-//                                    RouteProcessor.fetchRealtimeStation(routeStationsAndBuses)
-//                                Log.d("RouteProcessor", "실시간 경로 데이터: $realtimeResult")
-//                            }
-//                        }
-//                    }
+        // 데이터 로딩 시작
+        loadingSpinner.visibility = View.VISIBLE
+        dataLayout.visibility = View.GONE
 
-                    // 생성된 버튼을 컨테이너에 추가
+        // ViewModel의 LiveData 관찰
+        routeViewModel.routeData.observe(this, Observer { routes ->
+            // 데이터 로드 완료 후 처리
+            loadingSpinner.visibility = View.GONE
+            dataLayout.visibility = View.VISIBLE
 
+            // 데이터를 UI에 설정
+            routes?.let {
+                if (it.isNotEmpty()) {
+                    updateRouteViews(it)
+                } else {
+                    // 데이터가 없는 경우 처리
                 }
-            } catch (e: Exception) {
-                Log.e("RouteProcessor", "경로 탐색 중 오류 발생", e)
+            }
+        })
+
+        // 경로 데이터 가져오기
+        routeViewModel.fetchRoute(startLng, startLat, endLng, endLat)
+    }
+
+    private fun updateRouteViews(routes: List<Route>) {
+        val route1Views = listOf(binding.transitCountView1, binding.totalTimeView1, binding.detailedPathView1, binding.mainTransitTypesView1)
+        val route2Views = listOf(binding.transitCountView2, binding.totalTimeView2, binding.detailedPathView2, binding.mainTransitTypesView2)
+        val route3Views = listOf(binding.transitCountView3, binding.totalTimeView3, binding.detailedPathView3, binding.mainTransitTypesView3)
+
+        val routeLayouts = listOf(binding.someRootLayout1, binding.someRootLayout2, binding.someRootLayout3)
+        val routeViews = listOf(route1Views, route2Views, route3Views)
+
+        routes.forEachIndexed { index, route ->
+            if (index < routeViews.size) {
+                val (transitCountView, totalTimeView, detailedPathView, mainTransitTypesView) = routeViews[index]
+                detailedPathView.text = route.transitTypeNo.joinToString(", ")
+                transitCountView.text = getString(R.string.transitCount, route.transitCount)
+                totalTimeView.text = "${route.totalTime} 분"
+                mainTransitTypesView.text = route.mainTransitType
+
+                // Set click listener for each route layout
+                routeLayouts[index].setOnClickListener {
+                    // Handle click event
+                    val intent = Intent(this, TransportInfrmationActivity::class.java)
+                    intent.putIntegerArrayListExtra("pathTransitType", ArrayList(route.pathTransitType))
+                    intent.putStringArrayListExtra("transitTypeNo", ArrayList(route.transitTypeNo))
+                    intent.putParcelableArrayListExtra("routeIds", ArrayList(route.routeIds.map { it as Parcelable }))
+                    startActivity(intent)
+                }
             }
         }
     }

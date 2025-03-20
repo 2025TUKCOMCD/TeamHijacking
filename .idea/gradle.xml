@@ -10,6 +10,7 @@
         <option name="modules">
           <set>
             <option value="$PROJECT_DIR$/front" />
+            <option value="$PROJECT_DIR$/front/android2" />
             <option value="$PROJECT_DIR$/front/app" />
           </set>
         </option>

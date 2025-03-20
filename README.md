@@ -18,6 +18,35 @@
   2. 횡단보도 유도 기능과 횡단보도 안내 기능을 스마트 워치로도 이용할 수 있도록 지원하는 시각 장애인용 음성 안내기 **리모컨 기능**
   3. 집의 기기, 조명, AI 스피커와 연동하여, 필요시 음성만으로도 집안의 기기를 조작할 수 있도록 제공하는 **홈 네트워크 기기 조작 기능** 
 
+## 메인 기술
+<details>
+  <summary>교통 안내 기능</summary>
+  
+  1. **ODsay API 대중교통 길찾기** (`searchPubTransPathT`)를 사용하여 다음 정보를 추출:
+     - 총 소요 시간
+     - 환승 횟수
+     - 주요 대중교통 정보
+     - 상세 경로  
+     *→ 추출된 정보를 기반으로 시각장애인의 중요도에 따른 **가중치 부여**를 통해 경로를 추천하고 재정렬.*
+
+  2. **ODsay API 실시간 도착정보**  (`realtimeStation`)를 사용하여 다음 정보를 추출:
+     - 남은 정류장 수
+     - 도착 예정 시간 
+     - 재차인원수  
+       *→ 실시간 도착정보를 통한 시각장애인의 **버스 탑승 이용성** 증대*
+
+ <!--  3. **ODsay API 실시간 위치정보**  (`realtimeRoute`)를 사용하여 다음 정보를 추출:
+     - 
+     -  
+     - 
+-->
+</details>
+<details>
+  <summary>리모컨 기능</summary>
+</details>
+  <details>
+  <summary>홈 네트워크 기기 조작 기능</summary>
+</details>
 
 ## 🖥 시스템 소프트웨어 아키텍처 🖥
 <p align="center">
@@ -90,7 +119,7 @@
 - <a href = "https://drive.google.com/file/d/176_STpg_pBsIT_EmeeFJf_z5qdy2MSUh/view?usp=sharing">팀 하이재킹 제안서</a>
 - <a href = "https://drive.google.com/file/d/14pNoPenm9NCOFus4_Id3Xb9OWA8gTNcc/view?usp=sharing">팀 하이재킹 요약 계획서</a>
 - <a href = "https://docs.google.com/presentation/d/1yz5gyiYBwBFY1xeWGXbyRp7kZKCSKEi1/edit?usp=drive_link&ouid=102873262839899259467&rtpof=true&sd=true">시스템 구성도, 개발 환경, 운용 환경, 데모 환경</a>
-
+- <a href = "https://drive.google.com/file/d/106PggYcS9-Hg3sq0sLVcIDpOqJFWpi5G/view?usp=drive_link">에픽, 백로그, 1차스프린트</a>
 ## 🚥 개발자 🚥
 **김현빈** | **서하연** | **연찬호** | **김의연**
 :------: | :-------: | :-------: | :------: 

@@ -7,6 +7,11 @@
     <string name="hello_world">From the Square world,\nHello, %1$s!</string>
     <string name="btn_transport">대중교통</string>
     <string name="btn_audio_guide">음향 유도기</string>
+    <string name="btn_position_derrivation">음성 유도 기능입니다. 신호기 및 음성유도기에서 음성이 나옵니다.</string>
+    <string name="btn_signal_guide">신호 안내 기능입니다. 신호기의 현재 신호에 대한 음성이 나옵니다.</string>
+    <string name="btn_audio_guides">음성 안내 기능입니다. 음향신호기의 설치 위치정보가 나옵니다.</string>
+    <string name="btn_scan_start">주변에 있는 스마트 음향신호기들을 검색합니다.</string>
+
     <string name="btn_iot_home">iot 스마트홈</string>
     <string name="btn_setting">설정</string>
     <string name="btn_transport_description">교통안내 기능입니다. 자세한 설명이 필요하시다면 꾹 누르십시오.</string>
@@ -32,4 +37,24 @@
     <string name="addressStartTextView">출발지를 입력하십시오.</string>
     <string name="start_address_description">출발지.\n다음에 있을 칸에서 출발지를 입력할 수 있습니다.</string>
     <string name="end_address_description">목적지.\n다음에 있을 칸에서 목적지를 입력할 수 있습니다.</string>
+    <string name="defaultText">기본 텍스트</string>
+
+    <string name="transitCount">%d 회</string>
+    <string name="yes">예</string>
+    <string name="no">아니요</string>
+    <string name="doYouWantSave">경로를 저장하시겠습니까?</string>
+    <string name="plzEnterAddressName">별명을 지정하십시오.</string>
+    <string name="nickName">별명</string>
+    <string name="complete">완료</string>
+    <string name="disable">취소</string>
+    <string name="favouritePathStarBtt">즐겨찾기 지정 버튼, 클릭 시 본 경로가 최상단에 노출됩니다. 여러개를 설정하였을 시, 가장 최근에 사용한 즐겨찾기 경로가 노출됩니다.</string>
+    <string name="askFormBttDescription">문의 버튼, 클릭시 이메일을 볼 수 있습니다. 이용해주셔서 감사합니다.</string>
+    <string name="askFormBtt">문의용 연락처</string>
+    <string name="profileText">계정 설정</string>
+    <string name="faqText">FAQ</string>
+    <string name="thisVersionText">현재 버전</string>
+    <string name="code">코드</string>
+    <string name="n_nn">n시간 nn분</string>
+    <string name="n">n회</string>
+    <string name="FAQText">Q1. 어쩌고 저쩌고  \n A1. 어쩌고 저쩌고 \n Q2. 어쩌고 저쩌고 \n A2. 어쩌고 저쩌고</string>
 </resources>

@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.example.front">
+
+    <uses-permission android:name="android.permission.WAKE_LOCK" /> <!-- 화면 안꺼지게 하기 -->
+    <uses-permission android:name="com.google.android.permission.PROVIDE_BACKGROUND" /> <!-- Data Layble 사용을 위한 백그라운드 권한 요청 -->
+    <uses-permission android:name="com.google.android.gms.permission.BIND_NETWORK_TASK_SERVICE" /> <!-- 백그라운드 작업 예약 권한 -->
+    <uses-permission android:name="android.permission.INTERNET" />
+
+    <application
+        android:name=".MyApplication"
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/Theme.Front">
+
+        <!-- 카카오 인증을 위한.,. -->
+        <activity
+            android:name=".login.LoginActivity"
+            android:exported="true">
+            <intent-filter>
+
+                 <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" /> <!--이 액티비티가 작업의 최초 액티비티이며, 시스템의 애플리케이션 시작 관리자에 목록으로 게재됨-->
+                <action android:name="android.intent.action.VIEW" /> <!--데이터를 보여주는 기능일 시에 선언, 액티비티가 사용자에게 표시할 수 있는 어떤 정보를 가지고 있을 때, startActivity()가 있는 인텐트에서 사용-->
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" /> <!--대상 액티비티가 웹브라우저를 통해 시작되도록 허용하고 이미지, 이메일 메시지 등 링크로 참조된 데이터를 표시하게 함-->
+                <!--Redirect URI: "kakao${NATIVE_APP_KEY}://oauth"-->
+                <data
+                    android:host="oauth"
+                    android:scheme="kakao1638cec80abf113d47fdc29e5cd25fa1" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".MainActivity"
+            android:exported="false" />
+    </application>
+
+</manifest>
