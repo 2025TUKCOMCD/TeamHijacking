@@ -5,14 +5,12 @@ import android.os.Bundle
 import android.util.Log
 import android.widget.ImageButton
 import android.widget.Toast
-//import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import com.example.front.databinding.ActivityLoginBinding
 import com.kakao.sdk.auth.model.OAuthToken
+import com.kakao.sdk.common.model.ClientError
+import com.kakao.sdk.common.model.ClientErrorCause
 import com.kakao.sdk.user.UserApiClient
-//import java.io.File
-//import java.io.FileInputStream
-//import java.util.Properties
 import com.kakao.sdk.common.util.Utility
 
 class LoginActivity : AppCompatActivity() {
@@ -56,28 +54,23 @@ class LoginActivity : AppCompatActivity() {
          *
          *********************************************************************************/
 
-        //로그인 성공 여부를 확인한 후, 로그인에 성공하면 fetchKaKaoUserInfo를 호출해 사용자 정보를 요청한다.
-        /*val callback: (OAuthToken?, Throwable?) -> Unit = { token, error ->
-            Log.d("login", "callback 호출됨")  // 추가
-            if (error != null) {
-                Toast.makeText(this, "로그인 실패: ${error.message}", Toast.LENGTH_SHORT).show()
-                Log.e("login", "로그인 실패 ${error.message}")
-            } else if (token != null) {
-                Toast.makeText(this, "로그인 성공", Toast.LENGTH_SHORT).show()
-                Log.d("login", "로그인 성공")
-                fetchKakaoUserInfo()
-            } else {
-                Log.e("login", "알 수 없는 로그인 오류 발생")
-            }
-        }*/
-
         try {
-            // 카카오톡 설치 여부 확인 후 로그인 실행
+            // 카카오톡 설치 여부 확인 후 로그인 실행, 안 되어있을 시 카카오 계정으로 로그인
             if (UserApiClient.instance.isKakaoTalkLoginAvailable(this)) {
                 Log.d("login", "카카오톡이 설치되어 있음")
                 UserApiClient.instance.loginWithKakaoTalk(this) { token, error ->
                     Log.d("login", "callback 실행됨 - loginWithKaKaoTalk")
-                    handleLoginResult(token, error)
+
+                    /*if(error != null) {
+                        Log.e("login", "카카오톡 로그인 실패", error)
+                    }*/
+                    //사용자가 카카오톡 설치 후 디바이스 권한 요청 화면에서 로그인을 취소한 경우
+                    //의도적인 로그인 취소로 보고 카카오 계정으로 로그인 시도 없이 로그인 취소로 처리(예: 뒤로 가기)
+                    if (error is ClientError && error.reason == ClientErrorCause.Cancelled) {
+                        return@loginWithKakaoTalk
+                    }
+
+                    handleLoginResult(token, error) //콜백을 함수로 분리
                 }
             } else {
                 Log.d("login", "카카오톡이 설치되어 있지 않음, 계정 로그인 시도")
@@ -120,8 +113,13 @@ class LoginActivity : AppCompatActivity() {
                 Log.e("login", "사용자 정보가 null")
             } else {
                 Toast.makeText(this, "사용자 정보 요청 성공: ${user.kakaoAccount?.profile?.nickname}", Toast.LENGTH_SHORT).show()
+                Log.i("login", "사용자 정보 요청 성공: " +
+                      "\n 회원정보: ${user.id}" +
+                      "\n 이메일: ${user.kakaoAccount?.email}" +
+                      "\n 닉네임: ${user.kakaoAccount?.profile?.nickname}")
                 //사용자 정보를 활용하여 추가 로직 구현 가능
                 //TODO:: 추가 로직 구현
+
             }
         }
     }
@@ -131,8 +129,10 @@ class LoginActivity : AppCompatActivity() {
         UserApiClient.instance.logout { error ->
             if (error != null) {
                 Toast.makeText(this, "로그아웃 실패: ${error.message}", Toast.LENGTH_SHORT).show()
+                Log.e("login","로그아웃 실패, SDK에서 토큰 삭제됨", error)
             } else {
                 Toast.makeText(this, "로그아웃 성공", Toast.LENGTH_SHORT).show()
+                Log.i("logtin", "로그아웃 성공, SDK에서 토큰 삭제됨")
             }
         }
     }
