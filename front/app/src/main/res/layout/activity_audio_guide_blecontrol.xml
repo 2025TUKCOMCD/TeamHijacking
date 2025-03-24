@@ -19,7 +19,7 @@
             android:id="@+id/button3"
             android:layout_width="130dp"
             android:layout_height="50dp"
-            android:contentDescription="@string/btn_audio_guides"
+            android:contentDescription="@string/btn_signal_guide"
             android:background="@drawable/signal_guide_round_sqr"/>
     <LinearLayout
         android:layout_width="match_parent"
