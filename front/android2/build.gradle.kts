@@ -70,7 +70,8 @@ dependencies {
     implementation("androidx.activity:activity:1.9.3")
     implementation("androidx.constraintlayout:constraintlayout:2.2.1")
     testImplementation(libs.junit)
-    implementation(libs.v2.user.v2206)
+    //implementation(libs.v2.user.v2206) sync Now 오류로 잠시 주석처리
+    implementation(libs.v2.user)
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso.core)
     implementation("androidx.compose.runtime:runtime:1.5.2")
