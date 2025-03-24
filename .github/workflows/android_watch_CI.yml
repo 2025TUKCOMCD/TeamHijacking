@@ -2,9 +2,10 @@ name: Android CI
 
 on:
   push:
-    branches: [ "main", "develop" ]
+    branches: [ "main", "watch" ]
   pull_request:
-    branches: [ "main", "develop" ]
+    branches: [ "main", "watch" ]
+
 
 jobs:
   build:
@@ -41,6 +42,7 @@ jobs:
           echo "SMARTTHINGS_API_TOKEN=${{ secrets.SMARTTHINGS_API_TOKEN }}" >> ./front/local.properties
           echo "Public_Bus_APIKEY=${{ secrets.Public_Bus_APIKEY }}" >> ./front/local.properties
           echo "Public_Subway_APIKEY=${{ secrets.Public_Subway_APIKEY }}" >> ./front/local.properties
+          echo "KAKAO_NATIVE_API_KEY=${{ secrets.KAKAO_NATIVE_API_KEY }}" >> ./front/local.properties
 
       - name: Grant execute permission for gradlew
         working-directory: ./front
@@ -59,7 +61,7 @@ jobs:
         if: always()
         with:
           name: test-results
-          path: ./front/app/build/reports/tests/testDebugUnitTest
+          path: ./testDebugUnitTest
 
       - name: Upload APK (Debug)
         uses: actions/upload-artifact@v4
