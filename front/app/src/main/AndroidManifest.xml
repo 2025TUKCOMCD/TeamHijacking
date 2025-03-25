@@ -28,6 +28,9 @@
         android:supportsRtl="true"
         android:theme="@style/MainActivityTheme.Starting">
         <activity
+            android:name=".transportation.TransportDetailRouteControlActivity"
+            android:exported="false" />
+        <activity
             android:name=".audioguide.AudioSignalMuchineBLEControl"
             android:exported="false" />
         <activity
