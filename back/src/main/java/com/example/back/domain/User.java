@@ -13,12 +13,6 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    @Column(unique = true, nullable = false)
-    private String login_id;
-
-    @Column(nullable = false)
-    private String password;
-
     @Column(nullable = false)
     private String name;
 

@@ -1,7 +1,6 @@
 package com.example.back.service;
 
 import org.springframework.stereotype.Service;
-
 import java.sql.Time;
 import java.time.DayOfWeek;
 import java.time.LocalTime;
@@ -41,11 +40,11 @@ public class SubwayService {
 
         return subwayCodeToCity;
     }
+
     // 오디세이 -> 서울 지하철 노선 코드 변환
     public int convertSubwayCode(int subwayCode) {
         return subwayCodeMap.getOrDefault(subwayCode, 0);
     }
-
 
     // 서울 지하철 특수 코드 확인
     public boolean isSpecialSeoulCode(int subwayCode) {
@@ -55,41 +54,27 @@ public class SubwayService {
 
     // 서울 지하철 현재 시간 가져오기
     public static Time getSeoulCurrentTime() {
-        // 서울 시간대를 ZoneId로 정의
         ZoneId seoulZoneId = ZoneId.of("Asia/Seoul");
-
-        // ZonedDateTime을 사용해 서울 현재 시간 가져오기
         LocalTime seoulTime = ZonedDateTime.now(seoulZoneId).toLocalTime();
-
-        // LocalTime을 SQL Time 객체로 변환
         return Time.valueOf(seoulTime);
     }
+
     // 서울 지하철 도착 정보 조회
     public Map<String, Object> getTimeAndDayType(int subwayCode) {
-        // 서울 시간 기준 현재 시간 가져오기
         Time seoulTime = getSeoulCurrentTime();
-
-        // 현재 요일에 따른 Day_Type 계산
         String currentDayType = getCurrentDayType(subwayCode);
         System.out.println("현재 요일 타입: " + currentDayType);
-
-        // 결과를 Map으로 반환
         Map<String, Object> result = new HashMap<>();
         result.put("seoulTime", seoulTime);
         result.put("currentDayType", currentDayType);
-
         return result;
     }
 
     // 현재 요일 계산
     public String getCurrentDayType(int subwayCode) {
-        // 서울 시간 기준 현재 요일 계산
         ZoneId seoulZoneId = ZoneId.of("Asia/Seoul");
         DayOfWeek currentDay = ZonedDateTime.now(seoulZoneId).getDayOfWeek();
-
-        // 주말 또는 평일 판단
         if (currentDay == DayOfWeek.SATURDAY || currentDay == DayOfWeek.SUNDAY) {
-            // 특정 route_id에서 토요일과 일요일을 구분
             if (isWeekendRoute(subwayCode)) {
                 if (currentDay == DayOfWeek.SATURDAY) {
                     return "sat"; // 토요일
