@@ -1,27 +1,36 @@
 package com.example.front.transportation
 
 import android.os.Bundle
+import android.util.Log
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
 import com.example.front.R
+import com.example.front.databinding.ActivityTransportDetailRouteControlBinding
 import com.example.front.transportation.DetailRouteFragment.BusFragment
 import com.example.front.transportation.DetailRouteFragment.SubwayFragment
 import com.example.front.transportation.DetailRouteFragment.WalkFragment
 
-data class TransportData(val type: String, val data: Bundle?)
+interface FragmentNavigation {
+    fun showNextFragment()
+}
 
+class TransportDetailRouteControlActivity : AppCompatActivity(), FragmentNavigation { // FragmentNavigation 인터페이스 구현
 
-class TransportDetailRouteControlActivity : AppCompatActivity() {
+    private lateinit var binding: ActivityTransportDetailRouteControlBinding
+
+    data class TransportData(val type: String, val data: Bundle?)
     private val transportList = mutableListOf<TransportData>()
     private var currentIndex = 0
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
-        setContentView(R.layout.activity_transport_detail_route_control)
-        // Intent에서 데이터 추출 및 리스트에 추가
+
+        binding = ActivityTransportDetailRouteControlBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+
+        // ... (데이터 설정 및 Fragment 표시 코드)
         val walkData1 = Bundle().apply { putString("walkDistance", "500m"); putString("walkTime", "5분") }
         val busData = Bundle().apply { putString("busNumber", "123"); putString("busStation", "강남역") }
         val subwayData = Bundle().apply { putString("subwayLine", "2호선"); putString("subwayStation", "역삼역") }
@@ -31,10 +40,12 @@ class TransportDetailRouteControlActivity : AppCompatActivity() {
         transportList.add(TransportData("bus", busData))
         transportList.add(TransportData("subway", subwayData))
         transportList.add(TransportData("walk", walkData2))
+        Log.d("현빈", transportList.toString())
 
         showNextFragment()
     }
-    private fun showNextFragment() {
+
+    override fun showNextFragment() { // FragmentNavigation 인터페이스 메서드 구현 (override 추가)
         if (currentIndex < transportList.size) {
             val transportData = transportList[currentIndex]
             val fragment = when (transportData.type) {
@@ -51,7 +62,6 @@ class TransportDetailRouteControlActivity : AppCompatActivity() {
 
             currentIndex++
         } else {
-            // 모든 Fragment 표시 완료
             Toast.makeText(this, "모든 정보를 표시했습니다.", Toast.LENGTH_SHORT).show()
         }
     }

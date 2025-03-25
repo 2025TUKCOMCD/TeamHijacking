@@ -8,14 +8,17 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
+import androidx.appcompat.widget.AppCompatImageButton
 import com.example.front.R
+import com.example.front.transportation.FragmentNavigation
 
+// TODO: Rename parameter arguments, choose names that match
 class SubwayFragment : Fragment() {
-    private var navigation: BusFragment.FragmentNavigation? = null
+    private var navigation: FragmentNavigation? = null
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
-        if (context is BusFragment.FragmentNavigation) {
+        if (context is FragmentNavigation) {
             navigation = context
         } else {
             throw RuntimeException("$context must implement FragmentNavigation")
@@ -28,15 +31,14 @@ class SubwayFragment : Fragment() {
     ): View? {
         val view = inflater.inflate(R.layout.fragment_subway, container, false)
 
-        // 전달받은 데이터 표시
         val subwayLine = arguments?.getString("subwayLine") ?: ""
         val subwayStation = arguments?.getString("subwayStation") ?: ""
 
-        view.findViewById<TextView>(R.id.subwayLineTextView).text = "노선 번호: $subwayLine"
-        view.findViewById<TextView>(R.id.subwayStationTextView).text = "역: $subwayStation"
+        view.findViewById<TextView>(R.id.subwayLineTextView).text = "지하철 노선: $subwayLine"
+        view.findViewById<TextView>(R.id.subwayStationTextView).text = "지하철 역: $subwayStation"
 
-        // 다음 Fragment로 이동하는 버튼 이벤트 처리
-        view.findViewById<Button>(R.id.nextButton).setOnClickListener {
+        val nextButton = view.findViewById<AppCompatImageButton>(R.id.nextButton) // AppCompatImageButton으로 캐스팅
+        nextButton.setOnClickListener {
             navigation?.showNextFragment()
         }
 

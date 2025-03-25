@@ -8,14 +8,12 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
+import androidx.appcompat.widget.AppCompatImageButton
 import com.example.front.R
-
+import com.example.front.transportation.FragmentNavigation
 
 class BusFragment : Fragment() {
 
-    interface FragmentNavigation {
-        fun showNextFragment()
-    }
     private var navigation: FragmentNavigation? = null
 
     override fun onAttach(context: Context) {
@@ -33,15 +31,14 @@ class BusFragment : Fragment() {
     ): View? {
         val view = inflater.inflate(R.layout.fragment_bus, container, false)
 
-        // 전달받은 데이터 표시
         val busNumber = arguments?.getString("busNumber") ?: ""
         val busStation = arguments?.getString("busStation") ?: ""
 
         view.findViewById<TextView>(R.id.busNumberTextView).text = "버스 번호: $busNumber"
-        view.findViewById<TextView>(R.id.busStationTextView).text = "정류장: $busStation"
+        view.findViewById<TextView>(R.id.busStationTextView).text = "버스 정류장: $busStation"
 
-        // 다음 Fragment로 이동하는 버튼 이벤트 처리
-        view.findViewById<Button>(R.id.nextButton).setOnClickListener {
+        val nextButton = view.findViewById<AppCompatImageButton>(R.id.nextButton) // AppCompatImageButton으로 캐스팅
+        nextButton.setOnClickListener {
             navigation?.showNextFragment()
         }
 
