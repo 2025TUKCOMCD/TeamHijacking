@@ -37,7 +37,7 @@ class BusFragment : Fragment() {
 
         view.findViewById<TextView>(R.id.busNumberTextView).text = "버스 번호: $busNumber"
         view.findViewById<TextView>(R.id.busStationTextView).text = "버스 정류장: $busStation"
-        Log.d("현빈", "일단 테스트")
+        Log.d("현빈", "일단 테스트123")
 
         val nextButton = view.findViewById<AppCompatImageButton>(R.id.nextButton) // AppCompatImageButton으로 캐스팅
         nextButton.setOnClickListener {
