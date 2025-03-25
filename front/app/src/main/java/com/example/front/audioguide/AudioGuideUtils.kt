@@ -75,7 +75,7 @@ fun checkPermissions(activity: Activity) : Boolean {
     }
 }
 /*
-기능 1. 특정블루투스기기를 가지고 다음 화면으로 넘어가게 해준다.
+기능 1. 특정블루투스기기를 가지고 다음 음성유도기 화면으로 넘어가게 해준다.
  */
 fun connectToDevice(device: BluetoothDevice, activity: Activity) {
     val deviceName = device.name ?: "Unknown"
@@ -94,6 +94,8 @@ fun navigateToAudioGuideBLEControl(device: BluetoothDevice,activity: Activity) {
     Log.d("bludtooth", "navigatetonext호출")
     activity.startActivity(intent)
 }
+
+
 
 /*
 기능 1. Uart방식중 tx 부분을 담당해 준다. 특정 uuid의 특성(여기선 tx)에 데이터를 입력 해 주는 역할을 한다.
