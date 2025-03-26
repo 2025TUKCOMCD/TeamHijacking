@@ -94,4 +94,210 @@ public class SubwayService {
         List<Integer> weekendSpecificRoutes = Arrays.asList(71, 72, 73, 74, 41, 42, 43, 51, 110);
         return weekendSpecificRoutes.contains(subwayCode);
     }
+
+    private Map<String, LinkedList<String>> network;
+
+    // 생성자: 네트워크를 구축합니다.
+    public SubwayService() {
+        network = new HashMap<>();
+        buildNetwork();
+    }
+
+    // 네트워크 구축: 메인 노선 및 분기 노선들을 추가합니다.
+    private void buildNetwork() {
+        // 메인 노선 (연천 ~ 구로)
+        String[] mainBranch = {
+                "연천", "전곡", "청산", "소요산", "동두천", "보산", "동두천중앙",
+                "지행", "덕정", "덕계", "양주", "녹양", "가능", "의정부", "회룡", "망월사",
+                "도봉산", "도봉", "방학", "창동", "녹천", "월계", "광운대", "석계",
+                "신이문", "외대앞", "회기", "청량리", "제기동", "신설동", "동묘앞",
+                "동대문", "종로5가", "종로3가", "종각", "시청", "서울", "남영",
+                "용산", "노량진", "대방", "신길", "영등포", "신도림", "구로"
+        };
+        addRoute(network, mainBranch);
+
+        // 분기 1: 구로에서 분기하여 구일 ~ 인천 (예시)
+        String[] branch1 = {
+                "구일", "개봉", "오류동", "온수", "역곡", "소사", "부천", "중동",
+                "송내", "부개", "부평", "백운", "동암", "간석", "주안", "도화",
+                "제물포", "도원", "동인천", "인천"
+        };
+        addRoute(network, branch1);
+        addLinkedConnection(network, "구로", "구일");
+
+        // 분기 2: 구로에서 분기하여 가산디지털단지, 독산, 금천구청
+        String[] branch2 = {"가산디지털단지", "독산", "금천구청"};
+        addRoute(network, branch2);
+        addLinkedConnection(network, "구로", "가산디지털단지");
+
+        // 분기2-1: 금천구청에서 광명
+        addLinkedConnection(network, "금천구청", "광명");
+
+        // 분기2-2: 가산디지털단지부터 병점까지
+        String[] branch2_2 = {
+                "가산디지털단지", "독산", "금천구청", "석수", "관악", "안양", "명학",
+                "금정", "군포", "당정", "의왕", "성균관대", "화서", "수원", "세류", "병점"
+        };
+        addRoute(network, branch2_2);
+
+        // 분기2-2-1: 병점에서 서동탄
+        addLinkedConnection(network, "병점", "서동탄");
+
+        // 분기2-2-2: 병점부터 신창까지
+        String[] branch2_2_2 = {
+                "병점", "세마", "오산대", "오산", "진위", "송탄", "서정리", "지제",
+                "평택", "성환", "직산", "두정", "천안", "봉명", "쌍용(나사렛대)",
+                "아산", "탕정", "배방", "온양온천", "신창"
+        };
+        addRoute(network, branch2_2_2);
+    }
+
+    /**
+     * 주어진 출발역과 도착역 사이의 최단 경로를 반환합니다.
+     * @param start 시작 역
+     * @param end 도착 역
+     * @return 경로 리스트 (경로를 찾을 수 없으면 빈 리스트)
+     */
+    public List<String> findRoute(String start, String end) {
+        return findRoute(network, start, end);
+    }
+
+    /**
+     * 두 경로 비교:
+     * - (출발역은 무조건 동일하다고 가정)
+     * - 두 경로의 초기 진행 방향이 동일한지 확인하고,
+     * - A 경로가 B 경로의 연속적인 부분(즉, 접두어)인 경우 "A ⊂ B"로 판단합니다.
+     * @param aStart A 경로의 출발역
+     * @param aEnd A 경로의 도착역
+     * @param bStart B 경로의 출발역 (A와 동일해야 함)
+     * @param bEnd B 경로의 도착역
+     * @return 경로에 대한 비교 결과 메시지
+     */
+    public String compareRoutes(String aStart, String aEnd, String bStart, String bEnd) {
+        List<String> routeA = findRoute(aStart, aEnd);
+        List<String> routeB = findRoute(bStart, bEnd);
+
+        if (routeA.isEmpty() || routeB.isEmpty()) {
+            return "입력한 경로 중 하나 이상에서 경로를 찾을 수 없습니다.";
+        }
+        // 출발역이 같다고 가정하므로, 두 경로의 진행 방향 (초기 구간)이 같은지 확인
+        else if (!isSameDirection(routeA, routeB)) {
+            return "두 경로는 시작점은 같으나, 진행 방향이 다릅니다.";
+        }
+        // A 경로가 B의 부분 경로인 경우 (A의 길이가 B보다 짧으면서 B의 접두어인지 KMP로 확인)
+        else if (routeA.size() < routeB.size() && isSubPath(routeA, routeB)) {
+            return "A 경로는 B 경로의 연속적인 부분 경로입니다. (A ⊂ B)";
+        }
+        else {
+            return "A 경로는 B 경로와 같은 방향이지만, 포함 관계에 있지 않습니다.";
+        }
+    }
+
+    //--- 내부 헬퍼 함수들 ---
+
+    // 지정된 역 배열을 네트워크에 순서대로 추가 (양방향 연결)
+    private static void addRoute(Map<String, LinkedList<String>> network, String[] stations) {
+        for (int i = 0; i < stations.length; i++) {
+            network.putIfAbsent(stations[i], new LinkedList<>());
+            if (i > 0) {
+                addLinkedConnection(network, stations[i - 1], stations[i]);
+            }
+        }
+    }
+
+    // 두 역 사이에 양방향 연결을 추가합니다.
+    private static void addLinkedConnection(Map<String, LinkedList<String>> network, String station1, String station2) {
+        network.putIfAbsent(station1, new LinkedList<>());
+        network.putIfAbsent(station2, new LinkedList<>());
+        if (!network.get(station1).contains(station2))
+            network.get(station1).add(station2);
+        if (!network.get(station2).contains(station1))
+            network.get(station2).add(station1);
+    }
+
+    // BFS를 사용해 출발역부터 도착역까지 최단 경로 찾기
+    private static List<String> findRoute(Map<String, LinkedList<String>> network, String start, String end) {
+        Queue<List<String>> queue = new LinkedList<>();
+        Set<String> visited = new HashSet<>();
+        List<String> startPath = new ArrayList<>();
+        startPath.add(start);
+        queue.offer(startPath);
+        visited.add(start);
+
+        while (!queue.isEmpty()) {
+            List<String> path = queue.poll();
+            String lastStation = path.get(path.size() - 1);
+            if (lastStation.equals(end))
+                return path;
+            for (String neighbor : network.getOrDefault(lastStation, new LinkedList<>())) {
+                if (!visited.contains(neighbor)) {
+                    visited.add(neighbor);
+                    List<String> newPath = new ArrayList<>(path);
+                    newPath.add(neighbor);
+                    queue.offer(newPath);
+                }
+            }
+        }
+        return new ArrayList<>();
+    }
+
+    // 두 경로가 같은 방향인지 (즉, 시작부터 최소한의 공통 구간을 가지는지) 확인
+    private static boolean isSameDirection(List<String> r1, List<String> r2) {
+        int minSize = Math.min(r1.size(), r2.size());
+        for (int i = 0; i < minSize; i++) {
+            if (!r1.get(i).equals(r2.get(i))) return false;
+        }
+        return true;
+    }
+
+    // KMP 알고리즘을 이용하여, sub 리스트가 full 리스트 내에 연속적으로 존재하는지 확인 (O(m+n))
+    private static boolean isSubPath(List<String> sub, List<String> full) {
+        if (sub.size() > full.size())
+            return false;
+
+        String[] pattern = sub.toArray(new String[0]);
+        String[] text = full.toArray(new String[0]);
+        int[] lps = computeLPSArray(pattern);
+
+        int i = 0, j = 0;  // i: pattern index, j: text index
+        while (j < text.length) {
+            if (pattern[i].equals(text[j])) {
+                i++;
+                j++;
+                if (i == pattern.length)
+                    return true;
+            } else {
+                if (i != 0)
+                    i = lps[i - 1];
+                else
+                    j++;
+            }
+        }
+        return false;
+    }
+
+    // KMP 알고리즘용 LPS (Longest Prefix Suffix) 배열 계산
+    private static int[] computeLPSArray(String[] pattern) {
+        int[] lps = new int[pattern.length];
+        int len = 0;  // 이전 최대 접두사-접미사 길이
+        lps[0] = 0;
+        int i = 1;
+        while (i < pattern.length) {
+            if (pattern[i].equals(pattern[len])) {
+                len++;
+                lps[i] = len;
+                i++;
+            } else {
+                if (len != 0) {
+                    len = lps[len - 1];
+                } else {
+                    lps[i] = 0;
+                    i++;
+                }
+            }
+        }
+        return lps;
+    }
 }
+
+
