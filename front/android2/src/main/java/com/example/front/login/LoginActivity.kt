@@ -16,6 +16,7 @@ import com.kakao.sdk.common.util.Utility
 class LoginActivity : AppCompatActivity() {
     private lateinit var binding: ActivityLoginBinding
 
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityLoginBinding.inflate(layoutInflater)
@@ -83,6 +84,7 @@ class LoginActivity : AppCompatActivity() {
         }
     }
 
+
     /* UserAPiClient.instance.me() 메소드를 호출하면 현재 로그인한 사용자의 정보 받아올 수 있음.
        사용자 정보를 활용한 추가 로직 구현 가능 */
     private fun fetchKakaoUserInfo() {
@@ -107,9 +109,10 @@ class LoginActivity : AppCompatActivity() {
         }
     }
 
+
     //로그아웃을 위한 function. 앱에 저장된 로그인 정보 지우고 돌려보냄. 참고:: https://quessr.tistory.com/84
     private fun kakaoLogout() {
-        UserApiClient.instance.logout { error ->
+        UserApiClient.instance.unlink { error ->
             if (error != null) {
                 Toast.makeText(this, "로그아웃 실패: ${error.message}", Toast.LENGTH_SHORT).show()
                 Log.e("login","로그아웃 실패, SDK에서 토큰 삭제됨", error)
@@ -120,9 +123,53 @@ class LoginActivity : AppCompatActivity() {
         }
     }
 
-    /*TODO:: 로그인 여부를 자동 확인하는 func 구현 필요
-    fun isUserLogin(){
 
-    }*/
+    //TODO:: 로그인 여부를 자동 확인하는 func 구현 필요
+    private fun isUserLogin(){
+
+    }
+
+    private fun updateProfile() {
+        // 사용자 정보 저장,
+        /*사용자 프로퍼티인 properties 필드 하위 정보의 값을 저장한다.
+        * 키 값은 내 애플리케이션>카카오 로그인>사용자 프로퍼티에 정의한 값?을 사용해야 한다.
+        * https://developers.kakao.com/docs/latest/ko/kakaologin/prerequisite#user-properties*/
+
+//        val properties = mapOf("${CUSTOM_PROPERTY_KEY}" to "${CUSTOM_PROPERTY_VALUE}")
+//
+//        UserApiClient.instance.updateProfile(properties) { error ->
+//            if (error != null) {
+//                Log.e("login", "사용자 정보 저장 실패", error)
+//            }
+//            else {
+//                Log.i("login", "사용자 정보 저장 성공")
+//            }
+    }
+
+
+//    private fun selectShippingAddress() {
+//        UserApiClient.instance.selectShippingAddress(context) { addressId, error ->
+//            if (error != null) {
+//                Log.i("login", "배송지 선택 실패 $error")
+//                return@selectShippingAddress
+//            }
+//
+//            UserApiClient.instance.shippingAddresses(addressId!!) { userShippingAddresses, err ->
+//                if (err != null) {
+//                    Log.i("login", "배송지 조회 실패 $err")
+//                } else if (userShippingAddresses != null) {
+//                    Log.i(
+//                        "login", "배송지 조회 성공" +
+//                                "\n회원번호: ${userShippingAddresses.userId}" +
+//                                "\n배송지: \n${
+//                                    userShippingAddresses.shippingAddresses?.joinToString(
+//                                        "\n"
+//                                    )
+//                                }"
+//                    )
+//                }
+//            }
+//        }
+//    }
 
 }
