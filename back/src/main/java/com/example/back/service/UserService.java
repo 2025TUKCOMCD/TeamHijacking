@@ -16,7 +16,7 @@ chatGPT 의 도움 받아 @Autowired 대신 생성자 다른 걸로 주입*/
 @Service
 @RequiredArgsConstructor
 public class UserService {
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
 
     public User saveUser(UserDTO userDTO) {
         User user = userDTO.toEntity();
