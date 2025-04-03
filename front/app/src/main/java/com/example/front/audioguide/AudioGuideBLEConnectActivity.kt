@@ -61,19 +61,8 @@ class AudioGuideBLEConnectActivity : AppCompatActivity() {
             val selectedDevice = devices[position]
             val deviceName = selectedDevice.name ?: "Unknown"
 
-            // 기기 이름에 따라 다른 Activity 시작
-            when {
-                deviceName.startsWith("AGH") -> {
-                    connectToDevice(selectedDevice, this)
-                }
-                deviceName.startsWith("BGH") -> {
-                    connectToDevice(selectedDevice, this)
-                }
-                else -> {
-                    connectToDevice(selectedDevice, this) // 기본 연결 처리
-                    Log.d("Bluetooth", "기기 선택됨: $deviceName - ${selectedDevice.address}")
-                }
-            }
+            connectToDevice(selectedDevice, this)
+
         }
     }
 

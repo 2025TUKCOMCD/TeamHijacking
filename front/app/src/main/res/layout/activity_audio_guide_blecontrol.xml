@@ -6,14 +6,8 @@
     android:background="@color/backgroundDark"
     android:gravity="center"
     android:padding="16dp">
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_weight="2"
-        android:gravity="center_horizontal"
-        android:orientation="horizontal">
         <ImageButton
-            android:layout_gravity="bottom"
+            android:layout_gravity="center"
             android:id="@+id/button1"
             android:layout_width="60dp"
             android:layout_height="60dp"
@@ -21,21 +15,12 @@
             android:background="@drawable/position_derivation"/>
 
         <ImageButton
-            android:layout_gravity="bottom"
-            android:id="@+id/button2"
-            android:layout_width="60dp"
-            android:layout_height="60dp"
-            android:contentDescription="@string/btn_signal_guide"
-            android:background="@drawable/audio_guide"/>
-
-        <ImageButton
-            android:layout_gravity="bottom"
+            android:layout_gravity="center"
             android:id="@+id/button3"
-            android:layout_width="60dp"
-            android:layout_height="60dp"
-            android:contentDescription="@string/btn_audio_guides"
-            android:background="@drawable/signal_guide"/>
-    </LinearLayout>
+            android:layout_width="130dp"
+            android:layout_height="50dp"
+            android:contentDescription="@string/btn_signal_guide"
+            android:background="@drawable/signal_guide_round_sqr"/>
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"

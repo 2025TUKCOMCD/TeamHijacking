@@ -1,7 +1,9 @@
 package com.example.front.setting
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
+import android.widget.Button
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
@@ -9,6 +11,7 @@ import com.example.front.R
 import com.example.front.databinding.ActivitySettingBinding
 import com.example.front.databinding.SettingTextviewDialogBinding
 import androidx.appcompat.app.AlertDialog
+import com.example.front.transportation.TransportDetailRouteControlActivity
 
 class SettingActivity : AppCompatActivity() {
 
@@ -26,6 +29,7 @@ class SettingActivity : AppCompatActivity() {
         val settingNewestVersion: TextView = binding.settingNewestVersion
         val settingFAQ: TextView = binding.settingFAQ
         val askFormBtt: TextView = binding.askFormBtt
+        val testBtn: Button = binding.testBtn
 
         //클릭 시 이동하도록...
         settingProfile.setOnClickListener{
@@ -41,6 +45,13 @@ class SettingActivity : AppCompatActivity() {
         askFormBtt.setOnClickListener {
             editSettingDialog("Contact:: hanisky1@naver.com")
         }
+
+        testBtn.setOnClickListener{
+            intent = Intent(this, TransportDetailRouteControlActivity::class.java)
+            startActivity(intent)
+        }
+
+
     }
 
     fun editSettingDialog(someText:String = "기본 텍스트") {

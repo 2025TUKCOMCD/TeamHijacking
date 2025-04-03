@@ -6,6 +6,7 @@ import java.util.List;
 
 @Data
 public class BusArriveProcessDTO {
+
     @Data
     public static class arriveDetail{
         private MsgBody msgBody;
