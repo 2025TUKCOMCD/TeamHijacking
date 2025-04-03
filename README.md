@@ -43,6 +43,14 @@
 </details>
 <details>
   <summary>리모컨 기능</summary>
+  
+  1. **위치 안내 기능** :
+     - 음성 유도기의 유도기 기능을 활성화 시킴
+  2. **신호 안내 기능** :
+     - 스마트 BLE 음향 신호기의 불빛 현황을 알려줌
+  3. **음성 안내 기능** :
+     - 음향 신호기의 음성 안내 기능을 활성화 시킴
+  
 </details>
   <details>
   <summary>홈 네트워크 기기 조작 기능</summary>
@@ -99,7 +107,7 @@
 
 ## 📆 일정 📆
 <p align="center">
-<img width="900" src = "https://github.com/user-attachments/assets/7d839fcf-5cdb-40eb-8b92-138c6adea852"> <br>
+<img width="900" src = "https://github.com/user-attachments/assets/2dd07913-dcf8-4e25-97f1-817ae1a6046b"> <br>
 <img width="900" src ="https://github.com/user-attachments/assets/58631842-2cf3-4c6f-8c23-70106c24e627">
 <img width="900" src="https://github.com/user-attachments/assets/50bd6c60-0a6c-4443-9e4c-0a8f807151d4">
 <img width="900" src="https://github.com/user-attachments/assets/ca5b881e-94e7-41b4-a932-f29ebd262d23">
@@ -120,6 +128,7 @@
 - <a href = "https://drive.google.com/file/d/14pNoPenm9NCOFus4_Id3Xb9OWA8gTNcc/view?usp=sharing">팀 하이재킹 요약 계획서</a>
 - <a href = "https://docs.google.com/presentation/d/1yz5gyiYBwBFY1xeWGXbyRp7kZKCSKEi1/edit?usp=drive_link&ouid=102873262839899259467&rtpof=true&sd=true">시스템 구성도, 개발 환경, 운용 환경, 데모 환경</a>
 - <a href = "https://drive.google.com/file/d/106PggYcS9-Hg3sq0sLVcIDpOqJFWpi5G/view?usp=drive_link">에픽, 백로그, 1차스프린트</a>
+- <a href = "https://docs.google.com/presentation/d/1QXtck9GL4IYpaKq5fG3id_MRxDs5QOBO/edit?usp=sharing&ouid=110442659794936061964&rtpof=true&sd=true">2차스프린트</a>
 ## 🚥 개발자 🚥
 **김현빈** | **서하연** | **연찬호** | **김의연**
 :------: | :-------: | :-------: | :------: 
