@@ -57,4 +57,5 @@
     <string name="n_nn">n시간 nn분</string>
     <string name="n">n회</string>
     <string name="FAQText">Q1. 어쩌고 저쩌고  \n A1. 어쩌고 저쩌고 \n Q2. 어쩌고 저쩌고 \n A2. 어쩌고 저쩌고</string>
+    <string name="title_activity_my_iot">MyIotActivity</string>
 </resources>

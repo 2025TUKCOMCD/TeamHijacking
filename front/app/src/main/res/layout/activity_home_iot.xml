@@ -10,71 +10,42 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:orientation="vertical"
         android:gravity="center"
-        android:padding="16dp">
+        android:padding="16dp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
 
-        <!-- 기기 추가 버튼 -->
+        <!-- 🔄 IoT 추가 버튼 (SmartThings 앱 이동) -->
         <Button
             android:id="@+id/btnAddDevice"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="기기 추가"
-            android:layout_gravity="center"
+            android:text="IoT 추가"
             android:backgroundTint="@android:color/holo_blue_light"
             android:textColor="@android:color/white"
-            android:padding="8dp"
-            android:layout_marginBottom="8dp"/>
+            android:padding="12dp"
+            android:layout_marginBottom="16dp"/>
 
+        <!-- ➕ My IoT 페이지 이동 버튼 -->
         <Button
-            android:id="@+id/btnCheckDeviceStatus"
+            android:id="@+id/btnMyIot"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="기기 상태 조회"
-            android:layout_marginTop="16dp"
-            android:layout_gravity="center_horizontal"/>
+            android:text="My IoT"
+            android:layout_marginBottom="16dp"/>
 
-        <Button
-            android:id="@+id/btnTurnOn"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="무드등 켜기" />
-
-        <Button
-            android:id="@+id/btnTurnOff"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="무드등 끄기" />
-
-        <Button
-            android:id="@+id/btnBrightness"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="밝기 조절" />
-
-        <Button
-            android:id="@+id/btnColor"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="색상 변경"/>
-
-
-        <!-- 음성 명령 시작 버튼 -->
+        <!-- 🎤 음성 명령 버튼 -->
         <Button
             android:id="@+id/btnVoiceControl"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="음성 명령 시작"
-            android:layout_gravity="center"
             android:padding="12dp"/>
 
-        <!-- 기기 목록 RecyclerView -->
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recyclerViewDevices"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginTop="16dp" />
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
