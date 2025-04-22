@@ -12,7 +12,6 @@ import java.util.List;
 @RestController
 @RequestMapping("/api")
 public class RouteController {
-
     @Autowired
     private RouteService routeService;
 
@@ -28,5 +27,4 @@ public class RouteController {
         System.out.println("📦 응답: " + response);
         return ResponseEntity.ok(response);
     }
-
 }

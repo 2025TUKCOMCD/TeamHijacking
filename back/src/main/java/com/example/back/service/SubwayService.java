@@ -10,6 +10,8 @@ import java.util.*;
 
 @Service
 public class SubwayService {
+    private Map<String, LinkedList<String>> network;
+    private static Map<String, Integer> stationTravelTime;
     private static final Map<Integer, Integer> subwayCodeMap = Map.ofEntries(
             Map.entry(1, 1001), Map.entry(2, 1002), Map.entry(3, 1003), Map.entry(4, 1004),
             Map.entry(5, 1005), Map.entry(6, 1006), Map.entry(7, 1007), Map.entry(8, 1008),
@@ -17,7 +19,119 @@ public class SubwayService {
             Map.entry(108, 1067), Map.entry(116, 1075), Map.entry(109, 1077), Map.entry(112, 1081),
             Map.entry(113, 1092), Map.entry(114, 1093), Map.entry(117, 1094)
     );
+    private void initializeTravelTime() {
+        //  메인 노선 (연천 ~ 구로)
+        stationTravelTime.put("연천-전곡", 8);
+        stationTravelTime.put("전곡-청산", 5);
+        stationTravelTime.put("청산-소요산", 6);
+        stationTravelTime.put("소요산-동두천", 4);
+        stationTravelTime.put("동두천-보산", 2);
+        stationTravelTime.put("보산-동두천중앙", 3);
+        stationTravelTime.put("동두천중앙-지행", 2);
+        stationTravelTime.put("지행-덕정", 5);
+        stationTravelTime.put("덕정-덕계", 3);
+        stationTravelTime.put("덕계-양주", 5);
+        stationTravelTime.put("양주-녹양", 3);
+        stationTravelTime.put("녹양-가능", 2);
+        stationTravelTime.put("가능-의정부", 2);
+        stationTravelTime.put("의정부-회룡", 3);
+        stationTravelTime.put("회룡-망월사", 3);
+        stationTravelTime.put("망월사-도봉산", 3);
+        stationTravelTime.put("도봉산-도봉", 2);
+        stationTravelTime.put("도봉-방학", 2);
+        stationTravelTime.put("방학-창동", 2);
+        stationTravelTime.put("창동-녹천", 2);
+        stationTravelTime.put("녹천-월계", 3);
+        stationTravelTime.put("월계-광운대", 3);
+        stationTravelTime.put("광운대-석계", 2);
+        stationTravelTime.put("석계-신이문", 3);
+        stationTravelTime.put("신이문-외대앞", 1);
+        stationTravelTime.put("외대앞-회기", 2);
+        stationTravelTime.put("회기-청량리", 3);
+        stationTravelTime.put("청량리-제기동", 2);
+        stationTravelTime.put("제기동-신설동", 2);
+        stationTravelTime.put("신설동-동묘앞", 2);
+        stationTravelTime.put("동묘앞-동대문", 2);
+        stationTravelTime.put("동대문-종로5가", 2);
+        stationTravelTime.put("종로5가-종로3가", 2);
+        stationTravelTime.put("종로3가-종각", 2);
+        stationTravelTime.put("종각-시청", 3);
+        stationTravelTime.put("시청-서울", 2);
+        stationTravelTime.put("서울-남영", 3);
+        stationTravelTime.put("남영-용산", 3);
+        stationTravelTime.put("용산-노량진", 3);
+        stationTravelTime.put("노량진-대방", 3);
+        stationTravelTime.put("대방-신길", 1);
+        stationTravelTime.put("신길-영등포", 3);
+        stationTravelTime.put("영등포-신도림", 2);
+        stationTravelTime.put("신도림-구로", 3);
 
+        //  분기 1: 구로 → 인천 (구일~인천)
+        stationTravelTime.put("구로-구일", 2);
+        stationTravelTime.put("구일-개봉", 2);
+        stationTravelTime.put("개봉-오류동", 2);
+        stationTravelTime.put("오류동-온수", 3);
+        stationTravelTime.put("온수-역곡", 4);
+        stationTravelTime.put("역곡-소사", 3);
+        stationTravelTime.put("소사-부천", 3);
+        stationTravelTime.put("부천-중동", 3);
+        stationTravelTime.put("중동-송내", 3);
+        stationTravelTime.put("송내-부개", 2);
+        stationTravelTime.put("부개-부평", 3);
+        stationTravelTime.put("부평-백운", 2);
+        stationTravelTime.put("백운-동암", 2);
+        stationTravelTime.put("동암-간석", 2);
+        stationTravelTime.put("간석-주안", 3);
+        stationTravelTime.put("주안-도화", 2);
+        stationTravelTime.put("도화-제물포", 2);
+        stationTravelTime.put("제물포-도원", 2);
+        stationTravelTime.put("도원-동인천", 2);
+        stationTravelTime.put("동인천-인천", 2);
+
+        // ️ 분기 2: 구로 → 금천구청 → 병점
+        stationTravelTime.put("구로-가산디지털단지", 4);
+        stationTravelTime.put("가산디지털단지-독산", 3);
+        stationTravelTime.put("독산-금천구청", 2);
+        stationTravelTime.put("금천구청-석수", 3);
+        stationTravelTime.put("석수-관악", 3);
+        stationTravelTime.put("관악-안양", 3);
+        stationTravelTime.put("안양-명학", 3);
+        stationTravelTime.put("명학-금정", 2);
+        stationTravelTime.put("금정-군포", 3);
+        stationTravelTime.put("군포-당정", 2);
+        stationTravelTime.put("당정-의왕", 3);
+        stationTravelTime.put("의왕-성균관대", 3);
+        stationTravelTime.put("성균관대-화서", 3);
+        stationTravelTime.put("화서-수원", 3);
+        stationTravelTime.put("수원-세류", 4);
+        stationTravelTime.put("세류-병점", 4);
+
+        // 분기 2-1: 구로 → 광명
+        stationTravelTime.put("금천구청-광명", 5);
+
+        // 분기 2-2: 병점 → 서동탄
+        stationTravelTime.put("병점-서동탄", 6);
+        // 분기 2-3: 병점 → 신창
+        stationTravelTime.put("병점-세마", 3);
+        stationTravelTime.put("세마-오산대", 3);
+        stationTravelTime.put("오산대-오산", 4);
+        stationTravelTime.put("오산-진위", 3);
+        stationTravelTime.put("진위-송탄", 4);
+        stationTravelTime.put("송탄-서정리", 3);
+        stationTravelTime.put("서정리-지제", 4);
+        stationTravelTime.put("지제-평택", 4);
+        stationTravelTime.put("평택-성환", 4);
+        stationTravelTime.put("성환-직산", 3);
+        stationTravelTime.put("직산-두정", 5);
+        stationTravelTime.put("두정-천안", 5);
+        stationTravelTime.put("천안-봉명", 2);
+        stationTravelTime.put("봉명-쌍용(나사렛대)", 3);
+        stationTravelTime.put("쌍용(나사렛대)-아산", 2);
+        stationTravelTime.put("아산-탕정", 3);
+        stationTravelTime.put("탕정-배방", 4);
+        stationTravelTime.put("배방-온양온천", 4);
+        stationTravelTime.put("온양온천-신창", 5);
+    }
     // 지하철 코드 - 도시 매핑 메서드
     public Map<Integer, Integer> getSubwayCodeToCityMapping() {
         Map<Integer, Integer> subwayCodeToCity = new HashMap<>();
@@ -40,7 +154,6 @@ public class SubwayService {
 
         return subwayCodeToCity;
     }
-
     // 오디세이 -> 서울 지하철 노선 코드 변환
     public int convertSubwayCode(int subwayCode) {
         return subwayCodeMap.getOrDefault(subwayCode, 0);
@@ -95,12 +208,13 @@ public class SubwayService {
         return weekendSpecificRoutes.contains(subwayCode);
     }
 
-    private Map<String, LinkedList<String>> network;
 
     // 생성자: 네트워크를 구축합니다.
-    public SubwayService() {
+    private SubwayService() {
         network = new HashMap<>();
+        stationTravelTime = new HashMap<>();
         buildNetwork();
+        initializeTravelTime();
     }
 
     // 네트워크 구축: 메인 노선 및 분기 노선들을 추가합니다.
@@ -151,28 +265,10 @@ public class SubwayService {
         };
         addRoute(network, branch2_2_2);
     }
-
-    /**
-     * 주어진 출발역과 도착역 사이의 최단 경로를 반환합니다.
-     * @param start 시작 역
-     * @param end 도착 역
-     * @return 경로 리스트 (경로를 찾을 수 없으면 빈 리스트)
-     */
     public List<String> findRoute(String start, String end) {
         return findRoute(network, start, end);
     }
 
-    /**
-     * 두 경로 비교:
-     * - (출발역은 무조건 동일하다고 가정)
-     * - 두 경로의 초기 진행 방향이 동일한지 확인하고,
-     * - A 경로가 B 경로의 연속적인 부분(즉, 접두어)인 경우 "A ⊂ B"로 판단합니다.
-     * @param aStart A 경로의 출발역
-     * @param aEnd A 경로의 도착역
-     * @param bStart B 경로의 출발역 (A와 동일해야 함)
-     * @param bEnd B 경로의 도착역
-     * @return 경로에 대한 비교 결과 메시지
-     */
     public String compareRoutes(String aStart, String aEnd, String bStart, String bEnd) {
         List<String> routeA = findRoute(aStart, aEnd);
         List<String> routeB = findRoute(bStart, bEnd);
@@ -192,8 +288,6 @@ public class SubwayService {
             return "A 경로는 B 경로와 같은 방향이지만, 포함 관계에 있지 않습니다.";
         }
     }
-
-    //--- 내부 헬퍼 함수들 ---
 
     // 지정된 역 배열을 네트워크에 순서대로 추가 (양방향 연결)
     private static void addRoute(Map<String, LinkedList<String>> network, String[] stations) {
@@ -223,18 +317,24 @@ public class SubwayService {
         startPath.add(start);
         queue.offer(startPath);
         visited.add(start);
+        int totalTime = 0;
 
         while (!queue.isEmpty()) {
             List<String> path = queue.poll();
             String lastStation = path.get(path.size() - 1);
-            if (lastStation.equals(end))
+            if (lastStation.equals(end)){
+                System.out.println("총 예상 소요 시간: " + totalTime + "분");
                 return path;
+            }
             for (String neighbor : network.getOrDefault(lastStation, new LinkedList<>())) {
                 if (!visited.contains(neighbor)) {
                     visited.add(neighbor);
                     List<String> newPath = new ArrayList<>(path);
                     newPath.add(neighbor);
                     queue.offer(newPath);
+
+                    String key = lastStation + "-" + neighbor;
+                    totalTime += stationTravelTime.getOrDefault(key, 0);
                 }
             }
         }

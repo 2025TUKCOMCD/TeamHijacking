@@ -222,12 +222,19 @@ public class RouteService{
                     String predictTime2String = null;
                     // 첫번째 역 이름
                     String startName = subPath.getStartName();
+                    System.out.println(startName);
+                    // 마지막 역 이름
+                    String endName = subPath.getEndName();
+                    System.out.println(endName);
                     // 노선 정보
                     int subwayCode = subPath.getLane().get(0).getSubwayCode();
+                    System.out.println(subwayCode);
                     // 노선 이름
                     String subwayLineName = subPath.getLane().get(0).getName();
+                    System.out.println(subwayLineName);
                     // 노선 방향
                     String direction = subPath.getWayCode() == 1 ? "상행" : "하행";
+                    System.out.println(direction);
 
                     // 시작 주소
                     double startX = subPath.getStartX();
@@ -247,9 +254,10 @@ public class RouteService{
                     Map<String, Object> dataMap = new HashMap<>();
 
                     // 지하철 도시 코드 확인
-                //if(index < 2){
+                //if(index < 2){ // 인덱스 0, 1에 대해서만 처리
                     System.out.println("index" + index);
                     Map<Integer, Integer> subwayCodeToCity = subwayService.getSubwayCodeToCityMapping();
+                    System.out.println(subwayCodeToCity);
                     int city = subwayCodeToCity.getOrDefault(subwayCode, 0);
                     if (city == 10) {
                         // 시간표 기준 지하철
@@ -263,8 +271,16 @@ public class RouteService{
                         } else {
                             // 오디세이 -> 서울 지하철 노선 코드 변환
                             int convertedSubwayCode = subwayService.convertSubwayCode(subwayCode);
+                            // 역 이름 예외 처리
+                            if (startName.equals("서울역")) {
+                                startName = "서울";
+                            }
+                            else if (startName.equals("평택지제")){
+                                startName = "지제";
+                            }
                             // 역 ID 조회
                             int statn_id = databaseService.findStationId(convertedSubwayCode, startName);
+                            System.out.print("statn_id" + statn_id);
 
                             // 실시간 도착 정보 조회
                             List<SubwayArriveProcessDTO.RealtimeArrival> realtimeArrivals = fetchAndSubwayArrive(startName);
@@ -272,15 +288,22 @@ public class RouteService{
                                 List<SubwayArriveProcessDTO.RealtimeArrival> directionFilteredArrivals = new ArrayList<>();
                                 // 원하는 방향의 도착 정보 필터링
                                 for (SubwayArriveProcessDTO.RealtimeArrival arrival : realtimeArrivals) {
-                                    // 사용자가 원하는 방향인지 확인
-                                    if (arrival.getUpdnLine().equals(direction)) {
-                                        // TrainLineNm 조건 확인
-                                        String trainLineNm = arrival.getTrainLineNm();
-                                        if (trainLineNm != null) {
-                                            String[] parts = trainLineNm.split(" - ");
-                                            if (parts.length > 1 && parts[1].contains(secondStation)) {
-                                                // 조건에 맞는 데이터를 리스트에 추가
-                                                directionFilteredArrivals.add(arrival);
+                                    if (Integer.parseInt(arrival.getStatnId()) == statn_id) {
+                                        System.out.println("Statn ID: " + statn_id);
+                                        // 사용자가 원하는 방향인지 확인
+                                        if (arrival.getUpdnLine().equals(direction)) {
+                                            // TrainLineNm 조건 확인
+                                            String trainLineNm = arrival.getTrainLineNm();
+                                            if (trainLineNm != null) {
+                                                String[] parts = trainLineNm.split(" - ");
+                                                if (parts.length > 1 && parts[1].contains(secondStation)) {
+                                                    if (convertedSubwayCode == 1001) {
+                                                        String result = subwayService.compareRoutes(startName,endName,startName,parts[1]);
+                                                        System.out.println("result" + result);
+                                                    }
+                                                    // 조건에 맞는 데이터를 리스트에 추가
+                                                    directionFilteredArrivals.add(arrival);
+                                                }
                                             }
                                         }
                                     }
