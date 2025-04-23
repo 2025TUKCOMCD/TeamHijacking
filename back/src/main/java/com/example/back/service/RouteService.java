@@ -59,6 +59,12 @@ public class RouteService{
     @Value(("${Public_Subway_APIKEY}"))
     private String Seoul_Subway_apiKey;
 
+    enum CompareCriterion {
+        ARVL_CD, BARVL_DT, NTH_STATION, NONE
+    }
+
+    CompareCriterion lastCriterion = CompareCriterion.NONE;
+
 
     private final Gson gson = new Gson();
     private final OkHttpClient client = new OkHttpClient.Builder()
@@ -212,6 +218,7 @@ public class RouteService{
         }
     }
 
+    // 처리 순서
     private int getArvlCdPriority(String arvlCd) {
         switch (arvlCd) {
             case "0": case "1": case "2": case "3": return 0;
@@ -228,32 +235,108 @@ public class RouteService{
         }
         return Integer.MAX_VALUE;
     }
+    // arvlMsg2에서 역 이름 추출
+    private String getStationNameFromMsg(String arvlMsg2) {
+        if (arvlMsg2.contains("번째 전역") && arvlMsg2.contains("(") && arvlMsg2.contains(")")) {
+            // () 내부에 있는 내용을 추출
+            return arvlMsg2.replaceAll(".*\\(([^)]+)\\).*", "$1");
+        }
+        return ""; // 역 이름을 찾을 수 없으면 빈 문자열 반환
+    }
 
-    // 도착 메시지 생성
-    private String getArrivalMessage(SubwayArriveProcessDTO.RealtimeArrival arrival) {
-        String arvlCd = arrival.getArvlCd();
-        int barvlDt = Integer.parseInt(arrival.getBarvlDt());
-        String destination = arrival.getArvlMsg3();
+    // ArvlCd에 따라 처리 순서 지정
+    private int compareByArvlCd(SubwayArriveProcessDTO.RealtimeArrival a, SubwayArriveProcessDTO.RealtimeArrival b) {
+        int aPriority = getArvlCdPriority(a.getArvlCd());
+        int bPriority = getArvlCdPriority(b.getArvlCd());
 
-        switch (arvlCd) {
-            case "0":
-                return "당역 진입 예정";
-            case "1":
-                return "당역 도착";
-            case "2":
-                return "당역 출발";
-            case "3":
-                return "전역 출발";
-            case "4":
-                return "전역 진입 예정";
-            case "5":
-                return "전역 도착";
+        if (aPriority != bPriority) {
+            // 도착 상태에 따라 우선순위 비교
+            return Integer.compare(aPriority, bPriority);
+        }
+        return 0; // 동일한 우선순위인 경우 다음 조건으로 넘어감
+    }
+
+    // BarvlDt에 따라 처리 순서 지정
+    private int compareByBarvlDt(SubwayArriveProcessDTO.RealtimeArrival a, SubwayArriveProcessDTO.RealtimeArrival b) {
+        int aBarvlDt = Integer.parseInt(a.getBarvlDt());
+        int bBarvlDt = Integer.parseInt(b.getBarvlDt());
+
+
+        if (aBarvlDt != bBarvlDt) {
+            // 도착까지 남은 시간이 다른 경우 비교
+            return Integer.compare(aBarvlDt, bBarvlDt);
+        }
+        return 0; // 동일한 경우 다음 조건으로 넘어감
+    }
+
+    // NthStation에 따라 처리 순서 지정
+    private int compareByNthStation(SubwayArriveProcessDTO.RealtimeArrival a, SubwayArriveProcessDTO.RealtimeArrival b) {
+        // []역 번호를 추출
+        int aNthStation = getNthStation(a.getArvlMsg2());
+        int bNthStation = getNthStation(b.getArvlMsg2());
+
+        if (aNthStation != bNthStation) {
+            // 역 번호 비교
+            return Integer.compare(aNthStation, bNthStation);
+        }
+        return 0; // 동일한 경우 우선순위 동일
+    }
+
+
+    private String handleArrivalByCriterion(SubwayArriveProcessDTO.RealtimeArrival arrival, CompareCriterion criterion, String startName) {
+        switch (criterion) {
+            case ARVL_CD:
+                return handleBasedOnArvlCd(arrival);
+            case BARVL_DT:
+                return handleBasedOnBarvlDt(arrival);
+            case NTH_STATION:
+                return handleBasedOnNthStation(arrival, startName);
             default:
-                int minutes = barvlDt / 60;
-                return minutes + "분 후(" + destination + ")";
+                return "일반 처리: " + arrival.getArvlMsg3();
         }
     }
 
+    // ARVL_CD 기준 처리
+    private String handleBasedOnArvlCd(SubwayArriveProcessDTO.RealtimeArrival arrival) {
+        String arvlCdString;
+        switch (arrival.getArvlCd()) {
+            case "0":
+                arvlCdString = "진입";
+                break;
+            case "1":
+                arvlCdString = "도착";
+                break;
+            case "2":
+                arvlCdString = "출발";
+                break;
+            case "3":
+                arvlCdString = "전역출발";
+                break;
+            case "4":
+                arvlCdString = "전역진입";
+                break;
+            case "5":
+                arvlCdString = "전역도착";
+                break;
+            default:
+                arvlCdString = "알 수 없음";
+        }
+        return arvlCdString + " (" + arrival.getArvlMsg3() + ")";
+    }
+    // BARVL_DT 기준 처리
+    private String handleBasedOnBarvlDt(SubwayArriveProcessDTO.RealtimeArrival arrival) {
+        int barvlDt = Integer.parseInt(arrival.getBarvlDt());
+        int minutes = barvlDt / 60; // 초를 분으로 변환
+        return minutes > 0 ? minutes + "분 후 도착 " : "곧 도착 예정 (" + arrival.getArvlMsg3() + ")";
+    }
+
+    // NTH_STATION 기준 처리
+    private String handleBasedOnNthStation(SubwayArriveProcessDTO.RealtimeArrival arrival, String startName) {
+        String stationName = getStationNameFromMsg(arrival.getArvlMsg2());
+        List<String> route = subwayService.findRoute(startName, stationName);
+        int travelTime = subwayService.calculateTravelTime(route); // 두 역 간 이동 시간 계산
+        return travelTime > 0 ? travelTime + "분 후 도착 " : "경로 정보 없음 (" + arrival.getArvlMsg3() + ")";
+    }
     public CompletableFuture<Map.Entry<Integer, Map<String, Object>>> processTrafficType1Async(RouteProcessDTO.SubPath subPath, int index) {
         return CompletableFuture.supplyAsync(() -> {
 
@@ -359,36 +442,46 @@ public class RouteService{
                                     }
                                 }
 
+                                // 처리 순서 정의
                                 if (!directionFilteredArrivals.isEmpty()) {
                                     PriorityQueue<SubwayArriveProcessDTO.RealtimeArrival> arrival1Queue = new PriorityQueue<>(
                                             (a, b) -> {
-                                                int aPriority = getArvlCdPriority(a.getArvlCd());
-                                                int bPriority = getArvlCdPriority(b.getArvlCd());
-                                                if (aPriority != bPriority) return Integer.compare(aPriority, bPriority);
+                                                int result = compareByArvlCd(a, b);
+                                                if (result != 0) {
+                                                    lastCriterion = CompareCriterion.ARVL_CD;
+                                                    return result;
+                                                }
 
-                                                int aBarvlDt = Integer.parseInt(a.getBarvlDt());
-                                                int bBarvlDt = Integer.parseInt(b.getBarvlDt());
-                                                if (aBarvlDt == 0 || bBarvlDt == 0) return Integer.compare(aBarvlDt, bBarvlDt);
-                                                if (aBarvlDt != bBarvlDt) return Integer.compare(aBarvlDt, bBarvlDt);
+                                                result = compareByBarvlDt(a, b);
+                                                if (result != 0) {
+                                                    lastCriterion = CompareCriterion.BARVL_DT;
+                                                    return result;
+                                                }
 
-                                                int aNthStation = getNthStation(a.getArvlMsg2());
-                                                int bNthStation = getNthStation(b.getArvlMsg2());
-                                                return Integer.compare(aNthStation, bNthStation);
+                                                result = compareByNthStation(a, b);
+                                                if (result != 0) {
+                                                    lastCriterion = CompareCriterion.NTH_STATION;
+                                                    return result;
+                                                }
+
+                                                lastCriterion = CompareCriterion.NONE; // 동일한 경우
+                                                return 0;
                                             }
                                     );
 
                                     arrival1Queue.addAll(directionFilteredArrivals);
 
+                                    // 처리 순서 별 도착 정보 처리 및 출력
                                     if (!arrival1Queue.isEmpty()) {
                                         System.out.println(arrival1Queue);
+
                                         SubwayArriveProcessDTO.RealtimeArrival firstArrival = arrival1Queue.poll();
-                                        predictTime1String = getArrivalMessage(firstArrival);
+                                        predictTime1String = handleArrivalByCriterion(firstArrival, lastCriterion,startName);
                                         System.out.println("가장 가까운 도착 정보: " + predictTime1String);
 
                                         if (!arrival1Queue.isEmpty()) {
                                             SubwayArriveProcessDTO.RealtimeArrival secondArrival = arrival1Queue.poll();
-                                            predictTime2String = getArrivalMessage(secondArrival);
-                                            System.out.println("두 번째 도착 정보: " + predictTime2String);
+                                            predictTime2String = handleArrivalByCriterion(secondArrival, lastCriterion, startName);                                            System.out.println("두 번째 도착 정보: " + predictTime2String);
                                         } else {
                                             System.out.println("두 번째 도착 정보가 없습니다.");
                                         }
@@ -398,18 +491,14 @@ public class RouteService{
                                 } else {
                                     PriorityQueue<SubwayArriveProcessDTO.RealtimeArrival> arrival2Queue = new PriorityQueue<>(
                                             (a, b) -> {
-                                                int aPriority = getArvlCdPriority(a.getArvlCd());
-                                                int bPriority = getArvlCdPriority(b.getArvlCd());
-                                                if (aPriority != bPriority) return Integer.compare(aPriority, bPriority);
+                                                int result = compareByArvlCd(a, b);
+                                                if (result != 0) return result;
 
-                                                int aBarvlDt = Integer.parseInt(a.getBarvlDt());
-                                                int bBarvlDt = Integer.parseInt(b.getBarvlDt());
-                                                if (aBarvlDt == 0 || bBarvlDt == 0) return Integer.compare(aBarvlDt, bBarvlDt);
-                                                if (aBarvlDt != bBarvlDt) return Integer.compare(aBarvlDt, bBarvlDt);
+                                                result = compareByBarvlDt(a, b);
+                                                if (result != 0) return result;
 
-                                                int aNthStation = getNthStation(a.getArvlMsg2());
-                                                int bNthStation = getNthStation(b.getArvlMsg2());
-                                                return Integer.compare(aNthStation, bNthStation);
+                                                result = compareByNthStation(a, b);
+                                                return result;
                                             }
                                     );
 
@@ -417,13 +506,13 @@ public class RouteService{
 
                                     if (!arrival2Queue.isEmpty()) {
                                         SubwayArriveProcessDTO.RealtimeArrival firstArrival = arrival2Queue.poll();
-                                        predictTime1String = getArrivalMessage(firstArrival);
+                                        predictTime1String = handleArrivalByCriterion(firstArrival, lastCriterion,startName);
 
                                         System.out.println("가장 가까운 도착 정보: " + predictTime1String);
 
                                         if (!arrival2Queue.isEmpty()) {
                                             SubwayArriveProcessDTO.RealtimeArrival secondArrival = arrival2Queue.poll();
-                                            predictTime2String = getArrivalMessage(secondArrival);
+                                            predictTime2String = handleArrivalByCriterion(secondArrival, lastCriterion,startName);                                            System.out.println("두 번째 도착 정보: " + predictTime2String);
                                             System.out.println("두 번째 도착 정보: " + predictTime2String);
                                         } else {
                                             System.out.println("두 번째 도착 정보가 없습니다.");

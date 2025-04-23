@@ -19,6 +19,7 @@ public class SubwayService {
             Map.entry(108, 1067), Map.entry(116, 1075), Map.entry(109, 1077), Map.entry(112, 1081),
             Map.entry(113, 1092), Map.entry(114, 1093), Map.entry(117, 1094)
     );
+    // 지하철 1호선의 구간별 걸리는 시간
     private void initializeTravelTime() {
         //  메인 노선 (연천 ~ 구로)
         stationTravelTime.put("연천-전곡", 8);
@@ -265,10 +266,12 @@ public class SubwayService {
         };
         addRoute(network, branch2_2_2);
     }
+    // 경로 탐색
     public List<String> findRoute(String start, String end) {
         return findRoute(network, start, end);
     }
 
+    // 경로 비교 메서드
     public int compareRoutes(String aStart, String aEnd, String bStart, String bEnd) {
         System.out.println(aStart);
         System.out.println(aEnd);
@@ -325,32 +328,47 @@ public class SubwayService {
     private static List<String> findRoute(Map<String, LinkedList<String>> network, String start, String end) {
         Queue<List<String>> queue = new LinkedList<>();
         Set<String> visited = new HashSet<>();
+
+        // 출발역 초기화
         List<String> startPath = new ArrayList<>();
         startPath.add(start);
         queue.offer(startPath);
         visited.add(start);
-        int totalTime = 0;
 
         while (!queue.isEmpty()) {
             List<String> path = queue.poll();
             String lastStation = path.get(path.size() - 1);
-            if (lastStation.equals(end)){
-                System.out.println("총 예상 소요 시간: " + totalTime + "분");
+
+            // 도착역에 도달 시 경로 반환
+            if (lastStation.equals(end)) {
                 return path;
             }
+
+            // 이웃 역 탐색
             for (String neighbor : network.getOrDefault(lastStation, new LinkedList<>())) {
                 if (!visited.contains(neighbor)) {
                     visited.add(neighbor);
                     List<String> newPath = new ArrayList<>(path);
                     newPath.add(neighbor);
                     queue.offer(newPath);
-
-                    String key = lastStation + "-" + neighbor;
-                    totalTime += stationTravelTime.getOrDefault(key, 0);
                 }
             }
         }
+
+        // 경로를 찾을 수 없는 경우 빈 리스트 반환
         return new ArrayList<>();
+    }
+
+    static int calculateTravelTime(List<String> route) {
+        int totalTime = 0;
+
+        // 두 역 간 이동 시간을 더하기
+        for (int i = 0; i < route.size() - 1; i++) {
+            String key = route.get(i) + "-" + route.get(i + 1);
+            totalTime += stationTravelTime.getOrDefault(key, 0);
+        }
+
+        return totalTime;
     }
 
     // 두 경로가 같은 방향인지 (즉, 시작부터 최소한의 공통 구간을 가지는지) 확인
