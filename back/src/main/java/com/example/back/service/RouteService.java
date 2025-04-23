@@ -212,6 +212,39 @@ public class RouteService{
         }
     }
 
+    private int getArvlCdPriority(String arvlCd) {
+        switch (arvlCd) {
+            case "0": case "1": case "2": case "3": return 0;
+            case "4": case "5": return 1;
+            default: return 2;
+        }
+    }
+
+    // Helper: arvlMsg2 "[N]번째 전역" 추출
+    private int getNthStation(String arvlMsg2) {
+        if (arvlMsg2.contains("번째 전역")) {
+            String extracted = arvlMsg2.replaceAll(".*\\[(\\d+)].*", "$1");
+            return Integer.parseInt(extracted);
+        }
+        return Integer.MAX_VALUE;
+    }
+
+    // Helper: 도착 메시지 생성
+    private String getArrivalMessage(SubwayArriveProcessDTO.RealtimeArrival arrival) {
+        String arvlCd = arrival.getArvlCd();
+        int barvlDt = Integer.parseInt(arrival.getBarvlDt());
+        String destination = arrival.getArvlMsg3();
+
+        if ("0".equals(arvlCd) || "1".equals(arvlCd) || "2".equals(arvlCd) || "3".equals(arvlCd)) {
+            return "도착 예정 정보 있음";
+        } else if (barvlDt == 0) {
+            return "도착 정보 없음";
+        } else {
+            int minutes = barvlDt / 60;
+            return minutes + "분 후(" + destination + ")";
+        }
+    }
+
     public CompletableFuture<Map.Entry<Integer, Map<String, Object>>> processTrafficType1Async(RouteProcessDTO.SubPath subPath, int index) {
         return CompletableFuture.supplyAsync(() -> {
 
@@ -296,13 +329,17 @@ public class RouteService{
                                             String trainLineNm = arrival.getTrainLineNm();
                                             if (trainLineNm != null) {
                                                 String[] parts = trainLineNm.split(" - ");
-                                                if (parts.length > 1 && parts[1].contains(secondStation)) {
+                                                String destination = parts[0].replace("행", "").trim();
+                                                String nextStation = parts[1].replace("방면", "").trim(); // 정확한 역 이름 추출
+                                                if (parts.length > 1 &&  nextStation.equals(secondStation)) {
                                                     if (convertedSubwayCode == 1001) {
-                                                        String result = subwayService.compareRoutes(startName,endName,startName,parts[1]);
+                                                        int result = subwayService.compareRoutes(startName,endName,startName,destination);
                                                         System.out.println("result" + result);
+                                                        if (result == 1){
+                                                            // 조건에 맞는 데이터를 리스트에 추가
+                                                            directionFilteredArrivals.add(arrival);
+                                                        }
                                                     }
-                                                    // 조건에 맞는 데이터를 리스트에 추가
-                                                    directionFilteredArrivals.add(arrival);
                                                 }
                                             }
                                         }
@@ -310,40 +347,43 @@ public class RouteService{
                                 }
 
                                 if (!directionFilteredArrivals.isEmpty()) {
-                                    // 가장 가까운 도착 정보를 가져오기 위해 BarvlDt(열차 도착 예정 시간 기준)로 정렬
-                                    directionFilteredArrivals.sort(Comparator.comparing(SubwayArriveProcessDTO.RealtimeArrival::getBarvlDt));
+                                    PriorityQueue<SubwayArriveProcessDTO.RealtimeArrival> arrivalQueue = new PriorityQueue<>(
+                                            (a, b) -> {
+                                                int aPriority = getArvlCdPriority(a.getArvlCd());
+                                                int bPriority = getArvlCdPriority(b.getArvlCd());
+                                                if (aPriority != bPriority) return Integer.compare(aPriority, bPriority);
 
-                                    SubwayArriveProcessDTO.RealtimeArrival firstArrival = directionFilteredArrivals.get(0);
-                                    // 첫 번째 도착 정보 설정
-                                    // 도착 예정 시간 (초 단위)을 String에서 int로 변환
-                                    int firstArrivalSeconds = Integer.parseInt(firstArrival.getBarvlDt());
-                                    int firstArrivalMinutes = firstArrivalSeconds / 60; // 초를 분으로 변환
+                                                int aBarvlDt = Integer.parseInt(a.getBarvlDt());
+                                                int bBarvlDt = Integer.parseInt(b.getBarvlDt());
+                                                if (aBarvlDt == 0 || bBarvlDt == 0) return Integer.compare(aBarvlDt, bBarvlDt);
+                                                if (aBarvlDt != bBarvlDt) return Integer.compare(aBarvlDt, bBarvlDt);
 
-                                    String firstStationInfo = firstArrival.getArvlMsg3();
-                                    predictTime1String = firstArrivalMinutes + "분 후" + "(" + firstStationInfo + ")";
-                                    int firstStationNumber = -1;
-                                    String firstStationName = null;
+                                                int aNthStation = getNthStation(a.getArvlMsg2());
+                                                int bNthStation = getNthStation(b.getArvlMsg2());
+                                                return Integer.compare(aNthStation, bNthStation);
+                                            }
+                                    );
 
-                                    if (directionFilteredArrivals.size() > 1) {
-                                        SubwayArriveProcessDTO.RealtimeArrival secondArrival = directionFilteredArrivals.get(1);
-                                        int secondArrivalSeconds = Integer.parseInt(secondArrival.getBarvlDt()); // 도착 예정 시간 (초 단위)
-                                        int secondArrivalMinutes = secondArrivalSeconds / 60; // 초를 분으로 변환
+                                    arrivalQueue.addAll(directionFilteredArrivals);
 
-                                        String secondStationInfo = secondArrival.getArvlMsg3();
-                                        predictTime2String = secondArrivalMinutes + "분 후" + "(" + secondStationInfo + ")";
+                                    if (!arrivalQueue.isEmpty()) {
+                                        SubwayArriveProcessDTO.RealtimeArrival firstArrival = arrivalQueue.poll();
+                                        String firstMessage = getArrivalMessage(firstArrival);
+                                        System.out.println("가장 가까운 도착 정보: " + firstMessage);
 
-                                        // 결과 출력
-                                        System.out.println("가장 가까운 도착 정보 1: " + predictTime1String );
-                                        System.out.println("가장 가까운 도착 정보 2: " + predictTime2String );
+                                        if (!arrivalQueue.isEmpty()) {
+                                            SubwayArriveProcessDTO.RealtimeArrival secondArrival = arrivalQueue.poll();
+                                            String secondMessage = getArrivalMessage(secondArrival);
+                                            System.out.println("두 번째 도착 정보: " + secondMessage);
+                                        } else {
+                                            System.out.println("두 번째 도착 정보가 없습니다.");
+                                        }
                                     } else {
-                                        // 두 번째 도착 정보가 없는 경우
-                                        System.out.println("가장 가까운 도착 정보 1: " + predictTime1String + ", 몇 번째 역: " + firstStationNumber + ", 역 이름: " + firstStationName);
+                                        System.out.println("조건에 맞는 도착 정보가 없습니다.");
                                     }
                                 } else {
-                                    // 도착 정보가 없을 때
                                     System.out.println("조건에 맞는 도착 정보가 없습니다.");
                                 }
-
                             }
                         }
                     } else if (city == 20 || city == 30 || city == 40 || city == 50) { // 부산, 대구, 광주, 대전

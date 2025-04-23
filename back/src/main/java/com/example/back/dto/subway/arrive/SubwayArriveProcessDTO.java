@@ -32,6 +32,7 @@ public class SubwayArriveProcessDTO {
         private String bstatnNm;
         private String arvlMsg2;
         private String arvlMsg3;
+        private String arvlCd;
 
     }
 }

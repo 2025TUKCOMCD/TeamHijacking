@@ -269,23 +269,35 @@ public class SubwayService {
         return findRoute(network, start, end);
     }
 
-    public String compareRoutes(String aStart, String aEnd, String bStart, String bEnd) {
+    public int compareRoutes(String aStart, String aEnd, String bStart, String bEnd) {
+        System.out.println(aStart);
+        System.out.println(aEnd);
+        System.out.println(bStart);
+        System.out.println(bEnd);
+
         List<String> routeA = findRoute(aStart, aEnd);
         List<String> routeB = findRoute(bStart, bEnd);
 
+        System.out.println(routeA);
+        System.out.println(routeB);
+
         if (routeA.isEmpty() || routeB.isEmpty()) {
-            return "입력한 경로 중 하나 이상에서 경로를 찾을 수 없습니다.";
+            System.out.println("입력한 경로 중 하나 이상에서 경로를 찾을 수 없습니다.");
+            return -1;
         }
         // 출발역이 같다고 가정하므로, 두 경로의 진행 방향 (초기 구간)이 같은지 확인
         else if (!isSameDirection(routeA, routeB)) {
-            return "두 경로는 시작점은 같으나, 진행 방향이 다릅니다.";
+            System.out.println("두 경로는 시작점은 같으나, 진행 방향이 다릅니다.");
+            return 0;
         }
         // A 경로가 B의 부분 경로인 경우 (A의 길이가 B보다 짧으면서 B의 접두어인지 KMP로 확인)
         else if (routeA.size() < routeB.size() && isSubPath(routeA, routeB)) {
-            return "A 경로는 B 경로의 연속적인 부분 경로입니다. (A ⊂ B)";
+            System.out.println("A 경로는 B 경로의 연속적인 부분 경로입니다. (A ⊂ B)");
+            return 1;
         }
         else {
-            return "A 경로는 B 경로와 같은 방향이지만, 포함 관계에 있지 않습니다.";
+            System.out.println("A 경로는 B 경로와 같은 방향이지만, 포함 관계에 있지 않습니다.");
+            return 2;
         }
     }
 
