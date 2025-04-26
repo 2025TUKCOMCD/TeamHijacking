@@ -95,26 +95,7 @@ fun navigateToAudioGuideBLEControl(device: BluetoothDevice,activity: Activity) {
     activity.startActivity(intent)
 }
 
-/*
-기능 1. 특정블루투스기기를 가지고 다음 음향신호기 화면으로 넘어가게 해준다.
- */
-fun connectToSignalDevice(device: BluetoothDevice, activity: Activity) {
-    val deviceName = device.name ?: "Unknown"
-    val deviceAddress = device.address
-    Toast.makeText(activity, "$deviceName 에 연결 시도 중입니다", Toast.LENGTH_SHORT).show()
-    Log.d("Bluetooth", "$deviceName - ${deviceAddress}에 연결 시도 중입니다")
-    navigateToAudioSignalMuchineBLEControl(device, activity)
-}
 
-/*
-기능 1. 기기를 클릭했을 시에 AudioSignalMuchineBLEControl 로 화면 이동을 시켜주는 함수
- */
-fun navigateToAudioSignalMuchineBLEControl(device: BluetoothDevice,activity: Activity) {
-    val intent = Intent(activity, AudioSignalMuchineBLEControl::class.java)
-    intent.putExtra("EXTRA_BLUETOOTH_DEVICE", device)
-    Log.d("bludtooth", "navigatetonext호출")
-    activity.startActivity(intent)
-}
 
 /*
 기능 1. Uart방식중 tx 부분을 담당해 준다. 특정 uuid의 특성(여기선 tx)에 데이터를 입력 해 주는 역할을 한다.

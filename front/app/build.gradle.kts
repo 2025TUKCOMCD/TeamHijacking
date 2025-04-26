@@ -2,33 +2,41 @@ import java.util.Properties
 
 plugins {
     alias(libs.plugins.androidApplication)
-    id("org.jetbrains.kotlin.android") version "1.9.24"
+    id("org.jetbrains.kotlin.android")
 }
 
 android {
     namespace = "com.example.front"
     compileSdk = 34
 
-    // local.properties에서 API 키 가져오기
+    // local.properties 파일에서 API 키 가져오기
     val localProperties = Properties().apply {
         load(project.rootProject.file("local.properties").inputStream())
     }
-
+    val ODsay_APIKEY = localProperties.getProperty("ODsay_APIKEY", "")
+    val Geolocation_APIKEY = localProperties.getProperty("Geolocation_APIKEY", "")
+    val SMARTTHINGS_API_TOKEN = localProperties.getProperty("SMARTTHINGS_API_TOKEN", "")
+    val Public_Bus_APIKEY = localProperties.getProperty("Public_Bus_APIKEY", "")
+    val Public_Subway_APIKEY = localProperties.getProperty("Public_Subway_APIKEY", "")
+    val Host_URL = localProperties.getProperty("Host_URL", "")
     defaultConfig {
         applicationId = "com.example.front"
         minSdk = 30
         targetSdk = 34
         versionCode = 1
         versionName = "1.0"
+
         vectorDrawables.useSupportLibrary = true
 
-        // API 키를 BuildConfig 필드에 추가
-        buildConfigField("String", "ODsay_APIKEY", "\"${localProperties.getProperty("ODsay_APIKEY", "")}\"")
-        buildConfigField("String", "Geolocation_APIKEY", "\"${localProperties.getProperty("Geolocation_APIKEY", "")}\"")
-        buildConfigField("String", "SMARTTHINGS_API_TOKEN", "\"${localProperties.getProperty("SMARTTHINGS_API_TOKEN", "")}\"")
-        buildConfigField("String", "Public_Bus_APIKEY", "\"${localProperties.getProperty("Public_Bus_APIKEY", "")}\"")
-        buildConfigField("String", "Public_Subway_APIKEY", "\"${localProperties.getProperty("Public_Subway_APIKEY", "")}\"")
-        buildConfigField("String", "Host_URL", "\"${localProperties.getProperty("Host_URL", "")}\"")
+        // BuildConfig 필드에 API 키 추가
+        buildConfigField("String", "ODsay_APIKEY", "\"$ODsay_APIKEY\"")
+        buildConfigField("String", "Geolocation_APIKEY", "\"$Geolocation_APIKEY\"")
+        buildConfigField("String", "SMARTTHINGS_API_TOKEN", "\"$SMARTTHINGS_API_TOKEN\"")
+        buildConfigField("String", "Public_Bus_APIKEY", "\"$Public_Bus_APIKEY\"")
+        buildConfigField("String", "Public_Subway_APIKEY", "\"$Public_Subway_APIKEY\"")
+        buildConfigField("String", "Host_URL", "\"$Host_URL\"")
+
+
     }
 
     buildTypes {
@@ -42,12 +50,12 @@ android {
     }
 
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_11
-        targetCompatibility = JavaVersion.VERSION_11
+        sourceCompatibility = JavaVersion.VERSION_1_8
+        targetCompatibility = JavaVersion.VERSION_1_8
     }
 
     kotlinOptions {
-        jvmTarget = "11"
+        jvmTarget = "1.8"
     }
 
     buildFeatures {
@@ -58,7 +66,7 @@ android {
     }
 
     composeOptions {
-        kotlinCompilerExtensionVersion = "1.5.14"
+        kotlinCompilerExtensionVersion = "1.5.1"
     }
 
     packaging {
@@ -85,9 +93,10 @@ dependencies {
     implementation("androidx.activity:activity-compose:1.8.0")
 
     implementation(libs.core.splashscreen)
-    implementation("androidx.appcompat:appcompat:1.6.1")
-    implementation("com.google.android.material:material:1.10.0")
-    implementation("androidx.constraintlayout:constraintlayout:2.1.4")
+    implementation("androidx.appcompat:appcompat:1.7.0")
+    implementation("com.google.android.material:material:1.12.0")
+    implementation("androidx.activity:activity:1.9.3")
+    implementation("androidx.constraintlayout:constraintlayout:2.2.0")
     implementation("androidx.compose.material3:material3-android:1.3.1")
 
     // ✅ 네트워킹 & JSON/XML 처리
@@ -113,12 +122,7 @@ dependencies {
     implementation(libs.lifecycle.livedata.ktx)
     implementation(libs.lifecycle.viewmodel.ktx)
     implementation(libs.fragment.ktx)
-    implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.8.7")
-    implementation(platform("androidx.compose:compose-bom:2024.04.01"))
-    implementation("androidx.compose.ui:ui")
-    implementation("androidx.compose.ui:ui-graphics")
-    implementation("androidx.compose.ui:ui-tooling-preview")
-    implementation("androidx.compose.material3:material3")
+    implementation(project(":android2")) //Wear OS 전용 UI(곡선 리스트, BoxInsetLayout 등) 사용 가능
 
     // ✅ 테스트 라이브러리
     androidTestImplementation(platform(libs.compose.bom))
