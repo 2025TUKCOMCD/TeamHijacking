@@ -1,12 +1,14 @@
 package com.example.front.login
 
-
 import android.os.Bundle
 import android.util.Log
 import android.widget.ImageButton
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.front.databinding.ActivityLoginBinding
+import com.example.front.login.data.User
+import com.example.front.login.processor.RetrofitClient
+import com.example.front.login.processor.UserProcessor
 import com.kakao.sdk.auth.model.OAuthToken
 import com.kakao.sdk.common.model.ClientError
 import com.kakao.sdk.common.model.ClientErrorCause
@@ -35,21 +37,17 @@ class LoginActivity : AppCompatActivity() {
     }
 
 
-    /* 카카오톡 앱을 통해 로그인할 수 있는지 확인하고, 카카오톡이 설치되지 않은 경우에는 카카오 계정으로 로그인한다. */
+    /* kakaoTalk 앱을 통해 로그인 가능 여부 확인, 설치 되지 않은 경우 계정 으로 로그인 */
     private fun kakaoLogin() {
 
         try {
-            // 카카오톡 설치 여부 확인 후 로그인 실행, 안 되어있을 시 카카오 계정으로 로그인
+            // kakaoTalk 설치 여부 확인 후 로그인 실행, else 카카오 계정 으로 로그인
             if (UserApiClient.instance.isKakaoTalkLoginAvailable(this)) {
-                Log.d("login", "카카오톡이 설치되어 있음")
+                Log.d("login", "kakaoTalk 설치 되어 있음")
                 UserApiClient.instance.loginWithKakaoTalk(this) { token, error ->
                     Log.d("login", "callback 실행됨 - loginWithKaKaoTalk")
 
-                    /*if(error != null) {
-                        Log.e("login", "카카오톡 로그인 실패", error)
-                    }*/
-                    //사용자가 카카오톡 설치 후 디바이스 권한 요청 화면에서 로그인을 취소한 경우
-                    //의도적인 로그인 취소로 보고 카카오 계정으로 로그인 시도 없이 로그인 취소로 처리(예: 뒤로 가기)
+                    //kakaoTalk 설치 후 device 권한 요청 화면 에서 로그인 취소한 경우 의도적 로그인 취소로 보고 카카오 계정 로그인 시도 없이 로그인 취소로 처리(예: 뒤로 가기)
                     if (error is ClientError && error.reason == ClientErrorCause.Cancelled) {
                         return@loginWithKakaoTalk
                     }
@@ -57,9 +55,9 @@ class LoginActivity : AppCompatActivity() {
                     handleLoginResult(token, error) //콜백을 함수로 분리
                 }
             } else {
-                Log.d("login", "카카오톡이 설치되어 있지 않음, 계정 로그인 시도")
+                Log.d("login", "kakaoTalk 설치 되어 있지 않음, 계정 로그인 시도")
                 UserApiClient.instance.loginWithKakaoAccount(this) { token, error ->
-                    Log.d("login", "callback 실행됨 - loginWithKakaoAccount")
+                    Log.d("login", "callback 실행됨 - login With kakaoAccount")
                     handleLoginResult(token, error)
                 }
             }
@@ -69,7 +67,7 @@ class LoginActivity : AppCompatActivity() {
     }
 
 
-    //이전 코드에서 callBack 함수가 제대로 작동되지 않음을 확인, 이를 개선하기 위해 callback을 분리함. callback->handleLoginResult()
+    //callback 분리함. callback->handleLoginResult()
     private fun handleLoginResult(token:OAuthToken?, error: Throwable?) {
         Log.d("login", "callback 호출됨")  // 추가
         if (error != null) {
@@ -85,10 +83,10 @@ class LoginActivity : AppCompatActivity() {
     }
 
 
-    /* UserAPiClient.instance.me() 메소드를 호출하면 현재 로그인한 사용자의 정보 받아올 수 있음.
+    /* UserAPiClient.instance.me() 메소드 호출 시 현재 로그인 사용자 정보 받아올 수 있음.
        사용자 정보를 활용한 추가 로직 구현 가능 */
     private fun fetchKakaoUserInfo() {
-        Log.d("login", "fetchKakaoUserInfo() 실행됨")
+        Log.d("login", "fetch kakao UserInfo() 실행됨")
 
         UserApiClient.instance.me { user, error ->
             if (error != null) {
@@ -99,77 +97,48 @@ class LoginActivity : AppCompatActivity() {
             } else {
                 Toast.makeText(this, "사용자 정보 요청 성공: ${user.kakaoAccount?.profile?.nickname}", Toast.LENGTH_SHORT).show()
                 Log.i("login", "사용자 정보 요청 성공: " +
-                      "\n 회원정보: ${user.id}" +
+                      "\n 회원 정보: ${user.id}" +
                       "\n 이메일: ${user.kakaoAccount?.email}" +
                       "\n 닉네임: ${user.kakaoAccount?.profile?.nickname}")
-                //사용자 정보를 활용하여 추가 로직 구현 가능
-                //TODO:: 추가 로직 구현
 
+                //사용자 정보 객체 생성
+                val user = User(
+                    name = "${user.kakaoAccount?.profile?.nickname}",
+                    loginId = "${user.id}")
+
+                UserProcessor.registerUser(user) {  registeredUser ->    //registeredUser는 Retrofit 통신의 응답 결과를 받아 저장하는 콜백 함수의 매개변수
+                    if(registeredUser != null) {
+                        Log.d("Login", "등록된 사용자: $registeredUser")
+                    } else {
+                        Log.e("login", "등록 실패")
+                    }
+                }
             }
         }
+        //사용자 정보를 활용해 추가 로직 구현 가능
     }
 
 
-    //로그아웃을 위한 function. 앱에 저장된 로그인 정보 지우고 돌려보냄. 참고:: https://quessr.tistory.com/84
+    //logout 위한 function. 앱에 저장된 로그인 정보 지움. 참고:: https://quessr.tistory.com/84
     private fun kakaoLogout() {
         UserApiClient.instance.unlink { error ->
             if (error != null) {
-                Toast.makeText(this, "로그아웃 실패: ${error.message}", Toast.LENGTH_SHORT).show()
-                Log.e("login","로그아웃 실패, SDK에서 토큰 삭제됨", error)
+                Toast.makeText(this, "logout 실패: ${error.message}", Toast.LENGTH_SHORT).show()
+                Log.e("login","logout 실패, SDK 에서 토큰 삭제됨", error)
             } else {
-                Toast.makeText(this, "로그아웃 성공", Toast.LENGTH_SHORT).show()
-                Log.i("logtin", "로그아웃 성공, SDK에서 토큰 삭제됨")
+                Toast.makeText(this, "logout 성공", Toast.LENGTH_SHORT).show()
+                Log.i("login", "logout 성공, SDK 에서 토큰 삭제됨")
             }
         }
     }
 
 
-    //TODO:: 로그인 여부를 자동 확인하는 func 구현 필요
+    //TODO:: 로그인 여부를 자동 확인 func 구현 필요
     private fun isUserLogin(){
 
     }
 
     private fun updateProfile() {
-        // 사용자 정보 저장,
-        /*사용자 프로퍼티인 properties 필드 하위 정보의 값을 저장한다.
-        * 키 값은 내 애플리케이션>카카오 로그인>사용자 프로퍼티에 정의한 값?을 사용해야 한다.
-        * https://developers.kakao.com/docs/latest/ko/kakaologin/prerequisite#user-properties*/
 
-//        val properties = mapOf("${CUSTOM_PROPERTY_KEY}" to "${CUSTOM_PROPERTY_VALUE}")
-//
-//        UserApiClient.instance.updateProfile(properties) { error ->
-//            if (error != null) {
-//                Log.e("login", "사용자 정보 저장 실패", error)
-//            }
-//            else {
-//                Log.i("login", "사용자 정보 저장 성공")
-//            }
     }
-
-
-//    private fun selectShippingAddress() {
-//        UserApiClient.instance.selectShippingAddress(context) { addressId, error ->
-//            if (error != null) {
-//                Log.i("login", "배송지 선택 실패 $error")
-//                return@selectShippingAddress
-//            }
-//
-//            UserApiClient.instance.shippingAddresses(addressId!!) { userShippingAddresses, err ->
-//                if (err != null) {
-//                    Log.i("login", "배송지 조회 실패 $err")
-//                } else if (userShippingAddresses != null) {
-//                    Log.i(
-//                        "login", "배송지 조회 성공" +
-//                                "\n회원번호: ${userShippingAddresses.userId}" +
-//                                "\n배송지: \n${
-//                                    userShippingAddresses.shippingAddresses?.joinToString(
-//                                        "\n"
-//                                    )
-//                                }"
-//                    )
-//                }
-//            }
-//        }
-//    }
-
 }

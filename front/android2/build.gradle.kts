@@ -10,7 +10,7 @@ android {
     namespace = "com.example.front"
     compileSdk = 34
 
-    //local.properties에서 KEY 가져오기
+    //local.properties 에서 KEY 가져옴
     val localProperties = Properties().apply {
         load(project.rootProject.file("local.properties").inputStream())
     }
@@ -82,5 +82,6 @@ dependencies {
     //JSON,XML 처리 용
     implementation("com.squareup.retrofit2:retrofit:2.9.0")  //API 처리용, Retrofit 사용 위해 추가 해야 한다고 함
     implementation("com.squareup.retrofit2:converter-gson:2.9.0")
-
+    implementation("com.squareup.okhttp3:okhttp:4.12.0")
+    implementation("com.google.code.gson:gson:2.11.0") //혹시 모르니 넣어봄
 }
