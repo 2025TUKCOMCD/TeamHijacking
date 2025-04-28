@@ -31,7 +31,7 @@
             android:name=".iot.MyIotActivity"
             android:exported="false"
             android:label="@string/title_activity_my_iot"
-            android:theme="@style/MainActivityTheme.Starting" />
+            android:theme="@style/MainActivityTheme" />
         <activity
             android:name=".audioguide.AudioSignalMuchineBLEControl"
             android:exported="false" />

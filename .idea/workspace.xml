@@ -60,18 +60,29 @@
           <theme>@style/MainActivityTheme</theme>
         </config>
       </layout>
+      <layout url="file://$PROJECT_DIR$/front/app/src/main/res/layout/list_item.xml">
+        <config>
+          <theme>@style/Transportation_Main_Theme</theme>
+        </config>
+      </layout>
     </layouts>
   </component>
   <component name="AutoImportSettings">
     <option name="autoReloadType" value="NONE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="5a34f773-8c82-4b0a-86d3-a37d3cf6ba80" name="Changes" comment="그래들 컴포즈 및 iot UI, 액티비티 수정">
-      <change afterPath="$PROJECT_DIR$/front/app/src/main/java/com/example/front/iot/SmartHome/MyDeviceAdapter.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/front/app/src/main/res/layout/dialog_device_detail.xml" afterDir="false" />
+    <list default="true" id="5a34f773-8c82-4b0a-86d3-a37d3cf6ba80" name="Changes" comment="my iot 액티비티 추가 및 Device dialog 추가">
+      <change beforePath="$PROJECT_DIR$/.idea/deploymentTargetSelector.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/deploymentTargetSelector.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/front/app/src/main/AndroidManifest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/front/app/src/main/AndroidManifest.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/front/app/src/main/java/com/example/front/iot/MyIotActivity.kt" beforeDir="false" afterPath="$PROJECT_DIR$/front/app/src/main/java/com/example/front/iot/MyIotActivity.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/front/app/src/main/res/layout/activity_my_iot.xml" beforeDir="false" afterPath="$PROJECT_DIR$/front/app/src/main/res/layout/activity_my_iot.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/front/app/src/main/java/com/example/front/iot/SmartHome/Command.kt" beforeDir="false" afterPath="$PROJECT_DIR$/front/app/src/main/java/com/example/front/iot/SmartHome/Command.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/front/app/src/main/java/com/example/front/iot/SmartHome/DeviceAdapter.kt" beforeDir="false" afterPath="$PROJECT_DIR$/front/app/src/main/java/com/example/front/iot/SmartHome/DeviceAdapter.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/front/app/src/main/java/com/example/front/iot/SmartHome/DeviceControlHelper.kt" beforeDir="false" afterPath="$PROJECT_DIR$/front/app/src/main/java/com/example/front/iot/SmartHome/DeviceControlHelper.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/front/app/src/main/java/com/example/front/iot/SmartHome/DeviceStatusResponse.kt" beforeDir="false" afterPath="$PROJECT_DIR$/front/app/src/main/java/com/example/front/iot/SmartHome/DeviceStatusResponse.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/front/app/src/main/java/com/example/front/iot/SmartHome/VoiceContolHelper.kt" beforeDir="false" afterPath="$PROJECT_DIR$/front/app/src/main/java/com/example/front/iot/SmartHome/VoiceControlHelper.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/front/app/src/main/res/layout/device_item.xml" beforeDir="false" afterPath="$PROJECT_DIR$/front/app/src/main/res/layout/device_item.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/front/app/src/main/res/layout/dialog_device_detail.xml" beforeDir="false" afterPath="$PROJECT_DIR$/front/app/src/main/res/layout/dialog_device_detail.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -81,7 +92,7 @@
   <component name="ClangdSettings">
     <option name="formatViaClangd" value="false" />
   </component>
-  <component name="ExecutionTargetManager" SELECTED_TARGET="device_and_snapshot_combo_box_target[DeviceId(pluginId=LocalEmulator, isTemplate=false, identifier=path=C:\Users\klmot\.android\avd\Wear_OS_Large_Round_API_34.avd)]" />
+  <component name="ExecutionTargetManager" SELECTED_TARGET="device_and_snapshot_combo_box_target[DeviceId(pluginId=PhysicalDevice, isTemplate=false, identifier=serial=RFAXB1VMDNK)]" />
   <component name="ExternalProjectsData">
     <projectState path="$PROJECT_DIR$/front">
       <ProjectState />
@@ -144,7 +155,7 @@
   <component name="Git.Settings">
     <option name="RECENT_BRANCH_BY_REPOSITORY">
       <map>
-        <entry key="$PROJECT_DIR$" value="main" />
+        <entry key="$PROJECT_DIR$" value="watch-hotfix" />
       </map>
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -449,14 +460,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1735374590430</updated>
-    </task>
-    <task id="LOCAL-00037" summary="SmartHome 데이터 DeviceResponse 클래스 안의 데이터 분리">
-      <option name="closed" value="true" />
-      <created>1738576045162</created>
-      <option name="number" value="00037" />
-      <option name="presentableId" value="LOCAL-00037" />
-      <option name="project" value="LOCAL" />
-      <updated>1738576045162</updated>
     </task>
     <task id="LOCAL-00038" summary="Command 데이터 추가">
       <option name="closed" value="true" />
@@ -842,7 +845,15 @@
       <option name="project" value="LOCAL" />
       <updated>1745226223366</updated>
     </task>
-    <option name="localTasksCounter" value="86" />
+    <task id="LOCAL-00086" summary="my iot 액티비티 추가 및 Device dialog 추가">
+      <option name="closed" value="true" />
+      <created>1745230672762</created>
+      <option name="number" value="00086" />
+      <option name="presentableId" value="LOCAL-00086" />
+      <option name="project" value="LOCAL" />
+      <updated>1745230672762</updated>
+    </task>
+    <option name="localTasksCounter" value="87" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -857,7 +868,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="IoT UI 버튼 색 추가" />
     <MESSAGE value="IoT UI 기기 추가버튼 수정" />
     <MESSAGE value="IoT UI/UX 수정" />
     <MESSAGE value="Homeiot액티비티 수정" />
@@ -889,6 +899,7 @@
     <MESSAGE value="커밋1" />
     <MESSAGE value="Login 액티비티 커밋 실패 수정" />
     <MESSAGE value="그래들 컴포즈 및 iot UI, 액티비티 수정" />
-    <option name="LAST_COMMIT_MESSAGE" value="그래들 컴포즈 및 iot UI, 액티비티 수정" />
+    <MESSAGE value="my iot 액티비티 추가 및 Device dialog 추가" />
+    <option name="LAST_COMMIT_MESSAGE" value="my iot 액티비티 추가 및 Device dialog 추가" />
   </component>
 </project>
