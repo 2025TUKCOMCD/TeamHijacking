@@ -12,35 +12,12 @@
     <!-- 기기 이름 표시 -->
     <TextView
         android:id="@+id/deviceLabel"
-        android:layout_width="0dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_weight="1"
         android:text="Device Name"
         android:textSize="16sp"
         android:textStyle="bold"
         android:padding="8dp"
         android:maxLines="1"
         android:ellipsize="end"/>
-
-    <!-- 켜기 버튼 -->
-    <Button
-        android:id="@+id/btnTurnOn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="On"
-        android:backgroundTint="@android:color/holo_green_light"
-        android:textColor="@android:color/white"
-        android:padding="8dp" />
-
-    <!-- 끄기 버튼 -->
-    <Button
-        android:id="@+id/btnTurnOff"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Off"
-        android:layout_marginStart="8dp"
-        android:backgroundTint="@android:color/holo_red_light"
-        android:textColor="@android:color/white"
-        android:padding="8dp" />
-
 </LinearLayout>

@@ -2,53 +2,64 @@ package com.example.front.iot
 
 import android.os.Bundle
 import android.view.LayoutInflater
-import android.view.View
-import android.widget.SeekBar
-import android.widget.TextView
-import android.widget.Toast
+import android.widget.*
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.front.BuildConfig
 import com.example.front.R
-import com.example.front.iot.SmartHome.*
+import com.example.front.iot.SmartHome.Device
+import com.example.front.iot.SmartHome.DeviceAdapter
+import com.example.front.iot.SmartHome.DeviceControlHelper
+import com.example.front.iot.SmartHome.DeviceResponse
+import com.example.front.iot.SmartHome.RetrofitClient
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
 class MyIotActivity : AppCompatActivity() {
 
-    private lateinit var apiToken: String
-    private lateinit var recyclerView: RecyclerView
+    private lateinit var deviceControlHelper: DeviceControlHelper
+    private lateinit var deviceAdapter: DeviceAdapter
+    private val deviceList = mutableListOf<Device>()
+    private val apiToken = "Bearer ${BuildConfig.SMARTTHINGS_API_TOKEN}"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_my_iot)
 
-        apiToken = "Bearer ${BuildConfig.SMARTTHINGS_API_TOKEN}"
-        recyclerView = findViewById(R.id.recyclerViewMyDevices)
-        recyclerView.layoutManager = LinearLayoutManager(this)
+        deviceControlHelper = DeviceControlHelper(apiToken)
 
+        // RecyclerView 설정
+        val recyclerView = findViewById<RecyclerView>(R.id.recyclerViewMyDevices)
+        deviceAdapter = DeviceAdapter(deviceList) { device ->
+            showDeviceDetailDialog(device)
+        }
+        recyclerView.layoutManager = LinearLayoutManager(this)
+        recyclerView.adapter = deviceAdapter
+
+        // 디바이스 목록 불러오기
         fetchDeviceList()
     }
 
     private fun fetchDeviceList() {
-        RetrofitClient.instance.getDevices(apiToken).enqueue(object : Callback<DeviceResponse> {
+        val apiService = RetrofitClient.instance
+
+        apiService.getDevices(apiToken).enqueue(object : Callback<DeviceResponse> {
             override fun onResponse(call: Call<DeviceResponse>, response: Response<DeviceResponse>) {
                 if (response.isSuccessful) {
-                    val devices = response.body()?.items.orEmpty()
-                    val adapter = MyDeviceAdapter(devices) { device ->
-                        showDeviceDetailDialog(device)
-                    }
-                    recyclerView.adapter = adapter
+                    val devices = response.body()?.items ?: emptyList()
+                    deviceList.clear()
+                    deviceList.addAll(devices)
+                    deviceAdapter.notifyDataSetChanged()
                 } else {
-                    Toast.makeText(this@MyIotActivity, "기기 목록을 불러올 수 없습니다.", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this@MyIotActivity, "기기 불러오기 실패", Toast.LENGTH_SHORT).show()
                 }
             }
 
             override fun onFailure(call: Call<DeviceResponse>, t: Throwable) {
-                Toast.makeText(this@MyIotActivity, "네트워크 오류", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this@MyIotActivity, "네트워크 오류: ${t.message}", Toast.LENGTH_SHORT).show()
             }
         })
     }
@@ -58,23 +69,74 @@ class MyIotActivity : AppCompatActivity() {
         val statusText = view.findViewById<TextView>(R.id.textDeviceStatus)
         val seekBarBrightness = view.findViewById<SeekBar>(R.id.seekBarBrightness)
         val seekBarSaturation = view.findViewById<SeekBar>(R.id.seekBarSaturation)
+        val btnTogglePower = view.findViewById<Button>(R.id.btnTogglePower)
 
         statusText.text = "기기 이름: ${device.label}\n기기 ID: ${device.deviceId}"
 
+        var isPowerOn = false
+
+        deviceControlHelper.getDeviceStatus(
+            device.deviceId,
+            onSuccess = { status ->
+                val mainComponent = status.components["main"]
+
+                if (mainComponent != null) {
+                    val switchValue = mainComponent.switch?.switch?.value
+                    isPowerOn = switchValue.equals("on", ignoreCase = true)
+
+                    val brightnessValue = mainComponent.switchLevel?.value?.toIntOrNull()
+                    brightnessValue?.let {
+                        seekBarBrightness.progress = it
+                    }
+
+                    val saturationValue = mainComponent.colorControl?.saturation?.value?.toInt()
+                    saturationValue?.let {
+                        seekBarSaturation.progress = it
+                    }
+                } else {
+                    Toast.makeText(this, "Main 컴포넌트 없음", Toast.LENGTH_SHORT).show()
+                }
+            },
+            onError = { error ->
+                Toast.makeText(this, "상태 불러오기 실패: $error", Toast.LENGTH_SHORT).show()
+            }
+        )
+
+        btnTogglePower.setOnClickListener {
+            deviceControlHelper.sendSwitchCommand(
+                device.deviceId, !isPowerOn,
+                onSuccess = {
+                    Toast.makeText(this, if (isPowerOn) "전원 OFF" else "전원 ON", Toast.LENGTH_SHORT).show()
+                    isPowerOn = !isPowerOn
+                },
+                onError = {
+                    Toast.makeText(this, "전원 제어 실패", Toast.LENGTH_SHORT).show()
+                }
+            )
+        }
+
         seekBarBrightness.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
             override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
-                setBrightness(device.deviceId, progress)
+                if (fromUser) {
+                    deviceControlHelper.setBrightness(device.deviceId, progress,
+                        onSuccess = { },
+                        onError = { }
+                    )
+                }
             }
-
             override fun onStartTrackingTouch(seekBar: SeekBar?) {}
             override fun onStopTrackingTouch(seekBar: SeekBar?) {}
         })
 
         seekBarSaturation.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
             override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
-                setColor(device.deviceId, 50, progress) // Hue는 고정값 예시
+                if (fromUser) {
+                    deviceControlHelper.setColor(device.deviceId, hue = 50, saturation = progress,
+                        onSuccess = { },
+                        onError = { }
+                    )
+                }
             }
-
             override fun onStartTrackingTouch(seekBar: SeekBar?) {}
             override fun onStopTrackingTouch(seekBar: SeekBar?) {}
         })
@@ -82,58 +144,7 @@ class MyIotActivity : AppCompatActivity() {
         AlertDialog.Builder(this)
             .setTitle("기기 상태 및 제어")
             .setView(view)
-            .setPositiveButton("전원 ON") { _, _ ->
-                sendDeviceCommand(device.deviceId, "switch", "on")
-            }
-            .setNegativeButton("전원 OFF") { _, _ ->
-                sendDeviceCommand(device.deviceId, "switch", "off")
-            }
             .setNeutralButton("닫기", null)
             .show()
-    }
-
-    private fun sendDeviceCommand(deviceId: String, capability: String, command: String) {
-        val commandBody = CommandBody(commands = listOf(Command(capability, command)))
-        RetrofitClient.instance.sendCommand(deviceId, commandBody, apiToken)
-            .enqueue(object : Callback<Unit> {
-                override fun onResponse(call: Call<Unit>, response: Response<Unit>) {
-                    if (response.isSuccessful) {
-                        Toast.makeText(this@MyIotActivity, "명령 전송 완료", Toast.LENGTH_SHORT).show()
-                    } else {
-                        Toast.makeText(this@MyIotActivity, "명령 실패", Toast.LENGTH_SHORT).show()
-                    }
-                }
-
-                override fun onFailure(call: Call<Unit>, t: Throwable) {
-                    Toast.makeText(this@MyIotActivity, "네트워크 오류", Toast.LENGTH_SHORT).show()
-                }
-            })
-    }
-
-    private fun setBrightness(deviceId: String, level: Int) {
-        val commandBody = CommandBody(commands = listOf(Command("switchLevel", level.toString())))
-        RetrofitClient.instance.setBrightness(deviceId, commandBody, apiToken).enqueue(object : Callback<Unit> {
-            override fun onResponse(call: Call<Unit>, response: Response<Unit>) {
-                Toast.makeText(this@MyIotActivity, "밝기 설정 완료", Toast.LENGTH_SHORT).show()
-            }
-
-            override fun onFailure(call: Call<Unit>, t: Throwable) {
-                Toast.makeText(this@MyIotActivity, "밝기 설정 실패", Toast.LENGTH_SHORT).show()
-            }
-        })
-    }
-
-    private fun setColor(deviceId: String, hue: Int, saturation: Int) {
-        val colorJson = "{" + "\"hue\":$hue,\"saturation\":$saturation" + "}"
-        val commandBody = CommandBody(commands = listOf(Command("colorControl", colorJson)))
-        RetrofitClient.instance.setColor(deviceId, commandBody, apiToken).enqueue(object : Callback<Unit> {
-            override fun onResponse(call: Call<Unit>, response: Response<Unit>) {
-                Toast.makeText(this@MyIotActivity, "색상 설정 완료", Toast.LENGTH_SHORT).show()
-            }
-
-            override fun onFailure(call: Call<Unit>, t: Throwable) {
-                Toast.makeText(this@MyIotActivity, "색상 설정 실패", Toast.LENGTH_SHORT).show()
-            }
-        })
     }
 }

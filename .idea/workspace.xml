@@ -15,13 +15,18 @@
           <theme>@style/Theme.AppCompat.Light.NoActionBar</theme>
         </config>
       </layout>
+      <layout url="file://$PROJECT_DIR$/front/app/src/main/res/layout/list_item.xml">
+        <config>
+          <theme>@style/Transportation_Main_Theme</theme>
+        </config>
+      </layout>
     </layouts>
   </component>
   <component name="AutoImportSettings">
     <option name="autoReloadType" value="NONE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="5a34f773-8c82-4b0a-86d3-a37d3cf6ba80" name="Changes" comment="watch 랑 합치기">
+    <list default="true" id="5a34f773-8c82-4b0a-86d3-a37d3cf6ba80" name="Changes" comment="watch 랑 합치기"/>
       <change afterPath="$PROJECT_DIR$/back/src/main/java/com/example/back/controller/UserController.java" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/back/src/main/java/com/example/back/dto/UserDTO.java" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/front/android2/src/main/java/com/example/front/Login/data/User.kt" afterDir="false" />
@@ -42,7 +47,18 @@
       <change beforePath="$PROJECT_DIR$/.github/workflows/androi_watch.yml" beforeDir="false" afterPath="$PROJECT_DIR$/.github/workflows/android_watch_CI.yml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/assetWizardSettings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/assetWizardSettings.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/caches/deviceStreaming.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/caches/deviceStreaming.xml" afterDir="false" />
+    <list default="true" id="5a34f773-8c82-4b0a-86d3-a37d3cf6ba80" name="Changes" comment="my iot 액티비티 추가 및 Device dialog 추가">
+      <change beforePath="$PROJECT_DIR$/.idea/deploymentTargetSelector.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/deploymentTargetSelector.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/front/app/src/main/AndroidManifest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/front/app/src/main/AndroidManifest.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/front/app/src/main/java/com/example/front/iot/MyIotActivity.kt" beforeDir="false" afterPath="$PROJECT_DIR$/front/app/src/main/java/com/example/front/iot/MyIotActivity.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/front/app/src/main/java/com/example/front/iot/SmartHome/Command.kt" beforeDir="false" afterPath="$PROJECT_DIR$/front/app/src/main/java/com/example/front/iot/SmartHome/Command.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/front/app/src/main/java/com/example/front/iot/SmartHome/DeviceAdapter.kt" beforeDir="false" afterPath="$PROJECT_DIR$/front/app/src/main/java/com/example/front/iot/SmartHome/DeviceAdapter.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/front/app/src/main/java/com/example/front/iot/SmartHome/DeviceControlHelper.kt" beforeDir="false" afterPath="$PROJECT_DIR$/front/app/src/main/java/com/example/front/iot/SmartHome/DeviceControlHelper.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/front/app/src/main/java/com/example/front/iot/SmartHome/DeviceStatusResponse.kt" beforeDir="false" afterPath="$PROJECT_DIR$/front/app/src/main/java/com/example/front/iot/SmartHome/DeviceStatusResponse.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/front/app/src/main/java/com/example/front/iot/SmartHome/VoiceContolHelper.kt" beforeDir="false" afterPath="$PROJECT_DIR$/front/app/src/main/java/com/example/front/iot/SmartHome/VoiceControlHelper.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/front/app/src/main/res/layout/device_item.xml" beforeDir="false" afterPath="$PROJECT_DIR$/front/app/src/main/res/layout/device_item.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/front/app/src/main/res/layout/dialog_device_detail.xml" beforeDir="false" afterPath="$PROJECT_DIR$/front/app/src/main/res/layout/dialog_device_detail.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/back/src/main/java/com/example/back/domain/User.java" beforeDir="false" afterPath="$PROJECT_DIR$/back/src/main/java/com/example/back/domain/User.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/back/src/main/java/com/example/back/repository/UserRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/back/src/main/java/com/example/back/repository/UserRepository.java" afterDir="false" />
@@ -72,6 +88,7 @@
   <component name="ClangdSettings">
     <option name="formatViaClangd" value="false" />
   </component>
+  <component name="ExecutionTargetManager" SELECTED_TARGET="device_and_snapshot_combo_box_target[DeviceId(pluginId=PhysicalDevice, isTemplate=false, identifier=serial=RFAXB1VMDNK)]" />
   <component name="ExecutionTargetManager" SELECTED_TARGET="device_and_snapshot_combo_box_target[DeviceId(pluginId=LocalEmulator, isTemplate=false, identifier=path=C:\Users\hhb06\.android\avd\Medium_Phone.avd)]" />
   <component name="ExternalProjectsData">
     <projectState path="$PROJECT_DIR$/front">
@@ -127,7 +144,7 @@
   <component name="Git.Settings">
     <option name="RECENT_BRANCH_BY_REPOSITORY">
       <map>
-        <entry key="$PROJECT_DIR$" value="main" />
+        <entry key="$PROJECT_DIR$" value="watch-hotfix" />
       </map>
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -269,7 +286,6 @@
       <option name="PM_INSTALL_OPTIONS" value="" />
       <option name="ALL_USERS" value="false" />
       <option name="ALWAYS_INSTALL_WITH_PM" value="false" />
-      <option name="ALLOW_ASSUME_VERIFIED" value="false" />
       <option name="CLEAR_APP_STORAGE" value="false" />
       <option name="DYNAMIC_FEATURES_DISABLED_LIST" value="" />
       <option name="ACTIVITY_EXTRA_FLAGS" value="" />
@@ -353,6 +369,16 @@
       <updated>1735374590430</updated>
     </task>
     <task id="LOCAL-00001" summary="UI/UX 프레임 구축">
+    </task>
+    <task id="LOCAL-00038" summary="Command 데이터 추가">
+      <option name="closed" value="true" />
+      <created>1738576117812</created>
+      <option name="number" value="00038" />
+      <option name="presentableId" value="LOCAL-00038" />
+      <option name="project" value="LOCAL" />
+      <updated>1738576117812</updated>
+    </task>
+    <task id="LOCAL-00039" summary="device_item.xml 추가, 어뎁터 수정, Iot액티비티 수정, DeviceItem 데이터 클래스 추가">
       <option name="closed" value="true" />
       <created>1736234831710</created>
       <option name="number" value="00001" />
@@ -385,6 +411,359 @@
       <updated>1736395141961</updated>
     </task>
     <option name="localTasksCounter" value="5" />
+    <task id="LOCAL-00043" summary="main 스크롤 이벤트 트리거">
+      <option name="closed" value="true" />
+      <created>1739256708198</created>
+      <option name="number" value="00043" />
+      <option name="presentableId" value="LOCAL-00043" />
+      <option name="project" value="LOCAL" />
+      <updated>1739256708198</updated>
+    </task>
+    <task id="LOCAL-00044" summary="main 스크롤 이벤트 트리거 추가">
+      <option name="closed" value="true" />
+      <created>1739256939744</created>
+      <option name="number" value="00044" />
+      <option name="presentableId" value="LOCAL-00044" />
+      <option name="project" value="LOCAL" />
+      <updated>1739256939744</updated>
+    </task>
+    <task id="LOCAL-00045" summary="main 스크롤 이벤트 트리거 talkback 지원 추가">
+      <option name="closed" value="true" />
+      <created>1739257185976</created>
+      <option name="number" value="00045" />
+      <option name="presentableId" value="LOCAL-00045" />
+      <option name="project" value="LOCAL" />
+      <updated>1739257185976</updated>
+    </task>
+    <task id="LOCAL-00046" summary="main 스크롤 이벤트 트리거 함수 수정">
+      <option name="closed" value="true" />
+      <created>1739257278711</created>
+      <option name="number" value="00046" />
+      <option name="presentableId" value="LOCAL-00046" />
+      <option name="project" value="LOCAL" />
+      <updated>1739257278711</updated>
+    </task>
+    <task id="LOCAL-00047" summary="test wav 파일 재생 함수 추가">
+      <option name="closed" value="true" />
+      <created>1739257464682</created>
+      <option name="number" value="00047" />
+      <option name="presentableId" value="LOCAL-00047" />
+      <option name="project" value="LOCAL" />
+      <updated>1739257464682</updated>
+    </task>
+    <task id="LOCAL-00048" summary="test wav 파일 재생 함수 추가 수정">
+      <option name="closed" value="true" />
+      <created>1739257596180</created>
+      <option name="number" value="00048" />
+      <option name="presentableId" value="LOCAL-00048" />
+      <option name="project" value="LOCAL" />
+      <updated>1739257596180</updated>
+    </task>
+    <task id="LOCAL-00049" summary="(Test) TalkBack을 통해 화면의 끝에 도달했음을 알리는 함수 추가">
+      <option name="closed" value="true" />
+      <created>1739257790239</created>
+      <option name="number" value="00049" />
+      <option name="presentableId" value="LOCAL-00049" />
+      <option name="project" value="LOCAL" />
+      <updated>1739257790239</updated>
+    </task>
+    <task id="LOCAL-00050" summary="(Test) TalkBack을 통해 화면의 끝에 도달했음을 알리는 함수 수정">
+      <option name="closed" value="true" />
+      <created>1739257906411</created>
+      <option name="number" value="00050" />
+      <option name="presentableId" value="LOCAL-00050" />
+      <option name="project" value="LOCAL" />
+      <updated>1739257906413</updated>
+    </task>
+    <task id="LOCAL-00051" summary="액티비티 종료 시 리소스 해제 onDestroy 함수 추가">
+      <option name="closed" value="true" />
+      <created>1739258094154</created>
+      <option name="number" value="00051" />
+      <option name="presentableId" value="LOCAL-00051" />
+      <option name="project" value="LOCAL" />
+      <updated>1739258094154</updated>
+    </task>
+    <task id="LOCAL-00052" summary="메인 xml 파일 &quot;스크롤 뷰 id&quot; 추가">
+      <option name="closed" value="true" />
+      <created>1739258229991</created>
+      <option name="number" value="00052" />
+      <option name="presentableId" value="LOCAL-00052" />
+      <option name="project" value="LOCAL" />
+      <updated>1739258229991</updated>
+    </task>
+    <task id="LOCAL-00053" summary="main 액티비티 오류 수정 및 wav 파일 추가">
+      <option name="closed" value="true" />
+      <created>1739258788101</created>
+      <option name="number" value="00053" />
+      <option name="presentableId" value="LOCAL-00053" />
+      <option name="project" value="LOCAL" />
+      <updated>1739258788103</updated>
+    </task>
+    <task id="LOCAL-00054" summary="메인 액티비티 코드 수정">
+      <option name="closed" value="true" />
+      <created>1740200983602</created>
+      <option name="number" value="00054" />
+      <option name="presentableId" value="LOCAL-00054" />
+      <option name="project" value="LOCAL" />
+      <updated>1740200983602</updated>
+    </task>
+    <task id="LOCAL-00055" summary="IoT UI 수정">
+      <option name="closed" value="true" />
+      <created>1740202242537</created>
+      <option name="number" value="00055" />
+      <option name="presentableId" value="LOCAL-00055" />
+      <option name="project" value="LOCAL" />
+      <updated>1740202242537</updated>
+    </task>
+    <task id="LOCAL-00056" summary="IoT UI 수정">
+      <option name="closed" value="true" />
+      <created>1740202287266</created>
+      <option name="number" value="00056" />
+      <option name="presentableId" value="LOCAL-00056" />
+      <option name="project" value="LOCAL" />
+      <updated>1740202287266</updated>
+    </task>
+    <task id="LOCAL-00057" summary="IoT UI 버튼 색 추가">
+      <option name="closed" value="true" />
+      <created>1740202374513</created>
+      <option name="number" value="00057" />
+      <option name="presentableId" value="LOCAL-00057" />
+      <option name="project" value="LOCAL" />
+      <updated>1740202374513</updated>
+    </task>
+    <task id="LOCAL-00058" summary="IoT UI 기기 추가버튼 수정">
+      <option name="closed" value="true" />
+      <created>1740202419723</created>
+      <option name="number" value="00058" />
+      <option name="presentableId" value="LOCAL-00058" />
+      <option name="project" value="LOCAL" />
+      <updated>1740202419723</updated>
+    </task>
+    <task id="LOCAL-00059" summary="IoT UI/UX 수정">
+      <option name="closed" value="true" />
+      <created>1740202472514</created>
+      <option name="number" value="00059" />
+      <option name="presentableId" value="LOCAL-00059" />
+      <option name="project" value="LOCAL" />
+      <updated>1740202472514</updated>
+    </task>
+    <task id="LOCAL-00060" summary="Homeiot액티비티 수정">
+      <option name="closed" value="true" />
+      <created>1740203245042</created>
+      <option name="number" value="00060" />
+      <option name="presentableId" value="LOCAL-00060" />
+      <option name="project" value="LOCAL" />
+      <updated>1740203245042</updated>
+    </task>
+    <task id="LOCAL-00061" summary="Homeiot액티비티 스마트싱스 앱실행 부분 수정">
+      <option name="closed" value="true" />
+      <created>1740203661745</created>
+      <option name="number" value="00061" />
+      <option name="presentableId" value="LOCAL-00061" />
+      <option name="project" value="LOCAL" />
+      <updated>1740203661745</updated>
+    </task>
+    <task id="LOCAL-00062" summary="스마트싱스 앱실행 부분 수정">
+      <option name="closed" value="true" />
+      <created>1740203963133</created>
+      <option name="number" value="00062" />
+      <option name="presentableId" value="LOCAL-00062" />
+      <option name="project" value="LOCAL" />
+      <updated>1740203963133</updated>
+    </task>
+    <task id="LOCAL-00063" summary="기기 등록을 유도하는 다이얼로그 추가">
+      <option name="closed" value="true" />
+      <created>1740204399459</created>
+      <option name="number" value="00063" />
+      <option name="presentableId" value="LOCAL-00063" />
+      <option name="project" value="LOCAL" />
+      <updated>1740204399459</updated>
+    </task>
+    <task id="LOCAL-00064" summary="상태조회">
+      <option name="closed" value="true" />
+      <created>1740424921448</created>
+      <option name="number" value="00064" />
+      <option name="presentableId" value="LOCAL-00064" />
+      <option name="project" value="LOCAL" />
+      <updated>1740424921448</updated>
+    </task>
+    <task id="LOCAL-00065" summary="IoT 상태조회 부분 롤백">
+      <option name="closed" value="true" />
+      <created>1741251970721</created>
+      <option name="number" value="00065" />
+      <option name="presentableId" value="LOCAL-00065" />
+      <option name="project" value="LOCAL" />
+      <updated>1741251970721</updated>
+    </task>
+    <task id="LOCAL-00066" summary="광도 API 추가">
+      <option name="closed" value="true" />
+      <created>1741832925926</created>
+      <option name="number" value="00066" />
+      <option name="presentableId" value="LOCAL-00066" />
+      <option name="project" value="LOCAL" />
+      <updated>1741832925927</updated>
+    </task>
+    <task id="LOCAL-00067" summary="광도 API 수정">
+      <option name="closed" value="true" />
+      <created>1741833203918</created>
+      <option name="number" value="00067" />
+      <option name="presentableId" value="LOCAL-00067" />
+      <option name="project" value="LOCAL" />
+      <updated>1741833203918</updated>
+    </task>
+    <task id="LOCAL-00068" summary="채도 API 추가">
+      <option name="closed" value="true" />
+      <created>1741833316422</created>
+      <option name="number" value="00068" />
+      <option name="presentableId" value="LOCAL-00068" />
+      <option name="project" value="LOCAL" />
+      <updated>1741833316422</updated>
+    </task>
+    <task id="LOCAL-00069" summary="스위치 on/off 추가">
+      <option name="closed" value="true" />
+      <created>1741833736377</created>
+      <option name="number" value="00069" />
+      <option name="presentableId" value="LOCAL-00069" />
+      <option name="project" value="LOCAL" />
+      <updated>1741833736377</updated>
+    </task>
+    <task id="LOCAL-00070" summary="스위치 on/off 수정">
+      <option name="closed" value="true" />
+      <created>1741833778144</created>
+      <option name="number" value="00070" />
+      <option name="presentableId" value="LOCAL-00070" />
+      <option name="project" value="LOCAL" />
+      <updated>1741833778144</updated>
+    </task>
+    <task id="LOCAL-00071" summary="광도 버튼 추가">
+      <option name="closed" value="true" />
+      <created>1741833890761</created>
+      <option name="number" value="00071" />
+      <option name="presentableId" value="LOCAL-00071" />
+      <option name="project" value="LOCAL" />
+      <updated>1741833890761</updated>
+    </task>
+    <task id="LOCAL-00072" summary="채도 버튼 추가">
+      <option name="closed" value="true" />
+      <created>1741833920234</created>
+      <option name="number" value="00072" />
+      <option name="presentableId" value="LOCAL-00072" />
+      <option name="project" value="LOCAL" />
+      <updated>1741833920234</updated>
+    </task>
+    <task id="LOCAL-00073" summary="광도 조절 API 호출">
+      <option name="closed" value="true" />
+      <created>1741834018477</created>
+      <option name="number" value="00073" />
+      <option name="presentableId" value="LOCAL-00073" />
+      <option name="project" value="LOCAL" />
+      <updated>1741834018477</updated>
+    </task>
+    <task id="LOCAL-00074" summary="광도 조절 API 호출 수정">
+      <option name="closed" value="true" />
+      <created>1741834505554</created>
+      <option name="number" value="00074" />
+      <option name="presentableId" value="LOCAL-00074" />
+      <option name="project" value="LOCAL" />
+      <updated>1741834505554</updated>
+    </task>
+    <task id="LOCAL-00075" summary="광도 조절 API 호출 수정">
+      <option name="closed" value="true" />
+      <created>1741834559828</created>
+      <option name="number" value="00075" />
+      <option name="presentableId" value="LOCAL-00075" />
+      <option name="project" value="LOCAL" />
+      <updated>1741834559828</updated>
+    </task>
+    <task id="LOCAL-00076" summary="채도 조절 API 호출">
+      <option name="closed" value="true" />
+      <created>1741835103081</created>
+      <option name="number" value="00076" />
+      <option name="presentableId" value="LOCAL-00076" />
+      <option name="project" value="LOCAL" />
+      <updated>1741835103081</updated>
+    </task>
+    <task id="LOCAL-00077" summary="채도 조절 API 호출 수정">
+      <option name="closed" value="true" />
+      <created>1741835132918</created>
+      <option name="number" value="00077" />
+      <option name="presentableId" value="LOCAL-00077" />
+      <option name="project" value="LOCAL" />
+      <updated>1741835132918</updated>
+    </task>
+    <task id="LOCAL-00078" summary="채도 조절 API 호출 수정">
+      <option name="closed" value="true" />
+      <created>1741835238955</created>
+      <option name="number" value="00078" />
+      <option name="presentableId" value="LOCAL-00078" />
+      <option name="project" value="LOCAL" />
+      <updated>1741835238955</updated>
+    </task>
+    <task id="LOCAL-00079" summary="무드등 전원 버튼과 밝기 조절 버튼 추가">
+      <option name="closed" value="true" />
+      <created>1742432397807</created>
+      <option name="number" value="00079" />
+      <option name="presentableId" value="LOCAL-00079" />
+      <option name="project" value="LOCAL" />
+      <updated>1742432397808</updated>
+    </task>
+    <task id="LOCAL-00080" summary="Main액티비티 부분 불필요 코드 정리">
+      <option name="closed" value="true" />
+      <created>1742438953531</created>
+      <option name="number" value="00080" />
+      <option name="presentableId" value="LOCAL-00080" />
+      <option name="project" value="LOCAL" />
+      <updated>1742438953532</updated>
+    </task>
+    <task id="LOCAL-00081" summary="코드병합 커밋">
+      <option name="closed" value="true" />
+      <created>1742440484283</created>
+      <option name="number" value="00081" />
+      <option name="presentableId" value="LOCAL-00081" />
+      <option name="project" value="LOCAL" />
+      <updated>1742440484283</updated>
+    </task>
+    <task id="LOCAL-00082" summary="코드병합">
+      <option name="closed" value="true" />
+      <created>1742447237437</created>
+      <option name="number" value="00082" />
+      <option name="presentableId" value="LOCAL-00082" />
+      <option name="project" value="LOCAL" />
+      <updated>1742447237438</updated>
+    </task>
+    <task id="LOCAL-00083" summary="커밋1">
+      <option name="closed" value="true" />
+      <created>1742447985344</created>
+      <option name="number" value="00083" />
+      <option name="presentableId" value="LOCAL-00083" />
+      <option name="project" value="LOCAL" />
+      <updated>1742447985344</updated>
+    </task>
+    <task id="LOCAL-00084" summary="Login 액티비티 커밋 실패 수정">
+      <option name="closed" value="true" />
+      <created>1742448267696</created>
+      <option name="number" value="00084" />
+      <option name="presentableId" value="LOCAL-00084" />
+      <option name="project" value="LOCAL" />
+      <updated>1742448267696</updated>
+    </task>
+    <task id="LOCAL-00085" summary="그래들 컴포즈 및 iot UI, 액티비티 수정">
+      <option name="closed" value="true" />
+      <created>1745226223365</created>
+      <option name="number" value="00085" />
+      <option name="presentableId" value="LOCAL-00085" />
+      <option name="project" value="LOCAL" />
+      <updated>1745226223366</updated>
+    </task>
+    <task id="LOCAL-00086" summary="my iot 액티비티 추가 및 Device dialog 추가">
+      <option name="closed" value="true" />
+      <created>1745230672762</created>
+      <option name="number" value="00086" />
+      <option name="presentableId" value="LOCAL-00086" />
+      <option name="project" value="LOCAL" />
+      <updated>1745230672762</updated>
+    </task>
+    <option name="localTasksCounter" value="87" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -423,5 +802,38 @@
         </entry>
       </map>
     </option>
+    <MESSAGE value="IoT UI 기기 추가버튼 수정" />
+    <MESSAGE value="IoT UI/UX 수정" />
+    <MESSAGE value="Homeiot액티비티 수정" />
+    <MESSAGE value="Homeiot액티비티 스마트싱스 앱실행 부분 수정" />
+    <MESSAGE value="스마트싱스 앱실행 부분 수정" />
+    <MESSAGE value="기기 등록을 유도하는 다이얼로그 추가" />
+    <MESSAGE value="상태조회" />
+    <MESSAGE value="그래들 버전 충돌 해결 및 메인 액티비티 롤백" />
+    <MESSAGE value="상태 조회 응답 데이터 클래스 생성" />
+    <MESSAGE value="상태 조회 응답 데이터 추가" />
+    <MESSAGE value="상태 조회 응답 코드 추가" />
+    <MESSAGE value="상태 조회 버튼 추가" />
+    <MESSAGE value="IoT 상태조회 부분 롤백" />
+    <MESSAGE value="광도 API 추가" />
+    <MESSAGE value="광도 API 수정" />
+    <MESSAGE value="채도 API 추가" />
+    <MESSAGE value="스위치 on/off 추가" />
+    <MESSAGE value="스위치 on/off 수정" />
+    <MESSAGE value="광도 버튼 추가" />
+    <MESSAGE value="채도 버튼 추가" />
+    <MESSAGE value="광도 조절 API 호출" />
+    <MESSAGE value="광도 조절 API 호출 수정" />
+    <MESSAGE value="채도 조절 API 호출" />
+    <MESSAGE value="채도 조절 API 호출 수정" />
+    <MESSAGE value="무드등 전원 버튼과 밝기 조절 버튼 추가" />
+    <MESSAGE value="Main액티비티 부분 불필요 코드 정리" />
+    <MESSAGE value="코드병합 커밋" />
+    <MESSAGE value="코드병합" />
+    <MESSAGE value="커밋1" />
+    <MESSAGE value="Login 액티비티 커밋 실패 수정" />
+    <MESSAGE value="그래들 컴포즈 및 iot UI, 액티비티 수정" />
+    <MESSAGE value="my iot 액티비티 추가 및 Device dialog 추가" />
+    <option name="LAST_COMMIT_MESSAGE" value="my iot 액티비티 추가 및 Device dialog 추가" />
   </component>
 </project>
