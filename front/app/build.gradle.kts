@@ -1,7 +1,7 @@
 import java.util.Properties
 
 plugins {
-    alias(libs.plugins.androidApplication)
+    alias(libs.plugins.androidApplication) // 앱 모듈 플러그인
     id("org.jetbrains.kotlin.android")
 }
 
@@ -19,6 +19,7 @@ android {
     val Public_Bus_APIKEY = localProperties.getProperty("Public_Bus_APIKEY", "")
     val Public_Subway_APIKEY = localProperties.getProperty("Public_Subway_APIKEY", "")
     val Host_URL = localProperties.getProperty("Host_URL", "")
+
     defaultConfig {
         applicationId = "com.example.front"
         minSdk = 30
@@ -35,8 +36,6 @@ android {
         buildConfigField("String", "Public_Bus_APIKEY", "\"$Public_Bus_APIKEY\"")
         buildConfigField("String", "Public_Subway_APIKEY", "\"$Public_Subway_APIKEY\"")
         buildConfigField("String", "Host_URL", "\"$Host_URL\"")
-
-
     }
 
     buildTypes {
@@ -66,7 +65,7 @@ android {
     }
 
     composeOptions {
-        kotlinCompilerExtensionVersion = "1.5.1"
+        kotlinCompilerExtensionVersion = "1.5.14"
     }
 
     packaging {
@@ -122,7 +121,7 @@ dependencies {
     implementation(libs.lifecycle.livedata.ktx)
     implementation(libs.lifecycle.viewmodel.ktx)
     implementation(libs.fragment.ktx)
-    implementation(project(":android2")) //Wear OS 전용 UI(곡선 리스트, BoxInsetLayout 등) 사용 가능
+    //implementation(project(":android2")) //Wear OS 전용 UI(곡선 리스트, BoxInsetLayout 등) 사용 가능
 
     // ✅ 테스트 라이브러리
     androidTestImplementation(platform(libs.compose.bom))
