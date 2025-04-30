@@ -10,6 +10,11 @@ pluginManagement {
         mavenCentral()
         gradlePluginPortal()
     }
+    plugins {
+        id("com.android.application") version "8.4.0" apply false
+        id("com.android.library") version "8.4.0" apply false
+        id("org.jetbrains.kotlin.android") version "1.9.24" apply false // Kotlin도 최신
+    }
 }
 
 dependencyResolutionManagement {
@@ -17,14 +22,15 @@ dependencyResolutionManagement {
     repositories {
         google()
         mavenCentral()
-        maven("https://jitpack.io") { // JitPack 저장소 추가
-            name = "jitpack" // 저장소 이름 (선택적)
+        maven("https://jitpack.io") {
+            name = "jitpack" // JitPack 저장소 추가
         }
-        maven(url = "https://devrepo.kakao.com/nexus/content/groups/public/") { // 카카오 저장소 추가
-            name = "kakao" // 저장소 이름 (선택적)
+        maven(url = "https://devrepo.kakao.com/nexus/content/groups/public/") {
+            name = "kakao" // 카카오 저장소 추가
         }
     }
 }
+
 rootProject.name = "front"
 include(":app")
 include(":android2")
