@@ -1,54 +1,57 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical"
-    android:padding="24dp"
-    android:background="@android:color/white">
-
+    android:fillViewport="true">
     <!-- 📛 기기 이름 & 상태 텍스트 -->
-    <TextView
-        android:id="@+id/textDeviceStatus"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="기기 정보 로딩 중..."
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:paddingBottom="16dp" />
+        android:orientation="vertical"
+        android:padding="24dp"
+        android:background="@android:color/white">
+        <!-- 📛 기기 이름 & 상태 텍스트 -->
+        <TextView
+            android:id="@+id/textDeviceStatus"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="기기 정보 로딩 중..."
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:paddingBottom="16dp" />
+        <!-- 💡 밝기 조절 SeekBar -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="밝기 조절"
+            android:textStyle="bold" />
+        <SeekBar
+            android:id="@+id/seekBarBrightness"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:max="100"
+            android:progress="50"
+            android:layout_marginBottom="16dp" />
 
-    <!-- 💡 밝기 조절 SeekBar -->
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="밝기 조절"
-        android:textStyle="bold" />
-    <SeekBar
-        android:id="@+id/seekBarBrightness"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:max="100"
-        android:progress="50"
-        android:layout_marginBottom="16dp" />
+        <!-- 🌈 색상(채도) 조절 SeekBar -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="채도 조절"
+            android:textStyle="bold" />
 
-    <!-- 🌈 색상(채도) 조절 SeekBar -->
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="채도 조절"
-        android:textStyle="bold" />
-    <SeekBar
-        android:id="@+id/seekBarSaturation"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:max="100"
-        android:progress="50"
-        android:layout_marginBottom="16dp" />
-
-    <!-- 🔘 전원 토글 버튼 -->
-    <Button
-        android:id="@+id/btnTogglePower"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="전원 ON / OFF"
-        android:layout_marginTop="8dp" />
-
-</LinearLayout>
+        <SeekBar
+            android:id="@+id/seekBarSaturation"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            android:max="100"
+            android:progress="50" />
+        <!-- 🔘 전원 토글 버튼 -->
+        <Button
+            android:id="@+id/btnTogglePower"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="전원 ON / OFF"
+            android:layout_marginTop="8dp" />
+    </LinearLayout>
+</ScrollView>
