@@ -365,6 +365,7 @@ public class SubwayService {
         // 두 역 간 이동 시간을 더하기
         for (int i = 0; i < route.size() - 1; i++) {
             String key = route.get(i) + "-" + route.get(i + 1);
+            System.out.println("Key: " + key);
             totalTime += stationTravelTime.getOrDefault(key, 0);
         }
 

@@ -337,13 +337,13 @@ public class RouteService{
         String stationName = getStationNameFromMsg(arrival.getArvlMsg2());
         List<String> route = subwayService.findRoute(startName, stationName);
         int travelTime = subwayService.calculateTravelTime(route); // 두 역 간 이동 시간 계산
+
         return travelTime > 0 ? travelTime + "분 후 도착 " : "경로 정보 없음 (" + arrival.getArvlMsg3() + ")";
     }
+
     public CompletableFuture<Map.Entry<Integer, Map<String, Object>>> processTrafficType1Async(RouteProcessDTO.SubPath subPath, int index) {
         return CompletableFuture.supplyAsync(() -> {
-
                     Map<String, Object> timeAndDayType;
-
                     List<TimeTable> predictTimeList = null;
                     String predictTime1String = null;
                     String predictTime2String = null;
