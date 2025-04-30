@@ -30,8 +30,7 @@
         <activity
             android:name=".iot.MyIotActivity"
             android:exported="false"
-            android:label="@string/title_activity_my_iot"
-            android:theme="@style/MainActivityTheme" />
+            android:theme="@style/Transportation_Main_Theme" />
         <activity
             android:name=".transportation.TransportDetailRouteControlActivity"
             android:exported="false"

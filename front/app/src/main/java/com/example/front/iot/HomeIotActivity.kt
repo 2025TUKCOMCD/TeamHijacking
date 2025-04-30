@@ -35,6 +35,7 @@ class HomeIotActivity : AppCompatActivity() {
 
         // 🟧 My IoT 페이지로 이동
         findViewById<Button>(R.id.btnMyIot).setOnClickListener {
+            Log.d("현빈", "들어옴")
             val intent = Intent(this, MyIotActivity::class.java)
             startActivity(intent)
         }

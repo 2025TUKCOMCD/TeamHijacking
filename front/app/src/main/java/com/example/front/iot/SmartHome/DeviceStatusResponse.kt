@@ -15,12 +15,10 @@ data class ComponentStatus(
 data class CapabilityStatus(
     val value: String
 )
-
 data class ColorControlStatus(
     val hue: AttributeValue?,
     val saturation: AttributeValue?
 )
-
 data class SwitchStatus(
     val switch: ValueStatus
 )

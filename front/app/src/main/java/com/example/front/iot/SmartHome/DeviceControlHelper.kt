@@ -1,4 +1,3 @@
-// DeviceControlHelper.kt
 package com.example.front.iot.SmartHome
 
 import android.util.Log
@@ -9,12 +8,11 @@ import retrofit2.Response
 class DeviceControlHelper(private val apiToken: String) {
     private val apiService = RetrofitClient.instance
 
-    // 명령 보내기
+    // 기기 명령 전송
     fun sendDeviceCommand(deviceId: String, capability: String, command: String, onSuccess: () -> Unit, onError: (String) -> Unit) {
         val commandBody = CommandBody(
             commands = listOf(Command(capability, command))
         )
-
         apiService.sendCommand(deviceId, commandBody, apiToken).enqueue(object : Callback<Unit> {
             override fun onResponse(call: Call<Unit>, response: Response<Unit>) {
                 if (response.isSuccessful) {
@@ -28,7 +26,6 @@ class DeviceControlHelper(private val apiToken: String) {
                     onError(error)
                 }
             }
-
             override fun onFailure(call: Call<Unit>, t: Throwable) {
                 val error = "Error sending command: ${t.message}"
                 Log.e("SmartThings", error)
@@ -36,7 +33,6 @@ class DeviceControlHelper(private val apiToken: String) {
             }
         })
     }
-
     private fun sendCommand(deviceId: String, commandBody: CommandBody, onSuccess: () -> Unit, onError: (String) -> Unit) {
         apiService.sendCommand(deviceId, commandBody, apiToken).enqueue(object : Callback<Unit> {
             override fun onResponse(call: Call<Unit>, response: Response<Unit>) {
