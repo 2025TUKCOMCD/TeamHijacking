@@ -283,7 +283,7 @@ public class RouteService{
     }
 
 
-    private String handleArrivalByCriterion(SubwayArriveProcessDTO.RealtimeArrival arrival, String startName) {
+    private String handleArrivalByCriterion(SubwayArriveProcessDTO.RealtimeArrival arrival, String startName,int subwayCode, String direction) {
         String arvlCdString = arrival.getArvlCd();
         System.out.println(arvlCdString);
         System.out.println(arrival.getBarvlDt());
@@ -293,7 +293,7 @@ public class RouteService{
         }else if(!arrival.getBarvlDt().equals("0")){
             return handleBasedOnBarvlDt(arrival);
         }else if(arrival.getArvlMsg2() != null && arrival.getArvlMsg2().contains("번째 전역")) {
-            return handleBasedOnNthStation(arrival, startName);
+            return handleBasedOnNthStation(arrival, startName, direction);
         }
         return arrival.getArvlMsg2();
     }
@@ -333,10 +333,10 @@ public class RouteService{
     }
 
     // NTH_STATION 기준 처리
-    private String handleBasedOnNthStation(SubwayArriveProcessDTO.RealtimeArrival arrival, String startName) {
+    private String handleBasedOnNthStation(SubwayArriveProcessDTO.RealtimeArrival arrival, String startName, String direction ) {
         String stationName = getStationNameFromMsg(arrival.getArvlMsg2());
         List<String> route = subwayService.findRoute(startName, stationName);
-        int travelTime = subwayService.calculateTravelTime(route); // 두 역 간 이동 시간 계산
+        int travelTime = subwayService.calculateTravelTime(route,direction); // 두 역 간 이동 시간 계산
 
         return travelTime > 0 ? travelTime + "분 후 도착 " : "경로 정보 없음 (" + arrival.getArvlMsg3() + ")";
     }
@@ -478,12 +478,12 @@ public class RouteService{
                                         System.out.println(arrival1Queue);
 
                                         SubwayArriveProcessDTO.RealtimeArrival firstArrival = arrival1Queue.poll();
-                                        predictTime1String = handleArrivalByCriterion(firstArrival,startName);
+                                        predictTime1String = handleArrivalByCriterion(firstArrival,startName,subwayCode, direction);
                                         System.out.println("가장 가까운 도착 정보: " + predictTime1String);
 
                                         if (!arrival1Queue.isEmpty()) {
                                             SubwayArriveProcessDTO.RealtimeArrival secondArrival = arrival1Queue.poll();
-                                            predictTime2String = handleArrivalByCriterion(secondArrival,startName);                                            System.out.println("두 번째 도착 정보: " + predictTime2String);
+                                            predictTime2String = handleArrivalByCriterion(secondArrival,startName, subwayCode, direction);                                            System.out.println("두 번째 도착 정보: " + predictTime2String);
                                         } else {
                                             System.out.println("두 번째 도착 정보가 없습니다.");
                                         }
@@ -508,13 +508,13 @@ public class RouteService{
 
                                     if (!arrival2Queue.isEmpty()) {
                                         SubwayArriveProcessDTO.RealtimeArrival firstArrival = arrival2Queue.poll();
-                                        predictTime1String = handleArrivalByCriterion(firstArrival,startName);
+                                        predictTime1String = handleArrivalByCriterion(firstArrival,startName, subwayCode, direction);
 
                                         System.out.println("가장 가까운 도착 정보: " + predictTime1String);
 
                                         if (!arrival2Queue.isEmpty()) {
                                             SubwayArriveProcessDTO.RealtimeArrival secondArrival = arrival2Queue.poll();
-                                            predictTime2String = handleArrivalByCriterion(secondArrival, startName);                                            System.out.println("두 번째 도착 정보: " + predictTime2String);
+                                            predictTime2String = handleArrivalByCriterion(secondArrival, startName, subwayCode, direction);                                            System.out.println("두 번째 도착 정보: " + predictTime2String);
                                             System.out.println("두 번째 도착 정보: " + predictTime2String);
                                         } else {
                                             System.out.println("두 번째 도착 정보가 없습니다.");

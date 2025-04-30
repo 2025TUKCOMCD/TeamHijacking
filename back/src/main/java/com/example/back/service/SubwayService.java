@@ -20,7 +20,7 @@ public class SubwayService {
             Map.entry(113, 1092), Map.entry(114, 1093), Map.entry(117, 1094)
     );
     // 지하철 1호선의 구간별 걸리는 시간
-    private void initializeTravelTime() {
+    private void initialize1TravelTime() {
         //  메인 노선 (연천 ~ 구로)
         stationTravelTime.put("연천-전곡", 8);
         stationTravelTime.put("전곡-청산", 5);
@@ -214,12 +214,12 @@ public class SubwayService {
     private SubwayService() {
         network = new HashMap<>();
         stationTravelTime = new HashMap<>();
-        buildNetwork();
-        initializeTravelTime();
+        build1Network();
+        initialize1TravelTime();
     }
 
     // 네트워크 구축: 메인 노선 및 분기 노선들을 추가합니다.
-    private void buildNetwork() {
+    private void build1Network() {
         // 메인 노선 (연천 ~ 구로)
         String[] mainBranch = {
                 "연천", "전곡", "청산", "소요산", "동두천", "보산", "동두천중앙",
@@ -359,16 +359,28 @@ public class SubwayService {
         return new ArrayList<>();
     }
 
-    static int calculateTravelTime(List<String> route) {
+    static int calculateTravelTime(List<String> route, String direction) {
         int totalTime = 0;
-
-        // 두 역 간 이동 시간을 더하기
-        for (int i = 0; i < route.size() - 1; i++) {
-            String key = route.get(i) + "-" + route.get(i + 1);
-            System.out.println("Key: " + key);
-            totalTime += stationTravelTime.getOrDefault(key, 0);
+        // direction에 따른 route.get(i)와 route.get(i+1) 간의 이동 시간 계산
+        // 상행
+        if(direction.equals("상행")){
+            for (int i = 0; i < route.size() - 1; i++) {
+                String key = route.get(i) + "-" + route.get(i + 1);
+                System.out.println("Key: " + key);
+                totalTime += stationTravelTime.getOrDefault(key, 0);
+                System.out.println("Total Time: " + totalTime);
+            }
         }
-
+        // 하행
+        else if(direction.equals("하행")){
+            for (int i = route.size() - 1; i > 0; i--) {
+                String key = route.get(i) + "-" + route.get(i - 1);
+                System.out.println("Key: " + key);
+                totalTime += stationTravelTime.getOrDefault(key, 0);
+                System.out.println("Total Time: " + totalTime);
+            }
+        }
+        // 두 역 간 이동 시간을 더하기
         return totalTime;
     }
 
