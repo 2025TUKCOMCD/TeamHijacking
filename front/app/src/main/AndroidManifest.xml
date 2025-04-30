@@ -47,7 +47,7 @@
             android:taskAffinity=""
             android:theme="@style/Transportation_Main_Theme" />
         <activity
-            android:name=".transportation.TransportInfrmationActivity"
+            android:name=".transportation.TransportInformationActivity"
             android:exported="false"
             android:taskAffinity=""
             android:theme="@style/Transportation_Main_Theme" />

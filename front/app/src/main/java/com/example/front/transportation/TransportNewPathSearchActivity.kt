@@ -81,7 +81,6 @@ class TransportNewPathSearchActivity : AppCompatActivity() {
 
                 // Set click listener for each route layout
                 routeLayouts[index].setOnClickListener {
-
                     // Create the Intent and add data
                     val intent = Intent(this, TransportInformationActivity::class.java)
                     intent.putIntegerArrayListExtra("pathTransitType", ArrayList(route.pathTransitType))

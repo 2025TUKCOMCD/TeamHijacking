@@ -19,12 +19,15 @@ data class Route(
 )
 
 data class RouteId(
-    val busLocalBlID: Int,
+    val transportLocalID: Int,
     val startStationInfo: Int,
     val endStationInfo: Int,
+    val subwayLineName: String,
+    val trainDirection: String,
     val startX : Double,
     val startY : Double,
+    val transferStations: List<String>,
     val stationInfo: List<Int>,
-    val predictTimes1: List<String>,
-    val predictTimes2: List<String>
+    val predictTimes1: String,
+    val predictTimes2: String
 ) : Serializable

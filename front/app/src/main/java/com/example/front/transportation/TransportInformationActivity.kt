@@ -1,6 +1,8 @@
 package com.example.front.transportation
 
+import android.content.ContentValues.TAG
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.location.Location
 import android.os.Bundle
 import android.os.Parcelable
@@ -37,6 +39,12 @@ class TransportInformationActivity : AppCompatActivity() {
         binding = ActivityTransportInformationBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        if (!hasGps()) {
+            Log.d(TAG, "This hardware doesn't have GPS.")
+            // Fall back to functionality that doesn't use location or
+            // warn the user that location function isn't available.
+        }
+
         //바인딩
         val imsiBtt2: Button = binding.imsiBtt2
         val imsiBtt3: Button = binding.imsiBtt3
@@ -66,6 +74,8 @@ class TransportInformationActivity : AppCompatActivity() {
         //updateButtonImages(pathTransitType)
 
     }
+    private fun hasGps(): Boolean =
+        packageManager.hasSystemFeature(PackageManager.FEATURE_LOCATION_GPS)
 
     private fun updateButtonImages(pathTransitType: List<Int>?) {
         if (pathTransitType == null) return
@@ -199,8 +209,6 @@ class TransportInformationActivity : AppCompatActivity() {
         //imageSwitcher에 imageView 설정
         transInfoImgSwitcher.setImageResource(transInfoImgArray[imgIndex])
     }
-
-
 
     /* 교통 안내 변경 시, 버스, 지하철, ... 에 따라 사진 바뀌도록 구현 */
     private fun whatIsNext(index:Int = 0) {
