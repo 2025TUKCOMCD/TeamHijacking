@@ -12,6 +12,7 @@ import java.util.*;
 public class SubwayService {
     private Map<String, LinkedList<String>> network;
     private static Map<String, Integer> station1TravelTime;
+    private static Map<String, Integer> station4TravelTime;
     private static final Map<Integer, Integer> subwayCodeMap = Map.ofEntries(
             Map.entry(1, 1001), Map.entry(2, 1002), Map.entry(3, 1003), Map.entry(4, 1004),
             Map.entry(5, 1005), Map.entry(6, 1006), Map.entry(7, 1007), Map.entry(8, 1008),
@@ -132,6 +133,63 @@ public class SubwayService {
         station1TravelTime.put("탕정-배방", 4);
         station1TravelTime.put("배방-온양온천", 4);
         station1TravelTime.put("온양온천-신창", 5);
+    }
+    private void initialize4TravelTime() {
+        //  메인 노선 (오이도 ~ 불암산)
+        station4TravelTime.put("오이도-정왕",3);
+        station4TravelTime.put("정왕-신길온천",3);
+        station4TravelTime.put("신길온천-안산",3);
+        station4TravelTime.put("안산-초지",3);
+        station4TravelTime.put("초지-고잔",2);
+        station4TravelTime.put("고잔-중앙",2);
+        station4TravelTime.put("중앙-한대앞",3);
+        station4TravelTime.put("한대앞-상록수",2);
+        station4TravelTime.put("상록수-반월",3);
+        station4TravelTime.put("반월-대야미",3);
+        station4TravelTime.put("대야미-수리산",3);
+        station4TravelTime.put("수리산-산본",2);
+        station4TravelTime.put("산본-금정",5);
+        station4TravelTime.put("금정-범계",3);
+        station4TravelTime.put("범계-평촌",2);
+        station4TravelTime.put("평촌-인덕원",3);
+        station4TravelTime.put("인덕원-정부과천청사",3);
+        station4TravelTime.put("정부과천청사-과천",2);
+        station4TravelTime.put("과천-대공원",2);
+        station4TravelTime.put("대공원-경마공원",2);
+        station4TravelTime.put("경마공원-선바위",2);
+        station4TravelTime.put("선바위-남태령",3);
+        station4TravelTime.put("남태령-사당",3);
+        station4TravelTime.put("사당-총신대입구",2); // 총신대입구랑 이수역 이름이 두개인데 뭐로 해야함?
+        station4TravelTime.put("총신대입구-동작",3);
+        station4TravelTime.put("동작-이촌",3);
+        station4TravelTime.put("이촌-신용산",3);
+        station4TravelTime.put("신용산-삼각지",1);
+        station4TravelTime.put("삼각지-숙대입구",2);
+        station4TravelTime.put("숙대입구-서울역",2);
+        station4TravelTime.put("서울역-회현",2);
+        station4TravelTime.put("회현-명동",2);
+        station4TravelTime.put("명동-충무로",1);
+        station4TravelTime.put("충무로-동대문역사문화공원",3);
+        station4TravelTime.put("동대문역사문화공원-동대문",1);
+        station4TravelTime.put("동대문-혜화",3);
+        station4TravelTime.put("혜화-한성대입구",2);
+        station4TravelTime.put("한성대입구-성신여대입구",2);
+        station4TravelTime.put("성신여대입구-길음",2);
+        station4TravelTime.put("길음-미아사거리",3);
+        station4TravelTime.put("미아사거리-미아",2);
+        station4TravelTime.put("미아-수유",2);
+        station4TravelTime.put("수유-쌍문",3);
+        station4TravelTime.put("쌍문-창동",2);
+        station4TravelTime.put("창동-노원",2);
+        station4TravelTime.put("노원-상계",2);
+        station4TravelTime.put("상계-불암산",3);
+        //불암산에서 진접 까진 다른 경로
+        station4TravelTime.put("불암산-별내별가람",5);
+        station4TravelTime.put("별내별가람-오남",7);
+        station4TravelTime.put("오남-진접",3);
+
+
+
     }
     // 지하철 코드 - 도시 매핑 메서드
     public Map<Integer, Integer> getSubwayCodeToCityMapping() {
