@@ -25,6 +25,7 @@ public class SubwayArriveProcessDTO {
         private String subwayId;
         private String updnLine;
         private String trainLineNm;
+        private String barvlDt;
         private String statnId;
         private String statnNm;
         private String bstatnId;
@@ -32,7 +33,6 @@ public class SubwayArriveProcessDTO {
         private String arvlMsg2;
         private String arvlMsg3;
         private String arvlCd;
-        private String barvlDt; // "도착까지 남은 시간" 필드
-        private String recptnDt; // "수신 시간" 필드
+
     }
 }

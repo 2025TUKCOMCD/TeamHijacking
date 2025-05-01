@@ -3,12 +3,11 @@ package com.example.back.dto.bus.arrive;
 import lombok.Data;
 
 import java.util.List;
-
 @Data
 public class BusArriveProcessDTO {
 
     @Data
-    public static class arriveDetail{
+    public static class arriveDetail {
         private MsgBody msgBody;
     }
 
@@ -19,16 +18,7 @@ public class BusArriveProcessDTO {
 
     @Data
     public static class Item {
-        private String stNm;
-        private String busRouteAbrv;
-        private String rtNm;
-        private String plainNo1;
-        private String traTime1;
-        private String isArrive1;
-        private String arrmsg1;
-        private String plainNo2;
-        private String traTime2;
-        private String isArrive2;
-        private String arrmsg2;
+        private String arrmsg1; // 첫 번째 도착 메시지
+        private String arrmsg2; // 두 번째 도착 메시지
     }
 }

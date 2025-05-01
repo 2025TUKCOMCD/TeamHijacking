@@ -1,12 +1,12 @@
 package com.example.back.dto.bus.detail;
 
 import com.example.back.dto.route.RouteProcessDTO;
+import com.fasterxml.jackson.annotation.JsonFilter;
 import lombok.Data;
 
 import java.util.List;
 
-
-
+@JsonFilter("BusDetailProcess")
 @Data
 public class BusDetailProcessDTO {
 

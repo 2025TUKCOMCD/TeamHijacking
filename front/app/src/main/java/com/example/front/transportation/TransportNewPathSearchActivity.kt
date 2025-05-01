@@ -3,8 +3,7 @@ package com.example.front.transportation
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
-import android.os.Parcelable
-import android.util.Log
+
 import android.view.View
 import android.widget.LinearLayout
 import android.widget.ProgressBar
@@ -16,7 +15,6 @@ import com.example.front.transportation.data.searchPath.Route
 
 
 import androidx.activity.viewModels
-import com.example.front.transportation.data.searchPath.RouteId
 import com.example.front.transportation.processor.RealtimeProcessor
 
 
