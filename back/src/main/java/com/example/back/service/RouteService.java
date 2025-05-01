@@ -9,7 +9,8 @@ import com.example.back.dto.RouteIdSetDTO;
 import com.example.back.dto.bus.arrive.BusArriveProcessDTO;
 import com.example.back.dto.bus.detail.BusDetailProcessDTO;
 import com.example.back.dto.route.*;
-import com.example.back.dto.subway.arrive.SubwayArriveProcessDTO;
+import com.example.back.dto.subway.SubwayArriveProcessDTO;
+import com.google.common.cache.Cache;
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 import okhttp3.OkHttpClient;
@@ -22,15 +23,12 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 import java.io.IOException;
-import java.io.StringReader;
 import java.sql.Time;
 import java.time.*;
 import java.util.*;
 import java.util.concurrent.*;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 import java.util.stream.Collectors;
-
+import com.google.common.cache.CacheBuilder;
 
 @Service
 public class RouteService{
@@ -98,6 +96,11 @@ public class RouteService{
     private final ExecutorService executorService = Executors.newFixedThreadPool(4);
 
     // 비동기 경로 상세 정보 조회
+    private final Cache<RouteProcessDTO.Path, ResultDTO> resultCache = CacheBuilder.newBuilder()
+            .maximumSize(100) // Maximum number of entries in the cache
+            .expireAfterWrite(10, TimeUnit.MINUTES) // Cache expiration time
+            .build();
+
     private CompletableFuture<List<ResultDTO>> asyncRouteDetails(List<RouteProcessDTO.Path> paths) {
         // path별 비동기 처리
         // result 함수를 CompletableFuture로 감싸고, executorService를 사용하여 병렬로 처리
@@ -293,7 +296,7 @@ public class RouteService{
         }else if(!arrival.getBarvlDt().equals("0")){
             return handleBasedOnBarvlDt(arrival);
         }else if(arrival.getArvlMsg2() != null && arrival.getArvlMsg2().contains("번째 전역")) {
-            return handleBasedOnNthStation(arrival, startName, direction);
+            return handleBasedOnNthStation(arrival, startName, direction,subwayCode);
         }
         return arrival.getArvlMsg2();
     }
@@ -333,10 +336,10 @@ public class RouteService{
     }
 
     // NTH_STATION 기준 처리
-    private String handleBasedOnNthStation(SubwayArriveProcessDTO.RealtimeArrival arrival, String startName, String direction ) {
+    private String handleBasedOnNthStation(SubwayArriveProcessDTO.RealtimeArrival arrival, String startName, String direction,int subwayCode) {
         String stationName = getStationNameFromMsg(arrival.getArvlMsg2());
         List<String> route = subwayService.findRoute(startName, stationName);
-        int travelTime = subwayService.calculateTravelTime(route,direction); // 두 역 간 이동 시간 계산
+        int travelTime = subwayService.calculateTravelTime(route,direction,subwayCode); // 두 역 간 이동 시간 계산
 
         return travelTime > 0 ? travelTime + "분 후 도착 " : "경로 정보 없음 (" + arrival.getArvlMsg3() + ")";
     }
