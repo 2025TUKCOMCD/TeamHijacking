@@ -17,6 +17,7 @@ import com.example.front.transportation.data.searchPath.Route
 
 import androidx.activity.viewModels
 import com.example.front.transportation.data.searchPath.RouteId
+import com.example.front.transportation.processor.RealtimeProcessor
 
 
 class TransportNewPathSearchActivity : AppCompatActivity() {
@@ -81,6 +82,7 @@ class TransportNewPathSearchActivity : AppCompatActivity() {
 
                 // Set click listener for each route layout
                 routeLayouts[index].setOnClickListener {
+                    RealtimeProcessor.main()
                     // Create the Intent and add data
                     val intent = Intent(this, TransportInformationActivity::class.java)
                     intent.putIntegerArrayListExtra("pathTransitType", ArrayList(route.pathTransitType))
