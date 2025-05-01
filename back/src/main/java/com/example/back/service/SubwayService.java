@@ -11,7 +11,8 @@ import java.util.*;
 @Service
 public class SubwayService {
     private Map<String, LinkedList<String>> network;
-    private static Map<String, Integer> stationTravelTime;
+    private static Map<String, Integer> station1TravelTime;
+    private static Map<String, Integer> station4TravelTime;
     private static final Map<Integer, Integer> subwayCodeMap = Map.ofEntries(
             Map.entry(1, 1001), Map.entry(2, 1002), Map.entry(3, 1003), Map.entry(4, 1004),
             Map.entry(5, 1005), Map.entry(6, 1006), Map.entry(7, 1007), Map.entry(8, 1008),
@@ -20,118 +21,175 @@ public class SubwayService {
             Map.entry(113, 1092), Map.entry(114, 1093), Map.entry(117, 1094)
     );
     // 지하철 1호선의 구간별 걸리는 시간
-    private void initializeTravelTime() {
+    private void initialize1TravelTime() {
         //  메인 노선 (연천 ~ 구로)
-        stationTravelTime.put("연천-전곡", 8);
-        stationTravelTime.put("전곡-청산", 5);
-        stationTravelTime.put("청산-소요산", 6);
-        stationTravelTime.put("소요산-동두천", 4);
-        stationTravelTime.put("동두천-보산", 2);
-        stationTravelTime.put("보산-동두천중앙", 3);
-        stationTravelTime.put("동두천중앙-지행", 2);
-        stationTravelTime.put("지행-덕정", 5);
-        stationTravelTime.put("덕정-덕계", 3);
-        stationTravelTime.put("덕계-양주", 5);
-        stationTravelTime.put("양주-녹양", 3);
-        stationTravelTime.put("녹양-가능", 2);
-        stationTravelTime.put("가능-의정부", 2);
-        stationTravelTime.put("의정부-회룡", 3);
-        stationTravelTime.put("회룡-망월사", 3);
-        stationTravelTime.put("망월사-도봉산", 3);
-        stationTravelTime.put("도봉산-도봉", 2);
-        stationTravelTime.put("도봉-방학", 2);
-        stationTravelTime.put("방학-창동", 2);
-        stationTravelTime.put("창동-녹천", 2);
-        stationTravelTime.put("녹천-월계", 3);
-        stationTravelTime.put("월계-광운대", 3);
-        stationTravelTime.put("광운대-석계", 2);
-        stationTravelTime.put("석계-신이문", 3);
-        stationTravelTime.put("신이문-외대앞", 1);
-        stationTravelTime.put("외대앞-회기", 2);
-        stationTravelTime.put("회기-청량리", 3);
-        stationTravelTime.put("청량리-제기동", 2);
-        stationTravelTime.put("제기동-신설동", 2);
-        stationTravelTime.put("신설동-동묘앞", 2);
-        stationTravelTime.put("동묘앞-동대문", 2);
-        stationTravelTime.put("동대문-종로5가", 2);
-        stationTravelTime.put("종로5가-종로3가", 2);
-        stationTravelTime.put("종로3가-종각", 2);
-        stationTravelTime.put("종각-시청", 3);
-        stationTravelTime.put("시청-서울", 2);
-        stationTravelTime.put("서울-남영", 3);
-        stationTravelTime.put("남영-용산", 3);
-        stationTravelTime.put("용산-노량진", 3);
-        stationTravelTime.put("노량진-대방", 3);
-        stationTravelTime.put("대방-신길", 1);
-        stationTravelTime.put("신길-영등포", 3);
-        stationTravelTime.put("영등포-신도림", 2);
-        stationTravelTime.put("신도림-구로", 3);
+        station1TravelTime.put("연천-전곡", 8);
+        station1TravelTime.put("전곡-청산", 5);
+        station1TravelTime.put("청산-소요산", 6);
+        station1TravelTime.put("소요산-동두천", 4);
+        station1TravelTime.put("동두천-보산", 2);
+        station1TravelTime.put("보산-동두천중앙", 3);
+        station1TravelTime.put("동두천중앙-지행", 2);
+        station1TravelTime.put("지행-덕정", 5);
+        station1TravelTime.put("덕정-덕계", 3);
+        station1TravelTime.put("덕계-양주", 5);
+        station1TravelTime.put("양주-녹양", 3);
+        station1TravelTime.put("녹양-가능", 2);
+        station1TravelTime.put("가능-의정부", 2);
+        station1TravelTime.put("의정부-회룡", 3);
+        station1TravelTime.put("회룡-망월사", 3);
+        station1TravelTime.put("망월사-도봉산", 3);
+        station1TravelTime.put("도봉산-도봉", 2);
+        station1TravelTime.put("도봉-방학", 2);
+        station1TravelTime.put("방학-창동", 2);
+        station1TravelTime.put("창동-녹천", 2);
+        station1TravelTime.put("녹천-월계", 3);
+        station1TravelTime.put("월계-광운대", 3);
+        station1TravelTime.put("광운대-석계", 2);
+        station1TravelTime.put("석계-신이문", 3);
+        station1TravelTime.put("신이문-외대앞", 1);
+        station1TravelTime.put("외대앞-회기", 2);
+        station1TravelTime.put("회기-청량리", 3);
+        station1TravelTime.put("청량리-제기동", 2);
+        station1TravelTime.put("제기동-신설동", 2);
+        station1TravelTime.put("신설동-동묘앞", 2);
+        station1TravelTime.put("동묘앞-동대문", 2);
+        station1TravelTime.put("동대문-종로5가", 2);
+        station1TravelTime.put("종로5가-종로3가", 2);
+        station1TravelTime.put("종로3가-종각", 2);
+        station1TravelTime.put("종각-시청", 3);
+        station1TravelTime.put("시청-서울", 2);
+        station1TravelTime.put("서울-남영", 3);
+        station1TravelTime.put("남영-용산", 3);
+        station1TravelTime.put("용산-노량진", 3);
+        station1TravelTime.put("노량진-대방", 3);
+        station1TravelTime.put("대방-신길", 1);
+        station1TravelTime.put("신길-영등포", 3);
+        station1TravelTime.put("영등포-신도림", 2);
+        station1TravelTime.put("신도림-구로", 3);
 
         //  분기 1: 구로 → 인천 (구일~인천)
-        stationTravelTime.put("구로-구일", 2);
-        stationTravelTime.put("구일-개봉", 2);
-        stationTravelTime.put("개봉-오류동", 2);
-        stationTravelTime.put("오류동-온수", 3);
-        stationTravelTime.put("온수-역곡", 4);
-        stationTravelTime.put("역곡-소사", 3);
-        stationTravelTime.put("소사-부천", 3);
-        stationTravelTime.put("부천-중동", 3);
-        stationTravelTime.put("중동-송내", 3);
-        stationTravelTime.put("송내-부개", 2);
-        stationTravelTime.put("부개-부평", 3);
-        stationTravelTime.put("부평-백운", 2);
-        stationTravelTime.put("백운-동암", 2);
-        stationTravelTime.put("동암-간석", 2);
-        stationTravelTime.put("간석-주안", 3);
-        stationTravelTime.put("주안-도화", 2);
-        stationTravelTime.put("도화-제물포", 2);
-        stationTravelTime.put("제물포-도원", 2);
-        stationTravelTime.put("도원-동인천", 2);
-        stationTravelTime.put("동인천-인천", 2);
+        station1TravelTime.put("구로-구일", 2);
+        station1TravelTime.put("구일-개봉", 2);
+        station1TravelTime.put("개봉-오류동", 2);
+        station1TravelTime.put("오류동-온수", 3);
+        station1TravelTime.put("온수-역곡", 4);
+        station1TravelTime.put("역곡-소사", 3);
+        station1TravelTime.put("소사-부천", 3);
+        station1TravelTime.put("부천-중동", 3);
+        station1TravelTime.put("중동-송내", 3);
+        station1TravelTime.put("송내-부개", 2);
+        station1TravelTime.put("부개-부평", 3);
+        station1TravelTime.put("부평-백운", 2);
+        station1TravelTime.put("백운-동암", 2);
+        station1TravelTime.put("동암-간석", 2);
+        station1TravelTime.put("간석-주안", 3);
+        station1TravelTime.put("주안-도화", 2);
+        station1TravelTime.put("도화-제물포", 2);
+        station1TravelTime.put("제물포-도원", 2);
+        station1TravelTime.put("도원-동인천", 2);
+        station1TravelTime.put("동인천-인천", 2);
 
         // ️ 분기 2: 구로 → 금천구청 → 병점
-        stationTravelTime.put("구로-가산디지털단지", 4);
-        stationTravelTime.put("가산디지털단지-독산", 3);
-        stationTravelTime.put("독산-금천구청", 2);
-        stationTravelTime.put("금천구청-석수", 3);
-        stationTravelTime.put("석수-관악", 3);
-        stationTravelTime.put("관악-안양", 3);
-        stationTravelTime.put("안양-명학", 3);
-        stationTravelTime.put("명학-금정", 2);
-        stationTravelTime.put("금정-군포", 3);
-        stationTravelTime.put("군포-당정", 2);
-        stationTravelTime.put("당정-의왕", 3);
-        stationTravelTime.put("의왕-성균관대", 3);
-        stationTravelTime.put("성균관대-화서", 3);
-        stationTravelTime.put("화서-수원", 3);
-        stationTravelTime.put("수원-세류", 4);
-        stationTravelTime.put("세류-병점", 4);
+        station1TravelTime.put("구로-가산디지털단지", 4);
+        station1TravelTime.put("가산디지털단지-독산", 3);
+        station1TravelTime.put("독산-금천구청", 2);
+        station1TravelTime.put("금천구청-석수", 3);
+        station1TravelTime.put("석수-관악", 3);
+        station1TravelTime.put("관악-안양", 3);
+        station1TravelTime.put("안양-명학", 3);
+        station1TravelTime.put("명학-금정", 2);
+        station1TravelTime.put("금정-군포", 3);
+        station1TravelTime.put("군포-당정", 2);
+        station1TravelTime.put("당정-의왕", 3);
+        station1TravelTime.put("의왕-성균관대", 3);
+        station1TravelTime.put("성균관대-화서", 3);
+        station1TravelTime.put("화서-수원", 3);
+        station1TravelTime.put("수원-세류", 4);
+        station1TravelTime.put("세류-병점", 4);
 
         // 분기 2-1: 구로 → 광명
-        stationTravelTime.put("금천구청-광명", 5);
+        station1TravelTime.put("금천구청-광명", 5);
 
         // 분기 2-2: 병점 → 서동탄
-        stationTravelTime.put("병점-서동탄", 6);
+        station1TravelTime.put("병점-서동탄", 6);
         // 분기 2-3: 병점 → 신창
-        stationTravelTime.put("병점-세마", 3);
-        stationTravelTime.put("세마-오산대", 3);
-        stationTravelTime.put("오산대-오산", 4);
-        stationTravelTime.put("오산-진위", 3);
-        stationTravelTime.put("진위-송탄", 4);
-        stationTravelTime.put("송탄-서정리", 3);
-        stationTravelTime.put("서정리-지제", 4);
-        stationTravelTime.put("지제-평택", 4);
-        stationTravelTime.put("평택-성환", 4);
-        stationTravelTime.put("성환-직산", 3);
-        stationTravelTime.put("직산-두정", 5);
-        stationTravelTime.put("두정-천안", 5);
-        stationTravelTime.put("천안-봉명", 2);
-        stationTravelTime.put("봉명-쌍용(나사렛대)", 3);
-        stationTravelTime.put("쌍용(나사렛대)-아산", 2);
-        stationTravelTime.put("아산-탕정", 3);
-        stationTravelTime.put("탕정-배방", 4);
-        stationTravelTime.put("배방-온양온천", 4);
-        stationTravelTime.put("온양온천-신창", 5);
+        station1TravelTime.put("병점-세마", 3);
+        station1TravelTime.put("세마-오산대", 3);
+        station1TravelTime.put("오산대-오산", 4);
+        station1TravelTime.put("오산-진위", 3);
+        station1TravelTime.put("진위-송탄", 4);
+        station1TravelTime.put("송탄-서정리", 3);
+        station1TravelTime.put("서정리-지제", 4);
+        station1TravelTime.put("지제-평택", 4);
+        station1TravelTime.put("평택-성환", 4);
+        station1TravelTime.put("성환-직산", 3);
+        station1TravelTime.put("직산-두정", 5);
+        station1TravelTime.put("두정-천안", 5);
+        station1TravelTime.put("천안-봉명", 2);
+        station1TravelTime.put("봉명-쌍용(나사렛대)", 3);
+        station1TravelTime.put("쌍용(나사렛대)-아산", 2);
+        station1TravelTime.put("아산-탕정", 3);
+        station1TravelTime.put("탕정-배방", 4);
+        station1TravelTime.put("배방-온양온천", 4);
+        station1TravelTime.put("온양온천-신창", 5);
+    }
+    private void initialize4TravelTime() {
+        //  메인 노선 (오이도 ~ 불암산)
+        station4TravelTime.put("오이도-정왕",3);
+        station4TravelTime.put("정왕-신길온천",3);
+        station4TravelTime.put("신길온천-안산",3);
+        station4TravelTime.put("안산-초지",3);
+        station4TravelTime.put("초지-고잔",2);
+        station4TravelTime.put("고잔-중앙",2);
+        station4TravelTime.put("중앙-한대앞",3);
+        station4TravelTime.put("한대앞-상록수",2);
+        station4TravelTime.put("상록수-반월",3);
+        station4TravelTime.put("반월-대야미",3);
+        station4TravelTime.put("대야미-수리산",3);
+        station4TravelTime.put("수리산-산본",2);
+        station4TravelTime.put("산본-금정",5);
+        station4TravelTime.put("금정-범계",3);
+        station4TravelTime.put("범계-평촌",2);
+        station4TravelTime.put("평촌-인덕원",3);
+        station4TravelTime.put("인덕원-정부과천청사",3);
+        station4TravelTime.put("정부과천청사-과천",2);
+        station4TravelTime.put("과천-대공원",2);
+        station4TravelTime.put("대공원-경마공원",2);
+        station4TravelTime.put("경마공원-선바위",2);
+        station4TravelTime.put("선바위-남태령",3);
+        station4TravelTime.put("남태령-사당",3);
+        station4TravelTime.put("사당-총신대입구",2); // 총신대입구랑 이수역 이름이 두개인데 뭐로 해야함?
+        station4TravelTime.put("총신대입구-동작",3);
+        station4TravelTime.put("동작-이촌",3);
+        station4TravelTime.put("이촌-신용산",3);
+        station4TravelTime.put("신용산-삼각지",1);
+        station4TravelTime.put("삼각지-숙대입구",2);
+        station4TravelTime.put("숙대입구-서울역",2);
+        station4TravelTime.put("서울역-회현",2);
+        station4TravelTime.put("회현-명동",2);
+        station4TravelTime.put("명동-충무로",1);
+        station4TravelTime.put("충무로-동대문역사문화공원",3);
+        station4TravelTime.put("동대문역사문화공원-동대문",1);
+        station4TravelTime.put("동대문-혜화",3);
+        station4TravelTime.put("혜화-한성대입구",2);
+        station4TravelTime.put("한성대입구-성신여대입구",2);
+        station4TravelTime.put("성신여대입구-길음",2);
+        station4TravelTime.put("길음-미아사거리",3);
+        station4TravelTime.put("미아사거리-미아",2);
+        station4TravelTime.put("미아-수유",2);
+        station4TravelTime.put("수유-쌍문",3);
+        station4TravelTime.put("쌍문-창동",2);
+        station4TravelTime.put("창동-노원",2);
+        station4TravelTime.put("노원-상계",2);
+        station4TravelTime.put("상계-불암산",3);
+        //불암산에서 진접 까진 다른 경로
+        station4TravelTime.put("불암산-별내별가람",5);
+        station4TravelTime.put("별내별가람-오남",7);
+        station4TravelTime.put("오남-진접",3);
+
+
+
     }
     // 지하철 코드 - 도시 매핑 메서드
     public Map<Integer, Integer> getSubwayCodeToCityMapping() {
@@ -213,13 +271,14 @@ public class SubwayService {
     // 생성자: 네트워크를 구축합니다.
     private SubwayService() {
         network = new HashMap<>();
-        stationTravelTime = new HashMap<>();
-        buildNetwork();
-        initializeTravelTime();
+        station1TravelTime = new HashMap<>();
+        //station2TravelTime = new HashMap<>();
+        build1Network();
+        initialize1TravelTime();
     }
 
     // 네트워크 구축: 메인 노선 및 분기 노선들을 추가합니다.
-    private void buildNetwork() {
+    private void build1Network() {
         // 메인 노선 (연천 ~ 구로)
         String[] mainBranch = {
                 "연천", "전곡", "청산", "소요산", "동두천", "보산", "동두천중앙",
@@ -359,16 +418,33 @@ public class SubwayService {
         return new ArrayList<>();
     }
 
-    static int calculateTravelTime(List<String> route) {
+    static int calculateTravelTime(List<String> route, String direction,int subwayCode) {
         int totalTime = 0;
-
-        // 두 역 간 이동 시간을 더하기
-        for (int i = 0; i < route.size() - 1; i++) {
-            String key = route.get(i) + "-" + route.get(i + 1);
-            System.out.println("Key: " + key);
-            totalTime += stationTravelTime.getOrDefault(key, 0);
+        // direction에 따른 route.get(i)와 route.get(i+1) 간의 이동 시간 계산
+        // 상행
+        if(direction.equals("상행")){
+            for (int i = 0; i < route.size() - 1; i++) {
+                String key = route.get(i) + "-" + route.get(i + 1);
+                System.out.println("Key: " + key);
+                // stationId에 따른 네트워크 선택 및 시간 계산
+                if (subwayCode == 1) {
+                    totalTime += station1TravelTime.getOrDefault(key, 0);
+                }
+                System.out.println("Total Time: " + totalTime);
+            }
         }
-
+        // 하행
+        else if(direction.equals("하행")){
+            for (int i = route.size() - 1; i > 0; i--) {
+                String key = route.get(i) + "-" + route.get(i - 1);
+                System.out.println("Key: " + key);
+                if(subwayCode == 1) {
+                    totalTime += station1TravelTime.getOrDefault(key, 0);
+                }
+                System.out.println("Total Time: " + totalTime);
+            }
+        }
+        // 두 역 간 이동 시간을 더하기
         return totalTime;
     }
 
