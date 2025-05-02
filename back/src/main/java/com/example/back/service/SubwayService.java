@@ -134,6 +134,7 @@ public class SubwayService {
         station1TravelTime.put("배방-온양온천", 4);
         station1TravelTime.put("온양온천-신창", 5);
     }
+    //지하철 4호선의 걸리는 시간
     private void initialize4TravelTime() {
         //  메인 노선 (오이도 ~ 불암산)
         station4TravelTime.put("오이도-정왕",3);
@@ -188,6 +189,34 @@ public class SubwayService {
         station4TravelTime.put("별내별가람-오남",7);
         station4TravelTime.put("오남-진접",3);
 
+
+
+    }
+    // 지하철 8호선의 구간별 걸리는 시간
+    private void initialize8TravelTime() {
+        station8TravelTime.put("모란-수진",1);
+        station8TravelTime.put("수란-신흥",2);
+        station8TravelTime.put("신흥-단대오거리",2);
+        station8TravelTime.put("단대오거리-남한산성입구",1);
+        station8TravelTime.put("남한산성입구-산성",3);
+        station8TravelTime.put("산성-남위례",2);
+        station8TravelTime.put("남위례-복정",2);
+        station8TravelTime.put("복정-장지",2);
+        station8TravelTime.put("장지-문정",2);
+        station8TravelTime.put("문정-가락시장",2);//체크 필
+        station8TravelTime.put("가락시장-송파",1);
+        station8TravelTime.put("송파-석촌",2);
+        station8TravelTime.put("석촌-잠실",3);
+        station8TravelTime.put("잠실-몽촌토성",1);
+        station8TravelTime.put("몽촌토성-강동구청",3);
+        station8TravelTime.put("강동구청-천호",2);
+        station8TravelTime.put("천호-암사",2);
+        station8TravelTime.put("암사-암사역사공원",2);
+        station8TravelTime.put("암사역사공원-장자호수공원",4);
+        station8TravelTime.put("장자호수공원-구리",3);
+        station8TravelTime.put("구리-동구릉",2);
+        station8TravelTime.put("동구릉-다산",3);
+        station8TravelTime.put("다산-별내",3);
 
 
     }
@@ -324,6 +353,15 @@ public class SubwayService {
                 "아산", "탕정", "배방", "온양온천", "신창"
         };
         addRoute(network, branch2_2_2);
+    }.
+    private void build8Network() {
+        String[] mainBranch = {
+                "모란", "수진", "신흥", "단대오거리", "남한산성입구", "산성", "남위례",
+                "복정", "장지", "문정", "가락시장", "송파", "석촌", "잠실", "몽촌토성",
+                "강동구청", "천호", "암사", "암사역사공원", "장자호수공원", "구리", "동구릉",
+                "다산", "별내"
+        }
+
     }
     // 경로 탐색
     public List<String> findRoute(String start, String end) {
