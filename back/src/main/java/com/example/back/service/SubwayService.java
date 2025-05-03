@@ -134,6 +134,7 @@ public class SubwayService {
         station1TravelTime.put("배방-온양온천", 4);
         station1TravelTime.put("온양온천-신창", 5);
     }
+    //지하철 4호선의 걸리는 시간
     private void initialize4TravelTime() {
         //  메인 노선 (오이도 ~ 불암산)
         station4TravelTime.put("오이도-정왕",3);
@@ -187,8 +188,54 @@ public class SubwayService {
         station4TravelTime.put("불암산-별내별가람",5);
         station4TravelTime.put("별내별가람-오남",7);
         station4TravelTime.put("오남-진접",3);
-    }
 
+
+
+    }
+    // 지하철 8호선의 구간별 걸리는 시간
+    private void initialize8TravelTime() {
+        station8TravelTime.put("모란-수진",1);
+        station8TravelTime.put("수란-신흥",2);
+        station8TravelTime.put("신흥-단대오거리",2);
+        station8TravelTime.put("단대오거리-남한산성입구(성남법원,검찰청)",1);
+        station8TravelTime.put("남한산성입구(성남법원,검찰청)-산성",3);
+        station8TravelTime.put("산성-남위례",2);
+        station8TravelTime.put("남위례-복정",2);
+        station8TravelTime.put("복정-장지",2);
+        station8TravelTime.put("장지-문정",2);
+        station8TravelTime.put("문정-가락시장",2);
+        station8TravelTime.put("가락시장-송파",1);
+        station8TravelTime.put("송파-석촌",2);
+        station8TravelTime.put("석촌-잠실",3);
+        station8TravelTime.put("잠실-몽촌토성(평화의문)",1);
+        station8TravelTime.put("몽촌토성(평화의문)-강동구청",3);
+        station8TravelTime.put("강동구청-천호(풍납토성)",2);
+        station8TravelTime.put("천호(풍납토성)-암사",2);
+        station8TravelTime.put("암사-암사역사공원",2);
+        station8TravelTime.put("암사역사공원-장자호수공원",4);
+        station8TravelTime.put("장자호수공원-구리",3);
+        station8TravelTime.put("구리-동구릉",2);
+        station8TravelTime.put("동구릉-다산",3);
+        station8TravelTime.put("다산-별내",3);
+
+
+    }
+    // 지하철 공항철도의 구간별 걸리는 시간 Airport Railroad
+    private void initializeARTravelTime() {
+        stationARTravelTime.put("인천공항2터미널-인천공항1터미널",8);
+        stationARTravelTime.put("인천공항1터미널-공항화물청사",5);
+        stationARTravelTime.put("공항화물청사-운서",4);
+        stationARTravelTime.put("운서-영종");
+        stationARTravelTime.put("영종-청라국제도시",9);
+        stationARTravelTime.put("청라국제도시-검암",5);
+        stationARTravelTime.put("검암-계양",6);
+        stationARTravelTime.put("계양-김포공항",6);
+        stationARTravelTime.put("김포공항-마곡나루",3);
+        stationARTravelTime.put("마곡나루-디지털미디어시티",8);
+        stationARTravelTime.put("디지털미디어시티-홍대입구",4);
+        stationARTravelTime.put("홍대입구-공덕",3);
+        stationARTravelTime.put("공덕-서울",4);
+    }
     // 지하철 코드 - 도시 매핑 메서드
     public Map<Integer, Integer> getSubwayCodeToCityMapping() {
         Map<Integer, Integer> subwayCodeToCity = new HashMap<>();
@@ -211,7 +258,6 @@ public class SubwayService {
 
         return subwayCodeToCity;
     }
-
     // 오디세이 -> 서울 지하철 노선 코드 변환
     public int convertSubwayCode(int subwayCode) {
         return subwayCodeMap.getOrDefault(subwayCode, 0);
@@ -323,6 +369,23 @@ public class SubwayService {
                 "아산", "탕정", "배방", "온양온천", "신창"
         };
         addRoute(network, branch2_2_2);
+    }.
+    private void build8Network() {
+        String[] mainBranch = {
+                "모란", "수진", "신흥", "단대오거리", "남한산성입구(성남법원,검찰청)", "산성", "남위례",
+                "복정", "장지", "문정", "가락시장", "송파", "석촌", "잠실", "몽촌토성(평화의문)",
+                "강동구청", "천호(풍납토성)", "암사", "암사역사공원", "장자호수공원", "구리", "동구릉",
+                "다산", "별내"
+        };
+        //addRoute(network, mainBranch); <- 질문1 이거 이름 다르게 안하고 추가해도 되는겨?
+
+    }
+    private void buildARNetwork() {
+        String[] mainBranch = {
+                "인천공항2터미널", "인천공항1터미널", "공항화물청사", "운서", "영종", "청라국제도시",
+                "검암", "계양", "김포공항", "마곡나루", "디지털미디어시티", "홍대입구", "공덕", "서울역"
+        }
+        //addRoute(network, mainBranch;;<- 위와같음
     }
     private void build4Network() {
         // 메인 노선 (연천 ~ 구로)
