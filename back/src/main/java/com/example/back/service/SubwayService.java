@@ -159,14 +159,14 @@ public class SubwayService {
         station4TravelTime.put("경마공원-선바위",2);
         station4TravelTime.put("선바위-남태령",3);
         station4TravelTime.put("남태령-사당",3);
-        station4TravelTime.put("사당-총신대입구",2); // 총신대입구랑 이수역 이름이 두개인데 뭐로 해야함?
+        station4TravelTime.put("사당-총신대입구(이수)",2); // 총신대입구랑 이수역 이름이 두개인데 뭐로 해야함?
         station4TravelTime.put("총신대입구-동작",3);
         station4TravelTime.put("동작-이촌",3);
         station4TravelTime.put("이촌-신용산",3);
         station4TravelTime.put("신용산-삼각지",1);
         station4TravelTime.put("삼각지-숙대입구",2);
-        station4TravelTime.put("숙대입구-서울역",2);
-        station4TravelTime.put("서울역-회현",2);
+        station4TravelTime.put("숙대입구-서울",2);
+        station4TravelTime.put("서울-회현",2);
         station4TravelTime.put("회현-명동",2);
         station4TravelTime.put("명동-충무로",1);
         station4TravelTime.put("충무로-동대문역사문화공원",3);
@@ -187,10 +187,8 @@ public class SubwayService {
         station4TravelTime.put("불암산-별내별가람",5);
         station4TravelTime.put("별내별가람-오남",7);
         station4TravelTime.put("오남-진접",3);
-
-
-
     }
+
     // 지하철 코드 - 도시 매핑 메서드
     public Map<Integer, Integer> getSubwayCodeToCityMapping() {
         Map<Integer, Integer> subwayCodeToCity = new HashMap<>();
@@ -213,6 +211,7 @@ public class SubwayService {
 
         return subwayCodeToCity;
     }
+
     // 오디세이 -> 서울 지하철 노선 코드 변환
     public int convertSubwayCode(int subwayCode) {
         return subwayCodeMap.getOrDefault(subwayCode, 0);
@@ -324,6 +323,19 @@ public class SubwayService {
                 "아산", "탕정", "배방", "온양온천", "신창"
         };
         addRoute(network, branch2_2_2);
+    }
+    private void build4Network() {
+        // 메인 노선 (연천 ~ 구로)
+        String[] mainBranch = {
+                "오이도", "정왕", "신길온천", "안산", "초지", "고잔", "중앙", "한대앞", "상록수",
+                "반월", "대야미", "수리산", "산본", "금정", "범계", "평촌", "인덕원",
+                "정부과천청사", "과천", "대공원", "경마공원", "선바위", "남태령", "사당",
+                "총신대입구(이수)", "동작", "이촌", "신용산", "삼각지", "숙대입구", "서울",
+                "회현", "명동", "충무로", "동대문역사문화공원", "동대문", "혜화",
+                "한성대입구", "성신여대입구", "길음", "미아사거리", "미아", "수유",
+                "쌍문", "창동", "노원", "상계", "불암산"
+        };
+        addRoute(network, mainBranch);
     }
     // 경로 탐색
     public List<String> findRoute(String start, String end) {
