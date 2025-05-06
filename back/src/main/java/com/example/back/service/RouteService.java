@@ -1,8 +1,5 @@
 package com.example.back.service;
 
-import com.example.back.api.BusApi;
-import com.example.back.api.RouteApi;
-import com.example.back.api.SubwayApi;
 import com.example.back.domain.TimeTable;
 import com.example.back.dto.ResultDTO;
 import com.example.back.dto.RouteIdSetDTO;
@@ -11,17 +8,9 @@ import com.example.back.dto.bus.detail.BusDetailProcessDTO;
 import com.example.back.dto.route.*;
 import com.example.back.dto.subway.SubwayArriveProcessDTO;
 import com.google.common.cache.Cache;
-import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
-import okhttp3.OkHttpClient;
-import okhttp3.ResponseBody;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-import retrofit2.Call;
-import retrofit2.Response;
-import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
 import java.io.IOException;
 import java.sql.Time;
 import java.time.*;
@@ -32,9 +21,6 @@ import com.google.common.cache.CacheBuilder;
 
 @Service
 public class RouteService{
-    private final String ODsayBaseURL = "https://api.odsay.com/v1/api/";
-    private final String Seoul_BusBaseURL = "http://ws.bus.go.kr/api/rest/";
-    private final String Seoul_SubwayBaseURL = "http://swopenAPI.seoul.go.kr/api/subway/";
 
     @Autowired
     private RouteCalService routeCalService;
@@ -48,14 +34,8 @@ public class RouteService{
     @Autowired
     private BusService busService;
 
-    @Value("${ODsay.apikey}")
-    private String Odsay_apiKey;
-
-    @Value(("${Public_Bus_APIKEY}"))
-    private String Seoul_Bus_apiKey;
-
-    @Value(("${Public_Subway_APIKEY}"))
-    private String Seoul_Subway_apiKey;
+    @Autowired
+    private APIService apiService;
 
     enum CompareCriterion {
         ARVL_CD, BARVL_DT, NTH_STATION, NONE
@@ -63,35 +43,6 @@ public class RouteService{
 
     CompareCriterion lastCriterion = CompareCriterion.NONE;
 
-
-    private final Gson gson = new Gson();
-    private final OkHttpClient client = new OkHttpClient.Builder()
-            .connectTimeout(60, TimeUnit.SECONDS)
-            .readTimeout(60, TimeUnit.SECONDS)
-            .writeTimeout(60, TimeUnit.SECONDS)
-            .build();
-
-    private final Retrofit OdsayRetrofit = new Retrofit.Builder()
-            .baseUrl(ODsayBaseURL)
-            .client(client)
-            .addConverterFactory(GsonConverterFactory.create(gson))
-            .build();
-
-    private final Retrofit BusRetrofit = new Retrofit.Builder()
-            .baseUrl(Seoul_BusBaseURL)
-            .client(client)
-            .addConverterFactory(GsonConverterFactory.create(gson))
-            .build();
-
-    private final Retrofit SubwayRetrofit = new Retrofit.Builder()
-            .baseUrl(Seoul_SubwayBaseURL)
-            .client(client)
-            .addConverterFactory(GsonConverterFactory.create(gson))
-            .build();
-
-    private final RouteApi routeApi = OdsayRetrofit.create(RouteApi.class);
-    private final BusApi busApi = BusRetrofit.create(BusApi.class);
-    private final SubwayApi subwayApi = SubwayRetrofit.create(SubwayApi.class);
 
     private final ExecutorService executorService = Executors.newFixedThreadPool(4);
 
@@ -101,8 +52,8 @@ public class RouteService{
             .expireAfterWrite(10, TimeUnit.MINUTES) // Cache expiration time
             .build();
 
+    // path별 비동기 처리
     private CompletableFuture<List<ResultDTO>> asyncRouteDetails(List<RouteProcessDTO.Path> paths) {
-        // path별 비동기 처리
         // result 함수를 CompletableFuture로 감싸고, executorService를 사용하여 병렬로 처리
         List<CompletableFuture<ResultDTO>> futureList = paths.stream()
                 .map(path -> CompletableFuture.supplyAsync(() -> result(path), executorService))
@@ -111,111 +62,28 @@ public class RouteService{
                 .thenApply(v -> futureList.stream().map(CompletableFuture::join).collect(Collectors.toList()));
     }
 
-    // Odsay 버스 상세 정보 조회
-    private BusDetailProcessDTO.BusLaneDetail fetchBusLaneDetail(int busID) throws IOException {
-        Call<ResponseBody> call = routeApi.busLaneDetail(busID, Odsay_apiKey);
-        ResponseBody responseBody = call.execute().body();
-
-        if (responseBody != null) {
-            String rawJson = responseBody.string();
-            BusDetailProcessDTO.BusLaneDetail parsedResponse = gson.fromJson(rawJson, BusDetailProcessDTO.BusLaneDetail.class);
-            return parsedResponse != null ? parsedResponse : new BusDetailProcessDTO.BusLaneDetail();
-        } else {
-            return new BusDetailProcessDTO.BusLaneDetail();
-        }
-    }
-
-    // Odsay 버스 도착 정보 조회
-    public List<BusArriveProcessDTO.arriveDetail> fetchAndBusArrive(int stId, int busRouteId, int ord) {
-        try {
-            Call<ResponseBody> call = busApi.getArrInfoByRoute(
-                    Seoul_Bus_apiKey,
-                    stId,
-                    busRouteId,
-                    ord,
-                    "json"
-            );
-            ResponseBody responseBody = call.execute().body();
-            if (responseBody != null) {
-                String rawJson = responseBody.string();
-                BusArriveProcessDTO.arriveDetail parsedResponse = gson.fromJson(rawJson, BusArriveProcessDTO.arriveDetail.class);
-
-                // 리스트 형태로 반환
-                return parsedResponse != null ? List.of(parsedResponse) : List.of();
-            }else {
-                return List.of();
-            }
-        } catch (IOException | JsonSyntaxException e) {
-            e.printStackTrace();
-        }
-        return List.of(); // 예외 상황에서도 빈 리스트 반환
-    }
-
-    // 서울 지하철 도착 정보 조회
-    public List<SubwayArriveProcessDTO.RealtimeArrival> fetchAndSubwayArrive(String stationName) {
-        try {
-            // Retrofit 호출
-            System.out.println("Station Name: " + stationName);
-            Call<ResponseBody> call = subwayApi.getRealtimeStationArrival(Seoul_Subway_apiKey, stationName);
-            Response<ResponseBody> response = call.execute(); // 동기 호출
-
-            // API 응답 확인
-            if (response.isSuccessful() && response.body() != null) {
-                ResponseBody responseBody = response.body();
-                String rawJson = responseBody.string();
-                SubwayArriveProcessDTO subwayArriveProcessDTO = gson.fromJson(rawJson, SubwayArriveProcessDTO.class);
-
-                // 도착 정보 리스트 반환
-                return subwayArriveProcessDTO.getRealtimeArrivalList();
-            } else {
-                // API 호출 실패 시 로그 출력
-                System.err.println("API 호출 실패 - 상태 코드: " + response.code());
-                System.err.println("응답 메시지: " + response.message());
-            }
-        } catch (IOException e) {
-            // 예외 처리
-            System.err.println("API 호출 중 예외 발생: " + e.getMessage());
-        }
-        // 오류 발생 시 빈 리스트 반환
-        return List.of();
-    }
-
     // 경로 조회 및 처리
     public List<ResultDTO> fetchAndProcessRoutes(RouteDTO routeDTO) {
         try {
             long startTime = System.nanoTime(); // 시작 시간 측정
-            Call<ResponseBody> call = routeApi.searchPubTransPathT(
-                    routeDTO.getStartLat(),
-                    routeDTO.getStartLng(),
-                    routeDTO.getEndLat(),
-                    routeDTO.getEndLng(),
-                    Odsay_apiKey
-            );
+            RouteProcessDTO.SearchPath parsedResponse = apiService.fetchAndProcessRoutes(routeDTO);
+            if (parsedResponse != null && parsedResponse.getResult() != null) {
+                List<RouteProcessDTO.Path> paths = parsedResponse.getResult().getPath();
+                if (paths != null) {
+                    List<RouteProcessDTO.Path> sortedPaths = paths.stream()
+                            .map(path -> new AbstractMap.SimpleEntry<>(path, routeCalService.calculateRouteScore(path)))
+                            .sorted(Map.Entry.comparingByValue())
+                            .limit(3)
+                            .map(Map.Entry::getKey)
+                            .collect(Collectors.toList());
 
-            ResponseBody responseBody = call.execute().body();
-            if (responseBody != null) {
-                String rawJson = responseBody.string();
-                RouteProcessDTO.SearchPath parsedResponse = gson.fromJson(rawJson, RouteProcessDTO.SearchPath.class);
-                if (parsedResponse != null && parsedResponse.getResult() != null) {
-                    List<RouteProcessDTO.Path> paths = parsedResponse.getResult().getPath();
-                    if (paths != null) {
-                        List<RouteProcessDTO.Path> sortedPaths = paths.stream()
-                                .map(path -> new AbstractMap.SimpleEntry<>(path, routeCalService.calculateRouteScore(path)))
-                                .sorted(Map.Entry.comparingByValue())
-                                .limit(3)
-                                .map(Map.Entry::getKey)
-                                .collect(Collectors.toList());
-
-                        CompletableFuture<List<ResultDTO>> futureResult = asyncRouteDetails(sortedPaths);
-                        long endTime = System.nanoTime();
-                        System.out.println("⏳ GSON 처리 시간: " + (endTime - startTime) / 1_000_000.0 + " ms");
-                        return futureResult.join();
-                    }
+                    CompletableFuture<List<ResultDTO>> futureResult = asyncRouteDetails(sortedPaths);
+                    long endTime = System.nanoTime();
+                    System.out.println("⏳ GSON 처리 시간: " + (endTime - startTime) / 1_000_000.0 + " ms");
+                    return futureResult.join();
                 }
             }
-            return Collections.emptyList();
-
-
+        return Collections.emptyList();
         } catch (IOException | JsonSyntaxException e) {
             e.printStackTrace();
             return Collections.emptyList();
@@ -419,7 +287,12 @@ public class RouteService{
                             System.out.print("statn_id" + statn_id);
 
                             // 실시간 도착 정보 조회
-                            List<SubwayArriveProcessDTO.RealtimeArrival> realtimeArrivals = fetchAndSubwayArrive(startName);
+                            List<SubwayArriveProcessDTO.RealtimeArrival> realtimeArrivals = null;
+                            try {
+                                realtimeArrivals = apiService.fetchAndSubwayArrive(startName).getRealtimeArrivalList();
+                            } catch (IOException e) {
+                                throw new RuntimeException(e);
+                            }
                             // 도착 정보가 null이 아니고 비어있지 않은 경우
                             if (realtimeArrivals != null && !realtimeArrivals.isEmpty()) {
                                 // 도착 정보 필터링
@@ -619,7 +492,7 @@ public class RouteService{
                 String predictTime2 = null;
 
                     // fetchBusLaneDetail 함수 호출 -> jsonParser 함수 호출
-                BusDetailProcessDTO.BusLaneDetail busDetail = fetchBusLaneDetail(busID);
+                BusDetailProcessDTO.BusLaneDetail busDetail = apiService.fetchBusLaneDetail(busID);
 
                 // compareStationIDs 함수 호출
                 List<Integer> stationInfos = busService.compareStationIDs(busDetail, startID, endID);
@@ -643,7 +516,9 @@ public class RouteService{
                 //if(index < 2) {
                     System.out.println("index" + index);
                     // 도착 정보 조회
-                    List<BusArriveProcessDTO.arriveDetail> arriveDetails = fetchAndBusArrive(startLocalStationID, busLocalBlID, startStationInfo);
+                    List<BusArriveProcessDTO.arriveDetail> arriveDetails = List.of(apiService.fetchAndBusArrive(startLocalStationID, busLocalBlID, startStationInfo));
+
+
 
                     if (arriveDetails != null && arriveDetails.get(0).getMsgBody() != null && arriveDetails.get(0).getMsgBody().getItemList() != null) {
                         BusArriveProcessDTO.Item firstItem = arriveDetails.get(0).getMsgBody().getItemList().get(0);
