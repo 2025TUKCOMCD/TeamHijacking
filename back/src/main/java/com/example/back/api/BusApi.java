@@ -24,12 +24,5 @@ public interface BusApi {
             @Query("resultType")String resultType
     );
 
-    @GET("6410000/busarrivalservice/v2/getBusArrivalItemv2")
-    Call<ResponseBody> getBusArrivalItemv2(
-            @Query("serviceKey") String serviceKey,
-            @Query("stationId") int stationId,
-            @Query("routeId") int routeId,
-            @Query("staOrder") int staOrder,
-            @Query("format") String format
-    );
+
 }
