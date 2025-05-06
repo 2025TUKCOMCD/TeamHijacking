@@ -13,11 +13,13 @@ public class RealtimeController implements WebSocketConfigurer {
 
     private final RealtimeWebSocketHandler realtimeWebSocketHandler;
 
+    // RealtimeWebSocketHandler를 주입받는 생성자
     @Autowired
     public RealtimeController(RealtimeWebSocketHandler realtimeWebSocketHandler) {
         this.realtimeWebSocketHandler = realtimeWebSocketHandler;
     }
 
+    // WebSocketConfigurer 인터페이스의 메서드 구현
     @Override
     public void registerWebSocketHandlers(WebSocketHandlerRegistry registry) {
         registry.addHandler(realtimeWebSocketHandler, "/realtime")
