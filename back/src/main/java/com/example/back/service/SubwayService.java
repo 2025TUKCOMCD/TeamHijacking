@@ -51,7 +51,6 @@ public class SubwayService {
     public Map<String, Object> getTimeAndDayType(int subwayCode) {
         Time seoulTime = getSeoulCurrentTime();
         String currentDayType = getCurrentDayType(subwayCode);
-        System.out.println("현재 요일 타입: " + currentDayType);
         Map<String, Object> result = new HashMap<>();
         result.put("seoulTime", seoulTime);
         result.put("currentDayType", currentDayType);
@@ -108,33 +107,27 @@ public class SubwayService {
 
     // 경로 탐색
     public List<String> findRoute(int subwayCode, String start, String end) {
-        return RouteTimeService.findRoute(networkService.getNetwork(subwayCode), start, end);
+        return routeTimeService.findRoute(networkService.getNetwork(subwayCode,start), start, end);
     }
 
     // 경로 비교 메서드
     public int compareRoutes(int subwayCode,String aStart, String aEnd, String bStart, String bEnd) {
-        System.out.println(aStart);
-        System.out.println(aEnd);
-        System.out.println(bStart);
-        System.out.println(bEnd);
 
         List<String> routeA = findRoute(subwayCode,aStart, aEnd);
         List<String> routeB = findRoute(subwayCode,bStart, bEnd);
 
-        System.out.println(routeA);
-        System.out.println(routeB);
 
         if (routeA.isEmpty() || routeB.isEmpty()) {
             System.out.println("입력한 경로 중 하나 이상에서 경로를 찾을 수 없습니다.");
             return -1;
         }
         // 출발역이 같다고 가정하므로, 두 경로의 진행 방향 (초기 구간)이 같은지 확인
-        else if (!RouteTimeService.isSameDirection(routeA, routeB)) {
+        else if (!routeTimeService.isSameDirection(routeA, routeB)) {
             System.out.println("두 경로는 시작점은 같으나, 진행 방향이 다릅니다.");
             return 0;
         }
         // A 경로가 B의 부분 경로인 경우 (A의 길이가 B보다 짧으면서 B의 접두어인지 KMP로 확인)
-        else if (routeA.size() < routeB.size() && RouteTimeService.isSubPath(routeA, routeB)) {
+        else if (routeA.size() < routeB.size() && routeTimeService.isSubPath(routeA, routeB)) {
             System.out.println("A 경로는 B 경로의 연속적인 부분 경로입니다. (A ⊂ B)");
             return 1;
         }
@@ -147,9 +140,7 @@ public class SubwayService {
     // 두 역 간 이동 시간을 계산합니다.
     public int calculateTravelTime(List<String> route, String direction,int subwayCode) {
         int totalTime = 0;
-        System.out.println(subwayCode);
-        Map<String, Integer> travelTimeMap = RouteTimeService.getStationTravelTime(subwayCode);
-        System.out.println(travelTimeMap);
+        Map<String, Integer> travelTimeMap = routeTimeService.getStationTravelTime(subwayCode);
         if (travelTimeMap == null) {
             System.out.println("No travel time data available for subwayCode: " + subwayCode);
             return -1; // Error case
@@ -160,20 +151,15 @@ public class SubwayService {
         if(direction.equals("상행")){
             for (int i = 0; i < route.size() - 1; i++) {
                 String key = route.get(i) + "-" + route.get(i + 1);
-                System.out.println("Key: " + key);
                 // stationId에 따른 네트워크 선택 및 시간 계산
                 totalTime += travelTimeMap.getOrDefault(key, 0);
-
-                System.out.println("Total Time: " + totalTime);
             }
         }
         // 하행
         else if(direction.equals("하행")){
             for (int i = route.size() - 1; i > 0; i--) {
                 String key = route.get(i) + "-" + route.get(i - 1);
-                System.out.println("Key: " + key);
                     totalTime += travelTimeMap.getOrDefault(key, 0);
-                System.out.println("Total Time: " + totalTime);
             }
         }
         // 두 역 간 이동 시간을 더하기
