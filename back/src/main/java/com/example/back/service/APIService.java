@@ -9,6 +9,7 @@ import com.example.back.dto.bus.realtime.RealBusLocationDTO;
 import com.example.back.dto.route.RouteDTO;
 import com.example.back.dto.route.RouteProcessDTO;
 import com.example.back.dto.subway.arrive.SubwayArriveProcessDTO;
+import com.example.back.dto.subway.realtime.RealSubwayLocationDTO;
 import com.google.gson.Gson;
 import okhttp3.OkHttpClient;
 import okhttp3.ResponseBody;
@@ -157,17 +158,18 @@ public class APIService {
             return new RealBusLocationDTO();
         }
     }
+
     // 서울 지하철 실시간 위치 정보 조회
-    public SubwayArriveProcessDTO fetchAndSubwayLocation(String stationName) throws IOException {
+    public RealSubwayLocationDTO fetchAndSubwayLocation(String stationName) throws IOException {
         Call<ResponseBody> call = subwayApi.getRealtimeStationArrival(Seoul_Subway_apiKey, stationName);
         ResponseBody responseBody = call.execute().body(); // 동기 호출
         if (responseBody != null) {
             String rawJson = responseBody.string();
-            SubwayArriveProcessDTO subwayArriveProcessDTO = gson.fromJson(rawJson, SubwayArriveProcessDTO.class);
+            RealSubwayLocationDTO parsedResponse = gson.fromJson(rawJson, RealSubwayLocationDTO.class);
             // 도착 정보 리스트 반환
-            return subwayArriveProcessDTO != null ? subwayArriveProcessDTO : new SubwayArriveProcessDTO();
+            return parsedResponse != null ? parsedResponse : new RealSubwayLocationDTO();
         } else {
-            return new SubwayArriveProcessDTO();
+            return new RealSubwayLocationDTO();
         }
     }
 }

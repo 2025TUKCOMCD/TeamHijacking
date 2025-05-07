@@ -52,6 +52,14 @@ public class RouteService{
             .expireAfterWrite(10, TimeUnit.MINUTES) // Cache expiration time
             .build();
 
+    private ResultDTO getCachedResult(RouteProcessDTO.Path path) {
+        return resultCache.getIfPresent(path);
+    }
+
+    private void cacheResult(RouteProcessDTO.Path path, ResultDTO result) {
+        resultCache.put(path, result);
+    }
+
     // path별 비동기 처리
     private CompletableFuture<List<ResultDTO>> asyncRouteDetails(List<RouteProcessDTO.Path> paths) {
         // result 함수를 CompletableFuture로 감싸고, executorService를 사용하여 병렬로 처리
@@ -62,13 +70,14 @@ public class RouteService{
                 .thenApply(v -> futureList.stream().map(CompletableFuture::join).collect(Collectors.toList()));
     }
 
-    // 경로 조회 및 처리
     public List<ResultDTO> fetchAndProcessRoutes(RouteDTO routeDTO) {
         try {
             long startTime = System.nanoTime(); // 시작 시간 측정
             RouteProcessDTO.SearchPath parsedResponse = apiService.fetchAndProcessRoutes(routeDTO);
+
             if (parsedResponse != null && parsedResponse.getResult() != null) {
                 List<RouteProcessDTO.Path> paths = parsedResponse.getResult().getPath();
+
                 if (paths != null) {
                     List<RouteProcessDTO.Path> sortedPaths = paths.stream()
                             .map(path -> new AbstractMap.SimpleEntry<>(path, routeCalService.calculateRouteScore(path)))
@@ -77,13 +86,33 @@ public class RouteService{
                             .map(Map.Entry::getKey)
                             .collect(Collectors.toList());
 
+                    // 캐싱된 결과 확인
+                    List<ResultDTO> cachedResults = sortedPaths.stream()
+                            .map(this::getCachedResult)
+                            .filter(Objects::nonNull) // 캐시에 존재하는 값만 필터링
+                            .collect(Collectors.toList());
+
+                    // 캐시에 있는 데이터가 3개 이상이면 API 호출 없이 반환
+                    if (cachedResults.size() >= 3) {
+                        System.out.println("✅ 캐시에서 결과 반환!");
+                        return cachedResults;
+                    }
+
+                    // 캐시에 없는 데이터를 조회하여 추가
                     CompletableFuture<List<ResultDTO>> futureResult = asyncRouteDetails(sortedPaths);
+                    List<ResultDTO> newResults = futureResult.join();
+
+                    // 캐시에 저장
+                    for (int i = 0; i < sortedPaths.size(); i++) {
+                        cacheResult(sortedPaths.get(i), newResults.get(i));
+                    }
+
                     long endTime = System.nanoTime();
                     System.out.println("⏳ GSON 처리 시간: " + (endTime - startTime) / 1_000_000.0 + " ms");
-                    return futureResult.join();
+                    return newResults;
                 }
             }
-        return Collections.emptyList();
+            return Collections.emptyList();
         } catch (IOException | JsonSyntaxException e) {
             e.printStackTrace();
             return Collections.emptyList();

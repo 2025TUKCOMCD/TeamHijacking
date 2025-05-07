@@ -36,34 +36,34 @@ public class RealtimeWebSocketService implements WebSocketHandler {
                 // JSON 데이터를 DTO로 변환
                 RealtimeDTO data = objectMapper.readValue(payload, RealtimeDTO.class);
 
-//                // 서비스 호출로 비즈니스 로직 처리
-//                switch (data.getType()) {
-//                    case 1:
-//                        // 지하철 데이터 처리
-//                        // 탑승 전인 경우
-//                        if(data.isBoarding()) realTimeResultDTO = messageService.processSubwayBoardingData(data);
-//                        else {
-//                            // 탑승 중인 경우
-//                            realTimeResultDTO =messageService.processSubwayAlightingData(data);
-//                        }
-//                    case 2:
-//                        // 버스 데이터 처리
-//                        if (data.isBoarding()) {
-//                            // 탑승 전인 경우
-//                            realTimeResultDTO = messageService.processBusBoardingData(data);
-//                        } else {
-//                            // 탑승 중인 경우
-//                            realTimeResultDTO = messageService.processBusAlightingData(data);
-//                        }
-//                    case 3:
-//                        // 도보 데이터 처리
-//                        realTimeResultDTO = messageService.processWalkingData(data);
-//                    default:
-//                        realTimeResultDTO = messageService.processDefaultData(data);
-//                }
-//
-//                // 처리 결과를 클라이언트로 전송
-//                session.sendMessage(new TextMessage(realTimeResultDTO.toString()));
+                // 서비스 호출로 비즈니스 로직 처리
+                switch (data.getType()) {
+                    case 1:
+                        // 지하철 데이터 처리
+                        // 탑승 전인 경우
+                        if(data.isBoarding()) realTimeResultDTO = messageService.processSubwayBoardingData(data);
+                        else {
+                            // 탑승 중인 경우
+                            realTimeResultDTO =messageService.processSubwayAlightingData(data);
+                        }
+                    case 2:
+                        // 버스 데이터 처리
+                        if (data.isBoarding()) {
+                            // 탑승 전인 경우
+                            realTimeResultDTO = messageService.processBusBoardingData(data);
+                        } else {
+                            // 탑승 중인 경우
+                            realTimeResultDTO = messageService.processBusAlightingData(data);
+                        }
+                    case 3:
+                        // 도보 데이터 처리
+                        realTimeResultDTO = messageService.processWalkingData(data);
+                    default:
+                        realTimeResultDTO = messageService.processDefaultData(data);
+                }
+
+                // 처리 결과를 클라이언트로 전송
+                session.sendMessage(new TextMessage(realTimeResultDTO.toString()));
 
             } catch (Exception e) {
                 // 오류 처리
