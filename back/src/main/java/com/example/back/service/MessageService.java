@@ -1,15 +1,8 @@
 package com.example.back.service;
 
 
-import com.example.back.dto.RealTimeResultDTO;
-import com.example.back.dto.realtime.RealtimeDTO;
-
-import com.example.back.dto.subway.SubwayArriveProcessDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import java.io.IOException;
-import java.util.List;
 
 
 @Service
