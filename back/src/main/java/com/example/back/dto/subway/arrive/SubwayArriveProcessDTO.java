@@ -1,4 +1,4 @@
-package com.example.back.dto.subway;
+package com.example.back.dto.subway.arrive;
 
 import lombok.Data;
 
