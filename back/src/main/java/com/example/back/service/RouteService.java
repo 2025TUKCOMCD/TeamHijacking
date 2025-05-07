@@ -6,7 +6,7 @@ import com.example.back.dto.RouteIdSetDTO;
 import com.example.back.dto.bus.arrive.BusArriveProcessDTO;
 import com.example.back.dto.bus.detail.BusDetailProcessDTO;
 import com.example.back.dto.route.*;
-import com.example.back.dto.subway.SubwayArriveProcessDTO;
+import com.example.back.dto.subway.arrive.SubwayArriveProcessDTO;
 import com.google.common.cache.Cache;
 import com.google.gson.JsonSyntaxException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -158,9 +158,6 @@ public class RouteService{
     // 도착정보 처리
     private String handleArrivalByCriterion(SubwayArriveProcessDTO.RealtimeArrival arrival, String startName,int subwayCode, String direction) {
         String arvlCdString = arrival.getArvlCd();
-        System.out.println(arvlCdString);
-        System.out.println(arrival.getBarvlDt());
-        System.out.println(arrival.getArvlMsg2());
         if(!arvlCdString.equals("99")){
             return handleBasedOnArvlCd(arrival);
         }else if(!arrival.getBarvlDt().equals("0")){
@@ -226,19 +223,14 @@ public class RouteService{
                     String predictTime2String = null;
                     // 첫번째 역 이름
                     String startName = subPath.getStartName();
-                    System.out.println(startName);
                     // 마지막 역 이름
                     String endName = subPath.getEndName();
-                    System.out.println(endName);
                     // 노선 정보
                     int subwayCode = subPath.getLane().get(0).getSubwayCode();
-                    System.out.println(subwayCode);
                     // 노선 이름
                     String subwayLineName = subPath.getLane().get(0).getName();
-                    System.out.println(subwayLineName);
                     // 노선 방향
                     String direction = subPath.getWayCode() == 1 ? "상행" : "하행";
-                    System.out.println(direction);
 
                     // 시작 주소
                     double startX = subPath.getStartX();
@@ -253,7 +245,6 @@ public class RouteService{
                     }
 
                     String secondStation = transferStations.size() > 1 ? transferStations.get(1) : null;
-                    System.out.println("Second Station: " + secondStation);
                     // 결과 데이터를 저장할 Map 생성
                     Map<String, Object> dataMap = new HashMap<>();
 
@@ -261,7 +252,6 @@ public class RouteService{
                 //if(index < 2){ // 인덱스 0, 1에 대해서만 처리
                     System.out.println("index" + index);
                     Map<Integer, Integer> subwayCodeToCity = subwayService.getSubwayCodeToCityMapping();
-                    System.out.println(subwayCodeToCity);
                     int city = subwayCodeToCity.getOrDefault(subwayCode, 0);
                     if (city == 10) {
                         // 시간표 기준 지하철
@@ -304,7 +294,6 @@ public class RouteService{
                                 for (SubwayArriveProcessDTO.RealtimeArrival arrival : realtimeArrivals) {
                                     // 역 ID 동일 여부 확인
                                     if (Integer.parseInt(arrival.getStatnId()) == statn_id) {
-                                        System.out.println("Statn ID: " + statn_id);
                                         // 사용자가 원하는 방향인지 확인
                                         if (arrival.getUpdnLine().equals(direction)) {
                                             // 같은 노선 여부 확인
@@ -323,7 +312,6 @@ public class RouteService{
                                                     if (convertedSubwayCode == 1001) {
                                                         // FindNetwork로 이전
                                                         int result = subwayService.compareRoutes(convertedSubwayCode,startName,endName,startName,destination);
-                                                        System.out.println("result" + result);
                                                         if (result == 1){
                                                             // 조건에 맞는 데이터를 리스트에 추가
                                                             directionFilteredArrivals.add(arrival);
@@ -366,19 +354,16 @@ public class RouteService{
 
                                     // 같은 방향 종착역 포함 우선 순위 큐 처리
                                     arrival1Queue.addAll(directionFilteredArrivals);
-                                    System.out.println("최종 정렬 기준: " + lastCriterion);
                                     // 처리 순서 별 도착 정보 처리 및 출력
                                     if (!arrival1Queue.isEmpty()) {
-                                        System.out.println(arrival1Queue);
                                         // 가장 가까운 도착 정보
                                         SubwayArriveProcessDTO.RealtimeArrival firstArrival = arrival1Queue.poll();
                                         // 도착정보 처리
                                         predictTime1String = handleArrivalByCriterion(firstArrival,startName,convertedSubwayCode, direction);
-                                        System.out.println("가장 가까운 도착 정보: " + predictTime1String);
                                         // 두 번째 가장 가까운 도착 정보
                                         if (!arrival1Queue.isEmpty()) {
                                             SubwayArriveProcessDTO.RealtimeArrival secondArrival = arrival1Queue.poll();
-                                            predictTime2String = handleArrivalByCriterion(secondArrival,startName, convertedSubwayCode, direction);                                            System.out.println("두 번째 도착 정보: " + predictTime2String);
+                                            predictTime2String = handleArrivalByCriterion(secondArrival,startName, convertedSubwayCode, direction);
                                         } else {
                                             System.out.println("두 번째 도착 정보가 없습니다.");
                                         }
@@ -407,13 +392,9 @@ public class RouteService{
                                     if (!arrival2Queue.isEmpty()) {
                                         SubwayArriveProcessDTO.RealtimeArrival firstArrival = arrival2Queue.poll();
                                         predictTime1String = handleArrivalByCriterion(firstArrival,startName, convertedSubwayCode, direction);
-
-                                        System.out.println("가장 가까운 도착 정보: " + predictTime1String);
-
                                         if (!arrival2Queue.isEmpty()) {
                                             SubwayArriveProcessDTO.RealtimeArrival secondArrival = arrival2Queue.poll();
-                                            predictTime2String = handleArrivalByCriterion(secondArrival, startName, convertedSubwayCode, direction);                                            System.out.println("두 번째 도착 정보: " + predictTime2String);
-                                            System.out.println("두 번째 도착 정보: " + predictTime2String);
+                                            predictTime2String = handleArrivalByCriterion(secondArrival, startName, convertedSubwayCode, direction);
                                         } else {
                                             System.out.println("두 번째 도착 정보가 없습니다.");
                                         }
@@ -437,7 +418,6 @@ public class RouteService{
                     Time Time2;
 
                     if (predictTimeList != null && !predictTimeList.isEmpty()) {
-                        System.out.println("Predict Time List: " + predictTimeList);
                         Time1 = predictTimeList.size() > 0 ? predictTimeList.get(0).getArrival_Time() : null;
                         Time2 = predictTimeList.size() > 1 ? predictTimeList.get(1).getArrival_Time() : null;
 
@@ -449,14 +429,12 @@ public class RouteService{
 
                             // predictTime1을 String으로 변환
                             predictTime1String = predictTime1 + "분 후";
-                            System.out.println(predictTime1String);
                         }
                         if (Time2 != null) {
                             LocalTime arrivalTime2 = Time2.toLocalTime();
                             long predictTime2 = java.time.Duration.between(seoulTime.toLocalTime(), arrivalTime2).toMinutes();
                             // predictTime2를 String으로 변환
                             predictTime2String = predictTime2 + "분 후";
-                            System.out.println(predictTime2String);
                         }
                     }
                 //}
@@ -514,7 +492,6 @@ public class RouteService{
                 }
 
                 //if(index < 2) {
-                    System.out.println("index" + index);
                     // 도착 정보 조회
                     List<BusArriveProcessDTO.arriveDetail> arriveDetails = List.of(apiService.fetchAndBusArrive(startLocalStationID, busLocalBlID, startStationInfo));
 
@@ -626,7 +603,6 @@ public class RouteService{
                     resultDTO.getRouteIds().add(routeIdSetDTO);
                     // 교통 유형 3일 경우 처리
                 }
-                System.out.println("처리 완료된 subPath 인덱스: " + subPathIndex);
             } catch (InterruptedException | ExecutionException e) {
                 e.printStackTrace();
             }
