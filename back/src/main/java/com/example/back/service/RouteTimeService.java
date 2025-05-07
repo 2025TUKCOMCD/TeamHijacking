@@ -269,6 +269,8 @@ public class RouteTimeService {
         stationGCLTravelTime.put("홍대입구-가좌",2);47
         stationGCLTravelTime.put("가좌-디지털미디어시티",3);50
         //분기 1 (가좌~임진강)
+
+        //경춘선
     }
 
     // 시간 조회
