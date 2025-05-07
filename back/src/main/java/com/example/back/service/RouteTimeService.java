@@ -24,6 +24,7 @@ public class RouteTimeService {
         Map<String, Integer> stationARTravelTime = new HashMap<>();
         Map<String, Integer> stationGCLTravelTime = new HashMap<>();
         Map<String, Integer> stationGLTravelTime = new HashMap<>();
+        Map<String, Integer> stationSBLTravelTime = new HashMap<>();
         //  메인 노선 (연천 ~ 구로)
         station1TravelTime.put("연천-전곡", 8);
         station1TravelTime.put("전곡-청산", 5);
@@ -298,6 +299,70 @@ public class RouteTimeService {
         stationGLTravelTime.put("상봉-중랑",3);
         stationGLTravelTime.put("중랑-회기",3);
         stationGLTravelTime.put("회기-청량리",3);
+        //수인분당선 (Suin Bundang Line)SBL
+        // 메인노선
+        stationSBLTravelTime.put("인천-신포",2);
+        stationSBLTravelTime.put("신포-숭의",2);
+        stationSBLTravelTime.put("숭의-인하대",3);
+        stationSBLTravelTime.put("인하대-송도",2);
+        stationSBLTravelTime.put("송도-연수",4);
+        stationSBLTravelTime.put("연수-원인재",2);
+        stationSBLTravelTime.put("원인재-남동인더스파크",2);
+        stationSBLTravelTime.put("남동인더스파크-호구포",2);
+        stationSBLTravelTime.put("호구포-인천논현",2);
+        stationSBLTravelTime.put("인천논현-소래포구",2);
+        stationSBLTravelTime.put("소래포구-월곶",2);
+        stationSBLTravelTime.put("월곶-달월",2);
+        stationSBLTravelTime.put("달월-오이도",3);
+        stationSBLTravelTime.put("오이도-정왕",3);
+        stationSBLTravelTime.put("정왕-신길온천",3);
+        stationSBLTravelTime.put("신길온천-안산",3);
+        stationSBLTravelTime.put("안산-초지",3);
+        stationSBLTravelTime.put("초지-고잔",2);
+        stationSBLTravelTime.put("고잔-중앙",2);
+        stationSBLTravelTime.put("중앙-한대앞",3);
+        stationSBLTravelTime.put("한대앞-사리",4);
+        stationSBLTravelTime.put("사리-야목",5);
+        stationSBLTravelTime.put("야목-어천",3);
+        stationSBLTravelTime.put("어천-오목천",4);
+        stationSBLTravelTime.put("오목천-고색",3);
+        stationSBLTravelTime.put("고색-수원",4);
+        stationSBLTravelTime.put("수원-매교",2);
+        stationSBLTravelTime.put("매교-수원시청",3);
+        stationSBLTravelTime.put("수원시청-매탄권선",3);
+        stationSBLTravelTime.put("매탄권선-망포",2);
+        stationSBLTravelTime.put("망포-영통",3);
+        stationSBLTravelTime.put("영통-청명",2);
+        stationSBLTravelTime.put("청명-상갈",3);
+        stationSBLTravelTime.put("상갈-기흥",3);
+        stationSBLTravelTime.put("기흥-신갈",2);
+        stationSBLTravelTime.put("신갈-구성",3);
+        stationSBLTravelTime.put("구성-보정",2);
+        stationSBLTravelTime.put("보정-죽전",3);
+        stationSBLTravelTime.put("죽전-오리",3);
+        stationSBLTravelTime.put("오리-미금",2);
+        stationSBLTravelTime.put("미금-정자",3);
+        stationSBLTravelTime.put("정자-수내",2);
+        stationSBLTravelTime.put("수내-서현",2);
+        stationSBLTravelTime.put("서현-이매",2);
+        stationSBLTravelTime.put("이매-야탑",3);
+        stationSBLTravelTime.put("야탑-모란",3);
+        stationSBLTravelTime.put("모란-태평",2);
+        stationSBLTravelTime.put("태평-가천대",2);
+        stationSBLTravelTime.put("가천대-복정",3);
+        stationSBLTravelTime.put("복정-수서",4);
+        stationSBLTravelTime.put("수서-대모산입구",4);
+        stationSBLTravelTime.put("대모산입구-개포동",1);
+        stationSBLTravelTime.put("개포동-구룡",2);
+        stationSBLTravelTime.put("구룡-도곡",2);
+        stationSBLTravelTime.put("도곡-한티",1);
+        stationSBLTravelTime.put("한티-선릉",2);
+        stationSBLTravelTime.put("선릉-선정릉",2);
+        stationSBLTravelTime.put("선정릉-강남구청",2);
+        stationSBLTravelTime.put("강남구청-압구정로데오",2);
+        stationSBLTravelTime.put("압구정로데오-서울숲",2);
+        stationSBLTravelTime.put("서울숲-왕십리",3);
+        stationSBLTravelTime.put("왕십리-청량리",7);
 
     }
 
