@@ -22,6 +22,7 @@ public class RouteTimeService {
         Map<String, Integer> station4TravelTime = new HashMap<>();
         Map<String, Integer> station8TravelTime = new HashMap<>();
         Map<String, Integer> stationARTravelTime = new HashMap<>();
+        Map<String, Integer> stationGCLTravelTime = new HashMap<>();
         //  메인 노선 (연천 ~ 구로)
         station1TravelTime.put("연천-전곡", 8);
         station1TravelTime.put("전곡-청산", 5);
@@ -229,7 +230,45 @@ public class RouteTimeService {
         stationARTravelTime.put("디지털미디어시티-홍대입구",4);
         stationARTravelTime.put("홍대입구-공덕",3);
         stationARTravelTime.put("공덕-서울",4);
-        stationTravelTime.put(1065, station8TravelTime);
+        stationTravelTime.put(1065, stationARTravelTime);
+
+        // 경의중앙선 (Gyeongui Central Line)GCL
+        // 메인노선(지평~가좌)
+        stationGCLTravelTime.put("지평-용문",5);0
+        stationGCLTravelTime.put("용문-원덕",5);5
+        stationGCLTravelTime.put("원덕-양평",6);11
+        stationGCLTravelTime.put("양평-오빈",3);14
+        stationGCLTravelTime.put("오빈-아신",3);17
+        stationGCLTravelTime.put("아신-국수",4);21
+        stationGCLTravelTime.put("국수-신원",4);25
+        stationGCLTravelTime.put("신원-양수",4);29
+        stationGCLTravelTime.put("양수-운길산",3);32
+        stationGCLTravelTime.put("운길산-팔당",5);37
+        stationGCLTravelTime.put("팔당-도심",5);42
+        stationGCLTravelTime.put("도심-덕소",2);44
+        stationGCLTravelTime.put("덕소-양정",4);48
+        stationGCLTravelTime.put("양정-도뇽",4);52
+        stationGCLTravelTime.put("도뇽-구리",3);55
+        stationGCLTravelTime.put("구리-양원",4);59
+        stationGCLTravelTime.put("양원-망우",3);2
+        stationGCLTravelTime.put("망우-상봉",2);4
+        stationGCLTravelTime.put("상봉-중랑",2);6
+        stationGCLTravelTime.put("중랑-회기",3);9
+        stationGCLTravelTime.put("회기-청량리",4);13
+        stationGCLTravelTime.put("청량리-왕십리",4);17
+        stationGCLTravelTime.put("왕십리-응봉",2);19
+        stationGCLTravelTime.put("응봉-옥수",3);22
+        stationGCLTravelTime.put("옥수-한남",2);24
+        stationGCLTravelTime.put("한남-서빙고",3);27
+        stationGCLTravelTime.put("서빙고-이촌",3);30
+        stationGCLTravelTime.put("이촌-용산",4);34
+        stationGCLTravelTime.put("용산-효창공원앞",3);37
+        stationGCLTravelTime.put("효창공원앞-공덕",3);40
+        stationGCLTravelTime.put("공덕-서강대",3);43
+        stationGCLTravelTime.put("서강대-홍대입구",2);45
+        stationGCLTravelTime.put("홍대입구-가좌",2);47
+        stationGCLTravelTime.put("가좌-디지털미디어시티",3);50
+        //분기 1 (가좌~임진강)
     }
 
     // 시간 조회
