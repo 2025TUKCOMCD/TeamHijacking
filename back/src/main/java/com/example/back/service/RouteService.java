@@ -1,42 +1,26 @@
 package com.example.back.service;
 
-import com.example.back.api.BusApi;
-import com.example.back.api.RouteApi;
-import com.example.back.api.SubwayApi;
 import com.example.back.domain.TimeTable;
 import com.example.back.dto.ResultDTO;
 import com.example.back.dto.RouteIdSetDTO;
 import com.example.back.dto.bus.arrive.BusArriveProcessDTO;
 import com.example.back.dto.bus.detail.BusDetailProcessDTO;
 import com.example.back.dto.route.*;
-import com.example.back.dto.subway.arrive.SubwayArriveProcessDTO;
-import com.google.gson.Gson;
+import com.example.back.dto.subway.SubwayArriveProcessDTO;
+import com.google.common.cache.Cache;
 import com.google.gson.JsonSyntaxException;
-import okhttp3.OkHttpClient;
-import okhttp3.ResponseBody;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-import retrofit2.Call;
-import retrofit2.Response;
-import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
 import java.io.IOException;
-import java.io.StringReader;
 import java.sql.Time;
 import java.time.*;
 import java.util.*;
 import java.util.concurrent.*;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 import java.util.stream.Collectors;
-
+import com.google.common.cache.CacheBuilder;
 
 @Service
 public class RouteService{
-    private final String ODsayBaseURL = "https://api.odsay.com/v1/api/";
-    private final String Seoul_BusBaseURL = "http://ws.bus.go.kr/api/rest/";
-    private final String Seoul_SubwayBaseURL = "http://swopenAPI.seoul.go.kr/api/subway/";
 
     @Autowired
     private RouteCalService routeCalService;
@@ -50,14 +34,8 @@ public class RouteService{
     @Autowired
     private BusService busService;
 
-    @Value("${ODsay.apikey}")
-    private String Odsay_apiKey;
-
-    @Value(("${Public_Bus_APIKEY}"))
-    private String Seoul_Bus_apiKey;
-
-    @Value(("${Public_Subway_APIKEY}"))
-    private String Seoul_Subway_apiKey;
+    @Autowired
+    private APIService apiService;
 
     enum CompareCriterion {
         ARVL_CD, BARVL_DT, NTH_STATION, NONE
@@ -66,40 +44,16 @@ public class RouteService{
     CompareCriterion lastCriterion = CompareCriterion.NONE;
 
 
-    private final Gson gson = new Gson();
-    private final OkHttpClient client = new OkHttpClient.Builder()
-            .connectTimeout(60, TimeUnit.SECONDS)
-            .readTimeout(60, TimeUnit.SECONDS)
-            .writeTimeout(60, TimeUnit.SECONDS)
-            .build();
-
-    private final Retrofit OdsayRetrofit = new Retrofit.Builder()
-            .baseUrl(ODsayBaseURL)
-            .client(client)
-            .addConverterFactory(GsonConverterFactory.create(gson))
-            .build();
-
-    private final Retrofit BusRetrofit = new Retrofit.Builder()
-            .baseUrl(Seoul_BusBaseURL)
-            .client(client)
-            .addConverterFactory(GsonConverterFactory.create(gson))
-            .build();
-
-    private final Retrofit SubwayRetrofit = new Retrofit.Builder()
-            .baseUrl(Seoul_SubwayBaseURL)
-            .client(client)
-            .addConverterFactory(GsonConverterFactory.create(gson))
-            .build();
-
-    private final RouteApi routeApi = OdsayRetrofit.create(RouteApi.class);
-    private final BusApi busApi = BusRetrofit.create(BusApi.class);
-    private final SubwayApi subwayApi = SubwayRetrofit.create(SubwayApi.class);
-
     private final ExecutorService executorService = Executors.newFixedThreadPool(4);
 
     // 비동기 경로 상세 정보 조회
+    private final Cache<RouteProcessDTO.Path, ResultDTO> resultCache = CacheBuilder.newBuilder()
+            .maximumSize(100) // Maximum number of entries in the cache
+            .expireAfterWrite(10, TimeUnit.MINUTES) // Cache expiration time
+            .build();
+
+    // path별 비동기 처리
     private CompletableFuture<List<ResultDTO>> asyncRouteDetails(List<RouteProcessDTO.Path> paths) {
-        // path별 비동기 처리
         // result 함수를 CompletableFuture로 감싸고, executorService를 사용하여 병렬로 처리
         List<CompletableFuture<ResultDTO>> futureList = paths.stream()
                 .map(path -> CompletableFuture.supplyAsync(() -> result(path), executorService))
@@ -108,110 +62,28 @@ public class RouteService{
                 .thenApply(v -> futureList.stream().map(CompletableFuture::join).collect(Collectors.toList()));
     }
 
-    // Odsay 버스 상세 정보 조회
-    private BusDetailProcessDTO.BusLaneDetail fetchBusLaneDetail(int busID) throws IOException {
-        Call<ResponseBody> call = routeApi.busLaneDetail(busID, Odsay_apiKey);
-        ResponseBody responseBody = call.execute().body();
-
-        if (responseBody != null) {
-            String rawJson = responseBody.string();
-            BusDetailProcessDTO.BusLaneDetail parsedResponse = gson.fromJson(rawJson, BusDetailProcessDTO.BusLaneDetail.class);
-            return parsedResponse != null ? parsedResponse : new BusDetailProcessDTO.BusLaneDetail();
-        } else {
-            return new BusDetailProcessDTO.BusLaneDetail();
-        }
-    }
-
-    public List<BusArriveProcessDTO.arriveDetail> fetchAndBusArrive(int stId, int busRouteId, int ord) {
-        try {
-            Call<ResponseBody> call = busApi.getArrInfoByRoute(
-                    Seoul_Bus_apiKey,
-                    stId,
-                    busRouteId,
-                    ord,
-                    "json"
-            );
-            ResponseBody responseBody = call.execute().body();
-            if (responseBody != null) {
-                String rawJson = responseBody.string();
-                BusArriveProcessDTO.arriveDetail parsedResponse = gson.fromJson(rawJson, BusArriveProcessDTO.arriveDetail.class);
-
-                // 리스트 형태로 반환
-                return parsedResponse != null ? List.of(parsedResponse) : List.of();
-            }else {
-                return List.of();
-            }
-        } catch (IOException | JsonSyntaxException e) {
-            e.printStackTrace();
-        }
-        return List.of(); // 예외 상황에서도 빈 리스트 반환
-    }
-
-    // 서울 지하철 도착 정보 조회
-    public List<SubwayArriveProcessDTO.RealtimeArrival> fetchAndSubwayArrive(String stationName) {
-        try {
-            // Retrofit 호출
-            System.out.println("Station Name: " + stationName);
-            Call<ResponseBody> call = subwayApi.getRealtimeStationArrival(Seoul_Subway_apiKey, stationName);
-            Response<ResponseBody> response = call.execute(); // 동기 호출
-
-            // API 응답 확인
-            if (response.isSuccessful() && response.body() != null) {
-                ResponseBody responseBody = response.body();
-                String rawJson = responseBody.string();
-                SubwayArriveProcessDTO subwayArriveProcessDTO = gson.fromJson(rawJson, SubwayArriveProcessDTO.class);
-
-                // 도착 정보 리스트 반환
-                return subwayArriveProcessDTO.getRealtimeArrivalList();
-            } else {
-                // API 호출 실패 시 로그 출력
-                System.err.println("API 호출 실패 - 상태 코드: " + response.code());
-                System.err.println("응답 메시지: " + response.message());
-            }
-        } catch (IOException e) {
-            // 예외 처리
-            System.err.println("API 호출 중 예외 발생: " + e.getMessage());
-        }
-        // 오류 발생 시 빈 리스트 반환
-        return List.of();
-    }
-
     // 경로 조회 및 처리
     public List<ResultDTO> fetchAndProcessRoutes(RouteDTO routeDTO) {
         try {
             long startTime = System.nanoTime(); // 시작 시간 측정
-            Call<ResponseBody> call = routeApi.searchPubTransPathT(
-                    routeDTO.getStartLat(),
-                    routeDTO.getStartLng(),
-                    routeDTO.getEndLat(),
-                    routeDTO.getEndLng(),
-                    Odsay_apiKey
-            );
+            RouteProcessDTO.SearchPath parsedResponse = apiService.fetchAndProcessRoutes(routeDTO);
+            if (parsedResponse != null && parsedResponse.getResult() != null) {
+                List<RouteProcessDTO.Path> paths = parsedResponse.getResult().getPath();
+                if (paths != null) {
+                    List<RouteProcessDTO.Path> sortedPaths = paths.stream()
+                            .map(path -> new AbstractMap.SimpleEntry<>(path, routeCalService.calculateRouteScore(path)))
+                            .sorted(Map.Entry.comparingByValue())
+                            .limit(3)
+                            .map(Map.Entry::getKey)
+                            .collect(Collectors.toList());
 
-            ResponseBody responseBody = call.execute().body();
-            if (responseBody != null) {
-                String rawJson = responseBody.string();
-                RouteProcessDTO.SearchPath parsedResponse = gson.fromJson(rawJson, RouteProcessDTO.SearchPath.class);
-                if (parsedResponse != null && parsedResponse.getResult() != null) {
-                    List<RouteProcessDTO.Path> paths = parsedResponse.getResult().getPath();
-                    if (paths != null) {
-                        List<RouteProcessDTO.Path> sortedPaths = paths.stream()
-                                .map(path -> new AbstractMap.SimpleEntry<>(path, routeCalService.calculateRouteScore(path)))
-                                .sorted(Map.Entry.comparingByValue())
-                                .limit(3)
-                                .map(Map.Entry::getKey)
-                                .collect(Collectors.toList());
-
-                        CompletableFuture<List<ResultDTO>> futureResult = asyncRouteDetails(sortedPaths);
-                        long endTime = System.nanoTime();
-                        System.out.println("⏳ GSON 처리 시간: " + (endTime - startTime) / 1_000_000.0 + " ms");
-                        return futureResult.join();
-                    }
+                    CompletableFuture<List<ResultDTO>> futureResult = asyncRouteDetails(sortedPaths);
+                    long endTime = System.nanoTime();
+                    System.out.println("⏳ GSON 처리 시간: " + (endTime - startTime) / 1_000_000.0 + " ms");
+                    return futureResult.join();
                 }
             }
-            return Collections.emptyList();
-
-
+        return Collections.emptyList();
         } catch (IOException | JsonSyntaxException e) {
             e.printStackTrace();
             return Collections.emptyList();
@@ -235,6 +107,7 @@ public class RouteService{
         }
         return Integer.MAX_VALUE;
     }
+
     // arvlMsg2에서 역 이름 추출
     private String getStationNameFromMsg(String arvlMsg2) {
         if (arvlMsg2.contains("번째 전역") && arvlMsg2.contains("(") && arvlMsg2.contains(")")) {
@@ -282,8 +155,8 @@ public class RouteService{
         return 0; // 동일한 경우 우선순위 동일
     }
 
-
-    private String handleArrivalByCriterion(SubwayArriveProcessDTO.RealtimeArrival arrival, String startName) {
+    // 도착정보 처리
+    private String handleArrivalByCriterion(SubwayArriveProcessDTO.RealtimeArrival arrival, String startName,int subwayCode, String direction) {
         String arvlCdString = arrival.getArvlCd();
         System.out.println(arvlCdString);
         System.out.println(arrival.getBarvlDt());
@@ -293,7 +166,7 @@ public class RouteService{
         }else if(!arrival.getBarvlDt().equals("0")){
             return handleBasedOnBarvlDt(arrival);
         }else if(arrival.getArvlMsg2() != null && arrival.getArvlMsg2().contains("번째 전역")) {
-            return handleBasedOnNthStation(arrival, startName);
+            return handleBasedOnNthStation(arrival, startName, direction,subwayCode);
         }
         return arrival.getArvlMsg2();
     }
@@ -325,6 +198,7 @@ public class RouteService{
         }
         return arvlCdString + " (" + arrival.getArvlMsg3() + ")";
     }
+
     // BARVL_DT 기준 처리
     private String handleBasedOnBarvlDt(SubwayArriveProcessDTO.RealtimeArrival arrival) {
         int barvlDt = Integer.parseInt(arrival.getBarvlDt());
@@ -333,14 +207,17 @@ public class RouteService{
     }
 
     // NTH_STATION 기준 처리
-    private String handleBasedOnNthStation(SubwayArriveProcessDTO.RealtimeArrival arrival, String startName) {
+    private String handleBasedOnNthStation(SubwayArriveProcessDTO.RealtimeArrival arrival, String startName, String direction,int subwayCode) {
         String stationName = getStationNameFromMsg(arrival.getArvlMsg2());
-        List<String> route = subwayService.findRoute(startName, stationName);
-        int travelTime = subwayService.calculateTravelTime(route); // 두 역 간 이동 시간 계산
+        // FindNetwork로 이전
+        List<String> route = subwayService.findRoute(subwayCode,startName, stationName);
+        // TimeFindNetwork로 이전
+        int travelTime = subwayService.calculateTravelTime(route,direction,subwayCode); // 두 역 간 이동 시간 계산
 
-        return travelTime > 0 ? travelTime + "분 후 도착 " : "경로 정보 없음 (" + arrival.getArvlMsg3() + ")";
+        return travelTime > 0 ? travelTime + "분 후 도착" + "(" + stationName + ")" : "경로 정보 없음 (" + arrival.getArvlMsg3() + ")";
     }
 
+    // 지하철 도착 정보 처리
     public CompletableFuture<Map.Entry<Integer, Map<String, Object>>> processTrafficType1Async(RouteProcessDTO.SubPath subPath, int index) {
         return CompletableFuture.supplyAsync(() -> {
                     Map<String, Object> timeAndDayType;
@@ -410,26 +287,42 @@ public class RouteService{
                             System.out.print("statn_id" + statn_id);
 
                             // 실시간 도착 정보 조회
-                            List<SubwayArriveProcessDTO.RealtimeArrival> realtimeArrivals = fetchAndSubwayArrive(startName);
+                            List<SubwayArriveProcessDTO.RealtimeArrival> realtimeArrivals = null;
+                            try {
+                                realtimeArrivals = apiService.fetchAndSubwayArrive(startName).getRealtimeArrivalList();
+                            } catch (IOException e) {
+                                throw new RuntimeException(e);
+                            }
+                            // 도착 정보가 null이 아니고 비어있지 않은 경우
                             if (realtimeArrivals != null && !realtimeArrivals.isEmpty()) {
+                                // 도착 정보 필터링
                                 List<SubwayArriveProcessDTO.RealtimeArrival> directionFilteredArrivals = new ArrayList<>();
+                                // 도착 정보 리스트
                                 List<SubwayArriveProcessDTO.RealtimeArrival> preliminaryArrivals = new ArrayList<>();
 
                                 // 원하는 방향의 도착 정보 필터링
                                 for (SubwayArriveProcessDTO.RealtimeArrival arrival : realtimeArrivals) {
+                                    // 역 ID 동일 여부 확인
                                     if (Integer.parseInt(arrival.getStatnId()) == statn_id) {
                                         System.out.println("Statn ID: " + statn_id);
                                         // 사용자가 원하는 방향인지 확인
                                         if (arrival.getUpdnLine().equals(direction)) {
-                                            // TrainLineNm 조건 확인
+                                            // 같은 노선 여부 확인
                                             String trainLineNm = arrival.getTrainLineNm();
+                                            // 노선 이름이 null이 아닌 경우
                                             if (trainLineNm != null) {
+                                                // 노선 - 기준 방향으로 분리
                                                 String[] parts = trainLineNm.split(" - ");
+                                                // 노선 종착역 정보
                                                 String destination = parts[0].replace("행", "").trim();
+                                                // 노선 다음역 정보
                                                 String nextStation = parts[1].replace("방면", "").trim(); // 정확한 역 이름 추출
+                                                // 다음역이 null이 아닌 경우
                                                 if (parts.length > 1 &&  nextStation.equals(secondStation)) {
+                                                    // 지하철 코드에 따른 처리
                                                     if (convertedSubwayCode == 1001) {
-                                                        int result = subwayService.compareRoutes(startName,endName,startName,destination);
+                                                        // FindNetwork로 이전
+                                                        int result = subwayService.compareRoutes(convertedSubwayCode,startName,endName,startName,destination);
                                                         System.out.println("result" + result);
                                                         if (result == 1){
                                                             // 조건에 맞는 데이터를 리스트에 추가
@@ -444,7 +337,7 @@ public class RouteService{
                                     }
                                 }
 
-                                // 처리 순서 정의
+                                // 도착 정보 처리 순서 지정
                                 if (!directionFilteredArrivals.isEmpty()) {
                                     PriorityQueue<SubwayArriveProcessDTO.RealtimeArrival> arrival1Queue = new PriorityQueue<>(
                                             (a, b) -> {
@@ -471,19 +364,21 @@ public class RouteService{
                                             }
                                     );
 
+                                    // 같은 방향 종착역 포함 우선 순위 큐 처리
                                     arrival1Queue.addAll(directionFilteredArrivals);
                                     System.out.println("최종 정렬 기준: " + lastCriterion);
                                     // 처리 순서 별 도착 정보 처리 및 출력
                                     if (!arrival1Queue.isEmpty()) {
                                         System.out.println(arrival1Queue);
-
+                                        // 가장 가까운 도착 정보
                                         SubwayArriveProcessDTO.RealtimeArrival firstArrival = arrival1Queue.poll();
-                                        predictTime1String = handleArrivalByCriterion(firstArrival,startName);
+                                        // 도착정보 처리
+                                        predictTime1String = handleArrivalByCriterion(firstArrival,startName,convertedSubwayCode, direction);
                                         System.out.println("가장 가까운 도착 정보: " + predictTime1String);
-
+                                        // 두 번째 가장 가까운 도착 정보
                                         if (!arrival1Queue.isEmpty()) {
                                             SubwayArriveProcessDTO.RealtimeArrival secondArrival = arrival1Queue.poll();
-                                            predictTime2String = handleArrivalByCriterion(secondArrival,startName);                                            System.out.println("두 번째 도착 정보: " + predictTime2String);
+                                            predictTime2String = handleArrivalByCriterion(secondArrival,startName, convertedSubwayCode, direction);                                            System.out.println("두 번째 도착 정보: " + predictTime2String);
                                         } else {
                                             System.out.println("두 번째 도착 정보가 없습니다.");
                                         }
@@ -491,7 +386,9 @@ public class RouteService{
                                         System.out.println("조건에 맞는 도착 정보가 없습니다.");
                                     }
                                 } else {
+                                    // 같은 방향 환승 가능성 포함 우선순위 큐 처리
                                     PriorityQueue<SubwayArriveProcessDTO.RealtimeArrival> arrival2Queue = new PriorityQueue<>(
+                                            // 도착 정보 처리 순서 지정
                                             (a, b) -> {
                                                 int result = compareByArvlCd(a, b);
                                                 if (result != 0) return result;
@@ -504,17 +401,18 @@ public class RouteService{
                                             }
                                     );
 
+                                    //
                                     arrival2Queue.addAll(preliminaryArrivals);
 
                                     if (!arrival2Queue.isEmpty()) {
                                         SubwayArriveProcessDTO.RealtimeArrival firstArrival = arrival2Queue.poll();
-                                        predictTime1String = handleArrivalByCriterion(firstArrival,startName);
+                                        predictTime1String = handleArrivalByCriterion(firstArrival,startName, convertedSubwayCode, direction);
 
                                         System.out.println("가장 가까운 도착 정보: " + predictTime1String);
 
                                         if (!arrival2Queue.isEmpty()) {
                                             SubwayArriveProcessDTO.RealtimeArrival secondArrival = arrival2Queue.poll();
-                                            predictTime2String = handleArrivalByCriterion(secondArrival, startName);                                            System.out.println("두 번째 도착 정보: " + predictTime2String);
+                                            predictTime2String = handleArrivalByCriterion(secondArrival, startName, convertedSubwayCode, direction);                                            System.out.println("두 번째 도착 정보: " + predictTime2String);
                                             System.out.println("두 번째 도착 정보: " + predictTime2String);
                                         } else {
                                             System.out.println("두 번째 도착 정보가 없습니다.");
@@ -594,7 +492,7 @@ public class RouteService{
                 String predictTime2 = null;
 
                     // fetchBusLaneDetail 함수 호출 -> jsonParser 함수 호출
-                BusDetailProcessDTO.BusLaneDetail busDetail = fetchBusLaneDetail(busID);
+                BusDetailProcessDTO.BusLaneDetail busDetail = apiService.fetchBusLaneDetail(busID);
 
                 // compareStationIDs 함수 호출
                 List<Integer> stationInfos = busService.compareStationIDs(busDetail, startID, endID);
@@ -618,7 +516,9 @@ public class RouteService{
                 //if(index < 2) {
                     System.out.println("index" + index);
                     // 도착 정보 조회
-                    List<BusArriveProcessDTO.arriveDetail> arriveDetails = fetchAndBusArrive(startLocalStationID, busLocalBlID, startStationInfo);
+                    List<BusArriveProcessDTO.arriveDetail> arriveDetails = List.of(apiService.fetchAndBusArrive(startLocalStationID, busLocalBlID, startStationInfo));
+
+
 
                     if (arriveDetails != null && arriveDetails.get(0).getMsgBody() != null && arriveDetails.get(0).getMsgBody().getItemList() != null) {
                         BusArriveProcessDTO.Item firstItem = arriveDetails.get(0).getMsgBody().getItemList().get(0);

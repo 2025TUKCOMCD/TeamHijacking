@@ -7,9 +7,6 @@ import android.widget.Button
 import android.widget.ImageButton
 import androidx.appcompat.app.AppCompatActivity
 import com.example.front.databinding.ActivityTransportationMainBinding
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 
 class TransportationMainActivity : AppCompatActivity() {
 
@@ -44,7 +41,7 @@ class TransportationMainActivity : AppCompatActivity() {
 
         imsiBtn.setOnClickListener {
             //하... 교통 안내 Activity로 이동됨, Dialog창을 확인하기 위함.
-            val intent = Intent(this, TransportInfrmationActivity::class.java)
+            val intent = Intent(this, TransportInformationActivity::class.java)
             startActivity(intent)
         }
 
