@@ -3,6 +3,7 @@ package com.example.back.dto.bus.arrive;
 import lombok.Data;
 
 import java.util.List;
+
 @Data
 public class BusArriveProcessDTO {
 
