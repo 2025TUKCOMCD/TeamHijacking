@@ -23,6 +23,7 @@ public class RouteTimeService {
         Map<String, Integer> station8TravelTime = new HashMap<>();
         Map<String, Integer> stationARTravelTime = new HashMap<>();
         Map<String, Integer> stationGCLTravelTime = new HashMap<>();
+        Map<String, Integer> stationGLTravelTime = new HashMap<>();
         //  메인 노선 (연천 ~ 구로)
         station1TravelTime.put("연천-전곡", 8);
         station1TravelTime.put("전곡-청산", 5);
@@ -270,7 +271,34 @@ public class RouteTimeService {
         stationGCLTravelTime.put("가좌-디지털미디어시티",3);50
         //분기 1 (가좌~임진강)
 
-        //경춘선
+        //경춘선(Gyeongchun Line) GL (춘천~상봉)
+        stationGLTravelTime.put("춘천-남춘천",3);
+        stationGLTravelTime.put("남춘천-김유정",6);
+        stationGLTravelTime.put("김유정-강촌",6);
+        stationGLTravelTime.put("강촌-백양리",5);
+        stationGLTravelTime.put("백양리-굴봉산",3);
+        stationGLTravelTime.put("굴봉산-가평",5);
+        stationGLTravelTime.put("가평-상천",6);
+        stationGLTravelTime.put("상천-청평",4);
+        stationGLTravelTime.put("청평-대성리",7);
+        stationGLTravelTime.put("대성리-마석",6);
+        stationGLTravelTime.put("마석-천마산",2);
+        stationGLTravelTime.put("천마산-평내호평",4);
+        stationGLTravelTime.put("평내호평-금곡",4);
+        stationGLTravelTime.put("금곡-사릉",4);
+        stationGLTravelTime.put("사릉-퇴계원",3);
+        stationGLTravelTime.put("퇴계원-별내",3);
+        stationGLTravelTime.put("별내-갈매",2);
+        stationGLTravelTime.put("갈매-신내",3);
+        stationGLTravelTime.put("신내-망우",5);
+        stationGLTravelTime.put("망우-상봉",2);
+        //분기1 (상봉~광운대)
+        stationGLTravelTime.put("상봉-광운대",8);
+        //분기2 (상봉-청량리)
+        stationGLTravelTime.put("상봉-중랑",3);
+        stationGLTravelTime.put("중랑-회기",3);
+        stationGLTravelTime.put("회기-청량리",3);
+
     }
 
     // 시간 조회
