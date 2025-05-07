@@ -227,19 +227,19 @@ public class RouteTimeService {
         stationTravelTime.put(1008, station8TravelTime);
 
         //  공항철도
-        stationARTravelTime.put("인천공항2터미널-인천공항1터미널",8);
-        stationARTravelTime.put("인천공항1터미널-공항화물청사",5);
-        stationARTravelTime.put("공항화물청사-운서",4);
-        stationARTravelTime.put("운서-영종",4);
-        stationARTravelTime.put("영종-청라국제도시",9);
-        stationARTravelTime.put("청라국제도시-검암",5);
-        stationARTravelTime.put("검암-계양",6);
-        stationARTravelTime.put("계양-김포공항",6);
-        stationARTravelTime.put("김포공항-마곡나루",3);
-        stationARTravelTime.put("마곡나루-디지털미디어시티",8);
-        stationARTravelTime.put("디지털미디어시티-홍대입구",4);
-        stationARTravelTime.put("홍대입구-공덕",3);
-        stationARTravelTime.put("공덕-서울",4);
+        stationARTravelTime.put("서울-공덕", 4);
+        stationARTravelTime.put("공덕-홍대입구", 3);
+        stationARTravelTime.put("홍대입구-디지털미디어시티", 4);
+        stationARTravelTime.put("디지털미디어시티-마곡나루", 8);
+        stationARTravelTime.put("마곡나루-김포공항", 3);
+        stationARTravelTime.put("김포공항-계양", 6);
+        stationARTravelTime.put("계양-검암", 6);
+        stationARTravelTime.put("검암-청라국제도시", 5);
+        stationARTravelTime.put("청라국제도시-영종", 9);
+        stationARTravelTime.put("영종-운서", 4);
+        stationARTravelTime.put("운서-공항화물청사", 4);
+        stationARTravelTime.put("공항화물청사-인천공항1터미널", 5);
+        stationARTravelTime.put("인천공항1터미널-인천공항2터미널", 8);
         stationTravelTime.put(1065, stationARTravelTime);
 
         // 경의중앙선 (Gyeongui Central Line)GCL
