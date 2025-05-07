@@ -25,6 +25,14 @@ public class RouteTimeService {
         Map<String, Integer> stationGCLTravelTime = new HashMap<>();
         Map<String, Integer> stationGLTravelTime = new HashMap<>();
         Map<String, Integer> stationSBLTravelTime = new HashMap<>();
+        Map<String, Integer> stationSLTravelTime = new HashMap<>();
+        Map<String, Integer> stationGGLTravelTime = new HashMap<>();
+        Map<String, Integer> stationSHLTravelTime = new HashMap<>();
+        Map<String, Integer> stationSLLTravelTime = new HashMap<>();
+        Map<String, Integer> stationGTXTravelTime = new HashMap<>();
+
+
+
         //  메인 노선 (연천 ~ 구로)
         station1TravelTime.put("연천-전곡", 8);
         station1TravelTime.put("전곡-청산", 5);
@@ -236,40 +244,40 @@ public class RouteTimeService {
 
         // 경의중앙선 (Gyeongui Central Line)GCL
         // 메인노선(지평~가좌)
-        stationGCLTravelTime.put("지평-용문",5);0
-        stationGCLTravelTime.put("용문-원덕",5);5
-        stationGCLTravelTime.put("원덕-양평",6);11
-        stationGCLTravelTime.put("양평-오빈",3);14
-        stationGCLTravelTime.put("오빈-아신",3);17
-        stationGCLTravelTime.put("아신-국수",4);21
-        stationGCLTravelTime.put("국수-신원",4);25
-        stationGCLTravelTime.put("신원-양수",4);29
-        stationGCLTravelTime.put("양수-운길산",3);32
-        stationGCLTravelTime.put("운길산-팔당",5);37
-        stationGCLTravelTime.put("팔당-도심",5);42
-        stationGCLTravelTime.put("도심-덕소",2);44
-        stationGCLTravelTime.put("덕소-양정",4);48
-        stationGCLTravelTime.put("양정-도뇽",4);52
-        stationGCLTravelTime.put("도뇽-구리",3);55
-        stationGCLTravelTime.put("구리-양원",4);59
-        stationGCLTravelTime.put("양원-망우",3);2
-        stationGCLTravelTime.put("망우-상봉",2);4
-        stationGCLTravelTime.put("상봉-중랑",2);6
-        stationGCLTravelTime.put("중랑-회기",3);9
-        stationGCLTravelTime.put("회기-청량리",4);13
-        stationGCLTravelTime.put("청량리-왕십리",4);17
-        stationGCLTravelTime.put("왕십리-응봉",2);19
-        stationGCLTravelTime.put("응봉-옥수",3);22
-        stationGCLTravelTime.put("옥수-한남",2);24
-        stationGCLTravelTime.put("한남-서빙고",3);27
-        stationGCLTravelTime.put("서빙고-이촌",3);30
-        stationGCLTravelTime.put("이촌-용산",4);34
-        stationGCLTravelTime.put("용산-효창공원앞",3);37
-        stationGCLTravelTime.put("효창공원앞-공덕",3);40
-        stationGCLTravelTime.put("공덕-서강대",3);43
-        stationGCLTravelTime.put("서강대-홍대입구",2);45
-        stationGCLTravelTime.put("홍대입구-가좌",2);47
-        stationGCLTravelTime.put("가좌-디지털미디어시티",3);50
+        stationGCLTravelTime.put("지평-용문",5);
+        stationGCLTravelTime.put("용문-원덕",5);
+        stationGCLTravelTime.put("원덕-양평",6);
+        stationGCLTravelTime.put("양평-오빈",3);
+        stationGCLTravelTime.put("오빈-아신",3);
+        stationGCLTravelTime.put("아신-국수",4);
+        stationGCLTravelTime.put("국수-신원",4);
+        stationGCLTravelTime.put("신원-양수",4);
+        stationGCLTravelTime.put("양수-운길산",3);
+        stationGCLTravelTime.put("운길산-팔당",5);
+        stationGCLTravelTime.put("팔당-도심",5);
+        stationGCLTravelTime.put("도심-덕소",2);
+        stationGCLTravelTime.put("덕소-양정",4);
+        stationGCLTravelTime.put("양정-도뇽",4);
+        stationGCLTravelTime.put("도뇽-구리",3);
+        stationGCLTravelTime.put("구리-양원",4);
+        stationGCLTravelTime.put("양원-망우",3);
+        stationGCLTravelTime.put("망우-상봉",2);
+        stationGCLTravelTime.put("상봉-중랑",2);
+        stationGCLTravelTime.put("중랑-회기",3);
+        stationGCLTravelTime.put("회기-청량리",4);
+        stationGCLTravelTime.put("청량리-왕십리",4);
+        stationGCLTravelTime.put("왕십리-응봉",2);
+        stationGCLTravelTime.put("응봉-옥수",3);
+        stationGCLTravelTime.put("옥수-한남",2);
+        stationGCLTravelTime.put("한남-서빙고",3);
+        stationGCLTravelTime.put("서빙고-이촌",3);
+        stationGCLTravelTime.put("이촌-용산",4);
+        stationGCLTravelTime.put("용산-효창공원앞",3);
+        stationGCLTravelTime.put("효창공원앞-공덕",3);
+        stationGCLTravelTime.put("공덕-서강대",3);
+        stationGCLTravelTime.put("서강대-홍대입구",2);
+        stationGCLTravelTime.put("홍대입구-가좌",2);
+        stationGCLTravelTime.put("가좌-디지털미디어시티",3);
         //분기 1 (가좌~임진강)
 
         //경춘선(Gyeongchun Line) GL (춘천~상봉)
@@ -299,6 +307,8 @@ public class RouteTimeService {
         stationGLTravelTime.put("상봉-중랑",3);
         stationGLTravelTime.put("중랑-회기",3);
         stationGLTravelTime.put("회기-청량리",3);
+        stationTravelTime.put(1067, stationGLTravelTime);
+
         //수인분당선 (Suin Bundang Line)SBL
         // 메인노선
         stationSBLTravelTime.put("인천-신포",2);
@@ -363,6 +373,91 @@ public class RouteTimeService {
         stationSBLTravelTime.put("압구정로데오-서울숲",2);
         stationSBLTravelTime.put("서울숲-왕십리",3);
         stationSBLTravelTime.put("왕십리-청량리",7);
+        stationTravelTime.put(1075, stationSBLTravelTime);
+
+        //신분당선(Shinbundang Line)SL
+        //메인노선
+        stationSLTravelTime.put("광교-광교중앙",3);
+        stationSLTravelTime.put("광교중앙-상현",3);
+        stationSLTravelTime.put("상현-성복",3);
+        stationSLTravelTime.put("성복-수지구청",3);
+        stationSLTravelTime.put("수지구청-동천",3);
+        stationSLTravelTime.put("동천-미금",2);
+        stationSLTravelTime.put("미금-정자",3);
+        stationSLTravelTime.put("정자-판교",3);
+        stationSLTravelTime.put("판교-청계산입구",6);
+        stationSLTravelTime.put("청계산입구-양재시민의숲",3);
+        stationSLTravelTime.put("양재시민의숲-양재",3);
+        stationSLTravelTime.put("양재-강남",2);
+        stationSLTravelTime.put("강남-신논현",2);
+        stationSLTravelTime.put("신논현-논현",1);
+        stationSLTravelTime.put("논현-신사",1);
+        stationTravelTime.put(1077, stationSLTravelTime);
+
+        //경강선(Gyeonggang Line)GGL (GL과 곂쳐서 GGL로 표기)
+        //메인노선
+        stationGGLTravelTime.put("여주-세종대왕릉",5);
+        stationGGLTravelTime.put("세종대왕릉-부발",6);
+        stationGGLTravelTime.put("부발-이천",4);
+        stationGGLTravelTime.put("이천-신둔도예촌",6);
+        stationGGLTravelTime.put("신둔도예촌-곤지암",6);
+        stationGGLTravelTime.put("곤지암-초월",4);
+        stationGGLTravelTime.put("초월-경기광주",5);
+        stationGGLTravelTime.put("경기광주-삼동",5);
+        stationGGLTravelTime.put("삼동-이매",5);
+        stationGGLTravelTime.put("이매-성남",2);
+        stationGGLTravelTime.put("판교-성남",2);
+        stationTravelTime.put(1081, stationGGLTravelTime);
+
+        //서해선(Seohae Line)SHL (SL과 곂쳐서 SHL로 표기)
+        //메인노선
+        stationSHLTravelTime.put("원시-시우",3);
+        stationSHLTravelTime.put("시우-초지",3);
+        stationSHLTravelTime.put("초지-선부",3);
+        stationSHLTravelTime.put("선부-달미",3);
+        stationSHLTravelTime.put("달미-시흥능곡",3);
+        stationSHLTravelTime.put("시흥능곡-시흥시청",3);
+        stationSHLTravelTime.put("시흥시청-신현",4);
+        stationSHLTravelTime.put("신현-신천",5);
+        stationSHLTravelTime.put("신천-시흥대야",2);
+        stationSHLTravelTime.put("시흥대야-소새울",3);
+        stationSHLTravelTime.put("소새울-소사",4);
+        stationSHLTravelTime.put("소사-부천종합운동장",3);
+        stationSHLTravelTime.put("부천종합운동장-원종",3);
+        stationSHLTravelTime.put("원종-김포공항",5);
+        stationSHLTravelTime.put("김포공항-능곡",8);
+        stationSHLTravelTime.put("능곡-대곡",3);
+        stationSHLTravelTime.put("대곡-곡산",3);
+        stationSHLTravelTime.put("곡산-백마",3);
+        stationSHLTravelTime.put("백마-풍산",2);
+        stationSHLTravelTime.put("풍산-일산",2);
+        stationTravelTime.put(1093, stationSHLTravelTime);
+
+        //신림선(Sillim Line) SLL (SL과 곂쳐서 SSL로 표기)
+        //메인노선
+        stationSLLTravelTime.put("관악산-서울대벤처타운",2);
+        stationSLLTravelTime.put("서울대벤처타운-서원",2);
+        stationSLLTravelTime.put("서원-신림",2);
+        stationSLLTravelTime.put("신림-당곡",1);
+        stationSLLTravelTime.put("당곡-보라매병원",2);
+        stationSLLTravelTime.put("보라매병원-보라매공원",1);
+        stationSLLTravelTime.put("보라매공원-보라매",2);
+        stationSLLTravelTime.put("보라매-서울지방병무청",2);
+        stationSLLTravelTime.put("서울지방병무청-대방",2);
+        stationSLLTravelTime.put("대방-샛강",1);
+        stationTravelTime.put(1094, stationSLLTravelTime);
+
+        //GTX-A(GTX) 메인 노선
+        stationGTXTravelTime.put("동탄-구성",7);
+        stationGTXTravelTime.put("구성-성남",7);
+        stationGTXTravelTime.put("성남-수서",7);
+
+        //GTX-A 두번째 메인 노선?
+        stationGTXTravelTime.put("서울역-연신내",6);
+        stationGTXTravelTime.put("연신내-대곡",6);
+        stationGTXTravelTime.put("대곡-킨텍스",5);
+        stationGTXTravelTime.put("킨텍스-운정중앙",4);
+        stationTravelTime.put(1032, stationGTXTravelTime);
 
     }
 
