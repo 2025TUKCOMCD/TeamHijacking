@@ -277,8 +277,33 @@ public class RouteTimeService {
         stationGCLTravelTime.put("공덕-서강대",3);
         stationGCLTravelTime.put("서강대-홍대입구",2);
         stationGCLTravelTime.put("홍대입구-가좌",2);
+        //분기 1 (가좌~서울역)
+        stationGCLTravelTime.put("가좌-신촌(경의중앙선)",6);
+        stationGCLTravelTime.put("신촌(경의중앙선)-서울역",6);
+        //분기2 (가좌~임진강)
         stationGCLTravelTime.put("가좌-디지털미디어시티",3);
-        //분기 1 (가좌~임진강)
+        stationGCLTravelTime.put("디지털미디어시티-수색",2);
+        stationGCLTravelTime.put("수색-한국항공대",3);
+        stationGCLTravelTime.put("한국항공대-강매",3);
+        stationGCLTravelTime.put("강매-행신",2);
+        stationGCLTravelTime.put("행신-능곡",4);
+        stationGCLTravelTime.put("능곡-대곡",3);
+        stationGCLTravelTime.put("대곡-곡산",3);
+        stationGCLTravelTime.put("곡산-백마",2);
+        stationGCLTravelTime.put("백마-풍산",3);
+        stationGCLTravelTime.put("풍산-일산",2);
+        stationGCLTravelTime.put("일산-탄현",3);
+        stationGCLTravelTime.put("탄현-야당",2);
+        stationGCLTravelTime.put("야당-운정",2);
+        stationGCLTravelTime.put("운전-금릉",4);
+        stationGCLTravelTime.put("금릉-금촌",2);
+        stationGCLTravelTime.put("금촌-월롱",4);
+        stationGCLTravelTime.put("월롱-파주",3);
+        stationGCLTravelTime.put("파주-문산",4);
+        stationGCLTravelTime.put("문산-운천",6);
+        stationGCLTravelTime.put("운천-임진강",4);
+        stationTravelTime(1063, stationGCLTravelTime)
+
 
         //경춘선(Gyeongchun Line) GL (춘천~상봉)
         stationGLTravelTime.put("춘천-남춘천",3);
