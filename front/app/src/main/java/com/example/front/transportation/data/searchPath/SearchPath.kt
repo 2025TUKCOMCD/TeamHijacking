@@ -1,7 +1,6 @@
 package com.example.front.transportation.data.searchPath
 
-import android.os.Parcel
-import android.os.Parcelable
+import java.io.Serializable
 
 data class RouteRequest(
     val startLat: Double,
@@ -20,42 +19,15 @@ data class Route(
 )
 
 data class RouteId(
-    val busLocalBlID: List<Int>,
+    val transportLocalID: Int,
     val startStationInfo: Int,
     val endStationInfo: Int,
+    val subwayLineName: String,
+    val trainDirection: String,
+    val startX : Double,
+    val startY : Double,
+    val transferStations: List<String>,
     val stationInfo: List<Int>,
-    val predictTimes1: List<String>,
-    val predictTimes2: List<String>
-) : Parcelable {
-    constructor(parcel: Parcel) : this(
-        parcel.createIntArray()?.toList() ?: emptyList(),
-        parcel.readInt(),
-        parcel.readInt(),
-        parcel.createIntArray()?.toList() ?: emptyList(),
-        parcel.createStringArrayList() ?: emptyList(),
-        parcel.createStringArrayList() ?: emptyList()
-    )
-
-    override fun writeToParcel(parcel: Parcel, flags: Int) {
-        parcel.writeIntArray(busLocalBlID.toIntArray())
-        parcel.writeInt(startStationInfo)
-        parcel.writeInt(endStationInfo)
-        parcel.writeIntArray(stationInfo.toIntArray())
-        parcel.writeStringList(predictTimes1)
-        parcel.writeStringList(predictTimes2)
-    }
-
-    override fun describeContents(): Int {
-        return 0
-    }
-
-    companion object CREATOR : Parcelable.Creator<RouteId> {
-        override fun createFromParcel(parcel: Parcel): RouteId {
-            return RouteId(parcel)
-        }
-
-        override fun newArray(size: Int): Array<RouteId?> {
-            return arrayOfNulls(size)
-        }
-    }
-}
+    val predictTimes1: String,
+    val predictTimes2: String
+) : Serializable

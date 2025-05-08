@@ -23,12 +23,13 @@
 
         <!-- 첫 번째 경로 -->
         <LinearLayout
-            android:layout_width="162dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:minHeight="100dp"
             android:background="@drawable/some_chip"
             android:id="@+id/someRootLayout1"
             android:padding="5dp"
+            android:layout_margin="12dp"
             android:orientation="vertical"
             android:layout_marginBottom="10dp">
 
@@ -81,11 +82,12 @@
 
         <!-- 두 번째 경로 -->
         <LinearLayout
-            android:layout_width="162dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:minHeight="100dp"
             android:background="@drawable/some_chip"
             android:id="@+id/someRootLayout2"
+            android:layout_margin="12dp"
             android:padding="5dp"
             android:orientation="vertical"
             android:layout_marginBottom="10dp">
@@ -139,7 +141,8 @@
 
         <!-- 세 번째 경로 -->
         <LinearLayout
-            android:layout_width="162dp"
+            android:layout_width="match_parent"
+            android:layout_margin="12dp"
             android:layout_height="wrap_content"
             android:minHeight="100dp"
             android:background="@drawable/some_chip"
