@@ -41,19 +41,19 @@ class TransportNewPathSearchActivity : AppCompatActivity() {
         loadingSpinner.visibility = View.VISIBLE
         dataLayout.visibility = View.GONE
 
-        // ViewModel의 LiveData 관찰
+        // ViewModel 의 LiveData 관찰
         //
         routeViewModel.routeData.observe(this, Observer { routes ->
             // 데이터 로드 완료 후 처리
             loadingSpinner.visibility = View.GONE
             dataLayout.visibility = View.VISIBLE
 
-            // 데이터를 UI에 설정
+            // 데이터 UI에 설정
             routes?.let {
                 if (it.isNotEmpty()) {
                     updateRouteViews(it)
                 } else {
-                    // 데이터가 없는 경우 처리
+                    // 데이터 없는 경우 처리
                 }
             }
         })

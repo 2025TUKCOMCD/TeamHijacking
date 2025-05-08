@@ -1,7 +1,7 @@
 import java.util.Properties
 
 plugins {
-    alias(libs.plugins.androidApplication) // 앱 모듈 플러그인
+    alias(libs.plugins.androidApplication) // 앱 모듈 plugin
     id("org.jetbrains.kotlin.android")
 }
 
@@ -9,7 +9,7 @@ android {
     namespace = "com.example.front"
     compileSdk = 34
 
-    // local.properties 파일에서 API 키 가져오기
+    // local.properties 파일 에서 API 키 가져 오기
     val localProperties = Properties().apply {
         load(project.rootProject.file("local.properties").inputStream())
     }
@@ -98,7 +98,7 @@ dependencies {
     implementation("androidx.constraintlayout:constraintlayout:2.2.0")
     implementation("androidx.compose.material3:material3-android:1.3.1")
 
-    // ✅ 네트워킹 & JSON/XML 처리
+    // ✅ networking & JSON/XML 처리
     implementation("com.google.code.gson:gson:2.11.0")
     implementation("com.squareup.retrofit2:retrofit:2.9.0")
     implementation("com.squareup.retrofit2:converter-gson:2.9.0")
@@ -117,7 +117,7 @@ dependencies {
     implementation("com.google.android.gms:play-services-wearable:18.1.0")
     implementation("androidx.wear:wear:1.3.0")
 
-    // ✅ 라이프사이클 및 뷰모델
+    // ✅ life cycle 및 뷰모델
     implementation(libs.lifecycle.livedata.ktx)
     implementation(libs.lifecycle.viewmodel.ktx)
     implementation(libs.fragment.ktx)

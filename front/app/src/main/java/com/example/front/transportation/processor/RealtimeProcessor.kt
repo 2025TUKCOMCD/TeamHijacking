@@ -9,15 +9,15 @@ import okio.ByteString
 
 object RealtimeProcessor {
 
-    private const val Host_URL = BuildConfig.Host_URL // BuildConfig에서 Host_URL을 가져옴
+    private const val Host_URL = BuildConfig.Host_URL // BuildConfig 에서 Host_URL 을 가져옴
 
     fun main() {
-        // WebSocket을 위한 OkHttpClient 생성
+        // WebSocket 을 위한 OkHttpClient 생성
         val client = OkHttpClient()
 
         // WebSocket 연결 요청
         val request = Request.Builder()
-            .url("$Host_URL/realtime") // Host_URL을 활용하여 WebSocket URL 설정
+            .url("$Host_URL/realtime") // Host_URL 을 활용 하여 WebSocket URL 설정
             .build()
 
         // WebSocket Listener 설정
@@ -48,7 +48,7 @@ object RealtimeProcessor {
         // WebSocket 연결 실행
         client.newWebSocket(request, listener)
 
-        // WebSocket 사용 후 클라이언트 종료
+        // WebSocket 사용 후 client 종료
         client.dispatcher.executorService.shutdown()
     }
 

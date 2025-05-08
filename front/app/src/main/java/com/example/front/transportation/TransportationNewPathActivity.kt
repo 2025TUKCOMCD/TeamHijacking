@@ -46,12 +46,12 @@ class TransportationNewPathActivity : AppCompatActivity() {
         // 사용할 객체들 선언
         val addressStartEditText: TextView = binding.addressStartTextView
         val addressEndEditText: TextView = binding.addressEndTextView
-        val AddressConfirmBtn: Button = binding.AddressConfirmBtn
+        val addressConfirmBtn: Button = binding.AddressConfirmBtn
         // 오디오 권한 요청
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.RECORD_AUDIO), PERMISSION_REQUEST_RECORD_AUDIO)
         }
-        // 권한이 있는지 확인 (여기서는 위치 권한 확인) //일단 이곳에서 먼저 주소를 넣어둠(나중에 삭제 예정)
+        // 권한이 있는지 확인 (여기 에서는 위치 권한 확인) //일단 이 곳에서 먼저 주소를 넣어둠(나중에 삭제 예정)
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
             val saddress = "잠실역"
             addressStartEditText.text = saddress
@@ -78,7 +78,7 @@ class TransportationNewPathActivity : AppCompatActivity() {
         addressEndEditText.setOnClickListener {
             startSTT(REQUEST_CODE_SPEECH_INPUT_END)
         }
-        AddressConfirmBtn.setOnClickListener{
+        addressConfirmBtn.setOnClickListener{
             val intent = Intent(this, TransportNewPathSearchActivity::class.java)
             intent.putExtra("startLat", revs_latitude)
             intent.putExtra("startLng", revs_longitude)
@@ -103,7 +103,7 @@ class TransportationNewPathActivity : AppCompatActivity() {
         }
     }
 
-    // STT 이후 오게 되는 함수. 만약 REQUESTCODE == REQUEST_CODE_INPUT_START라면 STARTADRESS를 바꿔주고 아니면 END ADDRESS를 바꿔준다
+    // STT 이후 오게 되는 함수. 만약 REQUEST CODE == REQUEST_CODE_INPUT_START 라면 STARTADRESS 를 바꾸고 아니면 END ADDRESS 를 바꾼다
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if ((requestCode == REQUEST_CODE_SPEECH_INPUT_START || requestCode == REQUEST_CODE_SPEECH_INPUT_END) && resultCode == RESULT_OK && data != null) {
@@ -148,7 +148,7 @@ class TransportationNewPathActivity : AppCompatActivity() {
         val request = Request.Builder().url(url).build()
 
         return try {
-            val response = client.newCall(request).execute() // 동기식 네트워크 요청
+            val response = client.newCall(request).execute() // 동기식 network 요청
             if (response.isSuccessful) {
                 val responseBody = response.body?.string()
                 val json = JsonParser.parseString(responseBody) as JsonObject
@@ -172,7 +172,7 @@ class TransportationNewPathActivity : AppCompatActivity() {
         }
     }
 
-    // Default 함수. 일단 실행 먼저 됨. API와의 통신을 위함
+    // Default 함수. 일단 실행 먼저 됨. API 와의 통신을 위함
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         if (requestCode == PERMISSION_REQUEST_ACCESS_FINE_LOCATION && grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {

@@ -15,7 +15,7 @@ interface FragmentNavigation {
     fun showNextFragment()
 }
 
-class TransportDetailRouteControlActivity : AppCompatActivity(), FragmentNavigation { // FragmentNavigation 인터페이스 구현
+class TransportDetailRouteControlActivity : AppCompatActivity(), FragmentNavigation { // FragmentNavigation interface 구현
 
     private lateinit var binding: ActivityTransportDetailRouteControlBinding
 
@@ -45,7 +45,7 @@ class TransportDetailRouteControlActivity : AppCompatActivity(), FragmentNavigat
         showNextFragment()
     }
 
-    override fun showNextFragment() { // FragmentNavigation 인터페이스 메서드 구현 (override 추가)
+    override fun showNextFragment() { // FragmentNavigation interface 메서드 구현 (override 추가)
         if (currentIndex < transportList.size) {
             val transportData = transportList[currentIndex]
             val fragment = when (transportData.type) {
