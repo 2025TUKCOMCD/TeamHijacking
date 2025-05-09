@@ -20,24 +20,38 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent">
 
-        <!-- 🔄 IoT 추가 버튼 (SmartThings 앱 이동) -->
-        <Button
-            android:id="@+id/btnAddDevice"
-            android:layout_width="wrap_content"
+        <!-- ➕ My IoT 페이지 이동 버튼 -->
+        <ImageButton
+            android:id="@+id/btnMyIot"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="IoT 추가"
+            android:minWidth="20dp"
+            android:minHeight="40dp"
+            android:paddingTop="15dp"
+            android:paddingBottom="5dp"
+            android:layout_margin="5dp"
+            android:text="@string/iotmanage"
+            android:contentDescription="@string/iot_manage_content_description"
+            android:layout_marginBottom="10dp"
+            android:src="@drawable/myiot_btn"
+            android:background="@android:color/transparent"/>
+
+        <!-- 🔄 IoT 추가 버튼 (SmartThings 앱 이동) -->
+        <ImageButton
+            android:id="@+id/btnAddDevice"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:minWidth="20dp"
+            android:minHeight="40dp"
+            android:text="@string/iot_add"
+            android:layout_margin="5dp"
             android:backgroundTint="@android:color/holo_blue_light"
             android:textColor="@android:color/white"
-            android:padding="12dp"
-            android:layout_marginBottom="16dp"/>
-
-        <!-- ➕ My IoT 페이지 이동 버튼 -->
-        <Button
-            android:id="@+id/btnMyIot"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="My IoT"
-            android:layout_marginBottom="16dp"/>
+            android:paddingBottom="10dp"
+            android:layout_marginBottom="12dp"
+            android:src="@drawable/manage_myiot_btn"
+            android:background="@android:color/transparent"
+            android:contentDescription="IoT 기기 추가 버튼입니다. 클릭 시 IoT 기기를 스마트 워치 딴에서 추가할 수 있도록 smartThings로 이동합니다."/>
 
         <!-- 🎤 음성 명령 버튼 -->
         <Button
