@@ -1,8 +1,11 @@
 package com.example.front.transportation
 
+import android.Manifest
 import android.content.ContentValues.TAG
+import android.content.Context
 import android.content.pm.PackageManager
 import android.location.Location
+import android.location.LocationManager
 import android.os.Bundle
 import android.text.TextUtils
 import android.util.Log
@@ -15,13 +18,17 @@ import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
+import androidx.core.app.ActivityCompat
 import com.example.front.R
 import com.example.front.databinding.ActivityTransportInformationBinding
 
 import com.example.front.databinding.TransSavedConfirmDialogBinding
 import com.example.front.databinding.TransSavedDialogBinding
 import com.example.front.transportation.data.searchPath.RouteId
+import com.google.android.gms.location.FusedLocationProviderClient
+import com.google.android.gms.location.LocationServices
 
 //교통 안내용 Activity
 class TransportInformationActivity : AppCompatActivity() {
@@ -31,17 +38,65 @@ class TransportInformationActivity : AppCompatActivity() {
     private var transInfoImgArray = intArrayOf(1,2,3,4,5,6)
     private lateinit var transInfoImgSwitcher: ImageSwitcher
     private var transOrder = 0
+    private lateinit var fusedLocationClient: FusedLocationProviderClient
+    private var curLat: Double = 0.0
+    private var curLon: Double = 0.0
 
+    private val locationPermissionRequest = registerForActivityResult(
+        ActivityResultContracts.RequestMultiplePermissions()
+    ) { permissions ->
+        when {
+            permissions.getOrDefault(Manifest.permission.ACCESS_FINE_LOCATION, false) -> {
+                // Precise location access granted.
+                getLastLocation()
+            }
+            permissions.getOrDefault(Manifest.permission.ACCESS_COARSE_LOCATION, false) -> {
+                // Only approximate location access granted.
+                getLastLocation() // 필요에 따라 처리
+            } else -> {
+            // No location access granted.
+            Log.e("Location", "Location permission denied.")
+        }
+        }
+    }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityTransportInformationBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        //위치 코드
+        fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
+
+        // 위치 권한 확인 및 요청
+        if (ActivityCompat.checkSelfPermission(
+                this,
+                Manifest.permission.ACCESS_FINE_LOCATION
+            ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
+                this,
+                Manifest.permission.ACCESS_COARSE_LOCATION
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
+            locationPermissionRequest.launch(
+                arrayOf(
+                    Manifest.permission.ACCESS_FINE_LOCATION,
+                    Manifest.permission.ACCESS_COARSE_LOCATION
+                )
+            )
+            return
+        }
+
+        // 권한이 이미 있는 경우 바로 위치 정보 가져오기
+        getLastLocation()
+
         if (!hasGps()) {
-            Log.d(TAG, "This hardware doesn't have GPS.")
+            Log.d("GPS", "This hardware doesn't have GPS.")
             // Fall back to functionality that doesn't use location or
             // warn the user that location function isn't available.
         }
+        else{
+            Log.d("GPS", "This hardware has GPS.")
+        }
+        print(hasGps())
 
         //바인딩
         val imsiBtt2: Button = binding.imsiBtt2
@@ -230,5 +285,34 @@ class TransportInformationActivity : AppCompatActivity() {
         }
 
         return;
+    }
+    private fun getLastLocation() {
+        try {
+            fusedLocationClient.lastLocation
+                .addOnSuccessListener { location: Location? ->
+                    location?.let {
+                        curLat = it.latitude
+                        curLon = it.longitude
+                        Log.d("현빈", "Latitude: $curLat, Longitude: $curLon")
+                        // 얻은 위도, 경도 사용
+                    } ?: run {
+                        Log.w("현빈", "Last known location was null, try requesting location updates.")
+                        requestLocationUpdates() // 마지막 위치가 없는 경우 업데이트 요청
+                    }
+                }
+                .addOnFailureListener { e ->
+                    Log.e("Location", "Failed to get last location: ${e.message}")
+                }
+        } catch (securityException: SecurityException) {
+            Log.e("Location", "Security exception while getting last location.")
+        }
+    }
+
+    private fun requestLocationUpdates() {
+        // 위치 업데이트 요청 설정 (원하는 정확도, 빈도 등)
+        // ...
+
+        // fusedLocationClient.requestLocationUpdates(...) // 구현 필요
+        Log.w("Location", "requestLocationUpdates() not fully implemented.")
     }
 }
