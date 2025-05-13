@@ -14,6 +14,7 @@ import android.widget.ImageSwitcher
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import com.example.front.R
 import com.example.front.databinding.ActivityTransportInformationBinding
@@ -27,10 +28,9 @@ class TransportInformationActivity : AppCompatActivity() {
 
     private lateinit var binding : ActivityTransportInformationBinding
     //imageSwitcher 에 사용할 imageView 배열 선언
-    private val transInfoImgArray = intArrayOf(R.drawable.default_btt, R.drawable.train_btt, R.drawable.human_btt,
-        R.drawable.bus_btt, R.drawable.complete_btt)
-    private var imgIndex = 0
+    private var transInfoImgArray = intArrayOf(1,2,3,4,5,6)
     private lateinit var transInfoImgSwitcher: ImageSwitcher
+    private var transOrder = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -51,23 +51,36 @@ class TransportInformationActivity : AppCompatActivity() {
         //imageSwitcher 에 imageView 설정 하여 이미지 표시
         initTransImgSwitcher()
 
-        val pathTransitType = intent.getIntegerArrayListExtra("pathTransitType")
+        //val pathTransitType = intent.getIntegerArrayListExtra("pathTransitType")
+        val pathTransitType = mutableListOf(3,1,3,2,3)
         // Log.d("log", "pathTransitType: $pathTransitType")
+        //val transitTypeNo = intent.getStringArrayListExtra("transitTypeNo")
         val transitTypeNo = intent.getStringArrayListExtra("transitTypeNo")
         // Log.d("log", "transitTypeNo: $transitTypeNo") //
-        val routeIds = intent.getSerializableExtra("routeIds") as? ArrayList<RouteId>
+        //val routeIds = intent.getSerializableExtra("routeIds") as? ArrayList<RouteId>
+        val routeIds = intArrayOf(3,2,3,1,3)
         Log.d("log", "routeIds: $routeIds")
-        updateButtonImages(pathTransitType)
+        pathTransitType.add(4)
+        Log.d("현빈", pathTransitType.toString())
+        updateButtonImages(transOrder,pathTransitType)
         // 주석 처리된 임시 버튼
-        /*
         imsiBtt2.setOnClickListener {
-            transSavedDialogShow()
+            if(transOrder!=0){
+                updateButtonImages(--transOrder,pathTransitType)
+            }
+            else{
+                Toast.makeText(this, "첫번째 경로입니다.", Toast.LENGTH_SHORT).show()
+            }
         }
 
         imsiBtt3.setOnClickListener {
-            whatIsNext(++imgIndex)
+            if(transOrder+1 < pathTransitType.size) {
+                updateButtonImages(++transOrder, pathTransitType)
+            }
+            else{
+                Toast.makeText(this, "마지막 경로입니다.", Toast.LENGTH_SHORT).show()
+            }
         }
-        */
 
         //updateButtonImages(pathTransitType)
 
@@ -75,25 +88,20 @@ class TransportInformationActivity : AppCompatActivity() {
     private fun hasGps(): Boolean =
         packageManager.hasSystemFeature(PackageManager.FEATURE_LOCATION_GPS)
 
-    private fun updateButtonImages(pathTransitType: List<Int>?) {
+    private fun updateButtonImages(order: Int,pathTransitType: List<Int>?) {
         if (pathTransitType == null) return
 
-        pathTransitType.forEachIndexed { index, type ->
-            val imageResource = when (type) {
-                1 -> R.drawable.train_btt
-                2 -> R.drawable.bus_btt
-                3 -> R.drawable.human_btt
-                else -> R.drawable.default_btt // 기본 이미지
-            }
-            // 배열 범위를 벗어날 경우를 대비한 방어 코드
-            if (index < transInfoImgArray.size) {
-                transInfoImgArray[index] = imageResource
-            }
+        val imageResource = when (pathTransitType[order]) {
+            1 -> R.drawable.train_btt
+            2 -> R.drawable.bus_btt
+            3 -> R.drawable.human_btt
+            4 -> R.drawable.complete_btt
+            else -> R.drawable.default_btt // 기본 이미지
         }
+        Log.d("현빈", imageResource.toString())
+        transInfoImgArray[pathTransitType[order]] = imageResource
 
-        // 첫 번째 이미지 표시 하도록 설정
-        imgIndex = 0
-        transInfoImgSwitcher.setImageResource(transInfoImgArray[imgIndex])
+        transInfoImgSwitcher.setImageResource(transInfoImgArray[pathTransitType[order]])
     }
 
 
@@ -199,20 +207,23 @@ class TransportInformationActivity : AppCompatActivity() {
 
     //imgSwitcher 초기화 function
     private fun initTransImgSwitcher(){
+        Log.d("현빈", "함수입성")
         transInfoImgSwitcher.setFactory({val imgView = ImageView(applicationContext)
             imgView.scaleType = ImageView.ScaleType.FIT_CENTER
+            Log.d("현빈", "버그1")
             //imgView.setPadding(2, 2, 2, 2)
             imgView
         })
+        Log.d("현빈", "버그2")
         //imageSwitcher 에 imageView 설정
-        transInfoImgSwitcher.setImageResource(transInfoImgArray[imgIndex])
+        transInfoImgSwitcher.setImageResource(R.drawable.default_btt)
+        Log.d("현빈", "버그3")
     }
 
     /* 교통 안내 변경 시, 버스, 지하철, ... 에 따라 사진 바뀌도록 구현 */
     private fun whatIsNext(index:Int = 0) {
         //만약 배열의 크기 보다 크다면 0으로 바꾼다.
         if(index>=transInfoImgArray.size) {
-            imgIndex = 0
             transInfoImgSwitcher.setImageResource(transInfoImgArray[0])
         }else{
             transInfoImgSwitcher.setImageResource(transInfoImgArray[index])
