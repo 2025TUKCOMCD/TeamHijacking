@@ -63,4 +63,6 @@
     <string name="iotmanage">내 IOT 기기 관리</string>
     <string name="iot_add">IoT 기기 추가</string>
     <string name="iot_manage_content_description">내 IOT 기기를 관리하는 곳입니다. 더블 클릭 시 이전에 연결해둔 IoT 기기 목록을 보여주는 창으로 넘어갑니다.</string>
+    <string name="iot_iot_smartthings">IoT 기기 추가 버튼입니다. 클릭 시 IoT 기기를 스마트 워치 딴에서 추가할 수 있도록 smartThings로 이동합니다.</string>
+    <string name="start_ai">음성 명령 시작</string>
 </resources>
