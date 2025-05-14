@@ -13,9 +13,11 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="617fd7c0-9874-4635-9c7c-865fb012701e" name="Changes" comment="api데이터 서비스 추후 수정할 부분 체크만 해둠.">
+    <list default="true" id="617fd7c0-9874-4635-9c7c-865fb012701e" name="Changes" comment="수정할 함수 체크">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/front/app/src/main/java/com/example/front/iot/SmartHome/DeviceControlHelper.kt" beforeDir="false" afterPath="$PROJECT_DIR$/front/app/src/main/java/com/example/front/iot/SmartHome/DeviceControlHelper.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/front/app/src/main/java/com/example/front/iot/MyIotActivity.kt" beforeDir="false" afterPath="$PROJECT_DIR$/front/app/src/main/java/com/example/front/iot/MyIotActivity.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/front/app/src/main/res/layout/dialog_device_detail.xml" beforeDir="false" afterPath="$PROJECT_DIR$/front/app/src/main/res/layout/dialog_device_detail.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/front/app/src/main/res/values/strings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/front/app/src/main/res/values/strings.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -127,13 +129,22 @@
       <option name="project" value="LOCAL" />
       <updated>1747257441201</updated>
     </task>
-    <option name="localTasksCounter" value="4" />
+    <task id="LOCAL-00004" summary="수정할 함수 체크">
+      <option name="closed" value="true" />
+      <created>1747257747862</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1747257747862</updated>
+    </task>
+    <option name="localTasksCounter" value="5" />
     <servers />
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="그래들 오류 수정" />
     <MESSAGE value="HomeIoT액티비티 and xml의 버튼이 호환 되지않아. 기준이 되는 ImageButton으로 통일함." />
     <MESSAGE value="api데이터 서비스 추후 수정할 부분 체크만 해둠." />
-    <option name="LAST_COMMIT_MESSAGE" value="api데이터 서비스 추후 수정할 부분 체크만 해둠." />
+    <MESSAGE value="수정할 함수 체크" />
+    <option name="LAST_COMMIT_MESSAGE" value="수정할 함수 체크" />
   </component>
 </project>
