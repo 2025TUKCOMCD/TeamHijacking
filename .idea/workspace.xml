@@ -13,9 +13,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="617fd7c0-9874-4635-9c7c-865fb012701e" name="Changes" comment="그래들 오류 수정">
-      <change beforePath="$PROJECT_DIR$/.idea/deploymentTargetSelector.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+    <list default="true" id="617fd7c0-9874-4635-9c7c-865fb012701e" name="Changes" comment="HomeIoT액티비티 and xml의 버튼이 호환 되지않아. 기준이 되는 ImageButton으로 통일함.">
       <change beforePath="$PROJECT_DIR$/front/app/src/main/java/com/example/front/iot/HomeIotActivity.kt" beforeDir="false" afterPath="$PROJECT_DIR$/front/app/src/main/java/com/example/front/iot/HomeIotActivity.kt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -104,10 +102,20 @@
     </configuration>
   </component>
   <component name="TaskManager">
+    <task id="LOCAL-00001" summary="HomeIoT액티비티 and xml의 버튼이 호환 되지않아. 기준이 되는 ImageButton으로 통일함.">
+      <option name="closed" value="true" />
+      <created>1747257098531</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1747257098531</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
     <servers />
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="그래들 오류 수정" />
-    <option name="LAST_COMMIT_MESSAGE" value="그래들 오류 수정" />
+    <MESSAGE value="HomeIoT액티비티 and xml의 버튼이 호환 되지않아. 기준이 되는 ImageButton으로 통일함." />
+    <option name="LAST_COMMIT_MESSAGE" value="HomeIoT액티비티 and xml의 버튼이 호환 되지않아. 기준이 되는 ImageButton으로 통일함." />
   </component>
 </project>
