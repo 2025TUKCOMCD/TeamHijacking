@@ -90,7 +90,7 @@ class DeviceControlHelper(private val apiToken: String) {
         sendCommand(deviceId, commandBody, onSuccess, onError)
     }
 
-    // ✅ 상태 조회 추가 (DeviceStatus 가져오기)
+    // 얘로 원래 기기의 초기 상태 값을 불러오려고 했는데 잘 안되는거 같음 => 수정예정
     fun getDeviceStatus(deviceId: String, onSuccess: (DeviceStatusResponse) -> Unit, onError: (String) -> Unit) {
         apiService.getDeviceStatus(deviceId, apiToken).enqueue(object : Callback<DeviceStatusResponse> {
             override fun onResponse(call: Call<DeviceStatusResponse>, response: Response<DeviceStatusResponse>) {

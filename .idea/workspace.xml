@@ -13,8 +13,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="617fd7c0-9874-4635-9c7c-865fb012701e" name="Changes" comment="HomeIoT액티비티 and xml의 버튼이 호환 되지않아. 기준이 되는 ImageButton으로 통일함.">
-      <change beforePath="$PROJECT_DIR$/front/app/src/main/java/com/example/front/iot/SmartHome/SmartThingsApiService.kt" beforeDir="false" afterPath="$PROJECT_DIR$/front/app/src/main/java/com/example/front/iot/SmartHome/SmartThingsApiService.kt" afterDir="false" />
+    <list default="true" id="617fd7c0-9874-4635-9c7c-865fb012701e" name="Changes" comment="api데이터 서비스 추후 수정할 부분 체크만 해둠.">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/front/app/src/main/java/com/example/front/iot/SmartHome/DeviceControlHelper.kt" beforeDir="false" afterPath="$PROJECT_DIR$/front/app/src/main/java/com/example/front/iot/SmartHome/DeviceControlHelper.kt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -118,12 +119,21 @@
       <option name="project" value="LOCAL" />
       <updated>1747257220210</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="api데이터 서비스 추후 수정할 부분 체크만 해둠.">
+      <option name="closed" value="true" />
+      <created>1747257441201</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1747257441201</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="그래들 오류 수정" />
     <MESSAGE value="HomeIoT액티비티 and xml의 버튼이 호환 되지않아. 기준이 되는 ImageButton으로 통일함." />
-    <option name="LAST_COMMIT_MESSAGE" value="HomeIoT액티비티 and xml의 버튼이 호환 되지않아. 기준이 되는 ImageButton으로 통일함." />
+    <MESSAGE value="api데이터 서비스 추후 수정할 부분 체크만 해둠." />
+    <option name="LAST_COMMIT_MESSAGE" value="api데이터 서비스 추후 수정할 부분 체크만 해둠." />
   </component>
 </project>
