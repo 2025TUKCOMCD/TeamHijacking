@@ -2,10 +2,12 @@ package com.example.front.iot
 
 import android.content.ActivityNotFoundException
 import android.content.Intent
+import android.media.Image
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.widget.Button
+import android.widget.ImageButton
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
@@ -29,12 +31,12 @@ class HomeIotActivity : AppCompatActivity() {
         }
 
         // 🟦 IoT 추가 버튼 → SmartThings 앱 이동
-        findViewById<Button>(R.id.btnAddDevice).setOnClickListener {
+        findViewById<ImageButton>(R.id.btnAddDevice).setOnClickListener {
             openSmartThingsApp()
         }
 
         // 🟧 My IoT 페이지로 이동
-        findViewById<Button>(R.id.btnMyIot).setOnClickListener {
+        findViewById<ImageButton>(R.id.btnMyIot).setOnClickListener {
             Log.d("현빈", "들어옴")
             val intent = Intent(this, MyIotActivity::class.java)
             startActivity(intent)
