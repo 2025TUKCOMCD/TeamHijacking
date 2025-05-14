@@ -9,7 +9,7 @@ android {
     namespace = "com.example.front"
     compileSdk = 34
 
-    // local.properties 파일에서 API 키 가져오기
+    // local.properties에서 API 키 가져오기
     val localProperties = Properties().apply {
         load(project.rootProject.file("local.properties").inputStream())
     }
@@ -26,7 +26,6 @@ android {
         targetSdk = 34
         versionCode = 1
         versionName = "1.0"
-
         vectorDrawables.useSupportLibrary = true
 
         // BuildConfig 필드에 API 키 추가
@@ -121,7 +120,12 @@ dependencies {
     implementation(libs.lifecycle.livedata.ktx)
     implementation(libs.lifecycle.viewmodel.ktx)
     implementation(libs.fragment.ktx)
-    //implementation(project(":android2")) //Wear OS 전용 UI(곡선 리스트, BoxInsetLayout 등) 사용 가능
+    implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.8.7")
+    implementation(platform("androidx.compose:compose-bom:2024.04.01"))
+    implementation("androidx.compose.ui:ui")
+    implementation("androidx.compose.ui:ui-graphics")
+    implementation("androidx.compose.ui:ui-tooling-preview")
+    implementation("androidx.compose.material3:material3")
 
     // ✅ 테스트 라이브러리
     androidTestImplementation(platform(libs.compose.bom))

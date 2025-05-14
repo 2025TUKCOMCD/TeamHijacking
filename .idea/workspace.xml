@@ -26,59 +26,21 @@
     <option name="autoReloadType" value="NONE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="5a34f773-8c82-4b0a-86d3-a37d3cf6ba80" name="Changes" comment="watch 랑 합치기"/>
-      <change afterPath="$PROJECT_DIR$/back/src/main/java/com/example/back/controller/UserController.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/back/src/main/java/com/example/back/dto/UserDTO.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/front/android2/src/main/java/com/example/front/Login/data/User.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/front/android2/src/main/java/com/example/front/Login/processor/RetrofitClient.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/front/android2/src/main/java/com/example/front/Login/processor/UserProcessor.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/front/android2/src/main/java/com/example/front/Login/service/UserService.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/front/app/src/main/java/com/example/front/transportation/DetailRouteFragment/BusFragment.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/front/app/src/main/java/com/example/front/transportation/DetailRouteFragment/DetailRouteUtils.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/front/app/src/main/java/com/example/front/transportation/DetailRouteFragment/SubwayFragment.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/front/app/src/main/java/com/example/front/transportation/DetailRouteFragment/TransportData.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/front/app/src/main/java/com/example/front/transportation/DetailRouteFragment/WalkFragment.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/front/app/src/main/java/com/example/front/transportation/TransportDetailRouteControlActivity.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/front/app/src/main/res/drawable/signal_guide_round_sqr.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/front/app/src/main/res/layout/activity_transport_detail_route_control.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/front/app/src/main/res/layout/fragment_bus.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/front/app/src/main/res/layout/fragment_subway.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/front/app/src/main/res/layout/fragment_walk.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.github/workflows/androi_watch.yml" beforeDir="false" afterPath="$PROJECT_DIR$/.github/workflows/android_watch_CI.yml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/assetWizardSettings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/assetWizardSettings.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/caches/deviceStreaming.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/caches/deviceStreaming.xml" afterDir="false" />
-    <list default="true" id="5a34f773-8c82-4b0a-86d3-a37d3cf6ba80" name="Changes" comment="my iot 액티비티 추가 및 Device dialog 추가">
+    <list default="true" id="5a34f773-8c82-4b0a-86d3-a37d3cf6ba80" name="Changes" comment="watch 랑 합치기">
+      <change afterPath="$PROJECT_DIR$/.idea/other.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/deploymentTargetSelector.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/deploymentTargetSelector.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/gradle.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/gradle.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Merge_at_2025-03-20__11_16__Changes_.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Merge_at_2025-03-20__11_16__Changes_.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_2025-02-22__2_03__Changes_.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_2025-02-22__2_03__Changes_.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_2025-03-20__11_06__Changes_.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_2025-03-20__11_06__Changes_.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_2025-04-24__5_06__Changes_.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_2025-04-24__5_06__Changes_.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/front/app/src/main/AndroidManifest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/front/app/src/main/AndroidManifest.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/front/app/src/main/java/com/example/front/iot/MyIotActivity.kt" beforeDir="false" afterPath="$PROJECT_DIR$/front/app/src/main/java/com/example/front/iot/MyIotActivity.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/front/app/src/main/java/com/example/front/iot/SmartHome/Command.kt" beforeDir="false" afterPath="$PROJECT_DIR$/front/app/src/main/java/com/example/front/iot/SmartHome/Command.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/front/app/src/main/java/com/example/front/iot/SmartHome/DeviceAdapter.kt" beforeDir="false" afterPath="$PROJECT_DIR$/front/app/src/main/java/com/example/front/iot/SmartHome/DeviceAdapter.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/front/app/src/main/java/com/example/front/iot/SmartHome/DeviceControlHelper.kt" beforeDir="false" afterPath="$PROJECT_DIR$/front/app/src/main/java/com/example/front/iot/SmartHome/DeviceControlHelper.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/front/app/src/main/java/com/example/front/iot/SmartHome/DeviceStatusResponse.kt" beforeDir="false" afterPath="$PROJECT_DIR$/front/app/src/main/java/com/example/front/iot/SmartHome/DeviceStatusResponse.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/front/app/src/main/java/com/example/front/iot/SmartHome/VoiceContolHelper.kt" beforeDir="false" afterPath="$PROJECT_DIR$/front/app/src/main/java/com/example/front/iot/SmartHome/VoiceControlHelper.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/front/app/src/main/res/layout/device_item.xml" beforeDir="false" afterPath="$PROJECT_DIR$/front/app/src/main/res/layout/device_item.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/front/app/src/main/res/layout/dialog_device_detail.xml" beforeDir="false" afterPath="$PROJECT_DIR$/front/app/src/main/res/layout/dialog_device_detail.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/back/src/main/java/com/example/back/domain/User.java" beforeDir="false" afterPath="$PROJECT_DIR$/back/src/main/java/com/example/back/domain/User.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/back/src/main/java/com/example/back/repository/UserRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/back/src/main/java/com/example/back/repository/UserRepository.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/back/src/main/java/com/example/back/service/UserService.java" beforeDir="false" afterPath="$PROJECT_DIR$/back/src/main/java/com/example/back/service/UserService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/front/android2/build.gradle.kts" beforeDir="false" afterPath="$PROJECT_DIR$/front/android2/build.gradle.kts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/front/android2/src/main/AndroidManifest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/front/android2/src/main/AndroidManifest.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/front/android2/src/main/java/com/example/front/Login/LoginActivity.kt" beforeDir="false" afterPath="$PROJECT_DIR$/front/android2/src/main/java/com/example/front/Login/LoginActivity.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/front/app/build.gradle.kts" beforeDir="false" afterPath="$PROJECT_DIR$/front/app/build.gradle.kts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/front/app/src/main/AndroidManifest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/front/app/src/main/AndroidManifest.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/front/app/src/main/java/com/example/front/audioguide/AudioGuideBLEConnectActivity.kt" beforeDir="false" afterPath="$PROJECT_DIR$/front/app/src/main/java/com/example/front/audioguide/AudioGuideBLEConnectActivity.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/front/app/src/main/java/com/example/front/audioguide/AudioGuideBLEControl.kt" beforeDir="false" afterPath="$PROJECT_DIR$/front/app/src/main/java/com/example/front/audioguide/AudioGuideBLEControl.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/front/app/src/main/java/com/example/front/audioguide/AudioGuideUtils.kt" beforeDir="false" afterPath="$PROJECT_DIR$/front/app/src/main/java/com/example/front/audioguide/AudioGuideUtils.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/front/app/src/main/java/com/example/front/audioguide/AudioSignalMuchineBLEControl.kt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/front/app/src/main/java/com/example/front/setting/SettingActivity.kt" beforeDir="false" afterPath="$PROJECT_DIR$/front/app/src/main/java/com/example/front/setting/SettingActivity.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/front/app/src/main/res/layout/activity_audio_guide_blecontrol.xml" beforeDir="false" afterPath="$PROJECT_DIR$/front/app/src/main/res/layout/activity_audio_guide_blecontrol.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/front/app/src/main/res/layout/activity_audio_signal_muchine_blecontrol.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/front/app/src/main/res/layout/activity_setting.xml" beforeDir="false" afterPath="$PROJECT_DIR$/front/app/src/main/res/layout/activity_setting.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/front/app/src/main/res/values/strings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/front/app/src/main/res/values/strings.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/front/gradle/libs.versions.toml" beforeDir="false" afterPath="$PROJECT_DIR$/front/gradle/libs.versions.toml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/front/settings.gradle.kts" beforeDir="false" afterPath="$PROJECT_DIR$/front/settings.gradle.kts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/front/gradle/wrapper/gradle-wrapper.properties" beforeDir="false" afterPath="$PROJECT_DIR$/front/gradle/wrapper/gradle-wrapper.properties" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -88,8 +50,7 @@
   <component name="ClangdSettings">
     <option name="formatViaClangd" value="false" />
   </component>
-  <component name="ExecutionTargetManager" SELECTED_TARGET="device_and_snapshot_combo_box_target[DeviceId(pluginId=PhysicalDevice, isTemplate=false, identifier=serial=RFAXB1VMDNK)]" />
-  <component name="ExecutionTargetManager" SELECTED_TARGET="device_and_snapshot_combo_box_target[DeviceId(pluginId=LocalEmulator, isTemplate=false, identifier=path=C:\Users\hhb06\.android\avd\Medium_Phone.avd)]" />
+  <component name="ExecutionTargetManager" SELECTED_TARGET="device_and_snapshot_combo_box_target[DeviceId(pluginId=LocalEmulator, isTemplate=false, identifier=path=C:\Users\klmot\.android\avd\Wear_OS_Large_Round_API_34.avd)]" />
   <component name="ExternalProjectsData">
     <projectState path="$PROJECT_DIR$/front">
       <ProjectState />
@@ -99,6 +60,9 @@
     <system id="GRADLE">
       <state>
         <task path="$PROJECT_DIR$/front/app">
+          <activation />
+        </task>
+        <task path="$PROJECT_DIR$/front/android2">
           <activation />
         </task>
         <projects_view>
@@ -125,6 +89,12 @@
                 <item name="app" type="2d1252cf:ModuleNode" />
                 <item name="Tasks" type="e4a08cd1:TasksNode" />
                 <item name="other" type="c8890929:TasksNode$1" />
+              </path>
+              <path>
+                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
+                <item name="front" type="f1a62948:ProjectNode" />
+                <item name="app" type="2d1252cf:ModuleNode" />
+                <item name="Run Configurations" type="7b0102dc:RunConfigurationsNode" />
               </path>
             </expand>
             <select />
@@ -175,7 +145,9 @@
   </component>
   <component name="PropertiesComponent">{
   &quot;keyToString&quot;: {
+    &quot;Android App.app.executor&quot;: &quot;Run&quot;,
     &quot;Android App.front.app.executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.front:app [testReleaseUnitTest].executor&quot;: &quot;Run&quot;,
     &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.cidr.known.project.marker&quot;: &quot;true&quot;,
@@ -185,16 +157,28 @@
     &quot;cidr.known.project.marker&quot;: &quot;true&quot;,
     &quot;com.google.services.firebase.aqiPopupShown&quot;: &quot;true&quot;,
     &quot;dart.analysis.tool.window.visible&quot;: &quot;false&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;Merging watch-hotfix&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;watch&quot;,
     &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
     &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
     &quot;last_opened_file_path&quot;: &quot;C:/Users/klmot/AndroidStudioProjects/TeamHijacking/front/build.gradle.kts&quot;,
     &quot;project.structure.last.edited&quot;: &quot;Suggestions&quot;,
     &quot;project.structure.proportion&quot;: &quot;0.17&quot;,
     &quot;project.structure.side.proportion&quot;: &quot;0.2&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;reference.settingsdialog.project.gradle&quot;,
     &quot;show.migrate.to.gradle.popup&quot;: &quot;false&quot;
+  },
+  &quot;keyToStringList&quot;: {
+    &quot;com.intellij.ide.scratch.ScratchImplUtil$2/New Scratch File&quot;: [
+      &quot;Properties&quot;
+    ],
+    &quot;kotlin-gradle-user-dirs&quot;: [
+      &quot;C:\\Users\\klmot\\.gradle&quot;
+    ]
   }
 }</component>
+  <component name="PsdUISettings">
+    <option name="LAST_EDITED_BUILD_TYPE" value="release" />
+  </component>
   <component name="RecentsManager">
     <key name="android.template.1680739361">
       <recent name="com.example.front.audioguide" />
@@ -207,7 +191,6 @@
   <component name="RunManager" selected="Android App.front.app">
     <configuration name="FrameActivity" type="AndroidRunConfigurationType" factoryName="Android App" activateToolWindowBeforeRun="false" temporary="true">
       <module name="front.app" />
-      <option name="ANDROID_RUN_CONFIGURATION_SCHEMA_VERSION" value="1" />
       <option name="DEPLOY" value="true" />
       <option name="DEPLOY_APK_FROM_BUNDLE" value="false" />
       <option name="DEPLOY_AS_INSTANT" value="false" />
@@ -215,13 +198,10 @@
       <option name="PM_INSTALL_OPTIONS" value="" />
       <option name="ALL_USERS" value="false" />
       <option name="ALWAYS_INSTALL_WITH_PM" value="false" />
-      <option name="ALLOW_ASSUME_VERIFIED" value="false" />
       <option name="CLEAR_APP_STORAGE" value="false" />
       <option name="DYNAMIC_FEATURES_DISABLED_LIST" value="" />
       <option name="ACTIVITY_EXTRA_FLAGS" value="" />
       <option name="MODE" value="specific_activity" />
-      <option name="RESTORE_ENABLED" value="false" />
-      <option name="RESTORE_FILE" value="" />
       <option name="CLEAR_LOGCAT" value="false" />
       <option name="SHOW_LOGCAT_AUTOMATICALLY" value="false" />
       <option name="TARGET_SELECTION_MODE" value="DEVICE_AND_SNAPSHOT_COMBO_BOX" />
@@ -268,7 +248,6 @@
         <option name="NATIVE_MEMORY_SAMPLE_RATE_BYTES" value="2048" />
       </Profilers>
       <option name="DEEP_LINK" value="" />
-      <option name="ACTIVITY" value="" />
       <option name="ACTIVITY_CLASS" value="com.example.front.presentation.FrameActivity" />
       <option name="SEARCH_ACTIVITY_IN_GLOBAL_SCOPE" value="false" />
       <option name="SKIP_ACTIVITY_VALIDATION" value="false" />
@@ -276,9 +255,8 @@
         <option name="Android.Gradle.BeforeRunTask" enabled="true" />
       </method>
     </configuration>
-    <configuration name="front.app" type="AndroidRunConfigurationType" factoryName="Android App" activateToolWindowBeforeRun="false">
-      <module name="front.app" />
-      <option name="ANDROID_RUN_CONFIGURATION_SCHEMA_VERSION" value="1" />
+    <configuration name="android2" type="AndroidRunConfigurationType" factoryName="Android App">
+      <module name="front.android2.main" />
       <option name="DEPLOY" value="true" />
       <option name="DEPLOY_APK_FROM_BUNDLE" value="false" />
       <option name="DEPLOY_AS_INSTANT" value="false" />
@@ -290,8 +268,6 @@
       <option name="DYNAMIC_FEATURES_DISABLED_LIST" value="" />
       <option name="ACTIVITY_EXTRA_FLAGS" value="" />
       <option name="MODE" value="default_activity" />
-      <option name="RESTORE_ENABLED" value="false" />
-      <option name="RESTORE_FILE" value="" />
       <option name="CLEAR_LOGCAT" value="false" />
       <option name="SHOW_LOGCAT_AUTOMATICALLY" value="false" />
       <option name="TARGET_SELECTION_MODE" value="DEVICE_AND_SNAPSHOT_COMBO_BOX" />
@@ -338,7 +314,6 @@
         <option name="NATIVE_MEMORY_SAMPLE_RATE_BYTES" value="2048" />
       </Profilers>
       <option name="DEEP_LINK" value="" />
-      <option name="ACTIVITY" value="" />
       <option name="ACTIVITY_CLASS" value="" />
       <option name="SEARCH_ACTIVITY_IN_GLOBAL_SCOPE" value="false" />
       <option name="SKIP_ACTIVITY_VALIDATION" value="false" />
@@ -346,12 +321,170 @@
         <option name="Android.Gradle.BeforeRunTask" enabled="true" />
       </method>
     </configuration>
+    <configuration name="app" type="AndroidRunConfigurationType" factoryName="Android App">
+      <module name="front.app.main" />
+      <option name="DEPLOY" value="true" />
+      <option name="DEPLOY_APK_FROM_BUNDLE" value="false" />
+      <option name="DEPLOY_AS_INSTANT" value="false" />
+      <option name="ARTIFACT_NAME" value="" />
+      <option name="PM_INSTALL_OPTIONS" value="" />
+      <option name="ALL_USERS" value="false" />
+      <option name="ALWAYS_INSTALL_WITH_PM" value="false" />
+      <option name="CLEAR_APP_STORAGE" value="false" />
+      <option name="DYNAMIC_FEATURES_DISABLED_LIST" value="" />
+      <option name="ACTIVITY_EXTRA_FLAGS" value="" />
+      <option name="MODE" value="default_activity" />
+      <option name="CLEAR_LOGCAT" value="false" />
+      <option name="SHOW_LOGCAT_AUTOMATICALLY" value="false" />
+      <option name="TARGET_SELECTION_MODE" value="DEVICE_AND_SNAPSHOT_COMBO_BOX" />
+      <option name="SELECTED_CLOUD_MATRIX_CONFIGURATION_ID" value="-1" />
+      <option name="SELECTED_CLOUD_MATRIX_PROJECT_ID" value="" />
+      <option name="DEBUGGER_TYPE" value="Auto" />
+      <Auto>
+        <option name="USE_JAVA_AWARE_DEBUGGER" value="false" />
+        <option name="SHOW_STATIC_VARS" value="true" />
+        <option name="WORKING_DIR" value="" />
+        <option name="TARGET_LOGGING_CHANNELS" value="lldb process:gdb-remote packets" />
+        <option name="SHOW_OPTIMIZED_WARNING" value="true" />
+        <option name="ATTACH_ON_WAIT_FOR_DEBUGGER" value="false" />
+        <option name="DEBUG_SANDBOX_SDK" value="false" />
+      </Auto>
+      <Hybrid>
+        <option name="USE_JAVA_AWARE_DEBUGGER" value="false" />
+        <option name="SHOW_STATIC_VARS" value="true" />
+        <option name="WORKING_DIR" value="" />
+        <option name="TARGET_LOGGING_CHANNELS" value="lldb process:gdb-remote packets" />
+        <option name="SHOW_OPTIMIZED_WARNING" value="true" />
+        <option name="ATTACH_ON_WAIT_FOR_DEBUGGER" value="false" />
+        <option name="DEBUG_SANDBOX_SDK" value="false" />
+      </Hybrid>
+      <Java>
+        <option name="ATTACH_ON_WAIT_FOR_DEBUGGER" value="false" />
+        <option name="DEBUG_SANDBOX_SDK" value="false" />
+      </Java>
+      <Native>
+        <option name="USE_JAVA_AWARE_DEBUGGER" value="false" />
+        <option name="SHOW_STATIC_VARS" value="true" />
+        <option name="WORKING_DIR" value="" />
+        <option name="TARGET_LOGGING_CHANNELS" value="lldb process:gdb-remote packets" />
+        <option name="SHOW_OPTIMIZED_WARNING" value="true" />
+        <option name="ATTACH_ON_WAIT_FOR_DEBUGGER" value="false" />
+        <option name="DEBUG_SANDBOX_SDK" value="false" />
+      </Native>
+      <Profilers>
+        <option name="ADVANCED_PROFILING_ENABLED" value="false" />
+        <option name="STARTUP_PROFILING_ENABLED" value="false" />
+        <option name="STARTUP_CPU_PROFILING_ENABLED" value="false" />
+        <option name="STARTUP_CPU_PROFILING_CONFIGURATION_NAME" value="Java/Kotlin Method Sample (legacy)" />
+        <option name="STARTUP_NATIVE_MEMORY_PROFILING_ENABLED" value="false" />
+        <option name="NATIVE_MEMORY_SAMPLE_RATE_BYTES" value="2048" />
+      </Profilers>
+      <option name="DEEP_LINK" value="" />
+      <option name="ACTIVITY_CLASS" value="" />
+      <option name="SEARCH_ACTIVITY_IN_GLOBAL_SCOPE" value="false" />
+      <option name="SKIP_ACTIVITY_VALIDATION" value="false" />
+      <method v="2">
+        <option name="Android.Gradle.BeforeRunTask" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="front.app" type="AndroidRunConfigurationType" factoryName="Android App" activateToolWindowBeforeRun="false">
+      <module name="front.app" />
+      <option name="DEPLOY" value="true" />
+      <option name="DEPLOY_APK_FROM_BUNDLE" value="false" />
+      <option name="DEPLOY_AS_INSTANT" value="false" />
+      <option name="ARTIFACT_NAME" value="" />
+      <option name="PM_INSTALL_OPTIONS" value="" />
+      <option name="ALL_USERS" value="false" />
+      <option name="ALWAYS_INSTALL_WITH_PM" value="false" />
+      <option name="CLEAR_APP_STORAGE" value="false" />
+      <option name="DYNAMIC_FEATURES_DISABLED_LIST" value="" />
+      <option name="ACTIVITY_EXTRA_FLAGS" value="" />
+      <option name="MODE" value="default_activity" />
+      <option name="CLEAR_LOGCAT" value="false" />
+      <option name="SHOW_LOGCAT_AUTOMATICALLY" value="false" />
+      <option name="TARGET_SELECTION_MODE" value="DEVICE_AND_SNAPSHOT_COMBO_BOX" />
+      <option name="SELECTED_CLOUD_MATRIX_CONFIGURATION_ID" value="-1" />
+      <option name="SELECTED_CLOUD_MATRIX_PROJECT_ID" value="" />
+      <option name="DEBUGGER_TYPE" value="Auto" />
+      <Auto>
+        <option name="USE_JAVA_AWARE_DEBUGGER" value="false" />
+        <option name="SHOW_STATIC_VARS" value="true" />
+        <option name="WORKING_DIR" value="" />
+        <option name="TARGET_LOGGING_CHANNELS" value="lldb process:gdb-remote packets" />
+        <option name="SHOW_OPTIMIZED_WARNING" value="true" />
+        <option name="ATTACH_ON_WAIT_FOR_DEBUGGER" value="false" />
+        <option name="DEBUG_SANDBOX_SDK" value="false" />
+      </Auto>
+      <Hybrid>
+        <option name="USE_JAVA_AWARE_DEBUGGER" value="false" />
+        <option name="SHOW_STATIC_VARS" value="true" />
+        <option name="WORKING_DIR" value="" />
+        <option name="TARGET_LOGGING_CHANNELS" value="lldb process:gdb-remote packets" />
+        <option name="SHOW_OPTIMIZED_WARNING" value="true" />
+        <option name="ATTACH_ON_WAIT_FOR_DEBUGGER" value="false" />
+        <option name="DEBUG_SANDBOX_SDK" value="false" />
+      </Hybrid>
+      <Java>
+        <option name="ATTACH_ON_WAIT_FOR_DEBUGGER" value="false" />
+        <option name="DEBUG_SANDBOX_SDK" value="false" />
+      </Java>
+      <Native>
+        <option name="USE_JAVA_AWARE_DEBUGGER" value="false" />
+        <option name="SHOW_STATIC_VARS" value="true" />
+        <option name="WORKING_DIR" value="" />
+        <option name="TARGET_LOGGING_CHANNELS" value="lldb process:gdb-remote packets" />
+        <option name="SHOW_OPTIMIZED_WARNING" value="true" />
+        <option name="ATTACH_ON_WAIT_FOR_DEBUGGER" value="false" />
+        <option name="DEBUG_SANDBOX_SDK" value="false" />
+      </Native>
+      <Profilers>
+        <option name="ADVANCED_PROFILING_ENABLED" value="false" />
+        <option name="STARTUP_PROFILING_ENABLED" value="false" />
+        <option name="STARTUP_CPU_PROFILING_ENABLED" value="false" />
+        <option name="STARTUP_CPU_PROFILING_CONFIGURATION_NAME" value="Java/Kotlin Method Sample (legacy)" />
+        <option name="STARTUP_NATIVE_MEMORY_PROFILING_ENABLED" value="false" />
+        <option name="NATIVE_MEMORY_SAMPLE_RATE_BYTES" value="2048" />
+      </Profilers>
+      <option name="DEEP_LINK" value="" />
+      <option name="ACTIVITY_CLASS" value="" />
+      <option name="SEARCH_ACTIVITY_IN_GLOBAL_SCOPE" value="false" />
+      <option name="SKIP_ACTIVITY_VALIDATION" value="false" />
+      <method v="2">
+        <option name="Android.Gradle.BeforeRunTask" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="front:app [testReleaseUnitTest]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+      <ExternalSystemSettings>
+        <option name="executionName" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$/front/app" />
+        <option name="externalSystemIdString" value="GRADLE" />
+        <option name="scriptParameters" />
+        <option name="taskDescriptions">
+          <list />
+        </option>
+        <option name="taskNames">
+          <list>
+            <option value="testReleaseUnitTest" />
+          </list>
+        </option>
+        <option name="vmOptions" />
+      </ExternalSystemSettings>
+      <ExternalSystemDebugServerProcess>true</ExternalSystemDebugServerProcess>
+      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
+      <DebugAllEnabled>false</DebugAllEnabled>
+      <RunAsTest>false</RunAsTest>
+      <method v="2" />
+    </configuration>
     <list>
+      <item itemvalue="Android App.android2" />
+      <item itemvalue="Android App.app" />
       <item itemvalue="Android App.front.app" />
       <item itemvalue="Android App.FrameActivity" />
+      <item itemvalue="Gradle.front:app [testReleaseUnitTest]" />
     </list>
     <recent_temporary>
       <list>
+        <item itemvalue="Gradle.front:app [testReleaseUnitTest]" />
         <item itemvalue="Android App.FrameActivity" />
         <item itemvalue="Android App.FrameActivity" />
         <item itemvalue="Android App.FrameActivity" />
@@ -369,6 +502,11 @@
       <updated>1735374590430</updated>
     </task>
     <task id="LOCAL-00001" summary="UI/UX 프레임 구축">
+      <created>1745930879257</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1745930879257</updated>
     </task>
     <task id="LOCAL-00038" summary="Command 데이터 추가">
       <option name="closed" value="true" />
@@ -377,14 +515,6 @@
       <option name="presentableId" value="LOCAL-00038" />
       <option name="project" value="LOCAL" />
       <updated>1738576117812</updated>
-    </task>
-    <task id="LOCAL-00039" summary="device_item.xml 추가, 어뎁터 수정, Iot액티비티 수정, DeviceItem 데이터 클래스 추가">
-      <option name="closed" value="true" />
-      <created>1736234831710</created>
-      <option name="number" value="00001" />
-      <option name="presentableId" value="LOCAL-00001" />
-      <option name="project" value="LOCAL" />
-      <updated>1736234831710</updated>
     </task>
     <task id="LOCAL-00002" summary="UI/UX --Transportation으로 화면전환하는 로직 구현, 화면 생성시에 Theme을 설정하지 않으면 오류 발생, 앞으로 생성하면서 작업해야함--">
       <option name="closed" value="true" />
@@ -410,7 +540,6 @@
       <option name="project" value="LOCAL" />
       <updated>1736395141961</updated>
     </task>
-    <option name="localTasksCounter" value="5" />
     <task id="LOCAL-00043" summary="main 스크롤 이벤트 트리거">
       <option name="closed" value="true" />
       <created>1739256708198</created>
