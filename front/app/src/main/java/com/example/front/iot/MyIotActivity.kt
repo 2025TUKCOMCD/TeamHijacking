@@ -27,12 +27,12 @@ class MyIotActivity : AppCompatActivity() {
     private val apiToken = "Bearer ${BuildConfig.SMARTTHINGS_API_TOKEN}"
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        Log.d("현빈", "oncreate들어옴")
+        Log.d("현빈", "oncreate 들어옴")
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_my_iot)
         Log.d("현빈", "activity 할당")
         deviceControlHelper = DeviceControlHelper(apiToken)
-        Log.d("현빈", "토큰할당함")
+        Log.d("현빈", "토큰 할당함")
 
         // RecyclerView 설정
         val recyclerView = findViewById<RecyclerView>(R.id.recyclerViewMyDevices)
@@ -41,7 +41,7 @@ class MyIotActivity : AppCompatActivity() {
         }
         recyclerView.layoutManager = LinearLayoutManager(this)
         recyclerView.adapter = deviceAdapter
-        Log.d("현빈", "디바이스 불러오기전")
+        Log.d("현빈", "디바이스 불러오기 전")
 
         //디바이스 목록 불러오기
         fetchDeviceList()

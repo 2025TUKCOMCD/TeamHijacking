@@ -12,6 +12,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/api")
 public class RouteController {
+
     @Autowired
     private RouteService routeService;
 
@@ -22,7 +23,6 @@ public class RouteController {
 
     @PostMapping("/route")
     public ResponseEntity<List<ResultDTO>> getRoute(@RequestBody RouteDTO routeDTO) {
-        System.out.println("🔍 요청 도착: " + routeDTO);
         List<ResultDTO> response = routeService.fetchAndProcessRoutes(routeDTO);
         return ResponseEntity.ok(response);
     }

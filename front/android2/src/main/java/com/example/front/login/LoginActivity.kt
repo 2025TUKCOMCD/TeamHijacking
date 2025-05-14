@@ -106,7 +106,7 @@ class LoginActivity : AppCompatActivity() {
                     name = "${user.kakaoAccount?.profile?.nickname}",
                     loginId = "${user.id}")
 
-                UserProcessor.registerUser(user) {  registeredUser ->    //registeredUser는 Retrofit 통신의 응답 결과를 받아 저장하는 콜백 함수의 매개변수
+                UserProcessor.registerUser(user) {  registeredUser ->    //registeredUser 는 Retrofit 통신의 응답 결과를 받아 저장 하는 콜백 함수의 매개 변수
                     if(registeredUser != null) {
                         Log.d("Login", "등록된 사용자: $registeredUser")
                     } else {

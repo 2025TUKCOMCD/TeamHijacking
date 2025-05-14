@@ -1,7 +1,7 @@
 import java.util.Properties
 
 plugins {
-    alias(libs.plugins.androidApplication) // 앱 모듈 플러그인
+    alias(libs.plugins.androidApplication) // 앱 모듈 plugin
     id("org.jetbrains.kotlin.android")
 }
 
@@ -9,7 +9,7 @@ android {
     namespace = "com.example.front"
     compileSdk = 34
 
-    // local.properties에서 API 키 가져오기
+    // local.properties 파일에서 API 키 가져오기
     val localProperties = Properties().apply {
         load(project.rootProject.file("local.properties").inputStream())
     }
@@ -26,6 +26,7 @@ android {
         targetSdk = 34
         versionCode = 1
         versionName = "1.0"
+
         vectorDrawables.useSupportLibrary = true
 
         // BuildConfig 필드에 API 키 추가
@@ -97,7 +98,7 @@ dependencies {
     implementation("androidx.constraintlayout:constraintlayout:2.2.0")
     implementation("androidx.compose.material3:material3-android:1.3.1")
 
-    // ✅ 네트워킹 & JSON/XML 처리
+    // ✅ networking & JSON/XML 처리
     implementation("com.google.code.gson:gson:2.11.0")
     implementation("com.squareup.retrofit2:retrofit:2.9.0")
     implementation("com.squareup.retrofit2:converter-gson:2.9.0")
@@ -116,16 +117,11 @@ dependencies {
     implementation("com.google.android.gms:play-services-wearable:18.1.0")
     implementation("androidx.wear:wear:1.3.0")
 
-    // ✅ 라이프사이클 및 뷰모델
+    // ✅ life cycle 및 뷰모델
     implementation(libs.lifecycle.livedata.ktx)
     implementation(libs.lifecycle.viewmodel.ktx)
     implementation(libs.fragment.ktx)
-    implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.8.7")
-    implementation(platform("androidx.compose:compose-bom:2024.04.01"))
-    implementation("androidx.compose.ui:ui")
-    implementation("androidx.compose.ui:ui-graphics")
-    implementation("androidx.compose.ui:ui-tooling-preview")
-    implementation("androidx.compose.material3:material3")
+    //implementation(project(":android2")) //Wear OS 전용 UI(곡선 리스트, BoxInsetLayout 등) 사용 가능
 
     // ✅ 테스트 라이브러리
     androidTestImplementation(platform(libs.compose.bom))
