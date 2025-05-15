@@ -2,10 +2,12 @@ package com.example.front.iot
 
 import android.content.ActivityNotFoundException
 import android.content.Intent
+import android.media.Image
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.widget.Button
+import android.widget.ImageButton
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
@@ -28,19 +30,19 @@ class HomeIotActivity : AppCompatActivity() {
             processVoiceCommand(command)
         }
 
-        // 🟦 IoT 추가 버튼 → SmartThings 앱 이동
-        findViewById<Button>(R.id.btnAddDevice).setOnClickListener {
+        // 🟦 IoT 추가 버튼 → SmartThings 앱 이동 ==> <ImageButton>으로 통일했음!
+        findViewById<ImageButton>(R.id.btnAddDevice).setOnClickListener {
             openSmartThingsApp()
         }
 
-        // 🟧 My IoT 페이지로 이동
-        findViewById<Button>(R.id.btnMyIot).setOnClickListener {
+        // 🟧 My IoT 페이지로 이동 ==> <ImageButton>으로 통일했음!
+        findViewById<ImageButton>(R.id.btnMyIot).setOnClickListener {
             Log.d("현빈", "들어옴")
             val intent = Intent(this, MyIotActivity::class.java)
             startActivity(intent)
         }
 
-        // 🎤 음성 명령 시작
+        // 🎤 음성 명령 시작 ==> 추후, 계획에 따라 구현 or 리워크
         findViewById<Button>(R.id.btnVoiceControl).setOnClickListener {
             voiceControlHelper.startVoiceRecognition()
         }

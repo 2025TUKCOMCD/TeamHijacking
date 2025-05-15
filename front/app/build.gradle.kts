@@ -9,7 +9,7 @@ android {
     namespace = "com.example.front"
     compileSdk = 34
 
-    // local.properties 파일 에서 API 키 가져 오기
+    // local.properties 파일에서 API 키 가져오기
     val localProperties = Properties().apply {
         load(project.rootProject.file("local.properties").inputStream())
     }

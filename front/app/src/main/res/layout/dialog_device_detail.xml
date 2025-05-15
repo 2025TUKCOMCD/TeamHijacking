@@ -3,14 +3,14 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:fillViewport="true">
-    <!-- 📛 기기 이름 & 상태 텍스트 -->
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:padding="24dp"
         android:background="@android:color/white">
-        <!-- 📛 기기 이름 & 상태 텍스트 -->
+        <!-- 기기 이름 상태 및 텍스트 => 상태 함수가 이상해서 추후 수정 -->
         <TextView
             android:id="@+id/textDeviceStatus"
             android:layout_width="match_parent"
@@ -18,35 +18,67 @@
             android:text="기기 정보 로딩 중..."
             android:textAppearance="?android:attr/textAppearanceMedium"
             android:paddingBottom="16dp" />
-        <!-- 💡 밝기 조절 SeekBar -->
+        <!-- 밝기 SeekBar 제거, 버튼 형식으로 교체함 -->
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="밝기 조절"
             android:textStyle="bold" />
-        <SeekBar
-            android:id="@+id/seekBarBrightness"
+
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:max="100"
-            android:progress="50"
-            android:layout_marginBottom="16dp" />
+            android:orientation="horizontal"
+            android:layout_marginBottom="16dp">
 
-        <!-- 🌈 색상(채도) 조절 SeekBar -->
+            <Button
+                android:id="@+id/btnBrightnessDown"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:text="밝기 -10"
+                android:contentDescription="@string/btn_brightnessDescription1"/>
+
+            <Button
+                android:id="@+id/btnBrightnessUp"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:text="밝기 +10"
+                android:contentDescription="@string/btn_brightnessDescription2"/>
+        </LinearLayout>
+
+        <!-- 채도 SeekBar 제거, 버튼 형식으로 교체함 -->
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="채도 조절"
             android:textStyle="bold" />
 
-        <SeekBar
-            android:id="@+id/seekBarSaturation"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="16dp"
-            android:max="100"
-            android:progress="50" />
-        <!-- 🔘 전원 토글 버튼 -->
+            android:orientation="horizontal"
+            android:layout_marginBottom="16dp">
+
+            <Button
+                android:id="@+id/btnSaturationDown"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:text="채도 -10"
+                android:contentDescription="@string/btn_btnSaturationDescription1" />
+
+            <Button
+                android:id="@+id/btnSaturationUp"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:text="채도 +10"
+                android:contentDescription="@string/btn_btnSaturationDescription2"/>
+        </LinearLayout>
+
+        <!-- 전원 토글 -->
         <Button
             android:id="@+id/btnTogglePower"
             android:layout_width="match_parent"

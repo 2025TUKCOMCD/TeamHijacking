@@ -73,13 +73,18 @@ class MyIotActivity : AppCompatActivity() {
     private fun showDeviceDetailDialog(device: Device) {
         val view = LayoutInflater.from(this).inflate(R.layout.dialog_device_detail, null)
         val statusText = view.findViewById<TextView>(R.id.textDeviceStatus)
-        val seekBarBrightness = view.findViewById<SeekBar>(R.id.seekBarBrightness)
-        val seekBarSaturation = view.findViewById<SeekBar>(R.id.seekBarSaturation)
+        val btnBrightnessUp = view.findViewById<Button>(R.id.btnBrightnessUp)
+        val btnBrightnessDown = view.findViewById<Button>(R.id.btnBrightnessDown)
+        val btnSaturationUp = view.findViewById<Button>(R.id.btnSaturationUp)
+        val btnSaturationDown = view.findViewById<Button>(R.id.btnSaturationDown)
         val btnTogglePower = view.findViewById<Button>(R.id.btnTogglePower)
 
         statusText.text = "기기 이름: ${device.label}\n기기 ID: ${device.deviceId}"
 
         var isPowerOn = false
+
+        var brightnessValue = 50
+        var saturationValue = 50
 
         deviceControlHelper.getDeviceStatus(
             device.deviceId,
@@ -90,15 +95,15 @@ class MyIotActivity : AppCompatActivity() {
                     val switchValue = mainComponent.switch?.switch?.value
                     isPowerOn = switchValue.equals("on", ignoreCase = true)
 
-                    val brightnessValue = mainComponent.switchLevel?.value?.toIntOrNull()
-                    brightnessValue?.let {
-                        seekBarBrightness.progress = it
-                    }
+                    //val brightnessValue = mainComponent.switchLevel?.value?.toIntOrNull()
+                    //brightnessValue?.let {
+                        //seekBarBrightness.progress = it
+                    //}
 
-                    val saturationValue = mainComponent.colorControl?.saturation?.value?.toInt()
-                    saturationValue?.let {
-                        seekBarSaturation.progress = it
-                    }
+                    //val saturationValue = mainComponent.colorControl?.saturation?.value?.toInt()
+                    //saturationValue?.let {
+                        //seekBarSaturation.progress = it
+                    //}
                 } else {
                     Toast.makeText(this, "Main 컴포넌트 없음", Toast.LENGTH_SHORT).show()
                 }
@@ -121,36 +126,38 @@ class MyIotActivity : AppCompatActivity() {
             )
         }
 
+        // 밝기, 채도 각각 +- 버튼 총 4개 만듦. 추후, 테스트 예정
+        btnBrightnessUp.setOnClickListener {
+            brightnessValue = (brightnessValue + 10).coerceAtMost(100)
+            deviceControlHelper.setBrightness(device.deviceId, brightnessValue,
+                onSuccess = {},
+                onError = { Toast.makeText(this, "밝기 조절 실패", Toast.LENGTH_SHORT).show() }
+            )
+        }
 
+        btnBrightnessDown.setOnClickListener {
+            brightnessValue = (brightnessValue - 10).coerceAtLeast(0)
+            deviceControlHelper.setBrightness(device.deviceId, brightnessValue,
+                onSuccess = {},
+                onError = { Toast.makeText(this, "밝기 조절 실패", Toast.LENGTH_SHORT).show() }
+            )
+        }
 
-        seekBarBrightness.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
-            override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
-                if (fromUser) {
-                    deviceControlHelper.setBrightness(device.deviceId, progress,
-                        onSuccess = { },
-                        onError = { }
-                    )
-                }
+        btnSaturationUp.setOnClickListener {
+            saturationValue = (saturationValue + 10).coerceAtMost(100)
+            deviceControlHelper.setColor(device.deviceId, hue = 50, saturation = saturationValue,
+                onSuccess = {},
+                onError = { Toast.makeText(this, "채도 조절 실패", Toast.LENGTH_SHORT).show() }
+            )
+        }
 
-            }
-
-            override fun onStartTrackingTouch(seekBar: SeekBar?) {}
-            override fun onStopTrackingTouch(seekBar: SeekBar?) {}
-        })
-
-        seekBarSaturation.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
-            override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
-                if (fromUser) {
-                    deviceControlHelper.setColor(device.deviceId, hue = 50, saturation = progress,
-                        onSuccess = { },
-                        onError = { }
-                    )
-                }
-            }
-
-            override fun onStartTrackingTouch(seekBar: SeekBar?) {}
-            override fun onStopTrackingTouch(seekBar: SeekBar?) {}
-        })
+        btnSaturationDown.setOnClickListener {
+            saturationValue = (saturationValue - 10).coerceAtLeast(0)
+            deviceControlHelper.setColor(device.deviceId, hue = 50, saturation = saturationValue,
+                onSuccess = {},
+                onError = { Toast.makeText(this, "채도 조절 실패", Toast.LENGTH_SHORT).show() }
+            )
+        }
 
         AlertDialog.Builder(this)
             .setTitle("기기 상태 및 제어")

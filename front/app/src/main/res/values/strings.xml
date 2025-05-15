@@ -12,10 +12,16 @@
     <string name="btn_scan_start">주변에 있는 스마트 음향신호기들을 검색합니다.</string>
 
     <string name="btn_iot_home">iot 스마트홈</string>
+    <string name="title_activity_my_iot">스마트 IoT 제어</string>
     <string name="btn_setting">설정</string>
     <string name="btn_transport_description">교통안내 기능입니다. 자세한 설명이 필요하시다면 꾹 누르십시오.</string>
     <string name="btn_audio_guide_description">음향 유도기 버튼입니다. 자세한 설명이 필요하시다면 꾹 누르십시오.</string>
     <string name="btn_iot_description">AI 스피커와 연결하여 원격 조종하는 기능입니다. 자세한 설명이 필요하시다면 꾹 눌러주십시오.</string>
+    <string name="btn_brightnessDescription1">밝기를 줄여주는 버튼입니다.</string>
+    <string name="btn_brightnessDescription2">밝기를 올려주는 버튼입니다.</string>
+    <string name="btn_btnSaturationDescription1">채도를 줄여주는 버튼입니다.</string>
+    <string name="btn_btnSaturationDescription2">채도를 올려주는 버튼입니다.</string>
+
     <string name="btn_setting_description">설정 버튼입니다</string>
     <string name="btn_saved_path">저장된 경로로 탐색</string>
     <string name="btn_saved_path_description">저장된 경로로 탐색 버튼입니다. 클릭 시 미리 지정해둔 경로에 대한 경로 안내가 진행됩니다.</string>

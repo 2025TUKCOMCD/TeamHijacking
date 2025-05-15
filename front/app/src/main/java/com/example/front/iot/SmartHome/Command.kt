@@ -5,4 +5,3 @@ data class Command(
     val command: String,
     val arguments: List<Any>? = null
 )
-
