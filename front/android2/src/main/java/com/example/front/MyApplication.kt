@@ -8,8 +8,8 @@ import com.kakao.sdk.common.util.Utility
 //import com.umc.anddeul.R
 
 /*https://uroa.tistory.com/43
-   전역 변수? 를 공유하기 위한 Application Class.
-   자세한 것은 카카오톡 로그인 개발 이슈 참조
+   전역 변수? 를 공유 하기 위한 Application Class.
+   자세한 것은 카카 오톡 로그인 개발 이슈 참조
  */
 
 class MyApplication: Application() {

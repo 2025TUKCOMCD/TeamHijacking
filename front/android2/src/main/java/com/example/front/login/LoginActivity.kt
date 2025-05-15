@@ -1,10 +1,12 @@
 package com.example.front.login
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.widget.ImageButton
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import com.example.front.MainActivity
 import com.example.front.databinding.ActivityLoginBinding
 import com.example.front.login.data.User
 import com.example.front.login.processor.RetrofitClient
@@ -109,8 +111,22 @@ class LoginActivity : AppCompatActivity() {
                 UserProcessor.registerUser(user) {  registeredUser ->    //registeredUser 는 Retrofit 통신의 응답 결과를 받아 저장 하는 콜백 함수의 매개 변수
                     if(registeredUser != null) {
                         Log.d("Login", "등록된 사용자: $registeredUser")
+
+                        //로그인 정보 저장
+                        val prefs = getSharedPreferences("userPrefs", MODE_PRIVATE).edit()
+                        prefs.putString("loginId", registeredUser.loginId)
+                        prefs.putString("name", registeredUser.name)
+                        prefs.apply()
+
+                        //로그인 성공 후 Main Activity 로 이동
+                        val intent = Intent(this@LoginActivity, MainActivity::class.java).apply{
+                            putExtra("name", registeredUser.name)
+                        }
+                        startActivity(intent)
+                        finish()  //로그인 화면을 종료 (뒤로 가기 시 다시 오지 않도록)
                     } else {
                         Log.e("login", "등록 실패")
+                        Toast.makeText(this, "사용자 등록 실패", Toast.LENGTH_SHORT).show()
                     }
                 }
             }

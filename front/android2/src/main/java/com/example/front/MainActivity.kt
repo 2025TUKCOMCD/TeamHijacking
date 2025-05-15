@@ -2,6 +2,7 @@ package com.example.front
 
 
 import android.os.Bundle
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
@@ -15,7 +16,7 @@ import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 
 // FragmentStateAdapter
-//프래그먼트 화면 이동하게 해주는 코드
+//Fragment 화면 이동 하게 해주는 코드
 class MyPagerAdapter(fragmentActivity: FragmentActivity) : FragmentStateAdapter(fragmentActivity) {
     override fun getItemCount(): Int = 3
 
@@ -41,7 +42,11 @@ class MainActivity : AppCompatActivity() {
         val pagerAdapter = MyPagerAdapter(this)
         viewPager.adapter = pagerAdapter
 
-        //탭 레이아웃으로 아래쪽에 나오는 버튼 이름을 일단 설정해둠
+        //이름을 받아올 수 있는지 테스트 위한 코드
+        val name = intent.getStringExtra("name")
+        Toast.makeText(this, "어서오세요 $name 님", Toast.LENGTH_SHORT).show()
+
+        //탭 레이아웃 으로 하단에 나오는 버튼 이름을 일단 설정
         val tabLayout: TabLayout = binding.tabLayout //
         TabLayoutMediator(tabLayout, viewPager) { tab, position ->
             when (position) {
