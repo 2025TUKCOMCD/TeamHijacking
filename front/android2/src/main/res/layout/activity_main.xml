@@ -21,6 +21,11 @@
         android:layout_height="wrap_content"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:tabIconTint="@color/menu_selected"
+        app:tabTextColor="@color/menu_selected"
+        app:tabIndicatorColor ="@color/select"
+        app:tabIndicatorHeight="5dp"
+        app:tabIndicatorGravity="top"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
