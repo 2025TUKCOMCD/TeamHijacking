@@ -7,4 +7,8 @@
     <string name="backStep">뒤로가기</string>
     <string name="toolBarText">IoT 기기 관리</string>
     <string name="profileText">프로필</string>
+    <string name="settingText">설정</string>
+    <string name="InfoText">정보</string>
+    <string name="logout">로그아웃</string>
+    <string name="QAText"><![CDATA[Q&A]]></string>
 </resources>
