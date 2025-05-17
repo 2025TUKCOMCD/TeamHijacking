@@ -4,4 +4,6 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="login">카카오톡으로 로그인</string>
     <string name="kakaologin_contentDescription">카카오톡 로그인 버튼입니다. 애플리케이션의 실행 및 IOT 기기 관리를 위해 로그인을 진행해주십시오.</string>
+    <string name="backStep">뒤로가기</string>
+    <string name="toolBarText">IoT 기기 관리</string>
 </resources>
