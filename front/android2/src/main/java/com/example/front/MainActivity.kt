@@ -3,8 +3,6 @@ package com.example.front
 
 import android.os.Bundle
 import android.util.Log
-import android.widget.ImageButton
-import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
@@ -17,7 +15,6 @@ import com.example.front.Iot.Iot_page02
 import com.example.front.Iot.Iot_page03
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
-import org.w3c.dom.Text
 
 // FragmentStateAdapter
 //Fragment 화면 이동 하게 해주는 코드

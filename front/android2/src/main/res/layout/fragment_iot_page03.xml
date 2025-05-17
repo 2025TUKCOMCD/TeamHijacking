@@ -3,13 +3,46 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:gravity="center"
+    android:paddingTop="10dp"
+    android:gravity="start"
     android:orientation="vertical"
     tools:context=".login.LoginActivity">
-    <!-- -->
-    <Button
-        android:id="@+id/data_btn3"
-        android:layout_width="wrap_content"
+    <!-- 설정 페이지 -->
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="데이터 전송" />
+        android:minHeight="70dp"
+        android:id = "@+id/ProfileLayout"
+        android:orientation="vertical">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:minHeight="70dp"
+            android:orientation="horizontal"
+            android:id="@+id/realProfileLayout">
+            <ImageView
+                android:layout_width="70dp"
+                android:layout_height="70dp"
+                android:minHeight="70dp"
+                android:minWidth="70dp"
+                android:padding="10dp"
+                android:background="@android:color/transparent"
+                android:src="@drawable/profile_user"
+                android:scaleType="centerInside"
+                android:importantForAccessibility="no"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:minHeight="70dp"
+                android:paddingStart="30dp"
+                android:paddingEnd="10dp"
+                android:text="@string/profileText"
+                android:textSize="40sp"
+                android:textColor="@color/select"
+                android:textAlignment="center" />
+        </LinearLayout>
+
+        <!-- id가 realProfileLayout 인 것 눌렀을 시 출력될 친구들 -->
+        <!-- 프로필 정보 수정, 폰트 수정, 색 수정, 접근성, 등 지원 했으면 함-->
+    </LinearLayout>
 </LinearLayout>
