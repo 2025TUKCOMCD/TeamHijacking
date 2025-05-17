@@ -1,4 +1,4 @@
-package com.example.front.Iot
+package com.example.front.iot
 
 import android.content.Context
 import android.os.Bundle
@@ -16,7 +16,7 @@ import com.google.android.gms.wearable.PutDataMapRequest
 import com.google.android.gms.wearable.Wearable
 import com.google.android.gms.common.api.ApiException
 
-class Iot_page01 : Fragment() {
+class IotPage01 : Fragment() {
 
     private val TAG = "Iot_page01"
 

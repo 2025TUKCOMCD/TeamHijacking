@@ -10,5 +10,5 @@
     <string name="settingText">설정</string>
     <string name="InfoText">정보</string>
     <string name="logout">로그아웃</string>
-    <string name="QAText"><![CDATA[Q&A]]></string>
+    <string name="QAText">문의하기</string>
 </resources>

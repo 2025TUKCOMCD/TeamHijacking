@@ -10,9 +10,9 @@ import androidx.fragment.app.FragmentActivity
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import androidx.viewpager2.widget.ViewPager2
 import com.example.front.databinding.ActivityMainBinding
-import com.example.front.Iot.Iot_page01
-import com.example.front.Iot.Iot_page02
-import com.example.front.Iot.Iot_page03
+import com.example.front.iot.IotPage01
+import com.example.front.iot.IotPage02
+import com.example.front.iot.IotPage03
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 
@@ -23,9 +23,9 @@ class MyPagerAdapter(fragmentActivity: FragmentActivity) : FragmentStateAdapter(
 
     override fun createFragment(position: Int): Fragment {
         return when (position) {
-            0 -> Iot_page01()
-            1 -> Iot_page02()
-            2 -> Iot_page03()
+            0 -> IotPage01()
+            1 -> IotPage02()
+            2 -> IotPage03()
             else -> throw IllegalStateException("Invalid position")
         }
     }
