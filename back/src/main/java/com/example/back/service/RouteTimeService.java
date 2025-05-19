@@ -303,8 +303,7 @@ public class RouteTimeService {
         stationGCLTravelTime.put("파주-문산",4);
         stationGCLTravelTime.put("문산-운천",6);
         stationGCLTravelTime.put("운천-임진강",4);
-        stationTravelTime(1063, stationGCLTravelTime)
-
+        stationTravelTime.put(1063, stationGCLTravelTime);
 
         //경춘선(Gyeongchun Line) GL (춘천~상봉)
         stationGLTravelTime.put("춘천-남춘천",3);

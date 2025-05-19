@@ -24,6 +24,7 @@ public class UserController {
     @PostMapping("/register")
     public ResponseEntity<?> registerUser(@RequestBody UserDTO userDTO) {
         try {
+            System.out.println(userDTO);
             log.info("회원 등록 요청 - loginId: {}, name: {}", userDTO.getLoginId(), userDTO.getName());
 
             // 필수 값 검사
@@ -33,7 +34,6 @@ public class UserController {
                 return ResponseEntity.badRequest()
                         .body(Collections.singletonMap("message", "이름과 로그인 ID는 필수 입니다."));
             }
-
 
             if(userRepository.existsByLoginId(userDTO.getLoginId())) {
                 log.warn("이미 등록된 사용자 - loginId: {}", userDTO.getLoginId());
