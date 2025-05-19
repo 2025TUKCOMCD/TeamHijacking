@@ -110,6 +110,8 @@ class LoginActivity : AppCompatActivity() {
                     name = "${user.kakaoAccount?.profile?.nickname}",
                     loginId = "${user.id}")
 
+                //리스폰스 확인
+
                 UserProcessor.registerUser(user) { response ->
                     when (response.code()) {
                         201 -> {
