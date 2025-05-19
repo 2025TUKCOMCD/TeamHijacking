@@ -67,4 +67,30 @@ public class UserController {
                     .build();
         }
     }
+
+
+
+    // 🔹 사용자 조회 (loginId 기반)
+    @GetMapping("/{loginId}")
+    public ResponseEntity<?> getUserByLoginId(@PathVariable String loginId) {
+        try {
+            log.info("사용자 조회 요청 - loginId: {}", loginId);
+
+            User user = userRepository.findByLoginId(loginId);
+            if (user != null) {
+                UserDTO userDTO = UserDTO.builder()
+                        .id(user.getId())
+                        .name(user.getName())
+                        .loginId(user.getLoginId())
+                        .build();
+                return ResponseEntity.ok(userDTO);
+            } else {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                        .body(Collections.singletonMap("message", "사용자를 찾을 수 없습니다."));
+            }
+        } catch (Exception e) {
+            log.error("사용자 조회 중 예외 발생: {}", e.getMessage(), e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
 }

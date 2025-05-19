@@ -18,6 +18,7 @@ import java.time.LocalDateTime;
 public class UserDTO {
     private Integer id;           // `int unsigned`에 대응되는 Integer
     private String name;          // `varchar(255)`에 대응되는 String
+
     @JsonProperty("login_id")
     private String loginId; // `varchar(255)`에 대응되는 String
 //    private Timestamp createAt;   // `datetime`
