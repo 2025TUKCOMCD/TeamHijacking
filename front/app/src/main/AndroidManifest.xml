@@ -7,6 +7,7 @@
     <uses-feature android:name="android.hardware.type.watch" /> <!-- 정밀 위치 권한 요청 -->
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" /> <!-- 사용자 위치 받아 오기 -->
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION" />
     <uses-permission android:name="android.permission.RECORD_AUDIO" /> <!-- 오디오 권한 요청 -->
     <uses-permission android:name="android.permission.BLUETOOTH_ADVERTISE" />
     <uses-permission android:name="android.permission.BLUETOOTH_SCAN" /> <!-- 페어링 된 기기를 확인 하기 위한 권한 -->
@@ -54,9 +55,16 @@
             android:theme="@style/Transportation_Main_Theme" />
         <activity
             android:name=".transportation.TransportInformationActivity"
-            android:exported="false"
+            android:exported="true"
             android:taskAffinity=""
-            android:theme="@style/Transportation_Main_Theme" />
+            android:theme="@style/Transportation_Main_Theme" >
+
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
         <!--
  <activity
             android:name=".transportation.dialog.TransSavedDialog"
@@ -112,11 +120,11 @@
             android:exported="true"
             android:taskAffinity=""
             android:theme="@style/MainActivityTheme" >
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
+<!--            <intent-filter>-->
+<!--                <action android:name="android.intent.action.MAIN" />-->
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
+<!--                <category android:name="android.intent.category.LAUNCHER" />-->
+<!--            </intent-filter>-->
         </activity>
 
 <!--        <service-->
