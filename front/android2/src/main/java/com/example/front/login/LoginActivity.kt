@@ -137,7 +137,7 @@ class LoginActivity : AppCompatActivity() {
 
     // sharedPreferences 에 로그인 정보 저장
     private fun saveLoginInfo(user: User) {
-        val sharedPref = getSharedPreferences("UserPrefs", MODE_PRIVATE)
+        val sharedPref = getSharedPreferences("userPrefs", MODE_PRIVATE)
         with(sharedPref.edit()) {
             putString("loginId", user.loginId)
             putString("name", user.name)

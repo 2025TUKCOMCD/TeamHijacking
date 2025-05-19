@@ -26,14 +26,22 @@ public class UserController {
         try {
             log.info("회원 등록 요청 - loginId: {}, name: {}", userDTO.getLoginId(), userDTO.getName());
 
+            // 필수 값 검사
+            if (userDTO.getLoginId() == null || userDTO.getLoginId().isEmpty() ||
+                    userDTO.getName() == null || userDTO.getName().isEmpty()) {
+                log.warn("입력값 부족 - loginId: {}, name: {}", userDTO.getLoginId(), userDTO.getName());
+                return ResponseEntity.badRequest()
+                        .body(Collections.singletonMap("message", "이름과 로그인 ID는 필수입니다."));
+            }
+
             if(userRepository.existsByLoginId(userDTO.getLoginId())) {
                 log.warn("이미 등록된 사용자 - loginId: {}", userDTO.getLoginId());
                 //JSON 형태로 변경
-                return ResponseEntity
-                        .status(HttpStatus.CONFLICT)
+                return ResponseEntity.status(HttpStatus.CONFLICT)
                         .body(Collections.singletonMap("message", "이미 등록된 사용자입니다."));
             }
 
+            //사용자 저장
             User savedUser = userService.saveUser(userDTO);
             log.info("사용자 등록 성공 - id: {}", savedUser.getId());
 
