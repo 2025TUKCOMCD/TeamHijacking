@@ -18,6 +18,7 @@
         android:layout_height="100dp"
         android:layout_gravity="center"
         android:paddingBottom="20dp"
+        android:contentDescription="@string/get_transport_time"
         android:id="@+id/transInfoImgSwitcher">
 
     </ImageSwitcher>
@@ -30,14 +31,14 @@
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="하.."
+            android:text="전 경로"
             android:id="@+id/imsiBtt2"
             android:layout_gravity="center"
             />
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="하.."
+            android:text="다음경로"
             android:id="@+id/imsiBtt3"
             android:layout_gravity="center"
             />

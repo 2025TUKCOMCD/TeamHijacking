@@ -28,7 +28,7 @@ class MainActivity : AppCompatActivity() {
         // activity_main.xml 레이아웃 설정
         setContentView(binding.main)
 
-        // XML에서 정의된 버튼들을 연결
+        // XML 에서 정의된 버튼 들을 연결
         val transportButton: ImageButton = binding.btnTransport
         val audioGuideButton: ImageButton = binding.btnAudioGuide
         val iotHomeButton: ImageButton = binding.btnIotHome
@@ -36,7 +36,7 @@ class MainActivity : AppCompatActivity() {
 
         // 각 버튼의 클릭 이벤트 처리
         transportButton.setOnClickListener {
-            // 대중교통 버튼 클릭 시 실행할 로직
+            // 대중 교통 버튼 클릭 시 실행할 로직
             val intent = Intent(this, TransportationMainActivity::class.java)
             startActivity(intent)
         }

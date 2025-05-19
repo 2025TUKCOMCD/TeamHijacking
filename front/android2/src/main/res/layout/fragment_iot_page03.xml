@@ -3,13 +3,149 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:gravity="center"
+    android:paddingTop="10dp"
+    android:gravity="start"
     android:orientation="vertical"
     tools:context=".login.LoginActivity">
-    <!-- -->
+
+    <!-- 설정 페이지 -->
+    <LinearLayout
+        android:id = "@+id/ProfileLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:minHeight="70dp"
+        android:orientation="vertical"
+        android:paddingBottom="10dp">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:minHeight="70dp"
+            android:orientation="horizontal"
+            android:id="@+id/realProfileLayout"
+            android:background="@drawable/setting_border_layout"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="10dp">
+            <ImageView
+                android:layout_width="70dp"
+                android:layout_height="70dp"
+                android:minHeight="70dp"
+                android:minWidth="70dp"
+                android:padding="10dp"
+                android:background="@android:color/transparent"
+                android:src="@drawable/profile_user"
+                android:scaleType="centerInside"
+                android:importantForAccessibility="no"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:minHeight="70dp"
+                android:paddingStart="30dp"
+                android:paddingEnd="10dp"
+                android:text="@string/profileText"
+                android:textSize="40sp"
+                android:textColor="@color/select"
+                android:textAlignment="center"
+                android:layout_marginEnd="35dp"/>
+        </LinearLayout>
+
+        <!-- id가 realProfileLayout 인 것 눌렀을 시 출력될 친구들 -->
+        <!-- 프로필 정보 수정, 폰트 수정, 색 수정, 접근성, 닉네임 수정, 연동된 Google 계정 등 지원 했으면 함-->
+    </LinearLayout>
+
+
+    <!-- 정보 페이지 -->
+    <LinearLayout
+        android:id = "@+id/InfoLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:minHeight="70dp"
+        android:orientation="vertical"
+        android:paddingBottom="10dp">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:minHeight="70dp"
+            android:orientation="horizontal"
+            android:id="@+id/realInfoLayout"
+            android:background="@drawable/setting_border_layout"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="10dp">
+            <ImageView
+                android:layout_width="70dp"
+                android:layout_height="70dp"
+                android:minHeight="70dp"
+                android:minWidth="70dp"
+                android:padding="10dp"
+                android:background="@android:color/transparent"
+                android:src="@drawable/info"
+                android:scaleType="centerInside"
+                android:importantForAccessibility="no"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:minHeight="70dp"
+                android:paddingStart="30dp"
+                android:paddingEnd="10dp"
+                android:text="@string/InfoText"
+                android:textSize="40sp"
+                android:textColor="@color/select"
+                android:textAlignment="center" />
+        </LinearLayout>
+
+        <!-- id가 realInfoLayout 인 것 눌렀을 시 출력될 친구들 -->
+        <!-- 실행 방법, FAQ, Q&A, 이용 약관, 개인 정보 정책, 오픈 소스, 버전 등이 출력 -->
+    </LinearLayout>
+
+    <!-- 정보 페이지 -->
+    <LinearLayout
+        android:id = "@+id/QuestionLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:minHeight="70dp"
+        android:orientation="vertical"
+        android:paddingBottom="10dp">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:minHeight="70dp"
+            android:orientation="horizontal"
+            android:id="@+id/realQuestionLayout"
+            android:background="@drawable/setting_border_layout"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="10dp">
+            <ImageView
+                android:layout_width="70dp"
+                android:layout_height="70dp"
+                android:minHeight="70dp"
+                android:minWidth="70dp"
+                android:padding="10dp"
+                android:background="@android:color/transparent"
+                android:src="@drawable/question"
+                android:scaleType="centerInside"
+                android:importantForAccessibility="no"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:minHeight="70dp"
+                android:paddingStart="30dp"
+                android:paddingEnd="10dp"
+                android:text="@string/QAText"
+                android:textSize="40sp"
+                android:textColor="@color/select"
+                android:textAlignment="center" />
+        </LinearLayout>
+
+        <!-- id가 realInfoLayout 인 것 눌렀을 시 출력될 친구들 -->
+        <!-- 실행 방법, FAQ, Q&A, 이용 약관, 개인 정보 정책, 오픈 소스, 버전 등이 출력 -->
+    </LinearLayout>
+
     <Button
-        android:id="@+id/data_btn3"
+        android:id = "@+id/logoutBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="데이터 전송" />
+        android:layout_marginEnd="20dp"
+        android:layout_marginTop="10dp"
+        android:text = "@string/logout"
+        android:textSize="20sp"
+        android:layout_gravity="end" />
 </LinearLayout>

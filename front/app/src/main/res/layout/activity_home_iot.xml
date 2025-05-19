@@ -9,44 +9,68 @@
     tools:context=".iot.HomeIotActivity"
     android:background="@color/backgroundDark">
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:gravity="center"
-        android:padding="16dp"
+    <ScrollView
+        android:id="@+id/scrollView"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent">
-
-        <!-- 🔄 IoT 추가 버튼 (SmartThings 앱 이동) -->
-        <Button
-            android:id="@+id/btnAddDevice"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="IoT 추가"
+            android:orientation="vertical"
+            android:gravity="center"
+            android:padding="16dp"
+            android:minHeight="100dp"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent">
+
+            <!-- ➕ My IoT 페이지 이동 버튼 -->
+            <ImageButton
+                android:id="@+id/btnMyIot"
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:minWidth="20dp"
+                android:minHeight="40dp"
+                android:layout_margin="5dp"
+                android:text="@string/iotmanage"
+                android:contentDescription="@string/iot_manage_content_description"
+                android:layout_marginBottom="10dp"
+                android:src="@drawable/myiot_btn2"
+                android:background="@android:color/transparent"
+                android:scaleType="fitCenter"/>
+
+            <!-- 🔄 IoT 추가 버튼 (SmartThings 앱 이동) -->
+        <ImageButton
+            android:id="@+id/btnAddDevice"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:minWidth="20dp"
+            android:minHeight="40dp"
+            android:text="@string/iot_add"
+            android:layout_margin="5dp"
             android:backgroundTint="@android:color/holo_blue_light"
             android:textColor="@android:color/white"
-            android:padding="12dp"
-            android:layout_marginBottom="16dp"/>
-
-        <!-- ➕ My IoT 페이지 이동 버튼 -->
-        <Button
-            android:id="@+id/btnMyIot"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="My IoT"
-            android:layout_marginBottom="16dp"/>
+            android:layout_marginBottom="12dp"
+            android:src="@drawable/manage_myiot_btn2"
+            android:scaleType="fitCenter"
+            android:background="@android:color/transparent"
+            android:contentDescription="@string/iot_iot_smartthings"/>
 
         <!-- 🎤 음성 명령 버튼 -->
         <Button
             android:id="@+id/btnVoiceControl"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="음성 명령 시작"
-            android:padding="12dp"/>
+            android:text="@string/start_ai"
+            android:textSize="12sp"
+            android:padding="12dp"
+            android:minHeight="20dp" />
 
     </LinearLayout>
-
+    </ScrollView>
 </androidx.constraintlayout.widget.ConstraintLayout>

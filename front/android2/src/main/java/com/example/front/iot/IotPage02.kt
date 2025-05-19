@@ -1,4 +1,4 @@
-package com.example.front.Iot
+package com.example.front.iot
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -7,7 +7,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.example.front.R
 
-class Iot_page02 : Fragment() {
+class IotPage02 : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
