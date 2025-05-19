@@ -11,7 +11,6 @@ import org.springframework.data.jpa.repository.Query;
 
 @Repository
 public interface TimeTableRepository extends JpaRepository<TimeTable, Long> {
-
     @Query(value = "SELECT * FROM TimeTable t WHERE t.route_id = :routeId AND t.Station_Name = :stationName AND t.Arrival_Time > :currentTime AND t.Day_Type = :dayType ORDER BY t.Arrival_Time ASC LIMIT 2", nativeQuery = true)
     List<TimeTable> findNextSubwayByRouteIdAndStationNameAndDayType(
             @Param("routeId") int routeId,

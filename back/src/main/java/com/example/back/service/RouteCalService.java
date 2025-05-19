@@ -58,6 +58,8 @@ public class RouteCalService {
                 .filter(detail -> detail != null)
                 .collect(Collectors.toList());
     }
+
+    // 경로 대중교통 상세 정보
     public List<String> mapDetailedTrans(List<RouteProcessDTO.SubPath> subPaths) {
         return subPaths.stream()
                 .map(subPath -> {

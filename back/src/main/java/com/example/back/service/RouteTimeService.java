@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.*;
 
+// 네트워크 시간 처리
 @Service
 public class RouteTimeService {
 
@@ -18,6 +19,7 @@ public class RouteTimeService {
     // 시간 초기화
     @PostConstruct
     private void initializeTravelTime() {
+
         Map<String, Integer> station1TravelTime = new HashMap<>();
         Map<String, Integer> station4TravelTime = new HashMap<>();
         Map<String, Integer> station8TravelTime = new HashMap<>();
@@ -30,7 +32,6 @@ public class RouteTimeService {
         Map<String, Integer> stationSHLTravelTime = new HashMap<>();
         Map<String, Integer> stationSLLTravelTime = new HashMap<>();
         Map<String, Integer> stationGTXTravelTime = new HashMap<>();
-
 
 
         //  메인 노선 (연천 ~ 구로)

@@ -160,8 +160,8 @@ public class APIService {
     }
 
     // 서울 지하철 실시간 위치 정보 조회
-    public RealSubwayLocationDTO fetchAndSubwayLocation(String stationName) throws IOException {
-        Call<ResponseBody> call = subwayApi.getRealtimeStationArrival(Seoul_Subway_apiKey, stationName);
+    public RealSubwayLocationDTO fetchAndSubwayLocation(String routeName) throws IOException {
+        Call<ResponseBody> call = subwayApi.getRealtimePosition(Seoul_Subway_apiKey, routeName);
         ResponseBody responseBody = call.execute().body(); // 동기 호출
         if (responseBody != null) {
             String rawJson = responseBody.string();
