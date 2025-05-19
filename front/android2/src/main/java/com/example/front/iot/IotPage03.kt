@@ -38,7 +38,7 @@ class IotPage03 : Fragment() {
                     Log.e("Logout", "뭐라고 하더라 이거")
                 } else {
                     //2. SharedPreferences 초기화
-                    requireActivity().getSharedPreferences("userPrefs", MODE_PRIVATE).edit() {
+                    requireActivity().getSharedPreferences("userPrefs", MODE_PRIVATE).edit {
                         clear()
                     }
 

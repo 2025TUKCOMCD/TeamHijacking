@@ -16,6 +16,8 @@ import com.kakao.sdk.common.model.ClientError
 import com.kakao.sdk.common.model.ClientErrorCause
 import com.kakao.sdk.user.UserApiClient
 import com.kakao.sdk.common.util.Utility
+import retrofit2.Call
+import retrofit2.Response
 
 class LoginActivity : AppCompatActivity() {
     private lateinit var binding: ActivityLoginBinding
@@ -108,25 +110,24 @@ class LoginActivity : AppCompatActivity() {
                     name = "${user.kakaoAccount?.profile?.nickname}",
                     loginId = "${user.id}")
 
-                UserProcessor.registerUser(user) {  registeredUser ->    //registeredUser 는 Retrofit 통신의 응답 결과를 받아 저장 하는 콜백 함수의 매개 변수
-                    if(registeredUser != null) {
-                        Log.d("Login", "등록된 사용자: $registeredUser")
-
-                        //로그인 정보 저장
-                        val prefs = getSharedPreferences("userPrefs", MODE_PRIVATE).edit()
-                        prefs.putString("loginId", registeredUser.loginId)
-                        prefs.putString("name", registeredUser.name)
-                        prefs.apply()
-
-                        //로그인 성공 후 Main Activity 로 이동
-                        val intent = Intent(this@LoginActivity, MainActivity::class.java).apply{
-                            putExtra("name", registeredUser.name)
+                UserProcessor.registerUser(user) { response ->
+                    when (response.code()) {
+                        201 -> {
+                            val registeredUser = response.body()
+                            if (registeredUser != null ) {
+                                //로그인 정보 저장 + 메인 화면 이동
+                                saveLoginInfo(registeredUser)
+                                moveToMain(registeredUser.name)
+                            }
                         }
-                        startActivity(intent)
-                        finish()  //로그인 화면을 종료 (뒤로 가기 시 다시 오지 않도록)
-                    } else {
-                        Log.e("login", "등록 실패")
-                        Toast.makeText(this, "사용자 등록 실패", Toast.LENGTH_SHORT).show()
+                        409 -> {
+                            Toast.makeText(this, "이미 등록된 사용자 입니다.", Toast.LENGTH_SHORT).show()
+                            //이미 등록된 사용자 처리 로직
+                            moveToMain(user.name)
+                        }
+                        else -> {
+                            Toast.makeText(this, "등록 실패 (오류 코드: ${response.code()})", Toast.LENGTH_SHORT).show()
+                        }
                     }
                 }
             }
@@ -134,25 +135,37 @@ class LoginActivity : AppCompatActivity() {
         //사용자 정보를 활용해 추가 로직 구현 가능
     }
 
-
-    //logout 위한 function. 앱에 저장된 로그인 정보 지움. 참고:: https://quessr.tistory.com/84
-    private fun kakaoLogout() {
-        UserApiClient.instance.unlink { error ->
-            if (error != null) {
-                Toast.makeText(this, "logout 실패: ${error.message}", Toast.LENGTH_SHORT).show()
-                Log.e("login","logout 실패, SDK 에서 토큰 삭제됨", error)
-            } else {
-                Toast.makeText(this, "logout 성공", Toast.LENGTH_SHORT).show()
-                Log.i("login", "logout 성공, SDK 에서 토큰 삭제됨")
-            }
+    // sharedPreferences 에 로그인 정보 저장
+    private fun saveLoginInfo(user: User) {
+        val sharedPref = getSharedPreferences("UserPrefs", MODE_PRIVATE)
+        with(sharedPref.edit()) {
+            putString("loginId", user.loginId)
+            putString("name", user.name)
+            apply()
         }
     }
 
-
-    //TODO:: 로그인 여부를 자동 확인 func 구현 필요
-    private fun isUserLogin(){
-
+    //MainActivity 로 이동 위한 코드
+    private fun moveToMain(userName: String) {
+        val intent = Intent(this, MainActivity::class.java).apply {
+            putExtra("userName", userName)
+        }
+        startActivity(intent)
+        finish()  // 로그인 Activity 종료
     }
+
+    //logout 위한 function. 앱에 저장된 로그인 정보 지움. 참고:: https://quessr.tistory.com/84
+//    private fun kakaoLogout() {
+//        UserApiClient.instance.unlink { error ->
+//            if (error != null) {
+//                Toast.makeText(this, "logout 실패: ${error.message}", Toast.LENGTH_SHORT).show()
+//                Log.e("login","logout 실패, SDK 에서 토큰 삭제됨", error)
+//            } else {
+//                Toast.makeText(this, "logout 성공", Toast.LENGTH_SHORT).show()
+//                Log.i("login", "logout 성공, SDK 에서 토큰 삭제됨")
+//            }
+//        }
+//    }
 
     private fun updateProfile() {
 
