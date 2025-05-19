@@ -10,33 +10,13 @@ import retrofit2.Response
 object UserProcessor {
     private val userService = RetrofitClient.userService
 
-    // 사용자 등록 (회원 가입)
-//    fun registerUser(user: User, onResult: (User?) -> Unit) {
-//        val call = userService.registerUser(user)
-//
-//        call.enqueue(object: Callback<User> {
-//            override fun onResponse(call: Call<User>, response: Response<User>) {
-//                if (response.isSuccessful) {
-//                    Log.d("UserProcessor", "등록 성공: ${response.body()}")
-//                } else {
-//                    Log.e("UserProcessor", "서버 오류: ${response.code()}")
-//                }
-//                callback(response)  //성공 관계 없이 response 객체 전달
-//            }
-//
-//            override fun onFailure(call: Call<User>, t: Throwable) {
-//                Log.e("UserProcessor", "통신 실패: ${t.message}")
-//                callback(Response.error(500, okhttp3.ResponseBody.create(null, "통신 실패")))
-//            }
-//        })
-//    }
-
     fun registerUser(user: User, callback: (Response<User>) -> Unit) {
         val call = userService.registerUser(user)
 
         call.enqueue(object : Callback<User> {
             override fun onResponse(call: Call<User>, response: Response<User>) {
                 if (response.isSuccessful) {
+                    Log.d("response","${response}")
                     Log.d("UserProcessor", "등록 성공: ${response.body()}")
                 } else {
                     Log.w("UserProcessor", "등록 실패 - 상태 코드: ${response.code()}")
