@@ -13,7 +13,7 @@ object RetrofitClient {
 
     private const val HOST_URL = BuildConfig.HOST_URL
 
-    val instance: UserService by lazy {
+    val userService: UserService by lazy {
         val retrofit = Retrofit.Builder()
             .baseUrl(HOST_URL)
             .addConverterFactory(GsonConverterFactory.create())
