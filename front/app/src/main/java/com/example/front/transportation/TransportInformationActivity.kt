@@ -20,6 +20,7 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
+import androidx.compose.ui.res.stringArrayResource
 import androidx.core.app.ActivityCompat
 import com.example.front.R
 import com.example.front.databinding.ActivityTransportInformationBinding
@@ -29,6 +30,7 @@ import com.example.front.databinding.TransSavedDialogBinding
 import com.example.front.transportation.data.searchPath.RouteId
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
+import android.view.accessibility.AccessibilityEvent
 
 //교통 안내용 Activity
 class TransportInformationActivity : AppCompatActivity() {
@@ -114,36 +116,41 @@ class TransportInformationActivity : AppCompatActivity() {
         // Log.d("log", "transitTypeNo: $transitTypeNo") //
         //val routeIds = intent.getSerializableExtra("routeIds") as? ArrayList<RouteId>
         val routeIds = intArrayOf(3,2,3,1,3)
+        // 더미 데이터 실제 데이터로 바꿔야함
+        val messagelist = listOf("[10]번째 전역 (곡산) n분후 도착","목표역에 거의 다 접근함" ,"[10]번째 전역 (곡산)", "목표역에 거의 다 접근함" , "도착지까지 n m 남음")
+        // 이미지를 클릭시 소리가 나게 세팅하고 싶음
+
+
         Log.d("log", "routeIds: $routeIds")
         pathTransitType.add(4)
         Log.d("현빈", pathTransitType.toString())
-        updateButtonImages(transOrder,pathTransitType)
+        updateButtonImages(transOrder,pathTransitType, messagelist)
         // 주석 처리된 임시 버튼
         imsiBtt2.setOnClickListener {
             if(transOrder!=0){
-                updateButtonImages(--transOrder,pathTransitType)
+                updateButtonImages(--transOrder,pathTransitType, messagelist)
             }
             else{
                 Toast.makeText(this, "첫번째 경로입니다.", Toast.LENGTH_SHORT).show()
             }
+
         }
+
 
         imsiBtt3.setOnClickListener {
             if(transOrder+1 < pathTransitType.size) {
-                updateButtonImages(++transOrder, pathTransitType)
+                updateButtonImages(++transOrder, pathTransitType, messagelist)
             }
             else{
                 Toast.makeText(this, "마지막 경로입니다.", Toast.LENGTH_SHORT).show()
             }
         }
 
-        //updateButtonImages(pathTransitType)
-
     }
     private fun hasGps(): Boolean =
         packageManager.hasSystemFeature(PackageManager.FEATURE_LOCATION_GPS)
 
-    private fun updateButtonImages(order: Int,pathTransitType: List<Int>?) {
+    private fun updateButtonImages(order: Int,pathTransitType: List<Int>?, messagelist: List<String> = listOf()) {
         if (pathTransitType == null) return
 
         val imageResource = when (pathTransitType[order]) {
@@ -157,6 +164,8 @@ class TransportInformationActivity : AppCompatActivity() {
         transInfoImgArray[pathTransitType[order]] = imageResource
 
         transInfoImgSwitcher.setImageResource(transInfoImgArray[pathTransitType[order]])
+        //업데이트 할때 이미지 contentDescription도 같이 해서
+        transInfoImgSwitcher.contentDescription = messagelist[transOrder]
     }
 
 
