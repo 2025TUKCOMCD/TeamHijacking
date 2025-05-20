@@ -11,4 +11,11 @@
     <string name="InfoText">정보</string>
     <string name="logout">로그아웃</string>
     <string name="QAText">문의하기</string>
+    <string name="changeNickname">닉네임 변경</string>
+    <string name="faq">FAQ</string>
+    <string name="qna"><![CDATA[Q&A]]></string>
+    <string name="termOfUse">이용약관</string>
+    <string name="privacyPolicy">개인정보 정책</string>
+    <string name="openSource">오픈소스</string>
+    <string name="version">버전: 0.0.0</string>
 </resources>
