@@ -38,7 +38,7 @@ class DeviceAdapter(
     override fun getItemViewType(position: Int): Int {
         return when (devices[position].name) {
             "Galaxy Home Mini (3NPH)" -> VIEW_TYPE_LIGHT
-            "c2c-rgb-color-bulb" -> VIEW_TYPE_TEMPERATURE
+            "c2c-rgb-color-bulb" -> VIEW_TYPE_AISPEAKER
             // ... 다른 장치 유형에 대한 View Type 반환
             else -> {
                 Log.d("현빈", "그런 기기 없음")}
@@ -52,7 +52,7 @@ class DeviceAdapter(
                     .inflate(R.layout.device_itemlist_light, parent, false)
                 LightViewHolder(view)
             }
-            VIEW_TYPE_TEMPERATURE -> {
+            VIEW_TYPE_AISPEAKER -> {
                 val view = LayoutInflater.from(parent.context)
                     .inflate(R.layout.device_itemlist_aispeak, parent, false)
                 TemperatureViewHolder(view)
@@ -70,7 +70,7 @@ class DeviceAdapter(
                     // Light 관련 데이터 바인딩
                 }
             }
-            VIEW_TYPE_TEMPERATURE -> {
+            VIEW_TYPE_AISPEAKER -> {
                 (holder as TemperatureViewHolder).apply {
                     deviceLabel.text = device.label
                     // Temperature 관련 데이터 바인딩 (예: device.currentTemperature 또는 유사한 속성)
@@ -84,7 +84,7 @@ class DeviceAdapter(
 
     companion object {
         private const val VIEW_TYPE_LIGHT = 0
-        private const val VIEW_TYPE_TEMPERATURE = 1
+        private const val VIEW_TYPE_AISPEAKER = 1
         // ... 필요한 다른 View Type 상수 추가
     }
 }
