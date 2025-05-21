@@ -9,8 +9,11 @@ data class ComponentStatus(
     val temperatureMeasurement: TemperatureStatus?,
     val contactSensor: ContactSensorStatus?,
     val switchLevel: CapabilityStatus?,
-    val colorControl: ColorControlStatus?
+    val colorControl: ColorControlStatus?,
+    val custom: CustomStatus? // <- 새로 추가한 모드 정보 커스텀상태
 )
+
+
 
 data class CapabilityStatus(
     val value: String
