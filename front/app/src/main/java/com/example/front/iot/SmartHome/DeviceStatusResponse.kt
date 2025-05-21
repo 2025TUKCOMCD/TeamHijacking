@@ -13,7 +13,13 @@ data class ComponentStatus(
     val custom: CustomStatus? // <- 새로 추가한 모드 정보 커스텀상태
 )
 
+data class CustomStatus(
+    val lihghtMode: LightModeStatus?
+)
 
+data class LightModeStatus(
+    val lightMode: ValueStatus
+)
 
 data class CapabilityStatus(
     val value: String

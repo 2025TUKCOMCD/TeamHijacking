@@ -13,10 +13,8 @@
     <option name="autoReloadType" value="NONE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="617fd7c0-9874-4635-9c7c-865fb012701e" name="Changes" comment="SeekBar 제거 후 버튼으로 교체. 그리고, contentDescription 추가">
-      <change beforePath="$PROJECT_DIR$/.idea/deploymentTargetSelector.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/deploymentTargetSelector.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/other.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/other.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+    <list default="true" id="617fd7c0-9874-4635-9c7c-865fb012701e" name="Changes" comment="DeviceStatusResponse 클래스 데이터 추가">
+      <change beforePath="$PROJECT_DIR$/front/app/src/main/java/com/example/front/iot/SmartHome/DeviceStatusResponse.kt" beforeDir="false" afterPath="$PROJECT_DIR$/front/app/src/main/java/com/example/front/iot/SmartHome/DeviceStatusResponse.kt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -257,7 +255,15 @@
       <option name="presentableId" value="Default" />
       <updated>1747650493382</updated>
     </task>
-    <option name="localTasksCounter" value="6" />
+    <task id="LOCAL-00006" summary="DeviceStatusResponse 클래스 데이터 추가">
+      <option name="closed" value="true" />
+      <created>1747807137198</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1747807137198</updated>
+    </task>
+    <option name="localTasksCounter" value="7" />
     <servers />
   </component>
   <component name="VcsManagerConfiguration">
@@ -266,6 +272,7 @@
     <MESSAGE value="api데이터 서비스 추후 수정할 부분 체크만 해둠." />
     <MESSAGE value="수정할 함수 체크" />
     <MESSAGE value="SeekBar 제거 후 버튼으로 교체. 그리고, contentDescription 추가" />
-    <option name="LAST_COMMIT_MESSAGE" value="SeekBar 제거 후 버튼으로 교체. 그리고, contentDescription 추가" />
+    <MESSAGE value="DeviceStatusResponse 클래스 데이터 추가" />
+    <option name="LAST_COMMIT_MESSAGE" value="DeviceStatusResponse 클래스 데이터 추가" />
   </component>
 </project>
