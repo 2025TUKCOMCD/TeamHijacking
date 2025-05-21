@@ -145,7 +145,7 @@ class MyIotActivity : AppCompatActivity() {
 
         btnSaturationUp.setOnClickListener {
             saturationValue = (saturationValue + 10).coerceAtMost(100)
-            deviceControlHelper.setColor(device.deviceId, hue = 50, saturation = saturationValue,
+            deviceControlHelper.setColorWithAutoMode(device.deviceId, hue = 50, saturation = saturationValue,
                 onSuccess = {},
                 onError = { Toast.makeText(this, "채도 조절 실패", Toast.LENGTH_SHORT).show() }
             )
@@ -153,7 +153,7 @@ class MyIotActivity : AppCompatActivity() {
 
         btnSaturationDown.setOnClickListener {
             saturationValue = (saturationValue - 10).coerceAtLeast(0)
-            deviceControlHelper.setColor(device.deviceId, hue = 50, saturation = saturationValue,
+            deviceControlHelper.setColorWithAutoMode(device.deviceId, hue = 50, saturation = saturationValue,
                 onSuccess = {},
                 onError = { Toast.makeText(this, "채도 조절 실패", Toast.LENGTH_SHORT).show() }
             )
