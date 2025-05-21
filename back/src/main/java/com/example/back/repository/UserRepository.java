@@ -13,5 +13,7 @@ public interface UserRepository extends JpaRepository<User, Integer> {
    //Login_id를 이용해 유저 찾기(Native Query)
    @Query(value = "SELECT * FROM `user` u WHERE u.login_id = :loginId", nativeQuery = true)    //Login_id를 통해 멤버를 찾는 식.
    User findByLoginId(@Param("loginId") String loginId);
+
+   boolean existsByLoginId(String loginId);
 }
 

@@ -58,6 +58,7 @@ class MyIotActivity : AppCompatActivity() {
                 val devices = response.body()?.items ?: emptyList()
                 deviceList.clear()
                 deviceList.addAll(devices)
+                Log.d("현빈", deviceList[0].name)
                 deviceAdapter.notifyDataSetChanged()
             } else {
                 Toast.makeText(this@MyIotActivity, "기기 불러오기 실패", Toast.LENGTH_SHORT).show()
@@ -69,7 +70,7 @@ class MyIotActivity : AppCompatActivity() {
         }
     })
     }
-
+    //무드등 제어 만약 device이름이 c2c-rgb-color-bulb이라면 여기로 이동시키면 됨 추후에 넣어야 할듯
     private fun showDeviceDetailDialog(device: Device) {
         val view = LayoutInflater.from(this).inflate(R.layout.dialog_device_detail, null)
         val statusText = view.findViewById<TextView>(R.id.textDeviceStatus)
