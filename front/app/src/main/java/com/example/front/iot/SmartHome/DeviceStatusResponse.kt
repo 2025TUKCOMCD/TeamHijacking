@@ -14,7 +14,7 @@ data class ComponentStatus(
 )
 
 data class CustomStatus(
-    val lihghtMode: LightModeStatus?
+    val lightMode: LightModeStatus?
 )
 
 data class LightModeStatus(
