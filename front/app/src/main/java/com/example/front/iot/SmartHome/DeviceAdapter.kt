@@ -24,7 +24,7 @@ class DeviceAdapter(
         }
     }
 
-    inner class TemperatureViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+    inner class AiSpeakerViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val deviceLabel: TextView = view.findViewById(R.id.deviceLabel) // R.id.deviceLabel을 각 레이아웃에 맞게 변경
         init {
             view.setOnClickListener {
@@ -55,7 +55,7 @@ class DeviceAdapter(
             VIEW_TYPE_AISPEAKER -> {
                 val view = LayoutInflater.from(parent.context)
                     .inflate(R.layout.device_itemlist_aispeak, parent, false)
-                TemperatureViewHolder(view)
+                AiSpeakerViewHolder(view)
             }
             else -> throw IllegalArgumentException("Invalid view type")
         }
@@ -71,7 +71,7 @@ class DeviceAdapter(
                 }
             }
             VIEW_TYPE_AISPEAKER -> {
-                (holder as TemperatureViewHolder).apply {
+                (holder as AiSpeakerViewHolder).apply {
                     deviceLabel.text = device.label
                     // Temperature 관련 데이터 바인딩 (예: device.currentTemperature 또는 유사한 속성)
                     // temperatureValue.text = "${device.currentTemperature}°C"
