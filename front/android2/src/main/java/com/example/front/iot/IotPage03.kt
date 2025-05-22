@@ -36,6 +36,8 @@ class IotPage03 : Fragment() {
         val infoLittleLayout: LinearLayout = binding.InfoLittleLayout
         val realQuestionLayout: LinearLayout = binding.realQuestionLayout
         val questionLittleLayout: LinearLayout = binding.QuestionLittleLayout
+        val realProfileLayout: LinearLayout = binding.realProfileLayout
+        val littleProfileLayout: LinearLayout = binding.littleProfileLayout
 
         logoutBtn.setOnClickListener {
             //1. 카카오 logout
@@ -73,6 +75,14 @@ class IotPage03 : Fragment() {
                 questionLittleLayout.visibility = View.VISIBLE
             } else {
                 questionLittleLayout.visibility = View.GONE
+            }
+        }
+
+        realProfileLayout.setOnClickListener {
+            if(littleProfileLayout.isGone) {
+                littleProfileLayout.visibility = View.VISIBLE
+            } else {
+                littleProfileLayout.visibility = View.GONE
             }
         }
 
