@@ -5,11 +5,7 @@
     android:layout_height="match_parent"
     android:gravity="center"
     android:orientation="vertical"
-    tools:context=".login.LoginActivity">
-    <!-- -->
-    <Button
-        android:id="@+id/data_btn1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="데이터 전송" />
+    tools:context=".MainActivity"
+    android:id="@+id/iotDeviceControlLayout">
+    <!-- 장치 관리 페이지 -->
 </LinearLayout>
