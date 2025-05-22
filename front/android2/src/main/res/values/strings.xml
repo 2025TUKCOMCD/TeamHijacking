@@ -18,4 +18,6 @@
     <string name="privacyPolicy">개인정보 정책</string>
     <string name="openSource">오픈소스</string>
     <string name="version">버전: 0.0.0</string>
+    <string name="howToDoTextView">앱 실행 방법</string>
+    <string name="contactToDev">개발자에게 연락 하기</string>
 </resources>
