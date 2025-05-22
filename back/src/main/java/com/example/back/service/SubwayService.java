@@ -10,7 +10,7 @@ import java.time.ZonedDateTime;
 import java.util.*;
 
 
-
+// 네트워크 및 시간 처리
 @Service
 public class SubwayService {
 
@@ -21,12 +21,36 @@ public class SubwayService {
     private RouteTimeService routeTimeService;
 
     private static final Map<Integer, Integer> subwayCodeMap = Map.ofEntries(
+            // 서울 실시간 통신 가능
             Map.entry(1, 1001), Map.entry(2, 1002), Map.entry(3, 1003), Map.entry(4, 1004),
             Map.entry(5, 1005), Map.entry(6, 1006), Map.entry(7, 1007), Map.entry(8, 1008),
             Map.entry(9, 1009), Map.entry(91, 1032), Map.entry(104, 1063), Map.entry(101, 1065),
             Map.entry(108, 1067), Map.entry(116, 1075), Map.entry(109, 1077), Map.entry(112, 1081),
-            Map.entry(113, 1092), Map.entry(114, 1093), Map.entry(117, 1094)
+            Map.entry(113, 1092), Map.entry(114, 1093), Map.entry(117, 1094),
+            // 102 자기부상철도 중단
+            // 서울 실시간 통신 불가능
+            Map.entry(107, 107), Map.entry(110, 100),Map.entry(115, 115),
+            Map.entry(21, 21),Map.entry(22, 22),
+            // 부산 실시간 통신 불가능
+            Map.entry(71, 71), Map.entry(72, 72),Map.entry(73, 73),
+            Map.entry(74, 74),Map.entry(78, 78), Map.entry(79, 79),
+            // 대구 실시간 통신 불가능
+            Map.entry(41, 41), Map.entry( 42,42), Map.entry(43,4),Map.entry( 48,48),
+            // 광주 실시간 통신 불가능
+            Map.entry(51,51),
+            // 대전 실시간 통신 불가능
+            Map.entry(31,31)
     );
+
+    private static final Map<Integer, String> subwayMap = Map.ofEntries(
+            Map.entry(1001, "1호선"), Map.entry(1002, "2호선"),Map.entry(1003, "3호선"),
+            Map.entry(1004, "4호선"), Map.entry(1005, "5호선"), Map.entry(1006, "6호선"),
+            Map.entry(1007, "7호선"), Map.entry(1008, "8호선"), Map.entry(1009, "9호선"),
+            Map.entry(1032, "GTX-A"), Map.entry(1063, "경의중앙선"), Map.entry(1065, "공항철도"),
+            Map.entry(1067, "경춘선"), Map.entry(1075, "수인분당선"), Map.entry(1077, "신분당선"),
+            Map.entry(1081, "경강선"), Map.entry(1092, "우이신설선"), Map.entry(1093, "서해선"),
+            Map.entry(1094, "신림선")
+            );
 
 
     // 오디세이 -> 서울 지하철 노선 코드 변환
@@ -34,10 +58,28 @@ public class SubwayService {
         return subwayCodeMap.getOrDefault(subwayCode, 0);
     }
 
-    // 서울 지하철 특수 코드 확인
-    public boolean isSpecialSeoulCode(int subwayCode) {
-        List<Integer> specialSeoulCodes = Arrays.asList(110, 115, 21, 22, 107);
-        return specialSeoulCodes.contains(subwayCode);
+    // 서울 지하철 노선 코드 제한
+    public String convertRouteName(int subwayCode){
+        return subwayMap.getOrDefault(subwayCode,"알 수 없는 노선");
+    }
+
+    // 구간별 소요시간 지하철 노선 코드 반환
+    // 1001,1004,1008,1009,1032,1065,1067,1075,1077,1081,1093,1094 일때만
+    public Boolean convertSubwayCodeForTime(int subwayCode) {
+        if (subwayCode == 1001 || subwayCode == 1004 || subwayCode == 1008 || subwayCode == 1009 ||
+                subwayCode == 1032 || subwayCode == 1065 || subwayCode == 1067 || subwayCode == 1075 ||
+                subwayCode == 1077 || subwayCode == 1081 || subwayCode == 1093 || subwayCode == 1094) {
+            return true;
+        } else {
+            return false; // Invalid code
+        }
+    }
+
+
+    // 지하철 데이터베이스 코드 확인
+    public boolean DBCode(int subwayCode) {
+        List<Integer> DBCodes = Arrays.asList(107, 110, 115, 21, 22, 71, 72, 73, 74, 78, 79, 41, 42, 43, 48, 31, 51);
+        return DBCodes.contains(subwayCode);
     }
 
     // 서울 지하철 현재 시간 가져오기
@@ -128,13 +170,36 @@ public class SubwayService {
         }
         // A 경로가 B의 부분 경로인 경우 (A의 길이가 B보다 짧으면서 B의 접두어인지 KMP로 확인)
         else if (routeA.size() < routeB.size() && routeTimeService.isSubPath(routeA, routeB)) {
+            System.out.println("routeA" + routeA + "routeB" + routeB);
             System.out.println("A 경로는 B 경로의 연속적인 부분 경로입니다. (A ⊂ B)");
             return 1;
         }
         else {
+            System.out.println("routeA" + routeA + "routeB" + routeB);
             System.out.println("A 경로는 B 경로와 같은 방향이지만, 포함 관계에 있지 않습니다.");
             return 2;
         }
+    }
+
+    // 경로 별 시간 추출
+    public int[] findTime(List<String>route, String direction,int convertedCode) {
+        Map<String, Integer> travelTimeMap = routeTimeService.getStationTravelTime(convertedCode);
+        int[] travelTimes = new int[route.size() - 1];
+        if (direction.equals("상행")) {
+            for (int i = 0; i < route.size() - 1; i++) {
+                String key = route.get(i) + "-" + route.get(i + 1);
+                // stationId에 따른 네트워크 선택 및 시간 계산
+                travelTimes[i] = travelTimeMap.getOrDefault(key, 0); // 네트워크 이동 시간 가
+            }
+        }
+        // 하행
+        else if (direction.equals("하행")) {
+            for (int i = route.size() - 1; i > 0; i--) {
+                String key = route.get(i) + "-" + route.get(i - 1);
+                travelTimes[route.size() - i - 1] = travelTimeMap.getOrDefault(key, 0);
+            }
+        }
+        return travelTimes;
     }
 
     // 두 역 간 이동 시간을 계산합니다.

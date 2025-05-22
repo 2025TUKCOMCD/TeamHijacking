@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
+import java.util.Optional;
 
 /*Lombok 으로 스프링 에서 DI 방법 중 생성자 주입을 임의의 코드 없이 자동 으로 설정. 초기화 되지 않은
 final 필드나 @NonNull 이 붙은 필드에 대해 생성자 생성. 새로운 필드 추가 시 다시 생성자 안 만들어도 됨
@@ -19,12 +20,16 @@ public class UserService {
     private final UserRepository userRepository;
 
     public User saveUser(UserDTO userDTO) {
+        if (userDTO.getName() == null || userDTO.getLoginId() == null) {
+            throw new IllegalArgumentException("이름과 로그인 ID는 필수입니다.");
+        }
+
+        // loginId 중복 확인
+        if (userRepository.existsByLoginId(userDTO.getLoginId())) {
+            throw new IllegalStateException("이미 등록된 사용자입니다.");
+        }
+
         User user = userDTO.toEntity();
-//        user.setName(userDTO.getName());
-//        user.setLoginId(userDTO.getLoginId());
-//        //user.setPassword(userDTO.getPassword());
-//        user.setCreateAt(Timestamp.valueOf(LocalDateTime.now()));
-//        user.setUpdateAt(Timestamp.valueOf(LocalDateTime.now()));
         return userRepository.save(user);
         //id는 자동 생성되므로, saveUser()에서는 id를 직접 설정하지 않음
     }

@@ -1,41 +1,44 @@
 package com.example.back.dto.subway.realtime;
 
 import lombok.Data;
-
 import java.util.List;
 
 @Data
 public class RealSubwayLocationDTO {
-    private Result result;
-    private List<Row> row;
+    private ErrorMessageDTO errorMessage;
+    private List<RealtimePositionDTO> realtimePositionList;
 
     @Data
-    public class Result {
-        private String code;
-        private String developerMessage;
-        private String link;
-        private String message;
+    public static class ErrorMessageDTO {
         private int status;
+        private String code;
+        private String message;
+        private String link;
+        private String developerMessage;
         private int total;
     }
 
     @Data
-    public class Row {
+    public static class RealtimePositionDTO {
+        private Integer beginRow;
+        private Integer endRow;
+        private Integer curPage;
+        private Integer pageRow;
+        private int totalCount;
         private int rowNum;
         private int selectedCount;
-        private int totalCount;
-        private int subwayId;
+        private String subwayId;   // String으로 변경
         private String subwayNm;
         private String statnId;
         private String statnNm;
         private String trainNo;
         private String lastRecptnDt;
         private String recptnDt;
-        private int updnLine;
+        private String updnLine;   // String으로 변경
         private String statnTid;
         private String statnTnm;
-        private int trainSttus;
-        private int directAt;
-        private int lstcarAt;
+        private String trainSttus; // String으로 변경
+        private String directAt;   // String으로 변경
+        private String lstcarAt;   // String으로 변경
     }
 }
