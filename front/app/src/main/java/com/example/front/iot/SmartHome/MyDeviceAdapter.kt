@@ -3,7 +3,6 @@ package com.example.front.iot.SmartHome
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.front.R
@@ -25,7 +24,7 @@ class MyDeviceAdapter(
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view = LayoutInflater.from(parent.context)
-            .inflate(R.layout.device_item, parent, false)
+            .inflate(R.layout.device_itemlist_light, parent, false)
         return ViewHolder(view)
     }
 
