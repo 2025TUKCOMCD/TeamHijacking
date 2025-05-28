@@ -11,11 +11,11 @@ jobs:
           fetch-depth: 0
           submodules: true
 
-      # ... (Set up JDK, Cache Gradle dependencies, Create gradle.properties 스텝들은 그대로)
+      # ... (Set up JDK, Cache Gradle dependencies, Create gradle.properties steps - these seem fine)
 
       - name: Create local.properties for front/app module
         run: |
-          mkdir -p ./front/app # 혹시 모를 디렉토리 생성
+          mkdir -p ./front/app # Ensure directory exists
           echo "ODsay_APIKEY=${{ secrets.ODsay_APIKEY }}" > ./front/app/local.properties
           echo "Geolocation_APIKEY=${{ secrets.Geolocation_APIKEY }}" >> ./front/app/local.properties
           echo "SMARTTHINGS_API_TOKEN=${{ secrets.SMARTTHINGS_API_TOKEN }}" >> ./front/app/local.properties
@@ -23,28 +23,32 @@ jobs:
           echo "Public_Subway_APIKEY=${{ secrets.Public_Subway_APIKEY }}" >> ./front/app/local.properties
           echo "KAKAO_NATIVE_API_KEY=${{ secrets.KAKAO_NATIVE_API_KEY }}" >> ./front/app/local.properties
 
+      # --- START OF MODIFIED SECTION ---
+
       - name: Grant execute permission for gradlew
-        # gradlew 파일은 보통 프로젝트 루트에 있음
+        # Remove working-directory here. It will run from the repository root.
         run: chmod +x ./gradlew
 
       - name: Stop any running Gradle daemons
-        # gradlew 파일은 보통 프로젝트 루트에 있음
+        # Remove working-directory here. It will run from the repository root.
         run: ./gradlew --stop || true
 
       - name: Build with Gradle
-        # gradlew 파일은 보통 프로젝트 루트에 있음
-        # 모듈 지정은 'assembleDebug :front:app' 또는 ':front:app:assembleDebug' 형태로
-        run: ./gradlew :front:app:assembleDebug --stacktrace --info 
+        # Remove working-directory here. It will run from the repository root.
+        # Specify the module path explicitly.
+        run: ./gradlew :front:app:assembleDebug --stacktrace --info
 
       - name: Run unit tests
-        # gradlew 파일은 보통 프로젝트 루트에 있음
+        # Remove working-directory here. It will run from the repository root.
+        # Specify the module path explicitly.
         run: ./gradlew :front:app:testDebugUnitTest
+
       - name: Upload test results
         uses: actions/upload-artifact@v4
         if: always()
         with:
           name: test-results
-          # 경로는 'front/app' 모듈 내부 기준으로 지정
+          # Path remains relative to the repository root.
           path: ./front/app/build/reports/tests/testDebugUnitTest 
 
       - name: Upload APK (Debug)
@@ -52,5 +56,7 @@ jobs:
         if: github.ref == 'refs/heads/main'
         with:
           name: app-debug
-          # 경로는 'front/app' 모듈 내부 기준으로 지정
+          # Path remains relative to the repository root.
           path: ./front/app/build/outputs/apk/debug/*.apk
+
+      # --- END OF MODIFIED SECTION ---
