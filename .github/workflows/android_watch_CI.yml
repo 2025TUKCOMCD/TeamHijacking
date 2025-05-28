@@ -36,13 +36,20 @@ jobs:
             ${{ runner.os }}-gradle-
 
 
-      - name: Create gradle.properties
+      - name: Create gradle.properties in project root and front module
         run: |
+          # 프로젝트 루트에 생성 (기존과 동일)
           echo "android.useAndroidX=true" >> gradle.properties
           echo "android.enableJetifier=true" >> gradle.properties
-          # Gradle JVM 메모리 설정 (Out Of Memory 오류 방지)
           echo "org.gradle.jvmargs=-Xmx4g -XX:MaxPermSize=512m -XX:+HeapDumpOnOutOfMemoryError -Dfile.encoding=UTF-8" >> gradle.properties
 
+          # front 모듈 디렉토리 안에도 복사 (새로 추가되는 부분)
+          # front 디렉토리가 존재하는지 확인 후 복사하는 것이 안전합니다.
+          if [ -d "./front" ]; then
+            cp gradle.properties ./front/gradle.properties
+          else
+            echo "::warning::'front' directory not found. Skipping gradle.properties copy to front module."
+          fi
 
       - name: Create local.properties
         run: |
