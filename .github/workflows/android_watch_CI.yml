@@ -1,4 +1,5 @@
 name: Android CI
+
 on:
   push:
     branches: [ "main", "watch" ]
@@ -11,6 +12,7 @@ jobs:
     strategy:
       matrix:
         java-version: [ '17' ]
+
     steps:
       - uses: actions/checkout@v4
         with:
@@ -18,11 +20,12 @@ jobs:
           submodules: true
 
       - name: Set up JDK ${{ matrix.java-version }}
-        uses: actions/setup-java@v4 # v3에서 v4로 업데이트 권장
+        uses: actions/setup-java@v4 # 최신 버전 v4 사용
         with:
           java-version: ${{ matrix.java-version }}
           distribution: 'temurin'
           cache: gradle
+
       - name: Cache Gradle dependencies
         uses: actions/cache@v3
         with:
@@ -31,11 +34,13 @@ jobs:
           key: ${{ runner.os }}-gradle-${{ hashFiles('**/build.gradle', '**/settings.gradle', '**/gradle/libs.versions.toml', '**/gradle-wrapper.properties') }}
           restore-keys: |
             ${{ runner.os }}-gradle-
+
       - name: Create and configure root gradle.properties
+        # 프로젝트 루트에 gradle.properties 파일 생성 및 설정
         run: |
           echo "android.useAndroidX=true" > gradle.properties
           echo "android.enableJetifier=true" >> gradle.properties
-          # 메모리 설정: CI 환경에서 OutOfMemoryError 방지 및 성능 향상
+          # CI 환경에서 메모리 부족 방지를 위해 JVM 메모리 상향 조정
           echo "org.gradle.jvmargs=-Xmx6g -XX:+HeapDumpOnOutOfMemoryError -Dfile.encoding=UTF-8" >> gradle.properties
       
       - name: Copy root gradle.properties to front module
@@ -46,34 +51,47 @@ jobs:
           else
             echo "::warning::'front' directory not found. Skipping gradle.properties copy to front module."
           fi
+
       - name: Create local.properties for front/app module
-        # local.properties는 실제 앱 모듈의 루트에 생성하는 것이 일반적
+        # local.properties는 실제 앱 모듈의 루트에 생성
         run: |
-          mkdir -p ./front/app # 혹시 모를 디렉토리 생성
+          mkdir -p ./front/app # 디렉토리 존재 확인 및 생성
           echo "ODsay_APIKEY=${{ secrets.ODsay_APIKEY }}" > ./front/app/local.properties
           echo "Geolocation_APIKEY=${{ secrets.Geolocation_APIKEY }}" >> ./front/app/local.properties
           echo "SMARTTHINGS_API_TOKEN=${{ secrets.SMARTTHINGS_API_TOKEN }}" >> ./front/app/local.properties
           echo "Public_Bus_APIKEY=${{ secrets.Public_Bus_APIKEY }}" >> ./front/app/local.properties
           echo "Public_Subway_APIKEY=${{ secrets.Public_Subway_APIKEY }}" >> ./front/app/local.properties
           echo "KAKAO_NATIVE_API_KEY=${{ secrets.KAKAO_NATIVE_API_KEY }}" >> ./front/app/local.properties
+
       - name: Grant execute permission for gradlew
-        # working-directory를 실제 모듈 디렉토리로 변경
-        working-directory: ./front/app 
+        # gradlew 파일은 프로젝트 루트에 있으므로 working-directory 없이 실행
         run: chmod +x ./gradlew
 
       - name: Stop any running Gradle daemons
-        # working-directory를 실제 모듈 디렉토리로 변경
-        working-directory: ./front/app 
+        # gradlew 파일은 프로젝트 루트에 있으므로 working-directory 없이 실행
         run: ./gradlew --stop || true
 
       - name: Build with Gradle
-        # working-directory를 실제 모듈 디렉토리로 변경
-        working-directory: ./front/app 
-        run: ./gradlew assembleDebug --stacktrace --info # 상세 로그를 위해 옵션 유지
+        # gradlew 파일은 프로젝트 루트에 있으므로 working-directory 없이 실행하며, 모듈을 명시
+        run: ./gradlew :front:app:assembleDebug --stacktrace --info
 
       - name: Run unit tests
-        # working-directory를 실제 모듈 디렉토리로 변경
-        working-directory: ./front/app 
-        run: ./gradlew testDebugUnitTest
+        # gradlew 파일은 프로젝트 루트에 있으므로 working-directory 없이 실행하며, 모듈을 명시
+        run: ./gradlew :front:app:testDebugUnitTest
 
       - name: Upload test results
+        # ⭐ 이 부분이 복원되었습니다. ⭐
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: test-results
+          # 경로는 저장소 루트를 기준으로 지정
+          path: ./front/app/build/reports/tests/testDebugUnitTest 
+
+      - name: Upload APK (Debug)
+        uses: actions/upload-artifact@v4
+        if: github.ref == 'refs/heads/main'
+        with:
+          name: app-debug
+          # 경로는 저장소 루트를 기준으로 지정
+          path: ./front/app/build/outputs/apk/debug/*.apk
