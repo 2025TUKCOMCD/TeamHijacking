@@ -35,17 +35,24 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-gradle-
 
-
-      - name: Create gradle.properties
+      - name: Create gradle.properties in project root and front module
         run: |
-          echo "android.useAndroidX=true" >> gradle.properties
+          # 프로젝트 루트에 생성
+          echo "android.useAndroidX=true" > gradle.properties # ">" 사용: 항상 새 파일 생성
           echo "android.enableJetifier=true" >> gradle.properties
-          # Gradle JVM 메모리 설정 (Out Of Memory 오류 방지)
-          echo "org.gradle.jvmargs=-Xmx4g -XX:MaxPermSize=512m -XX:+HeapDumpOnOutOfMemoryError -Dfile.encoding=UTF-8" >> gradle.properties
+          # Java 17 환경에 맞게 MaxPermSize 제거, Xmx 메모리 상향 조정
+          echo "org.gradle.jvmargs=-Xmx6g -XX:+HeapDumpOnOutOfMemoryError -Dfile.encoding=UTF-8" >> gradle.properties
 
+          # front 모듈 디렉토리 안에도 복사
+          if [ -d "./front" ]; then
+            cp gradle.properties ./front/gradle.properties || true # 복사 실패해도 워크플로우 중단 방지
+          else
+            echo "::warning::'front' directory not found. Skipping gradle.properties copy to front module."
+          fi
 
       - name: Create local.properties
         run: |
+          # 요청에 따라 API 키 이름은 변경하지 않았습니다.
           echo "ODsay_APIKEY=${{ secrets.ODsay_APIKEY }}" > ./front/local.properties
           echo "Geolocation_APIKEY=${{ secrets.Geolocation_APIKEY }}" >> ./front/local.properties
           echo "SMARTTHINGS_API_TOKEN=${{ secrets.SMARTTHINGS_API_TOKEN }}" >> ./front/local.properties
@@ -56,6 +63,10 @@ jobs:
       - name: Grant execute permission for gradlew
         working-directory: ./front
         run: chmod +x ./gradlew
+
+      - name: Stop any running Gradle daemons
+        working-directory: ./front
+        run: ./gradlew --stop || true # --stop 명령이 실패해도 워크플로우가 멈추지 않도록 || true 추가
 
       - name: Build with Gradle
         working-directory: ./front
@@ -70,7 +81,7 @@ jobs:
         if: always()
         with:
           name: test-results
-          path: ./testDebugUnitTest
+          path: ./front/app/build/reports/tests/testDebugUnitTest # 일반적인 테스트 결과 경로
 
       - name: Upload APK (Debug)
         uses: actions/upload-artifact@v4
