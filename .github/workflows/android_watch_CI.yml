@@ -66,7 +66,7 @@ jobs:
 
       - name: Build with Gradle
         working-directory: ./front
-        run: ./gradlew assembleDebug
+        run: ./gradlew assembleDebug --stacktrace --info
 
       - name: Run unit tests
         working-directory: ./front
