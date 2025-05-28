@@ -84,6 +84,7 @@ dependencies {
     implementation(libs.ui)
     implementation(libs.ui.tooling.preview)
 //    implementation(libs.compose.material)
+    implementation(libs.compose.material3)
 //    implementation(libs.compose.foundation)
 
     // 🔽 AndroidX Activity (compileSdk 34에 맞게 조정)
@@ -94,7 +95,6 @@ dependencies {
     implementation("androidx.appcompat:appcompat:1.7.0")
     implementation("com.google.android.material:material:1.12.0")
     implementation("androidx.constraintlayout:constraintlayout:2.2.0")
-    //implementation("androidx.compose.material3:material3-android:1.3.1")
 
     // ✅ networking & JSON/XML 처리
     implementation("com.google.code.gson:gson:2.11.0")
@@ -112,8 +112,6 @@ dependencies {
 
     implementation("com.google.firebase:firebase-crashlytics-buildtools:3.0.2")
 
-    // ✅ Wear OS 관련 라이브러리
-    implementation("androidx.wear:wear:1.3.0")
 
     // ✅ life cycle 및 뷰모델
     implementation(libs.lifecycle.livedata.ktx)
@@ -123,11 +121,7 @@ dependencies {
     //implementation(project(":android2")) //Wear OS 전용 UI(곡선 리스트, BoxInsetLayout 등) 사용 가능
 
     // ✅ 테스트 라이브러리
-    androidTestImplementation(platform(libs.compose.bom))
     androidTestImplementation(libs.ui.test.junit4)
-    androidTestImplementation("androidx.compose.ui:ui-test-junit4")
     debugImplementation(libs.ui.tooling)
     debugImplementation(libs.ui.test.manifest)
-    debugImplementation("androidx.compose.ui:ui-tooling")
-    debugImplementation("androidx.compose.ui:ui-test-manifest")
 }
