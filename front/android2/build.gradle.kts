@@ -1,3 +1,4 @@
+import java.io.FileInputStream
 import java.util.Properties
 
 plugins {
@@ -11,7 +12,17 @@ android {
 
     // local.properties 에서 API 키와 호스트 URL 을 가져옴
     val localProperties = Properties().apply {
-        load(project.rootProject.file("local.properties").inputStream())
+        // 중요한 변경: 'front' 디렉토리 바로 아래에 있는 local.properties를 읽도록 경로를 명확히 지정합니다.
+        // project.rootProject는 Git 저장소의 가장 상위 디렉토리(TeamHijacking/)를 나타냅니다.
+        // 그 아래에 "front/local.properties"가 있으므로, 이 경로를 사용합니다.
+        val localPropertiesFile = project.rootProject.file("front/local.properties")
+
+        if (localPropertiesFile.exists()) {
+            load(FileInputStream(localPropertiesFile))
+        } else {
+            // 파일이 없는 경우 경고만 출력하고 빌드가 실패하지 않도록 처리합니다.
+            println("WARNING: local.properties file not found at ${localPropertiesFile.absolutePath}. Using empty strings for API keys.")
+        }
     }
     val KAKAO_NATIVE_API_KEY = localProperties.getProperty("KAKAO_NATIVE_API_KEY", "")
     val HOST_URL = localProperties.getProperty("Host_URL", "")
