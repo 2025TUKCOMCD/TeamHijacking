@@ -35,20 +35,16 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-gradle-
 
-      - name: Create gradle.properties in project root and front module
+      - name: Create and configure root gradle.properties
         run: |
-          # 프로젝트 루트에 생성
-          echo "android.useAndroidX=true" > gradle.properties # ">" 사용: 항상 새 파일 생성
+          echo "android.useAndroidX=true" > gradle.properties
           echo "android.enableJetifier=true" >> gradle.properties
-          # Java 17 환경에 맞게 MaxPermSize 제거, Xmx 메모리 상향 조정
           echo "org.gradle.jvmargs=-Xmx6g -XX:+HeapDumpOnOutOfMemoryError -Dfile.encoding=UTF-8" >> gradle.properties
+    
+      - name: Copy root gradle.properties to front module
+        run: cp gradle.properties ./front/gradle.properties
+        # cp 명령어가 실패할 가능성이 있다면 || true 추가: cp gradle.properties ./front/gradle.properties || true
 
-          # front 모듈 디렉토리 안에도 복사
-          if [ -d "./front" ]; then
-            cp gradle.properties ./front/gradle.properties || true # 복사 실패해도 워크플로우 중단 방지
-          else
-            echo "::warning::'front' directory not found. Skipping gradle.properties copy to front module."
-          fi
 
       - name: Create local.properties
         run: |
