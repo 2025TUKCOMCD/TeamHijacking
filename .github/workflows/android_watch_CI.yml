@@ -76,7 +76,7 @@ jobs:
         # gradlew 파일이 './front'에 있으므로 working-directory를 './front'로 지정
         # 'front' 디렉토리 내에 'app' 모듈이 있다고 가정하고 빌드 명령 명시
         working-directory: ./front 
-        run: ./gradlew :app:assembleDebug --stacktrace --info # 모듈 경로를 ':app'으로 지정
+        run: ./gradlew :app:assembleDebug #--stacktrace --info  모듈 경로를 ':app'으로 지정
 
       - name: Run unit tests
         # gradlew 파일이 './front'에 있으므로 working-directory를 './front'로 지정
