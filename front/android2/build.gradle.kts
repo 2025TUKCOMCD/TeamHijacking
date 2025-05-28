@@ -76,7 +76,7 @@ dependencies {
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso.core)
     implementation("com.google.android.gms:play-services-location:21.0.1")
-    implementation("com.google.android.gms:play-services-wearable:18.1.0") // 데이터 레이블 사용 가능 하게 해주는 코드
+    //implementation("com.google.android.gms:play-services-wearable:18.1.0") // 데이터 레이블 사용 가능 하게 해주는 코드
     // JSON, XML 처리용
     implementation("com.squareup.retrofit2:retrofit:2.9.0")  // API 처리용, Retrofit 사용 위해 추가 해야 한다고 함
     implementation("com.squareup.retrofit2:converter-gson:2.9.0")
