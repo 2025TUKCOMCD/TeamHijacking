@@ -51,17 +51,19 @@ jobs:
             echo "::warning::'front' directory not found. Skipping gradle.properties copy to front module."
           fi
 
-      - name: Create local.properties for front/app module
-        # local.properties는 'front/app' 모듈의 루트에 생성
+      - name: Create local.properties for front module (Corrected Path)
         run: |
-          mkdir -p ./front # 디렉토리 존재 확인 및 생성
-          echo "ODsay_APIKEY=${{ secrets.ODsay_APIKEY }}" > ./front/app/local.properties
-          echo "Geolocation_APIKEY=${{ secrets.Geolocation_APIKEY }}" >> ./front/app/local.properties
-          echo "SMARTTHINGS_API_TOKEN=${{ secrets.SMARTTHINGS_API_TOKEN }}" >> ./front/app/local.properties
-          echo "Public_Bus_APIKEY=${{ secrets.Public_Bus_APIKEY }}" >> ./front/app/local.properties
-          echo "Public_Subway_APIKEY=${{ secrets.Public_Subway_APIKEY }}" >> ./front/app/local.properties
-          echo "KAKAO_NATIVE_API_KEY=${{ secrets.KAKAO_NATIVE_API_KEY }}" >> ./front/app/local.properties
+          mkdir -p ./front
+          echo "ODsay_APIKEY=${{ secrets.ODsay_APIKEY }}" > ./front/local.properties
+          echo "Geolocation_APIKEY=${{ secrets.Geolocation_APIKEY }}" >> ./front/local.properties
+          echo "SMARTTHINGS_API_TOKEN=${{ secrets.SMARTTHINGS_API_TOKEN }}" >> ./front/local.properties
+          echo "Public_Bus_APIKEY=${{ secrets.Public_Bus_APIKEY }}" >> ./front/local.properties
+          echo "Public_Subway_APIKEY=${{ secrets.Public_Subway_APIKEY }}" >> ./front/local.properties
+          echo "KAKAO_NATIVE_API_KEY=${{ secrets.KAKAO_NATIVE_API_KEY }}" >> ./front/local.properties
 
+          echo "--- Contents of ./front/ directory after local.properties creation ---"
+          ls -al ./front/ # 이 줄을 추가하여 파일 생성 여부 확인
+          echo "----------------------------------------------------"
       - name: Grant execute permission for gradlew
         # gradlew 파일이 './front'에 있으므로 working-directory를 './front'로 지정
         working-directory: ./front 
