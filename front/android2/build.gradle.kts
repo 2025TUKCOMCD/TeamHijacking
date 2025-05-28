@@ -9,7 +9,7 @@ plugins {
 android {
     namespace = "com.example.front"
     compileSdk = 34
-
+    //뭔가뭔가
     // local.properties 에서 API 키와 호스트 URL 을 가져옴
     val localProperties = Properties().apply {
         // 중요한 변경: 'front' 디렉토리 바로 아래에 있는 local.properties를 읽도록 경로를 명확히 지정합니다.
