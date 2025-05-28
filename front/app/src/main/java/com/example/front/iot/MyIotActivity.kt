@@ -37,7 +37,10 @@ class MyIotActivity : AppCompatActivity() {
         // RecyclerView 설정
         val recyclerView = findViewById<RecyclerView>(R.id.recyclerViewMyDevices)
         deviceAdapter = DeviceAdapter(deviceList) { device ->
-            showDeviceDetailDialog(device)
+            when(device.label){
+                "Galaxy Home Mini (3NPH)" -> {showGalaxyHomeMiniControl(device)}
+                "c2c-rgb-color-bulb" -> {showRgbColorBulbControl(device)}
+            }
         }
         recyclerView.layoutManager = LinearLayoutManager(this)
         recyclerView.adapter = deviceAdapter
@@ -70,8 +73,14 @@ class MyIotActivity : AppCompatActivity() {
         }
     })
     }
+    private fun showGalaxyHomeMiniControl(device: Device){
+
+    }
+
+
+
     //무드등 제어 만약 device이름이 c2c-rgb-color-bulb이라면 여기로 이동시키면 됨 추후에 넣어야 할듯
-    private fun showDeviceDetailDialog(device: Device) {
+    private fun showRgbColorBulbControl(device: Device) {
         val view = LayoutInflater.from(this).inflate(R.layout.dialog_device_detail, null)
         val statusText = view.findViewById<TextView>(R.id.textDeviceStatus)
         val btnBrightnessUp = view.findViewById<Button>(R.id.btnBrightnessUp)
