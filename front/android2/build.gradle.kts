@@ -64,12 +64,21 @@ android {
 
 dependencies {
     implementation(platform(libs.compose.bom))
+
+    implementation(libs.ui) // androidx.compose.ui:ui
+    implementation(libs.ui.tooling.preview) // androidx.compose.ui:ui-tooling-preview
+    implementation(libs.activity.compose) // activity-compose
+    // implementation(libs.compose.runtime) // 일반적으로 ui 라이브러리가 transitively 가져오므로 명시적으로 추가할 필요는 없지만, 문제가 지속되면 추가 고려
+    // --- Compose 라이브러리 추가 끝 ---
+
+
     implementation(libs.core.ktx)
     implementation(libs.appcompat)
     implementation(libs.material)
     implementation(libs.activity)
     implementation(libs.constraintlayout)
     implementation(libs.play.services.wearable)
+    implementation(libs.compose.material3)
     testImplementation(libs.junit)
     // 카카오 로그인 용
     implementation(libs.v2.user)
