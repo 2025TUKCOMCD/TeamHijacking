@@ -35,6 +35,15 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-gradle-
 
+
+      - name: Create gradle.properties
+        run: |
+          echo "android.useAndroidX=true" >> gradle.properties
+          echo "android.enableJetifier=true" >> gradle.properties
+          # Gradle JVM 메모리 설정 (Out Of Memory 오류 방지)
+          echo "org.gradle.jvmargs=-Xmx4g -XX:MaxPermSize=512m -XX:+HeapDumpOnOutOfMemoryError -Dfile.encoding=UTF-8" >> gradle.properties
+
+
       - name: Create local.properties
         run: |
           echo "ODsay_APIKEY=${{ secrets.ODsay_APIKEY }}" > ./front/local.properties
