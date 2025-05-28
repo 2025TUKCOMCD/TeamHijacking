@@ -119,7 +119,7 @@ dependencies {
     implementation(libs.lifecycle.livedata.ktx)
     implementation(libs.lifecycle.viewmodel.ktx)
     implementation(libs.fragment.ktx)
-    implementation(libs.compose.material)
+    implementation(libs.compose.material3)
     //implementation(project(":android2")) //Wear OS 전용 UI(곡선 리스트, BoxInsetLayout 등) 사용 가능
 
     // ✅ 테스트 라이브러리

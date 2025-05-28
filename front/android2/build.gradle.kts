@@ -2,7 +2,7 @@ import java.util.Properties
 
 plugins {
     alias(libs.plugins.androidApplication)
-    id("org.jetbrains.kotlin.android") version "1.9.25"
+    alias(libs.plugins.jetbrainsKotlinAndroid)
 }
 
 android {
