@@ -1,62 +1,173 @@
+name: Android CI
+
+
+
+on:
+
+  push:
+
+    branches: [ "main", "watch" ]
+
+  pull_request:
+
+    branches: [ "main", "watch" ]
+
+
+
+
+
 jobs:
-  build:
-    runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        java-version: [ '17' ]
 
-    steps:
-      - uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-          submodules: true
+  build:
 
-      # ... (Set up JDK, Cache Gradle dependencies, Create gradle.properties steps - these seem fine)
+    runs-on: ubuntu-latest
 
-      - name: Create local.properties for front/app module
-        run: |
-          mkdir -p ./front/app # Ensure directory exists
-          echo "ODsay_APIKEY=${{ secrets.ODsay_APIKEY }}" > ./front/app/local.properties
-          echo "Geolocation_APIKEY=${{ secrets.Geolocation_APIKEY }}" >> ./front/app/local.properties
-          echo "SMARTTHINGS_API_TOKEN=${{ secrets.SMARTTHINGS_API_TOKEN }}" >> ./front/app/local.properties
-          echo "Public_Bus_APIKEY=${{ secrets.Public_Bus_APIKEY }}" >> ./front/app/local.properties
-          echo "Public_Subway_APIKEY=${{ secrets.Public_Subway_APIKEY }}" >> ./front/app/local.properties
-          echo "KAKAO_NATIVE_API_KEY=${{ secrets.KAKAO_NATIVE_API_KEY }}" >> ./front/app/local.properties
+    strategy:
 
-      # --- START OF MODIFIED SECTION ---
+      matrix:
 
-      - name: Grant execute permission for gradlew
-        # Remove working-directory here. It will run from the repository root.
-        run: chmod +x ./gradlew
+        java-version: [ '17' ]
 
-      - name: Stop any running Gradle daemons
-        # Remove working-directory here. It will run from the repository root.
-        run: ./gradlew --stop || true
 
-      - name: Build with Gradle
-        # Remove working-directory here. It will run from the repository root.
-        # Specify the module path explicitly.
-        run: ./gradlew :front:app:assembleDebug --stacktrace --info
 
-      - name: Run unit tests
-        # Remove working-directory here. It will run from the repository root.
-        # Specify the module path explicitly.
-        run: ./gradlew :front:app:testDebugUnitTest
+    steps:
 
-      - name: Upload test results
-        uses: actions/upload-artifact@v4
-        if: always()
-        with:
-          name: test-results
-          # Path remains relative to the repository root.
-          path: ./front/app/build/reports/tests/testDebugUnitTest 
+      - uses: actions/checkout@v4
 
-      - name: Upload APK (Debug)
-        uses: actions/upload-artifact@v4
-        if: github.ref == 'refs/heads/main'
-        with:
-          name: app-debug
-          # Path remains relative to the repository root.
-          path: ./front/app/build/outputs/apk/debug/*.apk
+        with:
 
-      # --- END OF MODIFIED SECTION ---
+          fetch-depth: 0
+
+          submodules: true
+
+
+
+      - name: Set up JDK ${{ matrix.java-version }}
+
+        uses: actions/setup-java@v3
+
+        with:
+
+          java-version: ${{ matrix.java-version }}
+
+          distribution: 'temurin'
+
+          cache: gradle
+
+
+
+      - name: Cache Gradle dependencies
+
+        uses: actions/cache@v3
+
+        with:
+
+          path: ~/.gradle/caches
+
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/build.gradle', '**/gradle.properties', '**/settings.gradle', '**/gradle-wrapper.properties') }}
+
+          restore-keys: |
+
+            ${{ runner.os }}-gradle-
+
+
+
+      - name: Create and configure root gradle.properties
+
+        run: |
+
+          echo "android.useAndroidX=true" > gradle.properties
+
+          echo "android.enableJetifier=true" >> gradle.properties
+
+          echo "org.gradle.jvmargs=-Xmx6g -XX:+HeapDumpOnOutOfMemoryError -Dfile.encoding=UTF-8" >> gradle.properties
+
+    
+
+      - name: Copy root gradle.properties to front module
+
+        run: cp gradle.properties ./front/gradle.properties
+
+        # cp 명령어가 실패할 가능성이 있다면 || true 추가: cp gradle.properties ./front/gradle.properties || true
+
+
+
+
+
+      - name: Create local.properties
+
+        run: |
+
+          # 요청에 따라 API 키 이름은 변경하지 않았습니다.
+
+          echo "ODsay_APIKEY=${{ secrets.ODsay_APIKEY }}" > ./front/local.properties
+
+          echo "Geolocation_APIKEY=${{ secrets.Geolocation_APIKEY }}" >> ./front/local.properties
+
+          echo "SMARTTHINGS_API_TOKEN=${{ secrets.SMARTTHINGS_API_TOKEN }}" >> ./front/local.properties
+
+          echo "Public_Bus_APIKEY=${{ secrets.Public_Bus_APIKEY }}" >> ./front/local.properties
+
+          echo "Public_Subway_APIKEY=${{ secrets.Public_Subway_APIKEY }}" >> ./front/local.properties
+
+          echo "KAKAO_NATIVE_API_KEY=${{ secrets.KAKAO_NATIVE_API_KEY }}" >> ./front/local.properties
+
+
+
+      - name: Grant execute permission for gradlew
+
+        working-directory: ./front
+
+        run: chmod +x ./gradlew
+
+
+
+      - name: Stop any running Gradle daemons
+
+        working-directory: ./front
+
+        run: ./gradlew --stop || true # --stop 명령이 실패해도 워크플로우가 멈추지 않도록 || true 추가
+
+
+
+      - name: Build with Gradle
+
+        working-directory: ./front
+
+        run: ./gradlew assembleDebug --stacktrace --info
+
+
+
+      - name: Run unit tests
+
+        working-directory: ./front
+
+        run: ./gradlew testDebugUnitTest
+
+
+
+      - name: Upload test results
+
+        uses: actions/upload-artifact@v4
+
+        if: always()
+
+        with:
+
+          name: test-results
+
+          path: ./front/app/build/reports/tests/testDebugUnitTest # 일반적인 테스트 결과 경로
+
+
+
+      - name: Upload APK (Debug)
+
+        uses: actions/upload-artifact@v4
+
+        if: github.ref == 'refs/heads/main'
+
+        with:
+
+          name: app-debug
+
+          path: ./front/app/build/outputs/apk/debug/*.apk
