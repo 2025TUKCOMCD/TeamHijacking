@@ -18,6 +18,7 @@ lifecycleViewmodelKtx = "2.6.1"
 fragmentKtx = "1.5.6"
 v2User = "2.12.1"
 composeMaterial3 = "1.2.1"
+composeMaterial = "1.4.1"
 
 [libraries]
 play-services-wearable = { group = "com.google.android.gms", name = "play-services-wearable", version.ref = "playServicesWearable" }
@@ -42,6 +43,7 @@ lifecycle-viewmodel-ktx = { group = "androidx.lifecycle", name = "lifecycle-view
 fragment-ktx = { group = "androidx.fragment", name = "fragment-ktx", version.ref = "fragmentKtx" }
 v2-user = { module = "com.kakao.sdk:v2-user", version.ref = "v2User" }
 compose-material3 = { group = "androidx.compose.material3", name = "material3", version.ref = "composeMaterial3" }
+compose-material = { group = "androidx.wear.compose", name = "compose-material", version.ref = "composeMaterial" }
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }
