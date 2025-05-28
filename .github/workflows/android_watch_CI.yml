@@ -54,7 +54,7 @@ jobs:
       - name: Create local.properties for front/app module
         # local.properties는 'front/app' 모듈의 루트에 생성
         run: |
-          mkdir -p ./front/app # 디렉토리 존재 확인 및 생성
+          mkdir -p ./front # 디렉토리 존재 확인 및 생성
           echo "ODsay_APIKEY=${{ secrets.ODsay_APIKEY }}" > ./front/app/local.properties
           echo "Geolocation_APIKEY=${{ secrets.Geolocation_APIKEY }}" >> ./front/app/local.properties
           echo "SMARTTHINGS_API_TOKEN=${{ secrets.SMARTTHINGS_API_TOKEN }}" >> ./front/app/local.properties
