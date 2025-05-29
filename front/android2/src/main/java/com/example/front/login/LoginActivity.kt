@@ -156,19 +156,6 @@ class LoginActivity : AppCompatActivity() {
         finish()  // 로그인 Activity 종료
     }
 
-    //logout 위한 function. 앱에 저장된 로그인 정보 지움. 참고:: https://quessr.tistory.com/84
-//    private fun kakaoLogout() {
-//        UserApiClient.instance.unlink { error ->
-//            if (error != null) {
-//                Toast.makeText(this, "logout 실패: ${error.message}", Toast.LENGTH_SHORT).show()
-//                Log.e("login","logout 실패, SDK 에서 토큰 삭제됨", error)
-//            } else {
-//                Toast.makeText(this, "logout 성공", Toast.LENGTH_SHORT).show()
-//                Log.i("login", "logout 성공, SDK 에서 토큰 삭제됨")
-//            }
-//        }
-//    }
-
     private fun updateProfile() {
 
     }

@@ -33,11 +33,7 @@ class IotPage01 : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val dataBtn = view.findViewById<Button>(R.id.data_btn1)
 
-        dataBtn.setOnClickListener {
-            sendData(requireContext(), "key1", "value2") // Wear OS 기기 여부 확인 없이 바로 데이터 전송
-        }
     }
 
     private fun sendData(context: Context, key: String, value: String) {

@@ -8,10 +8,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.LinearLayout
 import androidx.fragment.app.Fragment
 import com.example.front.databinding.FragmentIotPage03Binding
 import com.kakao.sdk.user.UserApiClient
 import androidx.core.content.edit
+import androidx.core.view.isGone
 
 class IotPage03 : Fragment() {
 
@@ -30,6 +32,13 @@ class IotPage03 : Fragment() {
         _binding = FragmentIotPage03Binding.inflate(inflater, container, false)
 
         val logoutBtn: Button = binding.logoutBtn
+        val infoLayout: LinearLayout = binding.InfoLayout
+        val infoLittleLayout: LinearLayout = binding.InfoLittleLayout
+        val realQuestionLayout: LinearLayout = binding.realQuestionLayout
+        val questionLittleLayout: LinearLayout = binding.QuestionLittleLayout
+        val realProfileLayout: LinearLayout = binding.realProfileLayout
+        val littleProfileLayout: LinearLayout = binding.littleProfileLayout
+
         logoutBtn.setOnClickListener {
             //1. 카카오 logout
             UserApiClient.instance.logout { error ->
@@ -51,6 +60,32 @@ class IotPage03 : Fragment() {
                 }
             }
         }
+
+        infoLayout.setOnClickListener {
+            //레이아웃 클릭 시 하위 레이아웃 보임
+            if(infoLittleLayout.isGone) {
+                infoLittleLayout.visibility = View.VISIBLE
+            } else {
+                infoLittleLayout.visibility = View.GONE
+            }
+        }
+
+        realQuestionLayout.setOnClickListener {
+            if(questionLittleLayout.isGone) {
+                questionLittleLayout.visibility = View.VISIBLE
+            } else {
+                questionLittleLayout.visibility = View.GONE
+            }
+        }
+
+        realProfileLayout.setOnClickListener {
+            if(littleProfileLayout.isGone) {
+                littleProfileLayout.visibility = View.VISIBLE
+            } else {
+                littleProfileLayout.visibility = View.GONE
+            }
+        }
+
         return binding.root
     }
 
