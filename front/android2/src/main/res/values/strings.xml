@@ -20,4 +20,5 @@
     <string name="version">버전: 0.0.0</string>
     <string name="howToDoTextView">앱 실행 방법</string>
     <string name="contactToDev">개발자에게 연락 하기</string>
+    <string name="defaultText">기본 텍스트입니다.</string>
 </resources>
