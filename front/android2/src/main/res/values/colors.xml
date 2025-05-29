@@ -5,4 +5,6 @@
     <color name="select">#873C87</color>
     <color name="selectDark">#402240</color>
     <color name="unselect">#D9D9D9</color>
+    <color name="iotColor">#873C87</color>
+    <color name="additionalExplanation">#999999</color>
 </resources>
