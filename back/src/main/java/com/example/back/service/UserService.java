@@ -20,8 +20,8 @@ public class UserService {
     private final UserRepository userRepository;
 
     public User saveUser(UserDTO userDTO) {
-        if (userDTO.getName() == null || userDTO.getLoginId() == null) {
-            throw new IllegalArgumentException("이름과 로그인 ID는 필수입니다.");
+        if (userDTO.getName() == null || userDTO.getLoginId() == null || userDTO.getEmail() == null) {
+            throw new IllegalArgumentException("이름과 로그인 ID, 이메일은 필수입니다.");
         }
 
         // loginId 중복 확인

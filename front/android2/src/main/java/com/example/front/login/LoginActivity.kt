@@ -3,6 +3,7 @@ package com.example.front.login
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
+import android.util.Log.e
 import android.widget.ImageButton
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -18,6 +19,8 @@ import com.kakao.sdk.user.UserApiClient
 import com.kakao.sdk.common.util.Utility
 import retrofit2.Call
 import retrofit2.Response
+import com.kakao.sdk.auth.model.Prompt
+
 
 class LoginActivity : AppCompatActivity() {
     private lateinit var binding: ActivityLoginBinding
@@ -55,12 +58,14 @@ class LoginActivity : AppCompatActivity() {
                     if (error is ClientError && error.reason == ClientErrorCause.Cancelled) {
                         return@loginWithKakaoTalk
                     }
-
                     handleLoginResult(token, error) //콜백을 함수로 분리
                 }
             } else {
                 Log.d("login", "kakaoTalk 설치 되어 있지 않음, 계정 로그인 시도")
-                UserApiClient.instance.loginWithKakaoAccount(this) { token, error ->
+                UserApiClient.instance.loginWithKakaoAccount(
+                    context = this,
+                    prompts = listOf(com.kakao.sdk.auth.model.Prompt.LOGIN)
+                ) { token, error ->
                     Log.d("login", "callback 실행됨 - login With kakaoAccount")
                     handleLoginResult(token, error)
                 }
@@ -68,6 +73,8 @@ class LoginActivity : AppCompatActivity() {
         } catch (e: Exception) {
             Log.e("login", "로그인 실행 중 예외 발생: ${e.message}")
         }
+
+
     }
 
 
@@ -96,8 +103,23 @@ class LoginActivity : AppCompatActivity() {
             if (error != null) {
                 Toast.makeText(this, "사용자 정보 요청 실패: ${error.message}", Toast.LENGTH_SHORT).show()
                 Log.e("login","사용자 정보 요청 실패: ${error.message}")
-            } else if (user == null) {
+                return@me
+            }else if (user == null) {
                 Log.e("login", "사용자 정보가 null")
+            } else if(user.kakaoAccount?.email == null) {
+                // 이메일 동의를 강제로 다시 요청
+                UserApiClient.instance.loginWithKakaoAccount(
+                    context = this,
+                    prompts = listOf(com.kakao.sdk.auth.model.Prompt.LOGIN)
+                ) { token, error ->
+                    if (error != null) {
+                        Toast.makeText(this, "이메일 동의 요청 실패: ${error.message}", Toast.LENGTH_SHORT).show()
+                        return@loginWithKakaoAccount
+                    }
+
+                    // 재로그인 성공 시 다시 사용자 정보 요청
+                    fetchKakaoUserInfo()
+                }
             } else {
                 Toast.makeText(this, "사용자 정보 요청 성공: ${user.kakaoAccount?.profile?.nickname}", Toast.LENGTH_SHORT).show()
                 Log.i("login", "사용자 정보 요청 성공: " +

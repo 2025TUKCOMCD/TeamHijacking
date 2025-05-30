@@ -76,6 +76,7 @@ public class UserController {
                         .id(user.getId())
                         .name(user.getName())
                         .loginId(user.getLoginId())
+                        .email(user.getEmail())
                         .build();
                 return ResponseEntity.ok(userDTO);
             } else {
