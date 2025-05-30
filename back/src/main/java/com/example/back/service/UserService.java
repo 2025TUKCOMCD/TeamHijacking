@@ -5,11 +5,6 @@ import com.example.back.domain.User;
 import com.example.back.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.springframework.beans.factory.annotation.Autowired;
-
-import java.sql.Timestamp;
-import java.time.LocalDateTime;
-import java.util.Optional;
 
 /*Lombok 으로 스프링 에서 DI 방법 중 생성자 주입을 임의의 코드 없이 자동 으로 설정. 초기화 되지 않은
 final 필드나 @NonNull 이 붙은 필드에 대해 생성자 생성. 새로운 필드 추가 시 다시 생성자 안 만들어도 됨
