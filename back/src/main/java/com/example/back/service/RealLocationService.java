@@ -31,6 +31,9 @@ public class RealLocationService {
         int type = data.getType();
         switch (type){
             case 1: // 지하철 도착 정보
+                if(data.getDBUsage()==1){
+                    return DBSubwayData(data);
+                } else{
                 if(data.getBoarding() == 1) { // 탑승 전 : 실시간 도착 정보
                     try {
                         return processSubwayBoardingData(data);
@@ -49,6 +52,7 @@ public class RealLocationService {
                 } catch (IOException e) {
                     throw new RuntimeException(e);
                 }
+            }
             case 2: // 버스 도착 정보
                 if(data.getBoarding() ==1 ) { // 탑승 전 : 실시간 도착 정보
                     try {
@@ -73,28 +77,43 @@ public class RealLocationService {
         }
     }
 
+    // DB에서 지하철 도착 정보 가져오기
+    private RealTimeResultDTO DBSubwayData(RealtimeDTO data) {
+        int subwayCode = data.getTransportLocalID();
+        String startName = data.getStartName();
+        String predictTime1String, predictTime2String = null;
+        String[] arrivals = subwayProcessService.fetchPredictedTimes(subwayCode, startName);
+        predictTime1String = (arrivals.length > 0) ? arrivals[0] : null;
+        predictTime1String = (arrivals.length > 1) ? arrivals[1] : null;
+        realTimeResultDTO.setNextRequest(1);
+        realTimeResultDTO.setPredictTimes1(predictTime1String);
+        realTimeResultDTO.setPredictTimes2(predictTime2String);
+        return realTimeResultDTO;
+    }
+
     // 지하철 도착 정보 (탑승 전)
     protected RealTimeResultDTO processSubwayBoardingData(RealtimeDTO data) throws IOException {
         String[] arrivals;
-        String predictTime1String, predictTime2String = null;
+        String predictTime1String = "도착 정보 없음";
+        String predictTime2String = "도착 정보 없음";
 
         int subwayCode = data.getTransportLocalID();
         int convertedCode = subwayService.convertSubwayCode(subwayCode);
-        String startName = data.getStartstationName();
-        String endName = data.getEndstationName();
+        String startName = data.getStartName();
+        String endName = data.getEndName();
         String direction = data.getDirection();
-        String secondStation = data.getSecondstationName();
-        // 데이터 형태 구부(데이터베이스, 실시간 데이터
-        if (subwayService.DBCode(subwayCode)) {
-            arrivals = subwayProcessService.fetchPredictedTimes(subwayCode, startName);
-        }else {
-            // 실시간 도착정보 처리
-            arrivals = subwayProcessService.processSeoulSubway(convertedCode, startName, endName, direction, secondStation);
+        String secondName = data.getSecondName();
+
+        // 실시간 도착정보 처리
+        arrivals = subwayProcessService.processSeoulSubway(convertedCode, startName, endName, direction, secondName);
+
+        if (arrivals != null && arrivals.length > 0) {
+            predictTime1String = arrivals[0]; // predictTime1에 첫 번째 할당
         }
-
-        predictTime1String = (arrivals.length > 0) ? arrivals[0] : null;
-        predictTime1String = (arrivals.length > 1) ? arrivals[1] : null;
-
+        if (arrivals != null && arrivals.length > 1) {
+            predictTime2String = arrivals[1]; // predictTime2에 두 번째 할당
+        }
+        realTimeResultDTO.setNextRequest(1);
         realTimeResultDTO.setPredictTimes1(predictTime1String);
         realTimeResultDTO.setPredictTimes2(predictTime2String);
 
@@ -103,23 +122,56 @@ public class RealLocationService {
 
     // 지하철 도착 정보 + 실시간 위치(탑승 중)
     protected RealTimeResultDTO processSubwayAlightingData(RealtimeDTO data) throws IOException {
-
-        String trainNm = subwayProcessService.getTranNo(data);
+        int trainNm = subwayProcessService.getTranNo(data);
         // 지하철 실시간 위치 정보 가져오기
-        RealTimeResultDTO realTimeResultDTO = new RealTimeResultDTO();
-
+        realTimeResultDTO.setTrainNo(trainNm);
         return realTimeResultDTO;
 
     }
-    // 지하철 도착 정보 + 실시간 위치(탑승 중)
+
+    // 지하철 도착 정보 + 실시간 위치(탑승 후)
     protected RealTimeResultDTO processSubwayAlightedData(RealtimeDTO data) throws IOException {
 
-        String trainNm = subwayProcessService.getTranNo(data);
+        String[] arrivals;
+        String predictTime1String = "도착 정보 없음"; // 기본값으로 초기화
+        String predictTime2String = "도착 정보 없음"; // 기본값으로 초기화
+
+        int subwayCode = data.getTransportLocalID();
+        int convertedCode = subwayService.convertSubwayCode(subwayCode);
+        String startName = data.getStartName();
+        String endName = data.getEndName();
+        String direction = data.getDirection();
+        String secondStation = data.getSecondName();
+
+        // 실시간 도착정보 처리
+        arrivals = subwayProcessService.processSeoulSubway(convertedCode, startName, endName, direction, secondStation);
+
+        String location = subwayProcessService.getLocation(data);
+
+        if (arrivals != null && arrivals.length > 0) {
+            predictTime1String = arrivals[0]; // 첫 번째 예측 시간 할당
+        }
+
+        if (arrivals != null && arrivals.length > 1) { // 배열에 두 번째 요소가 있는지 확인
+            predictTime2String = arrivals[1]; // 두 번째 예측 시간 할당
+        }
+
+        String endstationName= data.getEndName();
         // 지하철 실시간 위치 정보 가져오기
-        RealTimeResultDTO realTimeResultDTO = new RealTimeResultDTO();
+        System.out.println("Location: " + location);
 
+
+        if(location!= null && location.equals(endstationName)){
+            realTimeResultDTO.setNextRequest(2);
+        } else { // nextRequest가 항상 1이 되도록 명시적 설정
+            realTimeResultDTO.setNextRequest(1);
+        }
+
+
+        realTimeResultDTO.setLocation(location);
+        realTimeResultDTO.setPredictTimes1(predictTime1String);
+        realTimeResultDTO.setPredictTimes2(predictTime2String);
         return realTimeResultDTO;
-
     }
 
     // 버스 도착 정보
@@ -135,7 +187,6 @@ public class RealLocationService {
         BusArriveProcessDTO.arriveDetail busArrivals = apiService.fetchAndBusArrive(data.getTransportLocalID(),data.getStationId(),data.getStartOrd());
         RealBusLocationDTO busLocations = apiService.fetchAndBusLocation(data.getStationId(),data.getStartOrd(),data.getEndOrd());
         RealTimeResultDTO realTimeResultDTO = new RealTimeResultDTO();
-
 
         return realTimeResultDTO;
     }
