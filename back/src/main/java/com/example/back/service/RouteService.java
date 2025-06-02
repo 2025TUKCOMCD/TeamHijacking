@@ -69,6 +69,8 @@ public class RouteService{
             if (parsedResponse != null && parsedResponse.getResult() != null) {
                 List<RouteProcessDTO.Path> paths = parsedResponse.getResult().getPath();
 
+                System.out.println(paths);
+
                 if (paths != null) {
                     List<RouteProcessDTO.Path> sortedPaths = paths.stream()
                             .map(path -> new AbstractMap.SimpleEntry<>(path, routeCalService.calculateRouteScore(path)))
@@ -97,8 +99,6 @@ public class RouteService{
                     for (int i = 0; i < sortedPaths.size(); i++) {
                         cacheResult(sortedPaths.get(i), newResults.get(i));
                     }
-
-
                     return newResults;
                 }
             }
@@ -113,9 +113,8 @@ public class RouteService{
     public CompletableFuture<Map.Entry<Integer, Map<String, Object>>> processTrafficType1Async(RouteProcessDTO.SubPath subPath, int index) {
         return CompletableFuture.supplyAsync(() -> {
                     Map<String, Object> timeAndDayType;
-
-                    String predictTime1String;
-                    String predictTime2String = null;
+                    String predictTime1String = "도착 정보 없음";
+                    String predictTime2String = "도착 정보 없음";
                     // 첫번째 역 이름
                     String startName = subPath.getStartName();
                     // 마지막 역 이름
@@ -148,6 +147,7 @@ public class RouteService{
                     // 실시간 도착정보 제공x 지하철 시
                     int convertedCode = subwayService.convertSubwayCode(subwayCode);
                     int [] betweenTime = null;
+
                     // 도착정보 존재 x 처리
                     if(subwayService.convertSubwayCodeForTime(convertedCode)){
                         betweenTime = subwayProcessService.getBetweenTimes(convertedCode, startName, endName, direction);
@@ -173,8 +173,12 @@ public class RouteService{
 
 
             // `arrivals`에서 예측 도착 시간 분리
-                        predictTime1String = (arrivals.length > 0) ? arrivals[0] : null;
-                        predictTime1String = (arrivals.length > 1) ? arrivals[1] : null;
+            if (arrivals != null && arrivals.length > 0) {
+                predictTime1String = arrivals[0]; // predictTime1에 첫 번째 할당
+            }
+            if (arrivals != null && arrivals.length > 1) {
+                predictTime2String = arrivals[1]; // predictTime2에 두 번째 할당
+            }
                     //}
 //            // 지하철 도시 코드 확인
 //                if(index < 2){ // 인덱스 0, 1에 대해서만 처리
