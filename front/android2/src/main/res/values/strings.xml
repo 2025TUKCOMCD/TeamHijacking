@@ -11,4 +11,17 @@
     <string name="InfoText">정보</string>
     <string name="logout">로그아웃</string>
     <string name="QAText">문의하기</string>
+    <string name="changeNickname">닉네임 변경</string>
+    <string name="faq">FAQ</string>
+    <string name="qna"><![CDATA[Q&A]]></string>
+    <string name="termOfUse">이용약관</string>
+    <string name="privacyPolicy">개인정보 정책</string>
+    <string name="openSource">오픈소스</string>
+    <string name="version">버전: 0.0.0</string>
+    <string name="howToDoTextView">앱 실행 방법</string>
+    <string name="contactToDev">개발자에게 연락 하기</string>
+    <string name="defaultText">기본 텍스트입니다.</string>
+    <string name="selectIoT">사용자분께서 선택하신 IoT 기종을 이미지로 알려주는 곳입니다.</string>
+    <string name="defaultIotText">"<b>"IOT 기기의 디폴트 이름"</b>"</string>
+    <string name="additionalExplanation">기본설명입니다기본설명입니다기본설명입니다기본설명입니다기본설명입니다기본설명입니다기본설명입니다기본설명입니다기본설명입니다기본설명입니다</string>
 </resources>

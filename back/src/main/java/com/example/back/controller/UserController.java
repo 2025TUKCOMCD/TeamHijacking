@@ -6,7 +6,6 @@ import com.example.back.repository.UserRepository;
 import com.example.back.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -76,6 +75,7 @@ public class UserController {
                         .id(user.getId())
                         .name(user.getName())
                         .loginId(user.getLoginId())
+                        .email(user.getEmail())
                         .build();
                 return ResponseEntity.ok(userDTO);
             } else {

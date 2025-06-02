@@ -117,12 +117,14 @@ class TransportInformationActivity : AppCompatActivity() {
         //val routeIds = intent.getSerializableExtra("routeIds") as? ArrayList<RouteId>
         val routeIds = intArrayOf(3,2,3,1,3)
         // 더미 데이터 실제 데이터로 바꿔야함
-        val messagelist = listOf("[10]번째 전역 (곡산) n분후 도착","목표역에 거의 다 접근함" ,"[10]번째 전역 (곡산)", "목표역에 거의 다 접근함" , "도착지까지 n m 남음")
+        val messagelist = listOf("[10]번째 전역 (곡산) n분후 도착","목표역에 거의 다 접근함" ,"[10]번째 전역 (곡산)", "목표역에 거의 다 접근함" , "도착지까지 n m 남음", "도착!")
         // 이미지를 클릭시 소리가 나게 세팅하고 싶음
 
 
         Log.d("log", "routeIds: $routeIds")
         pathTransitType.add(4)
+        Log.d("현빈", pathTransitType[5].toString())
+        Log.d("현빈", pathTransitType.size.toString())
         Log.d("현빈", pathTransitType.toString())
         updateButtonImages(transOrder,pathTransitType, messagelist)
         // 주석 처리된 임시 버튼

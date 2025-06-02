@@ -5,11 +5,11 @@
     android:layout_height="match_parent"
     android:gravity="center"
     android:orientation="vertical"
-    tools:context=".login.LoginActivity">
-    <!-- -->
+    tools:context=".MainActivity">
+    <!-- 장치 추가 페이지 -->
     <Button
         android:id="@+id/data_btn2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="데이터 전송" />
+        android:text="@string/defaultText" />
 </LinearLayout>

@@ -14,8 +14,8 @@
                         <option name="values">
                           <map>
                             <entry key="assetSourceType" value="FILE" />
-                            <entry key="outputName" value="profile_user" />
-                            <entry key="sourceFile" value="C:\Users\srnb1\StudioProjects\TeamHijacking\front\android2\src\main\res\drawable\profile-user.svg" />
+                            <entry key="outputName" value="ai_speaker" />
+                            <entry key="sourceFile" value="C:\Users\srnb1\StudioProjects\TeamHijacking\front\app\src\main\res\drawable\speaker-_1_.svg" />
                           </map>
                         </option>
                       </PersistentState>

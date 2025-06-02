@@ -18,7 +18,7 @@ import java.time.LocalDateTime;
 public class UserDTO {
     private Integer id;           // `int unsigned`에 대응되는 Integer
     private String name;          // `varchar(255)`에 대응되는 String
-
+    private String email;          //varchar(360)에 대응되어야 하는 String
     private String loginId; // `varchar(255)`에 대응되는 String
 //    private Timestamp createAt;   // `datetime`
 //    private Timestamp updateAt;   // `datetime`에 대응되는 Timestamp
@@ -34,6 +34,7 @@ public class UserDTO {
         return User.builder()
                 .name(this.name)
                 .loginId(this.loginId)
+                .email(this.email)
 //                .createAt(Timestamp.valueOf(LocalDateTime.now()))
 //                .updateAt(Timestamp.valueOf(LocalDateTime.now()))
                 // createAt, updateAt 은 엔티티의 @PrePersist가 처리

@@ -55,22 +55,10 @@
             android:theme="@style/Transportation_Main_Theme" />
         <activity
             android:name=".transportation.TransportInformationActivity"
-            android:exported="true"
+            android:exported="false"
             android:taskAffinity=""
             android:theme="@style/Transportation_Main_Theme" >
-
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
-        <!--
- <activity
-            android:name=".transportation.dialog.TransSavedDialog"
-            android:exported="false"
-            android:theme="@style/Transportation_Main_Theme" />
-        -->
         <activity
             android:name=".transportation.TransportDoyouWantSaveActivity"
             android:exported="false"
@@ -120,11 +108,11 @@
             android:exported="true"
             android:taskAffinity=""
             android:theme="@style/MainActivityTheme" >
-<!--            <intent-filter>-->
-<!--                <action android:name="android.intent.action.MAIN" />-->
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
 
-<!--                <category android:name="android.intent.category.LAUNCHER" />-->
-<!--            </intent-filter>-->
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
 
 <!--        <service-->

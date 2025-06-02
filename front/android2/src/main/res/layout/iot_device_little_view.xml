@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="350dp"
+    android:layout_height="180dp"
+    android:minHeight="100dp"
+    android:minWidth="100dp"
+    android:padding="15dp"
+    android:gravity="start"
+    android:orientation="vertical"
+    android:id="@+id/iotDeviceLittleView"
+    android:background="@drawable/iot_background">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+        <ImageView
+            android:layout_width="70dp"
+            android:layout_height="70dp"
+            android:contentDescription="@string/selectIoT"
+            android:src = "@drawable/iot"
+            android:background="@android:color/transparent" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:paddingStart="10dp"
+            android:paddingEnd="1dp"
+            android:textSize="25sp"
+            android:text="@string/defaultIotText"
+            android:layout_gravity="center"
+            android:id = "@+id/iotNameText"
+            android:gravity="center"
+            android:textColor="@color/iotColor"/>
+    </LinearLayout>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="1dp"
+        android:paddingStart="20dp"
+        android:paddingEnd="1dp"
+        android:text="@string/additionalExplanation"
+        android:textColor="@color/additionalExplanation" />
+</LinearLayout>
