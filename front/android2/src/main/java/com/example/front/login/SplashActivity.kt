@@ -1,5 +1,6 @@
 package com.example.front.login
 
+import android.content.Context.MODE_PRIVATE
 import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity

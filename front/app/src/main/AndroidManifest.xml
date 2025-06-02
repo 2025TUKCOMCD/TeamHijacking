@@ -59,12 +59,6 @@
             android:taskAffinity=""
             android:theme="@style/Transportation_Main_Theme" >
         </activity>
-        <!--
- <activity
-            android:name=".transportation.dialog.TransSavedDialog"
-            android:exported="false"
-            android:theme="@style/Transportation_Main_Theme" />
-        -->
         <activity
             android:name=".transportation.TransportDoyouWantSaveActivity"
             android:exported="false"
