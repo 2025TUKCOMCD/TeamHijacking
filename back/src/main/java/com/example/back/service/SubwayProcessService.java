@@ -26,7 +26,7 @@ public class SubwayProcessService {
     @Autowired
     private APIService apiService;
 
-    String predictTime1String, predictTime2String = null;
+
 
     // 오디세이 -> 서울 공공데이터 역이름 변환
     private String normalizeStationName(String name) {
@@ -38,21 +38,24 @@ public class SubwayProcessService {
     }
 
     // 서울 지하철 도착 정보 처리(환승 필요 지하철 포함)
-    protected String[] processSeoulSubway(int convertedCode, String startName, String endName, String direction, String secondStation) {
+    protected String[] processSeoulSubway(int convertedCode, String startName, String endName, String direction, String secondName) {
 
         // 오디세이 -> 서울 공공데이터 역이름 변경
-        startName = normalizeStationName(startName);
-        // 데이터베이스 역id 추출
-        int statnId = databaseService.findStationId(convertedCode, startName);
+        String convertedStartName = normalizeStationName(startName);
+        String convertedEndName = normalizeStationName(endName);
+        String convertedSecondName = normalizeStationName(secondName);
 
-        List<SubwayArriveProcessDTO.RealtimeArrival> arrivals = null;
+        // 데이터베이스 역id 추출
+        int statnId = databaseService.findStationId(convertedCode, convertedStartName);
+
+        List<SubwayArriveProcessDTO.RealtimeArrival> arrivals;
         try {
             // 도착정보 가져오기
-            arrivals = apiService.fetchAndSubwayArrive(startName).getRealtimeArrivalList();
+            arrivals = apiService.fetchAndSubwayArrive(convertedStartName).getRealtimeArrivalList();
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-        if (arrivals == null || arrivals.isEmpty()) return null;
+
 
         // 같은 방향 및 목적지 포함 노선
         List<SubwayArriveProcessDTO.RealtimeArrival> matchedArrivals = new ArrayList<>();
@@ -62,19 +65,21 @@ public class SubwayProcessService {
             if (Integer.parseInt(arrival.getStatnId()) == statnId && direction.equals(arrival.getUpdnLine())) {
                 String[] parts = arrival.getTrainLineNm().split(" - ");
                 // 다음역
-                if (parts.length > 1 && parts[1].replace("방면", "").trim().equals(secondStation)) {
+                if (parts.length > 1 && parts[1].replace("방면", "").trim().equals(convertedSecondName)) {
+
                     // 도착역
                     String destination = parts[0].replace("행", "").trim();
                     // 경로 비교
-                    int result = subwayService.compareRoutes(convertedCode, startName, endName, startName, destination);
 
+                    int result = subwayService.compareRoutes(convertedCode, convertedStartName, convertedEndName, convertedStartName, destination);
+                    System.out.println(result);
                     if (result == 1 || result == 2) {
                         matchedArrivals.add(arrival);
                     }
                 }
             }
         }
-
+        System.out.println("필터링된 도착 정보: " + matchedArrivals);
         return handleArrivalQueue(matchedArrivals, startName, convertedCode, direction);
     }
 
@@ -90,7 +95,7 @@ public class SubwayProcessService {
 
     // 구간 별 소요 시간 추출
     protected int[] getBetweenTimes(int convertedCode, String startName, String endName, String direction) {
-        List<String> route = subwayService.findRoute(convertedCode, startName, endName );  // 경로 탐색
+        List<String> route = subwayService.findRoute(convertedCode, startName, endName);  // 경로 탐색
         return subwayService.findTime(route, direction, convertedCode);
     }
 
@@ -104,8 +109,11 @@ public class SubwayProcessService {
                         .thenComparingInt(a -> {
                             int barvlDt = Integer.parseInt(a.getBarvlDt());  // 도착 예정 시간 (초 단위)
                             String stationName = getStationNameFromMsg(a.getArvlMsg2());  // 역 이름 추출
+                            System.out.println("역 이름: " + stationName);
                             List<String> route = subwayService.findRoute(subwayCode, startName, stationName);  // 경로 탐색
+                            System.out.println("경로: " + route);
                             int travelTime = subwayService.calculateTravelTime(route, direction, subwayCode); // 예상 이동 시간 (분 단위)
+                            System.out.println("예상 이동 시간: " + travelTime + "분");
                             int travelTimeInSeconds = travelTime * 60;  // 분 → 초 변환
 
                             return (barvlDt == 0) ? travelTimeInSeconds : Math.min(barvlDt, travelTimeInSeconds); // 더 빠른 값으로 정렬
@@ -114,30 +122,36 @@ public class SubwayProcessService {
 
         // matched 리스트를 PriorityQueue에 추가
         queue.addAll(matched);
+        System.out.println("정렬된 도착 정보: " + queue);
+        String predictTime1String = "첫 번째 도착 정보 없음"; // 기본값으로 초기화
+        String predictTime2String = "두 번째 도착 정보 없음"; // 기본값으로 초기화
 
         if (!queue.isEmpty()) {
             SubwayArriveProcessDTO.RealtimeArrival first = queue.poll();
-            String predictTime1String = handleArrivalByCriterion(first, startName, subwayCode, direction);
+            System.out.println(">>> PriorityQueue에서 첫 번째로 poll된 객체: " + first.getArvlMsg2() + ", ARVL_CD: " + first.getArvlCd());
+            predictTime1String = handleArrivalByCriterion(first, startName, subwayCode, direction);
 
             if (!queue.isEmpty()) {
                 SubwayArriveProcessDTO.RealtimeArrival second = queue.poll();
-                String predictTime2String = handleArrivalByCriterion(second, startName, subwayCode, direction);
-                return new String[]{predictTime1String, predictTime2String};
-            } else {
+                System.out.println(">>> PriorityQueue에서 두 번째로 poll된 객체: " + second.getArvlMsg2() + ", ARVL_CD: " + second.getArvlCd());
+                predictTime2String = handleArrivalByCriterion(second, startName, subwayCode, direction);
+            } if(!queue.isEmpty()) {
                 System.out.println("두 번째 도착 정보가 없습니다.");
-                return new String[]{predictTime2String, "두 번째 도착 정보 없음"};
             }
         } else {
             System.out.println("조건에 맞는 도착 정보가 없습니다.");
-            return new String[]{predictTime1String, predictTime2String};
         }
+        return new String[]{predictTime1String, predictTime2String};
     }
 
     // 데이터베이스 도착정보 처리
     protected String[] processPredictedArrivals(List<TimeTable> predictTimeList) {
+        String predictTime1String = "첫 번째 도착 정보 없음"; // 기본값으로 초기화
+        String predictTime2String = "두 번째 도착 정보 없음"; // 기본값으로 초기화
         if (predictTimeList != null && !predictTimeList.isEmpty()) {
             Time Time1 = predictTimeList.size() > 0 ? predictTimeList.get(0).getArrival_Time() : null;
             Time Time2 = predictTimeList.size() > 1 ? predictTimeList.get(1).getArrival_Time() : null;
+
 
             Time current = subwayService.getSeoulCurrentTime();
             if (Time1 != null) {
@@ -153,14 +167,14 @@ public class SubwayProcessService {
     }
 
     // 실시간 도착정보 처리
-    private String handleArrivalByCriterion(SubwayArriveProcessDTO.RealtimeArrival arrival, String startName,int subwayCode, String direction) {
+    private String handleArrivalByCriterion(SubwayArriveProcessDTO.RealtimeArrival arrival, String startName, int subwayCode, String direction) {
         String arvlCdString = arrival.getArvlCd();
-        if(!arvlCdString.equals("99")){
+        if (!arvlCdString.equals("99")) {
             return handleBasedOnArvlCd(arrival);
-        }else if(!arrival.getBarvlDt().equals("0")){
+        } else if (!arrival.getBarvlDt().equals("0")) {
             return handleBasedOnBarvlDt(arrival);
-        }else if(arrival.getArvlMsg2() != null && arrival.getArvlMsg2().contains("번째 전역")) {
-            return handleBasedOnNthStation(arrival, startName, direction,subwayCode);
+        } else if (arrival.getArvlMsg2() != null && arrival.getArvlMsg2().contains("번째 전역")) {
+            return handleBasedOnNthStation(arrival, startName, direction, subwayCode);
         }
         return arrival.getArvlMsg2();
     }
@@ -201,12 +215,12 @@ public class SubwayProcessService {
     }
 
     // NTH_STATION 기준 처리
-    private String handleBasedOnNthStation(SubwayArriveProcessDTO.RealtimeArrival arrival, String startName, String direction,int subwayCode) {
+    private String handleBasedOnNthStation(SubwayArriveProcessDTO.RealtimeArrival arrival, String startName, String direction, int subwayCode) {
         String stationName = getStationNameFromMsg(arrival.getArvlMsg2());
         // FindNetwork로 이전
-        List<String> route = subwayService.findRoute(subwayCode,startName, stationName);
+        List<String> route = subwayService.findRoute(subwayCode, startName, stationName);
         // TimeFindNetwork로 이전
-        int travelTime = subwayService.calculateTravelTime(route,direction,subwayCode); // 두 역 간 이동 시간 계산
+        int travelTime = subwayService.calculateTravelTime(route, direction, subwayCode); // 두 역 간 이동 시간 계산
 
         return travelTime > 0 ? travelTime + "분 후 도착" + "(" + stationName + ")" : "경로 정보 없음 (" + arrival.getArvlMsg3() + ")";
     }
@@ -214,9 +228,16 @@ public class SubwayProcessService {
     // 처리 순서
     private int getArvlCdPriority(String arvlCd) {
         switch (arvlCd) {
-            case "0": case "1": case "2": case "3": return 0;
-            case "4": case "5": return 1;
-            default: return 2;
+            case "0":
+            case "1":
+            case "2":
+            case "3":
+                return 0;
+            case "4":
+            case "5":
+                return 1;
+            default:
+                return 2;
         }
     }
 
@@ -230,10 +251,10 @@ public class SubwayProcessService {
     }
 
     // 실시간 위치정보 현재 위치 특정
-    protected String getTranNo(RealtimeDTO data) {
-        String trainNm = null;
-        String nowStation = data.getStartstationName();
+    protected int getTranNo(RealtimeDTO data) {
+        String nowStation = data.getStartName();
         int subwayCode = data.getTransportLocalID();
+        int convertedDirection = data.getDirection().equals("상행") ? 0 : 1; // 상행: 0, 하행: 1
         int convertedCode = subwayService.convertSubwayCode(subwayCode);
         String routeName = subwayService.convertRouteName(convertedCode);
 
@@ -245,20 +266,47 @@ public class SubwayProcessService {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-        // 실시간 위치정보에서 역 이름과 방향이 같은 역 찾기
+
         List<RealSubwayLocationDTO.RealtimePositionDTO> stations = realSubwayLocation.getRealtimePositionList();
-        String[][] stationInfo = new String[stations.size()][2];
-        for (int i = 0; i < stations.size(); i++) {
-            stationInfo[i][0] = stations.get(i).getUpdnLine();
-            stationInfo[i][1] = stations.get(i).getStatnNm();
+        if(stations == null || stations.isEmpty()) {
+            throw new IllegalStateException("실시간 위치 정보가 없습니다.");
         }
 
-        // 역이름 과 방향이 같을 경우 stations의 trainNm추출
-        for (String[] station : stationInfo) {
-            if (station[1].equals(nowStation) && station[0].equals(data.getDirection())) {
-                return trainNm = station[0];
+        for (RealSubwayLocationDTO.RealtimePositionDTO station : stations) {
+            System.out.println(station.getStatnNm());
+            if (station.getStatnNm().equals(nowStation) && station.getUpdnLine()==convertedDirection) {
+                // 해당 열차의 고유 번호 반환
+                return station.getTrainNo(); // trainNo가 int 타입이어야 합니다
             }
         }
-        return null;
+        // 못 찾았을 경우 예외 발생 또는 기본값 설정
+        throw new IllegalStateException("해당 역에 위치한 열차 정보를 찾을 수 없습니다.");
+    }
+
+    // 실시간 위치정보 현재 위치 추출
+    protected String getLocation(RealtimeDTO data) {
+        int trainNo = data.getTrainNo(); // 열차 고유 번호
+        int subwayCode = data.getTransportLocalID(); // 지하철 노선 코드
+        int convertedDirection = data.getDirection().equals("상행") ? 0 : 1; // 상행: 0, 하행: 1
+        int convertedCode = subwayService.convertSubwayCode(subwayCode); // 변환 노선 코드
+        String routeName = subwayService.convertRouteName(convertedCode); // 노선 이름 변환
+
+        RealSubwayLocationDTO realSubwayLocation;
+        // API 호출
+        try {
+            realSubwayLocation = apiService.fetchAndSubwayLocation(routeName); // 실시간 위치 정보 API 호출
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+        // trainNo가 같은경우를 찾아 statnNm 반환
+        List<RealSubwayLocationDTO.RealtimePositionDTO> stations = realSubwayLocation.getRealtimePositionList();
+        for (RealSubwayLocationDTO.RealtimePositionDTO station : stations) {
+            if (station.getTrainNo() == (trainNo) && station.getUpdnLine()==convertedDirection) {
+                // 해당 역에 위치한 열차의 현재 위치 반환
+                return station.getStatnNm(); // location이 int 타입이어야 합니다
+            }
+        }
+        return null; // 못 찾았을 경우 -1 반환
     }
 }
