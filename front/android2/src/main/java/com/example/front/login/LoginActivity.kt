@@ -130,10 +130,11 @@ class LoginActivity : AppCompatActivity() {
                 //사용자 정보 객체 생성
                 val user = User(
                     name = "${user.kakaoAccount?.profile?.nickname}",
-                    loginId = "${user.id}")
+                    loginId = "${user.id}",
+                    email = "${user.kakaoAccount?.email}"
+                )
 
-                //리스폰스 확인
-
+                //response 확인
                 UserProcessor.registerUser(user) { response ->
                     when (response.code()) {
                         201 -> {

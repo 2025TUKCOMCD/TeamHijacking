@@ -19,7 +19,8 @@
             android:layout_height="70dp"
             android:contentDescription="@string/selectIoT"
             android:src = "@drawable/iot"
-            android:background="@android:color/transparent" />
+            android:background="@android:color/transparent"
+            android:id = "@+id/iotDeviceImageView"/>
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
@@ -38,6 +39,7 @@
         android:paddingTop="1dp"
         android:paddingStart="20dp"
         android:paddingEnd="1dp"
+        android:id = "@+id/iotDeviceDescription"
         android:text="@string/additionalExplanation"
         android:textColor="@color/additionalExplanation" />
 </LinearLayout>

@@ -21,7 +21,7 @@ object UserProcessor {
                 } else {
                     Log.w("UserProcessor", "등록 실패 - 상태 코드: ${response.code()}")
                 }
-                callback(response)  // 성공 여부 관계없이 Response 객체 전달
+                callback(response)  // 성공 여부 관계 없이 Response 객체 전달
             }
 
             override fun onFailure(call: Call<User>, t: Throwable) {
