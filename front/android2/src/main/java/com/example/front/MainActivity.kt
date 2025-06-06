@@ -24,7 +24,7 @@ class MyPagerAdapter(fragmentActivity: FragmentActivity) : FragmentStateAdapter(
     override fun createFragment(position: Int): Fragment {
         return when (position) {
             0 -> IotPage01()
-            1 -> IotPage02()
+//            1 -> IotPage02()
             2 -> IotPage03()
             else -> throw IllegalStateException("Invalid position")
         }
@@ -55,10 +55,10 @@ class MainActivity : AppCompatActivity() {
                     tab.setIcon(R.drawable.ic_home) // 아이콘 설정
                     tab.text = "관리" // 텍스트
                 }
-                1 -> {
-                    tab.setIcon(R.drawable.ic_add)
-                    tab.text = "추가"
-                }
+//                1 -> {
+//                    tab.setIcon(R.drawable.ic_add)
+//                    tab.text = "추가"
+//                }
                 2 -> {
                     tab.setIcon(R.drawable.ic_settings)
                     tab.text = "설정"
@@ -73,7 +73,7 @@ class MainActivity : AppCompatActivity() {
 
                 val title = when (position) {
                     0 -> "IoT 기기 관리"
-                    1 -> "IoT 기기 추가"
+//                    1 -> "IoT 기기 추가"
                     2 -> "설정"
                     else -> "IoT 기기 관리"
                 }
@@ -86,11 +86,19 @@ class MainActivity : AppCompatActivity() {
         binding.backStepBtn.setOnClickListener {
             val currentPosition = binding.viewpager.currentItem
             Log.d("ViewPager", "현재 위치: $currentPosition")
-            if ( currentPosition > 0 ) {
-                val newPosition = currentPosition - 1
-                binding.viewpager.setCurrentItem(newPosition, true)
-                Log.d("ViewPager", "현재 위치: $currentPosition -> 이동할 위치: ${currentPosition - 1}")
+//            if ( currentPosition > 0 ) {
+//                val newPosition = currentPosition - 1
+//                binding.viewpager.setCurrentItem(newPosition, true)
+//                Log.d("ViewPager", "현재 위치: $currentPosition -> 이동할 위치: ${currentPosition - 1}")
+//            }
+
+            /* 장치 추가 페이지 임시로 삭제, 페이지 두 개로 수정 */
+            val newPosition = when (currentPosition) {
+                0 -> 2
+                else -> 0
             }
+            binding.viewpager.setCurrentItem(newPosition, true)
+            Log.d("ViewPager", "현재 위치: $currentPosition -> 이동할 위치: $newPosition")
         }
     }
 }
