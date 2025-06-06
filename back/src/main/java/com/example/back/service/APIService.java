@@ -140,12 +140,10 @@ public class APIService {
     }
 
     // 버스 실시간 위치 정보 조회
-    public RealBusLocationDTO fetchAndBusLocation(int busRouteId, int startOrd, int endOrd) throws IOException {
-        Call<ResponseBody> call = busApi.getBusPosByRouteSt(
+    public RealBusLocationDTO fetchAndBusLocation(String vehid) throws IOException {
+        Call<ResponseBody> call = busApi.getBusPosByVehId(
                 Seoul_Bus_apiKey,
-                busRouteId,
-                startOrd,
-                endOrd,
+                vehid,
                 "json"
         );
         ResponseBody responseBody = call.execute().body();
