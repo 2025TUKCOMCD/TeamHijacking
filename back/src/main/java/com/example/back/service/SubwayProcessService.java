@@ -48,21 +48,22 @@ public class SubwayProcessService {
         // 데이터베이스 역id 추출
         int statnId = databaseService.findStationId(convertedCode, convertedStartName);
 
+        System.out.println(statnId);
         List<SubwayArriveProcessDTO.RealtimeArrival> arrivals;
         try {
             // 도착정보 가져오기
             arrivals = apiService.fetchAndSubwayArrive(convertedStartName).getRealtimeArrivalList();
+            System.out.println("도착 정보: " + arrivals);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-
 
         // 같은 방향 및 목적지 포함 노선
         List<SubwayArriveProcessDTO.RealtimeArrival> matchedArrivals = new ArrayList<>();
         // 같은 방향 및 중간 환승 포함 노선
 
         for (SubwayArriveProcessDTO.RealtimeArrival arrival : arrivals) {
-            if (Integer.parseInt(arrival.getStatnId()) == statnId && direction.equals(arrival.getUpdnLine())) {
+            if (Integer.parseInt(arrival.getStatnId()) == statnId) {
                 String[] parts = arrival.getTrainLineNm().split(" - ");
                 // 다음역
                 if (parts.length > 1 && parts[1].replace("방면", "").trim().equals(convertedSecondName)) {
@@ -96,6 +97,7 @@ public class SubwayProcessService {
     // 구간 별 소요 시간 추출
     protected int[] getBetweenTimes(int convertedCode, String startName, String endName, String direction) {
         List<String> route = subwayService.findRoute(convertedCode, startName, endName);  // 경로 탐색
+
         return subwayService.findTime(route, direction, convertedCode);
     }
 
