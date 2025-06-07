@@ -11,7 +11,7 @@ import androidx.viewpager2.adapter.FragmentStateAdapter
 import androidx.viewpager2.widget.ViewPager2
 import com.example.front.databinding.ActivityMainBinding
 import com.example.front.iot.IotPage01
-import com.example.front.iot.IotPage02
+//import com.example.front.iot.IotPage02
 import com.example.front.iot.IotPage03
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator

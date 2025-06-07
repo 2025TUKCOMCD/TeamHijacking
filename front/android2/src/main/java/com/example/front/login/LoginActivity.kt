@@ -3,23 +3,17 @@ package com.example.front.login
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
-import android.util.Log.e
 import android.widget.ImageButton
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.front.MainActivity
 import com.example.front.databinding.ActivityLoginBinding
-import com.example.front.login.data.User
-import com.example.front.login.processor.RetrofitClient
-import com.example.front.login.processor.UserProcessor
+import com.example.front.login.data.UserRequest
 import com.kakao.sdk.auth.model.OAuthToken
 import com.kakao.sdk.common.model.ClientError
 import com.kakao.sdk.common.model.ClientErrorCause
 import com.kakao.sdk.user.UserApiClient
 import com.kakao.sdk.common.util.Utility
-import retrofit2.Call
-import retrofit2.Response
-import com.kakao.sdk.auth.model.Prompt
 
 
 class LoginActivity : AppCompatActivity() {
@@ -36,8 +30,7 @@ class LoginActivity : AppCompatActivity() {
 
         loginButton.setOnClickListener {
             Log.d("login", "로그인 버튼 눌림")
-            moveToMain("일단바로넘어가도록바꿈")
-//            kakaoLogin()
+            kakaoLogin()
         }
 
         val keyHash = Utility.getKeyHash(this)
@@ -49,30 +42,30 @@ class LoginActivity : AppCompatActivity() {
     private fun kakaoLogin() {
 
         try {
-            // kakaoTalk 설치 여부 확인 후 로그인 실행, else 카카오 계정 으로 로그인
+                    // kakaoTalk 설치 여부 확인 후 로그인 실행
             if (UserApiClient.instance.isKakaoTalkLoginAvailable(this)) {
-                Log.d("login", "kakaoTalk 설치 되어 있음")
+                                Log.d("login", "kakaoTalk 설치 되어 있음")
                 UserApiClient.instance.loginWithKakaoTalk(this) { token, error ->
-                    Log.d("login", "callback 실행됨 - loginWithKaKaoTalk")
+                                Log.d("login", "callback 실행됨 - loginWithKaKaoTalk")
 
-                    //kakaoTalk 설치 후 device 권한 요청 화면 에서 로그인 취소한 경우 의도적 로그인 취소로 보고 카카오 계정 로그인 시도 없이 로그인 취소로 처리(예: 뒤로 가기)
+                    //의도적 로그인 취소 체크
                     if (error is ClientError && error.reason == ClientErrorCause.Cancelled) {
                         return@loginWithKakaoTalk
                     }
                     handleLoginResult(token, error) //콜백을 함수로 분리
                 }
             } else {
-                Log.d("login", "kakaoTalk 설치 되어 있지 않음, 계정 로그인 시도")
+                                Log.d("login", "kakaoTalk 설치 되어 있지 않음, 계정 로그인 시도")
                 UserApiClient.instance.loginWithKakaoAccount(
                     context = this,
                     prompts = listOf(com.kakao.sdk.auth.model.Prompt.LOGIN)
                 ) { token, error ->
-                    Log.d("login", "callback 실행됨 - login With kakaoAccount")
+                                Log.d("login", "callback 실행됨 - login With kakaoAccount")
                     handleLoginResult(token, error)
                 }
             }
         } catch (e: Exception) {
-            Log.e("login", "로그인 실행 중 예외 발생: ${e.message}")
+                                Log.e("login", "로그인 실행 중 예외 발생: ${e.message}")
         }
 
 
@@ -131,7 +124,7 @@ class LoginActivity : AppCompatActivity() {
                         "\n 닉네임: ${user.kakaoAccount?.profile?.nickname}")
 
                 //사용자 정보 객체 생성
-                val user = User(
+                val user = UserRequest(
                     name = "${user.kakaoAccount?.profile?.nickname}",
                     loginId = "${user.id}",
                     email = "${user.kakaoAccount?.email}"
@@ -164,7 +157,7 @@ class LoginActivity : AppCompatActivity() {
 //
 //                    Log.d("login", "등록 처리도 잘 됨 안 되었을수도")
 //                }
-                moveToMain("일단아무거나")
+//                moveToMain("일단아무거나")
 
             }
         }
@@ -172,7 +165,7 @@ class LoginActivity : AppCompatActivity() {
     }
 
     // sharedPreferences 에 로그인 정보 저장
-    private fun saveLoginInfo(user: User) {
+    private fun saveLoginInfo(user: UserRequest) {
         val sharedPref = getSharedPreferences("userPrefs", MODE_PRIVATE)
         with(sharedPref.edit()) {
             putString("loginId", user.loginId)
