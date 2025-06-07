@@ -8,11 +8,16 @@ import retrofit2.Response
 
 /* 실제 API 호출을 처리 하고, 응답 처리 로직을 담당 */
 object UserProcessor {
+
+
     private val userService = RetrofitClient.userService
 
+    //오류 여기서 가능성
     fun registerUser(user: User, callback: (Response<User>) -> Unit) {
+        Log.d("login", "registerUser 실행됨.")
         val call = userService.registerUser(user)
 
+        Log.d("login", "userService.registerUser(user) 실행됨")
         call.enqueue(object : Callback<User> {
             override fun onResponse(call: Call<User>, response: Response<User>) {
                 if (response.isSuccessful) {

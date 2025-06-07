@@ -18,6 +18,7 @@ class SplashActivity : AppCompatActivity() {
         val loginId = sharedPrefs.getString("loginId", null)
         val name = sharedPrefs.getString("name", null)
 
+
         // 로그인 여부에 따라 화면 전환
         if (!loginId.isNullOrEmpty() && !name.isNullOrEmpty()) {
             // 서버에 등록된 사용자 확인

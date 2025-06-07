@@ -30,7 +30,7 @@ public class User {
     @Column(name = "update_at", nullable = false)  //@Column이 자동 변환을 시켜중
     private Timestamp updateAt;
 
-    @Column(name = "email", length = 320)
+    @Column(name = "email", length = 320, nullable = false)
     private String email;
 
     /*@NoArgConstructor 와 @AllArgsConstructor 를 이용해 생성자 자동 생성 */

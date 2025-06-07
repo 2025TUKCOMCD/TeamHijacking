@@ -23,6 +23,7 @@ public class UserController {
     @PostMapping("/register")
     public ResponseEntity<?> registerUser(@RequestBody UserDTO userDTO) {
         try {
+            log.info("사용자 등록 요청 수신: {}", userDTO);  // ✅ 서버 로그 확인
             System.out.println(userDTO);
             log.info("회원 등록 요청 - loginId: {}, name: {}", userDTO.getLoginId(), userDTO.getName());
 

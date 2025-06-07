@@ -1,6 +1,7 @@
 package com.example.back.dto;
 
 import com.example.back.domain.User;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
 
@@ -15,6 +16,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class UserDTO {
     private Integer id;           // `int unsigned`에 대응되는 Integer
     private String name;          // `varchar(255)`에 대응되는 String
