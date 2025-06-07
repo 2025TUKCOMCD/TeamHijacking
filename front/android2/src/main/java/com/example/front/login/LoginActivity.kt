@@ -9,6 +9,7 @@ import androidx.appcompat.app.AppCompatActivity
 import com.example.front.MainActivity
 import com.example.front.databinding.ActivityLoginBinding
 import com.example.front.login.data.UserRequest
+import com.example.front.login.processor.UserProcessor
 import com.kakao.sdk.auth.model.OAuthToken
 import com.kakao.sdk.common.model.ClientError
 import com.kakao.sdk.common.model.ClientErrorCause
@@ -134,30 +135,30 @@ class LoginActivity : AppCompatActivity() {
 
                 //response 확인, 객체 response 받기 전 오류면
                 //registerUser에서 오류가 난 것 같다
-//                UserProcessor.registerUser(user) { response ->
-//                    Log.d("login", response.code().toString())
-//                    when (response.code()) {
-//                        201 -> {
-//                            val registeredUser = response.body()
-//                            if (registeredUser != null ) {
-//                                //로그인 정보 저장 + 메인 화면 이동
-//                                saveLoginInfo(registeredUser)
-//                                moveToMain(registeredUser.name)
-//                            }
-//                        }
-//                        409 -> {
-//                            Toast.makeText(this, "이미 등록된 사용자 입니다.", Toast.LENGTH_SHORT).show()
-//                            //이미 등록된 사용자 처리 로직
-//                            moveToMain(user.name)
-//                        }
-//                        else -> {
-//                            Toast.makeText(this, "등록 실패 (오류 코드: ${response.code()})", Toast.LENGTH_SHORT).show()
-//                        }
-//                    }
-//
-//                    Log.d("login", "등록 처리도 잘 됨 안 되었을수도")
-//                }
-//                moveToMain("일단아무거나")
+                UserProcessor.registerUser(user) { response ->
+                    Log.d("login", response.code().toString())
+                    when (response.code()) {
+                        201 -> {
+                            val registeredUser = response.body()
+                            if (registeredUser != null ) {
+                                //로그인 정보 저장 + 메인 화면 이동
+                                saveLoginInfo(registeredUser)
+                                moveToMain(registeredUser.name)
+                            }
+                        }
+                        409 -> {
+                            Toast.makeText(this, "이미 등록된 사용자 입니다.", Toast.LENGTH_SHORT).show()
+                            //이미 등록된 사용자 처리 로직
+                            moveToMain(user.name)
+                        }
+                        else -> {
+                            Toast.makeText(this, "등록 실패 (오류 코드: ${response.code()})", Toast.LENGTH_SHORT).show()
+                        }
+                    }
+
+                    Log.d("login", "등록 처리도 잘 됨 안 되었을수도")
+                }
+                moveToMain("일단아무거나")
 
             }
         }

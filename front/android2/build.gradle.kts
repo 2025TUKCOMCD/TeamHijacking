@@ -15,7 +15,7 @@ android {
         // 중요한 변경: 'front' 디렉토리 바로 아래에 있는 local.properties를 읽도록 경로를 명확히 지정합니다.
         // project.rootProject는 Git 저장소의 가장 상위 디렉토리(TeamHijacking/)를 나타냅니다.
         // 그 아래에 "front/local.properties"가 있으므로, 이 경로를 사용합니다.
-        val localPropertiesFile = project.rootProject.file("front/local.properties")
+        val localPropertiesFile = File(rootDir, "local.properties")
 
         if (localPropertiesFile.exists()) {
             load(FileInputStream(localPropertiesFile))
@@ -23,15 +23,11 @@ android {
             // 파일이 없는 경우 경고만 출력하고 빌드가 실패하지 않도록 처리합니다.
             println("WARNING: local.properties file not found at ${localPropertiesFile.absolutePath}. Using empty strings for API keys.")
         }
-    }                                  //KAKAO_NATIVE_API_KEY    cf939a3f6eb2a3a0c85cce072098dba2
-    val KAKAO_NATIVE_API_KEY = localProperties.getProperty("KAKAO_NATIVE_API_KEY", "cf939a3f6eb2a3a0c85cce072098dba2")
+    }
+    val KAKAO_NATIVE_API_KEY = localProperties.getProperty("KAKAO_NATIVE_API_KEY", "")
     val HOST_URL = localProperties.getProperty("Host_URL", "")
 
     //로컬 프로퍼티가 가져온게 제대로 됐는지 확인
-    //발급받은 걸 제대로 설정했는지 확인하기...
-    //서버 접속하고 설정할 때
-    //포스트에 배리어 키.... <? 스마트띵스 api 키 중에서.,. 헤더에 앱 키를 보통 넣음..
-    //헤더에서 보통 체크를 하니까... 그걸 테스트
 
     defaultConfig {
         minSdk = 30
