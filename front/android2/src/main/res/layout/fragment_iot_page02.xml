@@ -23,11 +23,11 @@
             android:textSize="30sp"
             android:text="@string/addSamsung"
             android:paddingBottom="40dp"/>
-<!--        <LinearLayout-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:orientation="horizontal"-->
-<!--            android:layout_gravity="fill_horizontal">-->
-<!--        </LinearLayout>-->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_gravity="fill_horizontal">
+        </LinearLayout>
     </LinearLayout>
 </LinearLayout>

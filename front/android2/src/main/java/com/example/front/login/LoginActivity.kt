@@ -36,7 +36,8 @@ class LoginActivity : AppCompatActivity() {
 
         loginButton.setOnClickListener {
             Log.d("login", "로그인 버튼 눌림")
-            kakaoLogin()
+            moveToMain("일단바로넘어가도록바꿈")
+//            kakaoLogin()
         }
 
         val keyHash = Utility.getKeyHash(this)
@@ -99,7 +100,9 @@ class LoginActivity : AppCompatActivity() {
     private fun fetchKakaoUserInfo() {
         Log.d("login", "fetch kakao UserInfo() 실행됨")
 
+
         UserApiClient.instance.me { user, error ->
+            Log.d("login", user?.kakaoAccount?.email.toString())
             if (error != null) {
                 Toast.makeText(this, "사용자 정보 요청 실패: ${error.message}", Toast.LENGTH_SHORT).show()
                 Log.e("login","사용자 정보 요청 실패: ${error.message}")
@@ -134,27 +137,35 @@ class LoginActivity : AppCompatActivity() {
                     email = "${user.kakaoAccount?.email}"
                 )
 
-                //response 확인
-                UserProcessor.registerUser(user) { response ->
-                    when (response.code()) {
-                        201 -> {
-                            val registeredUser = response.body()
-                            if (registeredUser != null ) {
-                                //로그인 정보 저장 + 메인 화면 이동
-                                saveLoginInfo(registeredUser)
-                                moveToMain(registeredUser.name)
-                            }
-                        }
-                        409 -> {
-                            Toast.makeText(this, "이미 등록된 사용자 입니다.", Toast.LENGTH_SHORT).show()
-                            //이미 등록된 사용자 처리 로직
-                            moveToMain(user.name)
-                        }
-                        else -> {
-                            Toast.makeText(this, "등록 실패 (오류 코드: ${response.code()})", Toast.LENGTH_SHORT).show()
-                        }
-                    }
-                }
+                Log.d("login", "객체 생성 제대로 됨")
+
+                //response 확인, 객체 response 받기 전 오류면
+                //registerUser에서 오류가 난 것 같다
+//                UserProcessor.registerUser(user) { response ->
+//                    Log.d("login", response.code().toString())
+//                    when (response.code()) {
+//                        201 -> {
+//                            val registeredUser = response.body()
+//                            if (registeredUser != null ) {
+//                                //로그인 정보 저장 + 메인 화면 이동
+//                                saveLoginInfo(registeredUser)
+//                                moveToMain(registeredUser.name)
+//                            }
+//                        }
+//                        409 -> {
+//                            Toast.makeText(this, "이미 등록된 사용자 입니다.", Toast.LENGTH_SHORT).show()
+//                            //이미 등록된 사용자 처리 로직
+//                            moveToMain(user.name)
+//                        }
+//                        else -> {
+//                            Toast.makeText(this, "등록 실패 (오류 코드: ${response.code()})", Toast.LENGTH_SHORT).show()
+//                        }
+//                    }
+//
+//                    Log.d("login", "등록 처리도 잘 됨 안 되었을수도")
+//                }
+                moveToMain("일단아무거나")
+
             }
         }
         //사용자 정보를 활용해 추가 로직 구현 가능
@@ -166,6 +177,7 @@ class LoginActivity : AppCompatActivity() {
         with(sharedPref.edit()) {
             putString("loginId", user.loginId)
             putString("name", user.name)
+//            putString("email", user.email)
             apply()
         }
     }

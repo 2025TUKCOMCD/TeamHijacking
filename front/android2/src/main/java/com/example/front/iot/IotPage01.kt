@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
@@ -41,7 +42,7 @@ class IotPage01 : Fragment() {
         val iotLinearLayout = binding.iotLinearLayout
 
         addViewBtn.setOnClickListener {
-
+            addIoTDeviceView("아무 이름")
         }
 
         return binding.root
@@ -54,7 +55,7 @@ class IotPage01 : Fragment() {
 
     /*     ----   func area   ----      */
 
-    private fun addIoTDeviceView(deviceName: String) {
+    private fun addIoTDeviceView(deviceName: String = "기본 이름 삽입") {
         // 1. 레이아웃 inflater 가져오기
         val inflater = LayoutInflater.from(requireContext())
         val newIotView = inflater.inflate(R.layout.iot_device_little_view, null)
@@ -65,6 +66,16 @@ class IotPage01 : Fragment() {
 
         iotNameTextView.text = deviceName
         //iotDeviceDescription :: 이 곳에 정리
+
+
+        val layoutParams = LinearLayout.LayoutParams(
+            ViewGroup.LayoutParams.MATCH_PARENT,
+            ViewGroup.LayoutParams.WRAP_CONTENT
+        ).apply {
+            val marginInPx = (20 * resources.displayMetrics.density).toInt()
+            bottomMargin = marginInPx
+        }
+        newIotView.layoutParams = layoutParams          // layoutParams 적용
 
         binding.iotLinearLayout.addView(newIotView)
     }
