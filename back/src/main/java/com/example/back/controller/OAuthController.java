@@ -12,7 +12,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 @Controller // 템플릿 뷰를 반환할 수 있도록 @Controller 사용 (리다이렉션 필요)
 @RequestMapping("/oauth")
-public class OAuthController {
+public class OAuthController {https://enterprise.smartthings.com/locations
 
     private final OAuthService oAuthService;
 
@@ -25,6 +25,11 @@ public class OAuthController {
     @Value("${smartthings.grant-type.refresh-token}") // SmartThings 리프레시 토큰 부여 타입
     private String smartthingsGrantTypeRefreshToken;
 
+    @Value("${kakao.client-id}") // application.properties의 kakao.client-id 값을 주입
+    private String kakaoClientId;
+
+    @Value("${kakao.redirect-uri}") // application.properties의 kakao.redirect-uri 값을 주입
+    private String kakaoRedirectUri;
     public OAuthController(OAuthService oAuthService) {
         this.oAuthService = oAuthService;
     }
