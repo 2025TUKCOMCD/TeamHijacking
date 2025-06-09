@@ -20,9 +20,6 @@ public class SmartThingsAuthController {
 
     private final SmartThingsAuthService smartThingsAuthService;
 
-    public SmartThingsAuthController(SmartThingsAuthService smartThingsAuthService) {
-        this.smartThingsAuthService = smartThingsAuthService;
-    }
 
     @PostMapping("/smartthings-callback")
     public ResponseEntity<Map<String, String>> handleSmartThingsCode(@RequestBody Map<String, String> payload) {

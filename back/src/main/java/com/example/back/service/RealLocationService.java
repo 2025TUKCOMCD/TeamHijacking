@@ -259,7 +259,11 @@ public class RealLocationService {
                 predictTime1String = itemList.get(0).getArrmsg1(); // 첫 번째 예측 시간
                 predictTime2String = itemList.get(0).getArrmsg2(); // 두 번째 예측 시간
             }
+        }else{
+            predictTime1String = "도착 정보 없음";
+            predictTime2String = "도착 정보 없음";
         }
+
         realTimeResultDTO.setNextRequest(1); // 다음 대중교통 정보 요청
         realTimeResultDTO.setVehId(vehId);
         realTimeResultDTO.setPredictTimes1(predictTime1String);

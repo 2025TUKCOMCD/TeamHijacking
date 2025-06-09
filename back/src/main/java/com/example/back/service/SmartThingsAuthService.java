@@ -36,10 +36,6 @@ public class SmartThingsAuthService {
     @Value("${smartthings.token-url}")
     private String tokenUrl;
 
-    public SmartThingsAuthService(SmartThingsTokenRepository smartThingsTokenRepository, WebClient webClient) {
-        this.smartThingsTokenRepository = smartThingsTokenRepository;
-        this.webClient = webClient;
-    }
 
     public SmartThingsToken exchangeCodeForTokens(String code, String state, String userId) {
         System.out.println("Attempting to exchange code for tokens for userId: " + userId); // log.info 대신 System.out.println 사용
@@ -54,8 +50,8 @@ public class SmartThingsAuthService {
                             .with("code", code)
                             .with("redirect_uri", redirectUri))
                     .retrieve()
-                    .onStatus(HttpStatus::is4xxClientError, response -> response.bodyToMono(String.class).map(WebClientResponseException::new))
-                    .onStatus(HttpStatus::is5xxServerError, response -> response.bodyToMono(String.class).map(WebClientResponseException::new))
+                    .onStatus(status -> status.is4xxClientError(), response -> response.bodyToMono(String.class).map(body -> new WebClientResponseException(response.statusCode().value(), response.statusCode().toString(), null, body.getBytes(), null)))
+                    .onStatus(status -> status.is5xxServerError(), response -> response.bodyToMono(String.class).map(body -> new WebClientResponseException(response.statusCode().value(), response.statusCode().toString(), null, body.getBytes(), null)))
                     .bodyToMono(Map.class)
                     .block();
 
@@ -106,8 +102,8 @@ public class SmartThingsAuthService {
                             .with("client_secret", clientSecret)
                             .with("refresh_token", refreshToken))
                     .retrieve()
-                    .onStatus(HttpStatus::is4xxClientError, response -> response.bodyToMono(String.class).map(WebClientResponseException::new))
-                    .onStatus(HttpStatus::is5xxServerError, response -> response.bodyToMono(String.class).map(WebClientResponseException::new))
+                    .onStatus(status -> status.is4xxClientError(), response -> response.bodyToMono(String.class).map(body -> new WebClientResponseException(response.statusCode().value(), response.statusCode().toString(), null, body.getBytes(), null)))
+                    .onStatus(status -> status.is5xxServerError(), response -> response.bodyToMono(String.class).map(body -> new WebClientResponseException(response.statusCode().value(), response.statusCode().toString(), null, body.getBytes(), null)))
                     .bodyToMono(Map.class)
                     .block();
 
