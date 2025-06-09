@@ -37,61 +37,206 @@ public class SubwayProcessService {
         };
     }
 
-    // 서울 지하철 도착 정보 처리(환승 필요 지하철 포함)
-    protected String[] processSeoulSubway(int convertedCode, String startName, String endName, String direction, String secondName) {
 
-        // 오디세이 -> 서울 공공데이터 역이름 변경
+
+    // 서울 지하철 도착 정보 처리(환승 필요 지하철 포함)
+    protected List<SubwayArriveProcessDTO.RealtimeArrival> processSeoulSubway(int convertedCode, String startName, String endName, String direction, String secondName) {
+
+        // 오디세이 -> 서울 공공데이터 역이름 변경 (normalizeStationName 메서드는 이미 있다고 가정)
         String convertedStartName = normalizeStationName(startName);
         String convertedEndName = normalizeStationName(endName);
-        String convertedSecondName = normalizeStationName(secondName);
+        String convertedSecondName = normalizeStationName(secondName); // 환승역 이름
+        System.out.println(convertedStartName + "+" + convertedSecondName + "+" + convertedEndName);
 
         // 데이터베이스 역id 추출
         int statnId = databaseService.findStationId(convertedCode, convertedStartName);
 
-        System.out.println(statnId);
+        System.out.println("조회할 역 ID: " + statnId);
         List<SubwayArriveProcessDTO.RealtimeArrival> arrivals;
         try {
             // 도착정보 가져오기
+            // apiService.fetchAndSubwayArrive(convertedStartName)가 반환하는 타입에 맞게 수정 필요
+            // 예시: .getRealtimeArrivalList() 가 필요하다면 추가
             arrivals = apiService.fetchAndSubwayArrive(convertedStartName).getRealtimeArrivalList();
-            System.out.println("도착 정보: " + arrivals);
+            System.out.println("API로부터 수신된 도착 정보 (총 " + arrivals.size() + "개): " + arrivals);
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            throw new RuntimeException("지하철 도착 정보를 가져오는 중 오류 발생: " + e.getMessage(), e);
         }
 
-        // 같은 방향 및 목적지 포함 노선
         List<SubwayArriveProcessDTO.RealtimeArrival> matchedArrivals = new ArrayList<>();
-        // 같은 방향 및 중간 환승 포함 노선
 
+        // 2호선 외 일반 노선에서 사용할 사용자 요청 경로 (미리 계산)
+        List<String> userDesiredPathForGeneralLines = null;
+        if (convertedCode != 1002) { // 2호선이 아닌 경우에만 최단 경로 계산
+            userDesiredPathForGeneralLines = subwayService.findRoute(convertedCode, convertedStartName, convertedEndName);
+            if (userDesiredPathForGeneralLines == null || userDesiredPathForGeneralLines.isEmpty()) {
+                System.out.println("일반 노선 (" + convertedCode + "호선) 사용자 요청 경로를 찾을 수 없습니다: " + convertedStartName + " -> " + convertedEndName + ". 필터링을 건너뜀.");
+                // return handleArrivalQueue(new ArrayList<>(), startName, convertedCode, direction);
+                return new ArrayList<>();
+            }
+        }
+
+        // --- 필터링 로직 시작 ---
         for (SubwayArriveProcessDTO.RealtimeArrival arrival : arrivals) {
+            // 현재 역 ID와 일치하는 도착 정보만 필터링 (API가 해당 역 정보만 주지만, 혹시 다른 역 정보가 섞여 올 경우 대비)
             if (Integer.parseInt(arrival.getStatnId()) == statnId) {
-                String[] parts = arrival.getTrainLineNm().split(" - ");
-                // 다음역
-                if (parts.length > 1 && parts[1].replace("방면", "").trim().equals(convertedSecondName)) {
+                System.out.println("\n현재 처리 중인 도착 정보: " + arrival);
 
-                    // 도착역
-                    String destination = parts[0].replace("행", "").trim();
-                    // 경로 비교
+                String apiUpdnLine = arrival.getUpdnLine(); // 내선, 외선
+                String apiTrainLineNm = arrival.getTrainLineNm();
+                String apiBstatnNm = arrival.getBstatnNm(); // 열차의 최종 종착역 이름
 
+                boolean isMatchingDirection = false;
+                boolean isDestinationOnTrack = false; // 열차가 요청된 목적지 방향으로 가는지 (해당 경로를 경유하는지)
+
+                if (convertedCode == 1002) { // 2호선 특수 처리
+                    boolean isBranchLineTrain = false; // 지선 열차인지 여부
+
+                    // 지선 열차 식별 (trainLineNm 또는 bstatnNm 활용)
+                    // 예: '성수지선', '신도림지선'이라는 문구가 trainLineNm에 포함되거나,
+                    // bstatnNm이 지선 종착역인 경우 (까치산, 신설동, 용두)
+                    if (apiBstatnNm.equals("까치산") || apiBstatnNm.equals("신설동")  ||
+                            apiTrainLineNm.contains("까치산행") || apiTrainLineNm.contains("신설동행") ) {
+                        isBranchLineTrain = true;
+                    }
+
+                    if (isBranchLineTrain) {
+                        System.out.println("  -> 2호선 지선 열차 감지: " + apiTrainLineNm);
+                        // 지선 열차는 일반적인 상행/하행 개념으로 판단
+                        if (apiUpdnLine.equals(direction)) { // API의 상하행과 요청 방향 일치
+                            isMatchingDirection = true;
+                            // 지선 열차의 경우 trainLineNm이나 bstatnNm에 요청 목적지가 포함되는지 확인
+                            if (apiTrainLineNm.contains(convertedEndName) || apiBstatnNm.equals(convertedEndName) ||
+                                    apiTrainLineNm.contains(convertedEndName + "행") || apiTrainLineNm.contains(convertedEndName + "방면")) {
+                                isDestinationOnTrack = true;
+                            }
+                            // 추가적으로, 환승역(secondName)이 지선 경로에 있다면 더 확실
+                            else if (!convertedSecondName.isEmpty() && apiTrainLineNm.contains(convertedSecondName + "방면")) {
+                                isDestinationOnTrack = true;
+                            }
+                            // 필요하다면 지선 열차의 경우에도 compareRoutes를 사용하여 정확한 경로 포함 관계 판단 가능
+                            // 다만, ODSay의 'secondName'이 실제 경유역인지 trainLineNm에 따라 다를 수 있어 신중
+                        }
+                    } else { // 2호선 본선 순환 열차
+                        System.out.println("  -> 2호선 본선 순환 열차 감지: " + apiTrainLineNm);
+
+                        // 1. 사용자 요청 경로의 '다음 역'을 파악
+                        String userNextStationOnPath = "";
+                        List<String> userPath = subwayService.findRoute(convertedCode, convertedStartName, convertedEndName);
+                        if (userPath != null && userPath.size() > 1) {
+                            userNextStationOnPath = userPath.get(1); // 사용자 경로의 시작역 바로 다음 역
+                            System.out.println("    사용자 경로의 다음 역: " + userNextStationOnPath);
+                        } else {
+                            // 사용자 경로를 찾을 수 없거나 짧으면 이 열차는 제외 (혹은 다른 방법으로 처리)
+                            System.out.println("    사용자 경로의 다음 역을 파악할 수 없어 2호선 본선 열차 제외됨.");
+                            continue; // 다음 도착 정보로 넘어감
+                        }
+
+                        // 2. API trainLineNm에서 '방면' 역 추출
+                        String apiTrainLineNmDirectionStation = "";
+                        String[] parts = apiTrainLineNm.split(" - ");
+                        if (parts.length > 1) {
+                            apiTrainLineNmDirectionStation = parts[1].replace("방면", "").trim();
+                            System.out.println("    API trainLineNm의 방면 역: " + apiTrainLineNmDirectionStation);
+                        }
+
+                        // 전제: API 'updnLine'이 '내선'이면 상행, '외선'이면 하행으로 매핑
+                        if (direction.equals("상행") && apiUpdnLine.equals("내선")) { // 요청이 상행(내선)이고 API가 '내선'
+                            isMatchingDirection = true;
+                            // 열차의 '방면' 역이 사용자 경로의 다음 역과 일치하는지 확인
+                            if (!userNextStationOnPath.isEmpty() && apiTrainLineNmDirectionStation.equals(userNextStationOnPath)) {
+                                isDestinationOnTrack = true;
+                            }
+                            // 방면 정보가 불확실하거나 없는 경우, 보조적으로 성수행/시청행을 사용
+                            else if (apiTrainLineNm.contains("성수행") || apiTrainLineNm.contains("시청행")) {
+                                // 이 경우 'isDestinationOnTrack'이 true가 되지만, 정확도는 떨어질 수 있음
+                                // 2호선 본선은 순환하므로 성수/시청행은 항상 해당 방면으로 가는 것과 같음.
+                                // 하지만 '잠실새내방면'과 같은 구체적인 정보가 있다면 그게 더 정확.
+                                isDestinationOnTrack = true;
+                            }
+
+                        } else if (direction.equals("하행") && apiUpdnLine.equals("외선")) { // 요청이 하행(외선)이고 API가 '외선'
+                            isMatchingDirection = true;
+                            // 열차의 '방면' 역이 사용자 경로의 다음 역과 일치하는지 확인
+                            if (!userNextStationOnPath.isEmpty() && apiTrainLineNmDirectionStation.equals(userNextStationOnPath)) {
+                                isDestinationOnTrack = true;
+                            }
+                            // 방면 정보가 불확실하거나 없는 경우, 보조적으로 성수행/시청행을 사용
+                            else if (apiTrainLineNm.contains("성수행") || apiTrainLineNm.contains("시청행")) {
+                                isDestinationOnTrack = true;
+                            }
+                        }
+                    }
+
+                    if (isMatchingDirection && isDestinationOnTrack) {
+                        matchedArrivals.add(arrival);
+                        System.out.println("  -> 2호선 필터링 통과: " + apiTrainLineNm + " (API updnLine: " + apiUpdnLine + ")");
+                    } else {
+                        System.out.println("  -> 2호선 필터링 제외: " + apiTrainLineNm + " (API updnLine: " + apiUpdnLine + ")" +
+                                " 요청방향=" + direction + ", 목표역=" + convertedEndName +
+                                ", 방향일치=" + isMatchingDirection + ", 목적지방향일치=" + isDestinationOnTrack +
+                                ", 지선여부=" + isBranchLineTrain);
+                    }
+
+                } else { // 2호선 외의 일반 노선 처리 (기존 compareRoutes 활용)
+                    System.out.println("  -> 일반 노선 열차 감지: " + apiTrainLineNm);
+                    String[] parts = apiTrainLineNm.split(" - ");
+                    String destination = parts[0].replace("행", "").trim(); // 열차의 최종 목적지 (예: "병점행" -> "병점")
+
+                    // 사용자의 요청 경로(userDesiredPathForGeneralLines)와 이 열차의 운행 방향(startName -> destination)을 비교
+                    // compareRoutes는 startName -> endName 경로와 startName -> destination 경로를 비교하여
+                    // 첫 번째 경로가 두 번째 경로의 부분 경로이거나 동일 방향인지 판단합니다.
                     int result = subwayService.compareRoutes(convertedCode, convertedStartName, convertedEndName, convertedStartName, destination);
-                    System.out.println(result);
+                    System.out.println("  -> 일반 노선 경로 비교 결과: " + result + " (" + convertedStartName + "->" + convertedEndName + " vs " + convertedStartName + "->" + destination + ")");
+
                     if (result == 1 || result == 2) {
                         matchedArrivals.add(arrival);
+                        System.out.println("  -> 일반 노선 필터링 통과: " + apiTrainLineNm + ", 결과: " + result);
+                    } else {
+                        System.out.println("  -> 일반 노선 필터링 제외: " + apiTrainLineNm + ", 경로 비교 결과: " + result);
                     }
                 }
             }
         }
-        System.out.println("필터링된 도착 정보: " + matchedArrivals);
-        return handleArrivalQueue(matchedArrivals, startName, convertedCode, direction);
+        // --- 필터링 로직 종료 ---
+
+        System.out.println("필터링된 최종 도착 정보: " + matchedArrivals);
+        // handleArrivalQueue는 기존과 동일하게 사용 (Comparator는 이전 답변에서 개선된 버전으로 가정)
+        return matchedArrivals;
+        //return handleArrivalQueue(matchedArrivals, startName, convertedCode, direction);
     }
 
     // 시간표 추출
-    protected String[] fetchPredictedTimes(int subwayCode, String startName) {
+    protected List<TimeTable> fetchPredictedTimes(int subwayCode, String startName, String direction) {
         Map<String, Object> timeAndDayType = subwayService.getTimeAndDayType(subwayCode);
         Time seoulTime = (Time) timeAndDayType.get("seoulTime");
         String currentDayType = (String) timeAndDayType.get("currentDayType");
+        String convertDirection = "up";
+        if(direction.equals("상행")) {
+            convertDirection = "up";
+        }else if(direction.equals("하행")) {
+            convertDirection = "dn";
+        }
         // 데이터베이스 도착정보 조회
-        List<TimeTable> predictTimeList = databaseService.findNextSubwayArrivals(subwayCode, startName, seoulTime, currentDayType);
-        return processPredictedArrivals(predictTimeList);
+        List<TimeTable> predictTimeTable = databaseService.findNextSubwayArrivals(subwayCode, startName, seoulTime, currentDayType, convertDirection);
+
+        return predictTimeTable;
+    }
+
+    protected List<TimeTable> dbFindRoute(int subwayCode, String startName, String trainNo, String direction) {
+        Map<String, Object> timeAndDayType = subwayService.getTimeAndDayType(subwayCode);
+        Time seoulTime = (Time) timeAndDayType.get("seoulTime");
+        String currentDayType = (String) timeAndDayType.get("currentDayType");
+        String convertDirection = "up";
+        if(direction.equals("상행")) {
+            convertDirection = "up";
+        }else if(direction.equals("하행")) {
+            convertDirection = "dn";
+        }
+        // 데이터베이스 도착정보 조회
+        List<TimeTable> predictTimeTable = databaseService.findTrainNoSubwayArrivals(subwayCode, startName, seoulTime, currentDayType, trainNo ,convertDirection);
+
+        return predictTimeTable;
     }
 
     // 구간 별 소요 시간 추출
@@ -102,7 +247,7 @@ public class SubwayProcessService {
     }
 
     // 도착정보 처리 기준 및 큐
-    private String[] handleArrivalQueue(List<SubwayArriveProcessDTO.RealtimeArrival> matched, String startName, int subwayCode, String direction) {
+    protected String[] handleArrivalQueue(List<SubwayArriveProcessDTO.RealtimeArrival> matched, String startName, int subwayCode, String direction) {
         PriorityQueue<SubwayArriveProcessDTO.RealtimeArrival> queue = new PriorityQueue<>(
                 Comparator
                         // ARVL_CD 기준 정렬
@@ -127,11 +272,14 @@ public class SubwayProcessService {
         System.out.println("정렬된 도착 정보: " + queue);
         String predictTime1String = "첫 번째 도착 정보 없음"; // 기본값으로 초기화
         String predictTime2String = "두 번째 도착 정보 없음"; // 기본값으로 초기화
+        String trainNo1String = "0";
+        String trainNo2String = "0";
 
         if (!queue.isEmpty()) {
             SubwayArriveProcessDTO.RealtimeArrival first = queue.poll();
             System.out.println(">>> PriorityQueue에서 첫 번째로 poll된 객체: " + first.getArvlMsg2() + ", ARVL_CD: " + first.getArvlCd());
             predictTime1String = handleArrivalByCriterion(first, startName, subwayCode, direction);
+            trainNo1String = first.getBtrainNo();
 
             if (!queue.isEmpty()) {
                 SubwayArriveProcessDTO.RealtimeArrival second = queue.poll();
@@ -143,7 +291,7 @@ public class SubwayProcessService {
         } else {
             System.out.println("조건에 맞는 도착 정보가 없습니다.");
         }
-        return new String[]{predictTime1String, predictTime2String};
+        return new String[]{predictTime1String, predictTime2String,trainNo1String};
     }
 
     // 데이터베이스 도착정보 처리
@@ -167,6 +315,18 @@ public class SubwayProcessService {
         }
         return new String[]{predictTime1String, predictTime2String};
     }
+
+    // 데이터베이스 열차정보 가져오기
+    protected String processPredictedTrainInfo(List<TimeTable> predictTimeList) {
+        String trainNo1String = "0";
+        String trainNo2String = "0";
+        if (predictTimeList != null && !predictTimeList.isEmpty()) {
+            TimeTable firstArrival = predictTimeList.get(0);
+            trainNo1String = firstArrival.getTrain_ID();
+        }
+        return trainNo1String;
+    }
+
 
     // 실시간 도착정보 처리
     private String handleArrivalByCriterion(SubwayArriveProcessDTO.RealtimeArrival arrival, String startName, int subwayCode, String direction) {
@@ -253,7 +413,7 @@ public class SubwayProcessService {
     }
 
     // 실시간 위치정보 현재 위치 특정
-    protected int getTranNo(RealtimeDTO data) {
+    protected String getTranNo(RealtimeDTO data) {
         String nowStation = data.getStartName();
         int subwayCode = data.getTransportLocalID();
         int convertedDirection = data.getDirection().equals("상행") ? 0 : 1; // 상행: 0, 하행: 1
@@ -278,7 +438,9 @@ public class SubwayProcessService {
             System.out.println(station.getStatnNm());
             if (station.getStatnNm().equals(nowStation) && station.getUpdnLine()==convertedDirection) {
                 // 해당 열차의 고유 번호 반환
-                return station.getTrainNo(); // trainNo가 int 타입이어야 합니다
+                int trainNo = station.getTrainNo();
+                String convertedTrainNo = Integer.toString(trainNo);
+                return convertedTrainNo ; // trainNo가 int 타입이어야 합니다
             }
         }
         // 못 찾았을 경우 예외 발생 또는 기본값 설정
@@ -287,7 +449,8 @@ public class SubwayProcessService {
 
     // 실시간 위치정보 현재 위치 추출
     protected String getLocation(RealtimeDTO data) {
-        int trainNo = data.getTrainNo(); // 열차 고유 번호
+        String trainNo = data.getTrainNo(); // 열차 고유 번호
+        int convertedTrainNo = Integer.parseInt(trainNo); // 열차 고유 번호를 int로 변환
         int subwayCode = data.getTransportLocalID(); // 지하철 노선 코드
         int convertedDirection = data.getDirection().equals("상행") ? 0 : 1; // 상행: 0, 하행: 1
         int convertedCode = subwayService.convertSubwayCode(subwayCode); // 변환 노선 코드
@@ -304,7 +467,7 @@ public class SubwayProcessService {
         // trainNo가 같은경우를 찾아 statnNm 반환
         List<RealSubwayLocationDTO.RealtimePositionDTO> stations = realSubwayLocation.getRealtimePositionList();
         for (RealSubwayLocationDTO.RealtimePositionDTO station : stations) {
-            if (station.getTrainNo() == (trainNo) && station.getUpdnLine()==convertedDirection) {
+            if (station.getTrainNo() == (convertedTrainNo) && station.getUpdnLine()==convertedDirection) {
                 // 해당 역에 위치한 열차의 현재 위치 반환
                 return station.getStatnNm(); // location이 int 타입이어야 합니다
             }

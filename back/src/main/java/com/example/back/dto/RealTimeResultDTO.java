@@ -5,8 +5,8 @@ import lombok.Data;
 
 @Data
 public class RealTimeResultDTO {
-    @JsonInclude(value = JsonInclude.Include.NON_DEFAULT)
-    private int trainNo; // 기차 번호
+    @JsonInclude(value = JsonInclude.Include.NON_EMPTY)
+    private String trainNo; // 기차 번호
     @JsonInclude(value = JsonInclude.Include.NON_EMPTY)
     private String vehId;
     private int nextRequest; // 1: 현재 대중교통 2: 다음 대중교통

@@ -1,10 +1,12 @@
 package com.example.back.service;
 
+import com.example.back.domain.TimeTable;
 import com.example.back.dto.ResultDTO;
 import com.example.back.dto.RouteIdSetDTO;
 import com.example.back.dto.bus.arrive.BusArriveProcessDTO;
 import com.example.back.dto.bus.detail.BusDetailProcessDTO;
 import com.example.back.dto.route.*;
+import com.example.back.dto.subway.arrive.SubwayArriveProcessDTO;
 import com.google.common.cache.Cache;
 import com.google.gson.JsonSyntaxException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -154,10 +156,12 @@ public class RouteService{
                         // if (index < 2) {
                         // 데이터베이스 처리 여부
                         if (subwayService.DBCode(subwayCode)) {
-                            arrivals = subwayProcessService.fetchPredictedTimes(subwayCode, startName);
+                            List<TimeTable> predictTimeTable = subwayProcessService.fetchPredictedTimes(subwayCode, startName, direction);
+                            arrivals = subwayProcessService.processPredictedArrivals(predictTimeTable);
                         } else {
                             // 실시간 도착정보 처리
-                            arrivals = subwayProcessService.processSeoulSubway(convertedCode, startName, endName, direction, secondStation);
+                            List< SubwayArriveProcessDTO.RealtimeArrival> matchedArrivals = subwayProcessService.processSeoulSubway(convertedCode, startName, endName, direction, secondStation);
+                            arrivals =  subwayProcessService.handleArrivalQueue(matchedArrivals, startName, convertedCode, direction);
                         }
 
                         // `arrivals`에서 예측 도착 시간 분리
