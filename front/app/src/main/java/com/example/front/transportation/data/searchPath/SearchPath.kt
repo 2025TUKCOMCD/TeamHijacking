@@ -31,3 +31,4 @@ data class RouteId(
     val predictTimes1: String,
     val predictTimes2: String
 ) : Serializable
+

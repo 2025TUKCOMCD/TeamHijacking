@@ -21,7 +21,7 @@ class TransportationMainActivity : AppCompatActivity() {
         val btnSavedPath: ImageButton = binding.btnSavedPath
         val btnNewPath: ImageButton = binding.btnNewPath
             //임시 버튼 생성, transportInformationActivity = 교통 안내 Activity 로 이어진다.
-            val imsiBtn: Button = binding.imsiBtt
+        // val imsiBtn: Button = binding.imsiBtt
 
         // 각 버튼의 클릭 이벤트 처리
         btnSavedPath.setOnClickListener {
@@ -39,11 +39,11 @@ class TransportationMainActivity : AppCompatActivity() {
             startActivity(intent)
         }
 
-        imsiBtn.setOnClickListener {
-            //교통 안내 Activity 로 이동됨, Dialog 창을 확인 하기 위함.
-            val intent = Intent(this, TransportInformationActivity::class.java)
-            startActivity(intent)
-        }
+//        imsiBtn.setOnClickListener {
+//            //교통 안내 Activity 로 이동됨, Dialog 창을 확인 하기 위함.
+//            val intent = Intent(this, TransportInformationActivity::class.java)
+//            startActivity(intent)
+//        }
 
     }
 

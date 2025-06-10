@@ -34,6 +34,11 @@ class TransportationNewPathActivity : AppCompatActivity() {
         var revs_longitude: Double = 0.0
         var reve_latitude: Double = 0.0
         var reve_longitude: Double = 0.0
+
+        // 출발지, 도착지 문자열을 저장할 변수 추가
+        var startAddressString: String = ""
+        var endAddressString: String = ""
+
         private val GEOCODING_API_KEY = BuildConfig.Geolocation_APIKEY // 실제 API 키로 변경
         private const val TAG = "TransportationNewPathActivity"
     }
@@ -47,29 +52,15 @@ class TransportationNewPathActivity : AppCompatActivity() {
         val addressStartEditText: TextView = binding.addressStartTextView
         val addressEndEditText: TextView = binding.addressEndTextView
         val addressConfirmBtn: Button = binding.AddressConfirmBtn
-        // 오디오 권한 요청
+
+        // 오디오 권한 요청 (onCreate에서 한 번만 호출)
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.RECORD_AUDIO), PERMISSION_REQUEST_RECORD_AUDIO)
         }
-        // 권한이 있는지 확인 (여기 에서는 위치 권한 확인) //일단 이 곳에서 먼저 주소를 넣어둠(나중에 삭제 예정)
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-            val saddress = "잠실역"
-            addressStartEditText.text = saddress
-            fetchLocation(saddress) { latitude, longitude ->
-                revs_latitude = latitude
-                revs_longitude = longitude
-                Log.d(TAG, "Start Location - Latitude: $revs_latitude, Longitude: $revs_longitude")
-            }
-            val eaddress = "낙성대역"
-            addressEndEditText.text = eaddress
-            fetchLocation(eaddress) { latitude, longitude ->
-                reve_latitude = latitude
-                reve_longitude = longitude
-                Log.d(TAG, "End Location - Latitude: $reve_latitude, Longitude: $reve_longitude")
-            }
-        } else { // 만약 권한이 없으면 권한 요청
-            ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.ACCESS_FINE_LOCATION), PERMISSION_REQUEST_ACCESS_FINE_LOCATION)
-        }
+
+        // 초기 주소 설정 및 위치 fetching
+        setupInitialLocations()
+
         // 시작 지점 STT 함수
         addressStartEditText.setOnClickListener {
             startSTT(REQUEST_CODE_SPEECH_INPUT_START)
@@ -78,32 +69,59 @@ class TransportationNewPathActivity : AppCompatActivity() {
         addressEndEditText.setOnClickListener {
             startSTT(REQUEST_CODE_SPEECH_INPUT_END)
         }
-        addressConfirmBtn.setOnClickListener{
+
+        addressConfirmBtn.setOnClickListener {
             val intent = Intent(this, TransportNewPathSearchActivity::class.java)
             intent.putExtra("startLat", revs_latitude)
             intent.putExtra("startLng", revs_longitude)
-            intent.putExtra("EndLat", reve_latitude)
-            intent.putExtra("EndLng", reve_longitude)
+            intent.putExtra("endLat", reve_latitude)
+            intent.putExtra("endLng", reve_longitude)
+            // 출발지/도착지 문자열도 Intent에 추가하여 넘깁니다.
+            intent.putExtra("departureName", startAddressString)
+            intent.putExtra("destinationName", endAddressString)
             startActivity(intent)
         }
     }
 
-    private fun startSTT(requestCode: Int) {
-        // 음성 인식을 위한 인텐트
-        val intent = Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH)
-        // 음성 인식 모델 설정
-        intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM)
-        // 음성 인식을 위한 기본 언어: 한국어
-        intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, Locale.KOREA)
-        intent.putExtra(RecognizerIntent.EXTRA_PROMPT, if (requestCode == REQUEST_CODE_SPEECH_INPUT_START) "Speak the start address..." else "Speak the end address...")
-        try {
-            startActivityForResult(intent, requestCode)
-        } catch (e: ActivityNotFoundException) {
-            e.printStackTrace()
+    // 초기 주소 설정 및 위치 정보를 가져오는 함수
+    private fun setupInitialLocations() {
+        val saddress = "장기역" // 초기 시작 주소
+        val eaddress = "운양역" // 초기 도착 주소
+
+        binding.addressStartTextView.text = saddress
+        // 콜백에서 주소 문자열도 함께 받도록 수정
+        fetchLocation(saddress) { address, latitude, longitude ->
+            startAddressString = address // 문자열 저장
+            revs_latitude = latitude
+            revs_longitude = longitude
+            Log.d(TAG, "Start Location - Address: $address, Latitude: $revs_latitude, Longitude: $revs_longitude")
+        }
+
+        binding.addressEndTextView.text = eaddress
+        // 콜백에서 주소 문자열도 함께 받도록 수정
+        fetchLocation(eaddress) { address, latitude, longitude ->
+            endAddressString = address // 문자열 저장
+            reve_latitude = latitude
+            reve_longitude = longitude
+            Log.d(TAG, "End Location - Address: $address, Latitude: $reve_latitude, Longitude: $reve_longitude")
         }
     }
 
-    // STT 이후 오게 되는 함수. 만약 REQUEST CODE == REQUEST_CODE_INPUT_START 라면 STARTADRESS 를 바꾸고 아니면 END ADDRESS 를 바꾼다
+
+    private fun startSTT(requestCode: Int) {
+        val intent = Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH)
+        intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM)
+        intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, Locale.KOREA)
+        intent.putExtra(RecognizerIntent.EXTRA_PROMPT, if (requestCode == REQUEST_CODE_SPEECH_INPUT_START) "시작 주소를 말해주세요..." else "도착 주소를 말해주세요...")
+        try {
+            startActivityForResult(intent, requestCode)
+        } catch (e: ActivityNotFoundException) {
+            Log.e(TAG, "STT Not Supported: " + e.message)
+            // 사용자에게 STT를 지원하지 않는다는 메시지를 보여주는 것이 좋습니다.
+        }
+    }
+
+    // 위도 경도 가져오기 (음성 인식 결과 처리)
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if ((requestCode == REQUEST_CODE_SPEECH_INPUT_START || requestCode == REQUEST_CODE_SPEECH_INPUT_END) && resultCode == RESULT_OK && data != null) {
@@ -112,75 +130,98 @@ class TransportationNewPathActivity : AppCompatActivity() {
                 val address = result[0]
                 if (requestCode == REQUEST_CODE_SPEECH_INPUT_START) {
                     binding.addressStartTextView.text = address
-                    fetchLocation(address) { latitude, longitude ->
+                    // 콜백에서 주소 문자열도 함께 받도록 수정
+                    fetchLocation(address) { returnedAddress, latitude, longitude ->
+                        startAddressString = returnedAddress // 문자열 저장
                         revs_latitude = latitude
                         revs_longitude = longitude
-                        Log.d(TAG, "Start Location - Latitude: $revs_latitude, Longitude: $revs_longitude")
+                        Log.d(TAG, "Start Location - Address: $returnedAddress, Latitude: $revs_latitude, Longitude: $revs_longitude")
                     }
-                } else {
+                } else { // REQUEST_CODE_SPEECH_INPUT_END
                     binding.addressEndTextView.text = address
-                    fetchLocation(address) { latitude, longitude ->
+                    // 콜백에서 주소 문자열도 함께 받도록 수정
+                    fetchLocation(address) { returnedAddress, latitude, longitude ->
+                        endAddressString = returnedAddress // 문자열 저장
                         reve_latitude = latitude
                         reve_longitude = longitude
-                        Log.d(TAG, "End Location - Latitude: $reve_latitude, Longitude: $reve_longitude")
+                        Log.d(TAG, "End Location - Address: $returnedAddress, Latitude: $reve_latitude, Longitude: $reve_longitude")
                     }
                 }
+            } else {
+                Log.w(TAG, "STT result is empty.")
             }
         }
     }
 
-    private fun fetchLocation(address: String, callback: (Double, Double) -> Unit) {
+    // fetchLocation 함수 콜백 시그니처 변경: 주소 문자열도 함께 전달하도록 수정
+    private fun fetchLocation(address: String, callback: (String, Double, Double) -> Unit) {
         Thread {
             val location = getLocationFromAddress(address)
             if (location != null) {
                 runOnUiThread {
-                    callback(location.first, location.second)
+                    // 콜백에 주소 문자열, 위도, 경도를 모두 전달
+                    callback(address, location.first, location.second)
                 }
             } else {
                 Log.e(TAG, "Failed to get location for address: $address")
+                // 사용자에게 위치 정보를 가져오지 못했다는 피드백을 줄 수 있습니다.
             }
         }.start()
     }
 
     private fun getLocationFromAddress(address: String): Pair<Double, Double>? {
         val client = OkHttpClient()
-        val url = "https://maps.googleapis.com/maps/api/geocode/json?address=${address}&key=$GEOCODING_API_KEY"
+        val encodedAddress = java.net.URLEncoder.encode(address, "UTF-8")
+        val url = "https://maps.googleapis.com/maps/api/geocode/json?address=${encodedAddress}&key=$GEOCODING_API_KEY"
         val request = Request.Builder().url(url).build()
 
         return try {
-            val response = client.newCall(request).execute() // 동기식 network 요청
+            val response = client.newCall(request).execute()
             if (response.isSuccessful) {
                 val responseBody = response.body?.string()
-                val json = JsonParser.parseString(responseBody) as JsonObject
-                val results = json["results"].asJsonArray
-                if (results.size() > 0) {
-                    val location = results[0].asJsonObject["geometry"].asJsonObject["location"].asJsonObject
-                    val latitude = location["lat"].asDouble
-                    val longitude = location["lng"].asDouble
-                    Pair(latitude, longitude)
+                if (responseBody != null) {
+                    val json = JsonParser.parseString(responseBody) as JsonObject
+                    val results = json["results"].asJsonArray
+                    if (results != null && results.size() > 0) {
+                        val location = results[0].asJsonObject["geometry"].asJsonObject["location"].asJsonObject
+                        val latitude = location["lat"].asDouble
+                        val longitude = location["lng"].asDouble
+                        Pair(latitude, longitude)
+                    } else {
+                        Log.e(TAG, "No results found for the specified address: $address")
+                        null
+                    }
                 } else {
-                    Log.e(TAG, "No results found for the specified address.")
+                    Log.e(TAG, "Geocoding API response body is null.")
                     null
                 }
             } else {
-                Log.e(TAG, "Geocoding API response was not successful")
+                Log.e(TAG, "Geocoding API response was not successful: ${response.code} - ${response.message}")
                 null
             }
         } catch (e: IOException) {
-            Log.e(TAG, "Geocoding API call failed", e)
+            Log.e(TAG, "Geocoding API call failed (IOException) for address: $address", e)
+            null
+        } catch (e: Exception) {
+            Log.e(TAG, "Geocoding API call failed (General Exception) for address: $address", e)
             null
         }
     }
 
-    // Default 함수. 일단 실행 먼저 됨. API 와의 통신을 위함
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        if (requestCode == PERMISSION_REQUEST_ACCESS_FINE_LOCATION && grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-            val address = "잠실역"
-            fetchLocation(address) { latitude, longitude ->
-                revs_latitude = latitude
-                revs_longitude = longitude
-                Log.d(TAG, "Permission Granted - Latitude: $revs_latitude, Longitude: $revs_longitude")
+        if (requestCode == PERMISSION_REQUEST_ACCESS_FINE_LOCATION) {
+            if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                Log.d(TAG, "ACCESS_FINE_LOCATION permission granted.")
+                setupInitialLocations()
+            } else {
+                Log.w(TAG, "ACCESS_FINE_LOCATION permission denied.")
+            }
+        } else if (requestCode == PERMISSION_REQUEST_RECORD_AUDIO) {
+            if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                Log.d(TAG, "RECORD_AUDIO permission granted.")
+            } else {
+                Log.w(TAG, "RECORD_AUDIO permission denied.")
             }
         }
     }
