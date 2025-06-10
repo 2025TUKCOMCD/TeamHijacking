@@ -1,5 +1,7 @@
 package com.example.front.iot.SmartHome
 
+import android.os.health.HealthStats
+
 data class DeviceStatusResponse(
     val components: Map<String, ComponentStatus>
 )
@@ -10,7 +12,12 @@ data class ComponentStatus(
     val contactSensor: ContactSensorStatus?,
     val switchLevel: CapabilityStatus?,
     val colorControl: ColorControlStatus?,
-    val custom: CustomStatus? // <- 새로 추가한 모드 정보 커스텀상태
+    val custom: CustomStatus?, // <- 새로 추가한 모드 정보 커스텀상태
+    val healthStats: HealthStats? // 온, 오프라인 확인
+)
+
+data class HealthStats(
+    val value: String
 )
 
 data class CustomStatus(

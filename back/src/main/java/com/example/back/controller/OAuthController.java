@@ -35,7 +35,7 @@ public class OAuthController {
     }
 
     /**
-     * SmartThings 인가 요청 처리 (Step 1: Authorization Code 요청)
+     * SmartThings 인가 요청 처리 (Step 1: Authorization Code 요ㅁ청)
      * 사용자를 카카오 로그인 페이지로 리다이렉트
      * GET /oauth/authorize
      */
@@ -59,8 +59,8 @@ public class OAuthController {
         // 카카오 콜백 이후 SmartThings 인가 코드를 생성할 때 사용합니다.
         String kakaoAuthUrl = UriComponentsBuilder.fromUriString("https://kauth.kakao.com/oauth/authorize")
                 .queryParam("response_type", "code")
-                .queryParam("client_id", kakaoClientId) // application.properties 또는 .env에서 직접 사용
-                .queryParam("redirect_uri", kakaoRedirectUri) // application.properties 또는 .env에서 직접 사용
+                .queryParam("client_id", "${kakao.client-id}") // application.properties 또는 .env에서 직접 사용
+                .queryParam("redirect_uri", "${kakao.redirect-uri}") // application.properties 또는 .env에서 직접 사용
                 .queryParam("scope", "profile_nickname,profile_image") // 카카오에서 요청할 스코프 (이메일 등 추가 가능)
                 .queryParam("state", String.join("|", clientId, redirectUri, scope, state != null ? state : "")) // SmartThings 정보를 state에 함께 전달
                 .build()

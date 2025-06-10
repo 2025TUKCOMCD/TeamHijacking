@@ -31,42 +31,69 @@ import com.example.front.transportation.data.searchPath.RouteId
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import android.view.accessibility.AccessibilityEvent
+import androidx.core.location.LocationManagerCompat.requestLocationUpdates
+import androidx.lifecycle.lifecycleScope
+import com.example.front.transportation.data.realTime.RealtimeDTO
+import com.example.front.transportation.data.realTime.RealtimeResponseDTO
+import com.example.front.transportation.processor.RealtimeProcessor
+import com.example.front.transportation.processor.RouteProcessor
+import kotlinx.coroutines.launch
 
-//교통 안내용 Activity
 class TransportInformationActivity : AppCompatActivity() {
 
     private lateinit var binding : ActivityTransportInformationBinding
     //imageSwitcher 에 사용할 imageView 배열 선언
-    private var transInfoImgArray = intArrayOf(1,2,3,4,5,6)
-    private lateinit var transInfoImgSwitcher: ImageSwitcher
-    private var transOrder = 0
-    private lateinit var fusedLocationClient: FusedLocationProviderClient
-    private var curLat: Double = 0.0
-    private var curLon: Double = 0.0
+    private var transInfoImgArray = intArrayOf(1,2,3,4,5,6) // 교통 안내 이미지 배열 (현재 코드에서는 직접 사용되지 않음)
+    private lateinit var transInfoImgSwitcher: ImageSwitcher // 교통 안내 이미지 스위처
+    private var transOrder = 0 // 현재 경로 단계 (0부터 시작)
+    private lateinit var fusedLocationClient: FusedLocationProviderClient // FusedLocationProviderClient 객체
+    private var curLat: Double = 0.0 //현재 위도
+    private var curLon: Double = 0.0 //현재 경도
+    private var startLat: Double = 0.0
+    private var startLng: Double = 0.0
+    private var endLat: Double = 0.0
+    private var endLng: Double = 0.0
+    private var departureName: String = "출발지" // 출발지 이름
+    private var destinationName: String = "도착지" // 도착지 이름
+
+    // Intent에서 전달받을 데이터
+    private var pathTransitType: ArrayList<Int>? = null
+    private var transitTypeNo: ArrayList<String>? = null
+    private var routeIds: ArrayList<RouteId>? = null
+
+    // 메시지 목록 (contentDescription 설정에 사용, 실제 도착 정보와는 무관)
+    private var messagelist: MutableList<String> = mutableListOf(
+        "교통 정보 업데이트 중", // 첫 번째 항목도 일반적인 대기 메시지로
+        "교통 정보 업데이트 중", // 두 번째 항목도 일반적인 대기 메시지로
+        "도착지까지 n m 남음",
+        "도착!"
+    )
+
+    // 특정 transportLocalID들이 DBUsage = 1을 사용하는 경우를 위한 Set
+    private val SPECIFIC_ROUTE_IDS_FOR_DB_USAGE = setOf(
+        107, 110, 115, 21, 22, 71, 72, 73, 74, 78, 79, 41, 42, 43, 48, 31, 51
+    )
 
     private val locationPermissionRequest = registerForActivityResult(
         ActivityResultContracts.RequestMultiplePermissions()
     ) { permissions ->
         when {
             permissions.getOrDefault(Manifest.permission.ACCESS_FINE_LOCATION, false) -> {
-                // Precise location access granted.
                 getLastLocation()
             }
             permissions.getOrDefault(Manifest.permission.ACCESS_COARSE_LOCATION, false) -> {
-                // Only approximate location access granted.
-                getLastLocation() // 필요에 따라 처리
+                getLastLocation()
             } else -> {
-            // No location access granted.
             Log.e("Location", "Location permission denied.")
         }
         }
     }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityTransportInformationBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        //위치 코드
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
 
         // 위치 권한 확인 및 요청
@@ -87,99 +114,646 @@ class TransportInformationActivity : AppCompatActivity() {
             return
         }
 
-        // 권한이 이미 있는 경우 바로 위치 정보 가져오기
         getLastLocation()
 
+        // GPS 사용 가능 여부 로그
         if (!hasGps()) {
             Log.d("GPS", "This hardware doesn't have GPS.")
-            // Fall back to functionality that doesn't use location or
-            // warn the user that location function isn't available.
-        }
-        else{
+        } else {
             Log.d("GPS", "This hardware has GPS.")
         }
-        print(hasGps())
+        println("GPS available: ${hasGps()}")
 
-        //바인딩
-        val imsiBtt2: Button = binding.imsiBtt2
-        val imsiBtt3: Button = binding.imsiBtt3
+        val imsiBtt2: Button = binding.imsiBtt2 // 이전 경로 버튼
+        val imsiBtt3: Button = binding.imsiBtt3 // 다음 경로 버튼
         transInfoImgSwitcher = binding.transInfoImgSwitcher
 
-        //imageSwitcher 에 imageView 설정 하여 이미지 표시
         initTransImgSwitcher()
 
-        //val pathTransitType = intent.getIntegerArrayListExtra("pathTransitType")
-        val pathTransitType = mutableListOf(3,1,3,2,3)
-        // Log.d("log", "pathTransitType: $pathTransitType")
-        //val transitTypeNo = intent.getStringArrayListExtra("transitTypeNo")
-        val transitTypeNo = intent.getStringArrayListExtra("transitTypeNo")
-        // Log.d("log", "transitTypeNo: $transitTypeNo") //
-        //val routeIds = intent.getSerializableExtra("routeIds") as? ArrayList<RouteId>
-        val routeIds = intArrayOf(3,2,3,1,3)
-        // 더미 데이터 실제 데이터로 바꿔야함
-        val messagelist = listOf("[10]번째 전역 (곡산) n분후 도착","목표역에 거의 다 접근함" ,"[10]번째 전역 (곡산)", "목표역에 거의 다 접근함" , "도착지까지 n m 남음", "도착!")
-        // 이미지를 클릭시 소리가 나게 세팅하고 싶음
+        // Intent에서 데이터 수신
+        pathTransitType = intent.getIntegerArrayListExtra("pathTransitType")
+        transitTypeNo = intent.getStringArrayListExtra("transitTypeNo")
+        routeIds = intent.getSerializableExtra("routeIds") as? ArrayList<RouteId>
 
+        startLat = intent.getDoubleExtra("startLat", 0.0)
+        startLng = intent.getDoubleExtra("startLng", 0.0)
+        endLat = intent.getDoubleExtra("endLat", 0.0)
+        endLng = intent.getDoubleExtra("endLng", 0.0)
+        departureName = intent.getStringExtra("departureName") ?: "출발지"
+        destinationName = intent.getStringExtra("destinationName") ?: "도착지"
 
+        Log.d("log", "pathTransitType: $pathTransitType")
+        Log.d("log", "transitTypeNo: $transitTypeNo")
         Log.d("log", "routeIds: $routeIds")
-        pathTransitType.add(4)
-        Log.d("현빈", pathTransitType[5].toString())
-        Log.d("현빈", pathTransitType.size.toString())
-        Log.d("현빈", pathTransitType.toString())
-        updateButtonImages(transOrder,pathTransitType, messagelist)
-        // 주석 처리된 임시 버튼
+
+        // 초기 교통 정보 업데이트
+        pathTransitType?.let {
+            updateCurrentTransportationInfo(transOrder)
+        }
+
+        // 이전 경로 버튼 클릭 리스너
         imsiBtt2.setOnClickListener {
-            if(transOrder!=0){
-                updateButtonImages(--transOrder,pathTransitType, messagelist)
+            if(transOrder > 0){
+                transOrder--
+                pathTransitType?.let {
+                    updateCurrentTransportationInfo(transOrder)
+                }
+            } else {
+                Toast.makeText(this, "첫 번째 경로입니다.", Toast.LENGTH_SHORT).show()
             }
-            else{
-                Toast.makeText(this, "첫번째 경로입니다.", Toast.LENGTH_SHORT).show()
-            }
-
         }
 
-
+        // 다음 경로 버튼 클릭 리스너
         imsiBtt3.setOnClickListener {
-            if(transOrder+1 < pathTransitType.size) {
-                updateButtonImages(++transOrder, pathTransitType, messagelist)
-            }
-            else{
-                Toast.makeText(this, "마지막 경로입니다.", Toast.LENGTH_SHORT).show()
+            pathTransitType?.let { list ->
+                if(transOrder + 1 < list.size) {
+                    transOrder++
+                    updateCurrentTransportationInfo(transOrder)
+                } else {
+                    transSavedDialogShow() // Toast가 끝난 후에 함수 호출
+                }
             }
         }
-
     }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        // Activity 종료 시 실시간 폴링 중지
+        RealtimeProcessor.stopPolling()
+    }
+
+    /**
+     * 기기에 GPS 기능이 있는지 확인합니다.
+     */
     private fun hasGps(): Boolean =
         packageManager.hasSystemFeature(PackageManager.FEATURE_LOCATION_GPS)
 
-    private fun updateButtonImages(order: Int,pathTransitType: List<Int>?, messagelist: List<String> = listOf()) {
-        if (pathTransitType == null) return
+    /**
+     * pathTransitType의 현재 order까지 대중교통(1 또는 2)이 몇 번 등장했는지 계산하여
+     * routeIds에 접근할 인덱스를 반환하는 헬퍼 함수
+     */
+    private fun getTransitRouteIndex(currentOrder: Int): Int {
+        var transitCount = 0
+        pathTransitType?.let { types ->
+            for (i in 0..currentOrder) {
+                val type = types.getOrNull(i)
+                if (type == 1 || type == 2) { // 지하철 또는 버스인 경우
+                    transitCount++
+                }
+            }
+        }
+        return transitCount - 1
+    }
 
-        val imageResource = when (pathTransitType[order]) {
+
+    /**
+     * transportLocalId에 따라 DBUsage 값을 결정하는 헬퍼 함수
+     * 특정 route ID에 대해 dbUsage가 1로 설정됩니다.
+     */
+    private fun getDBUsage(transportLocalId: Int): Int {
+        return if (SPECIFIC_ROUTE_IDS_FOR_DB_USAGE.contains(transportLocalId)) {
+            1
+        } else {
+            0
+        }
+    }
+
+
+    /**
+     * 현재 경로 단계에 따라 교통 정보를 업데이트하고 RealtimeProcessor를 제어합니다.
+     */
+    private fun updateCurrentTransportationInfo(order: Int) {
+        if (pathTransitType == null || routeIds == null) return
+
+        val currentTransitType = pathTransitType?.getOrNull(order)
+        val isLastStepOfOverallRoute = (order == (pathTransitType?.size ?: 0) - 1)
+
+        transInfoImgSwitcher.setImageResource(when (currentTransitType) {
             1 -> R.drawable.train_btt
             2 -> R.drawable.bus_btt
             3 -> R.drawable.human_btt
             4 -> R.drawable.complete_btt
-            else -> R.drawable.default_btt // 기본 이미지
-        }
-        Log.d("현빈", imageResource.toString())
-        transInfoImgArray[pathTransitType[order]] = imageResource
+            else -> R.drawable.default_btt
+        })
 
-        transInfoImgSwitcher.setImageResource(transInfoImgArray[pathTransitType[order]])
-        //업데이트 할때 이미지 contentDescription도 같이 해서
-        transInfoImgSwitcher.contentDescription = messagelist[transOrder]
+        if (order < messagelist.size) {
+            transInfoImgSwitcher.contentDescription = messagelist[order]
+        } else {
+            transInfoImgSwitcher.contentDescription = "교통 정보"
+        }
+
+        if (currentTransitType == 3) {
+            RealtimeProcessor.stopPolling()
+            println("RealtimeProcessor: Current step is walking (type 3), stopping polling.")
+            runOnUiThread {
+                val walkingMessage = "도보 경로입니다."
+                if (order < messagelist.size) {
+                    messagelist[order] = walkingMessage
+                } else {
+                    while (messagelist.size <= order) {
+                        messagelist.add("경로 정보 없음")
+                    }
+                    messagelist[order] = walkingMessage
+                }
+                transInfoImgSwitcher.contentDescription = messagelist[order]
+                // 도보 경로의 마지막 단계에서는 별도의 다이얼로그가 필요 없다면 호출하지 않음
+                // if (isLastStepOfOverallRoute) { transSavedDialogShow() }
+            }
+        } else if (currentTransitType == 1 || currentTransitType == 2) {
+            val routeIndex = getTransitRouteIndex(order)
+            val currentRouteId = routeIds?.getOrNull(routeIndex)
+
+            currentRouteId?.let { route ->
+                val transportLocalID = route.transportLocalID
+                val transferStations = route.transferStations // List<String> (순서대로 정류장 이름)
+                val startStationInfo = route.startStationInfo // ORD 값 (transferStations의 첫 번째에 해당)
+                val endStationInfo = route.endStationInfo     // ORD 값 (transferStations의 마지막에 해당)
+                val trainDirection = route.trainDirection
+
+                val onRealtimeResponse: (RealtimeResponseDTO) -> Unit = realtimeResponse@{ response ->
+                    Log.d("RealtimeResponse", "Received: $response")
+
+                    var updatedRealtimeDTO: RealtimeDTO? = null
+                    var currentRealtimeData = RealtimeProcessor.currentRealtimeData
+
+                    runOnUiThread {
+                        val predict1 = response.predictTimes1
+                        val predict2 = response.predictTimes2
+                        val location = response.location ?: "알 수 없음" // 노선 ORD 값 (String)
+                        val locationAsInt = location.toIntOrNull() // 노선 ORD 값 (Int)
+                        val currentBoardingStatus = currentRealtimeData?.boarding ?: 1
+                        // RealtimeDTO의 startName이 갱신된 최신 정류장 이름이어야 함
+                        val currentStationNameFromDTO = currentRealtimeData?.startName
+
+                        var dynamicMessage = ""
+                        val typeText = when (currentTransitType) {
+                            1 -> "지하철"
+                            2 -> "버스"
+                            else -> "교통수단"
+                        }
+                        val boardingText = when (currentBoardingStatus) {
+                            1 -> "탑승 전"
+                            2 -> "탑승 중"
+                            else -> "상태 알 수 없음"
+                        }
+
+                        when (currentTransitType) {
+                            2 -> { // 버스 로직
+                                val busCurrentStationText: String
+
+                                if (currentBoardingStatus == 1) { // 탑승 전
+                                    // 탑승 전이면 transferStations의 첫 번째 정류장 이름 사용
+                                    busCurrentStationText = transferStations?.firstOrNull()
+                                        ?: currentStationNameFromDTO // DTO 이름 폴백
+                                                ?: "알 수 없는 정류장 (탑승 전)"
+                                    Log.d("BusRealtime", "탑승 전: 현재 정류장은 경로 시작점: $busCurrentStationText")
+                                } else { // 탑승 중 (currentBoardingStatus == 2)
+                                    // `locationAsInt` (현재 ORD 값)와 `startStationInfo` (경로 시작 ORD 값)의 차이를 계산하여
+                                    // `transferStations` 리스트의 인덱스로 활용
+                                    val indexOffset = if (startStationInfo != null && locationAsInt != null) {
+                                        locationAsInt - startStationInfo
+                                    } else {
+                                        null
+                                    }
+
+                                    busCurrentStationText = if (indexOffset != null && indexOffset >= 0 && indexOffset < (transferStations?.size ?: 0)) {
+                                        // 계산된 인덱스를 사용하여 transferStations에서 정류장 이름 추출
+                                        transferStations?.getOrNull(indexOffset) ?: "알 수 없는 정류장 (ORD ${locationAsInt})"
+                                    } else {
+                                        // 인덱스 계산이 유효하지 않거나, transferStations가 null인 경우
+                                        currentStationNameFromDTO ?: "알 수 없는 정류장 (ORD ${locationAsInt})"
+                                    }
+                                    Log.d("BusRealtime", "탑승 중: location ORD $locationAsInt, 계산된 인덱스 $indexOffset -> $busCurrentStationText")
+                                }
+
+                                dynamicMessage = "$typeText, $boardingText. 현재 ${busCurrentStationText}. "
+                                if (predict1 != "데이터 없음" && predict1 != null) {
+                                    dynamicMessage += "첫차 ${predict1}. "
+                                }
+                                if (predict2 != "데이터 없음" && predict2 != null) {
+                                    dynamicMessage += "둘째차 ${predict2}."
+                                }
+                                if ((predict1 == "데이터 없음" || predict1 == null) && (predict2 == "데이터 없음" || predict2 == null)) {
+                                    dynamicMessage += "도착 예정 정보 없음."
+                                }
+                            }
+                            1 -> { // 지하철 로직 (이전 버전에서 수정된 부분 유지)
+                                val subwayCurrentStationText = if (currentStationNameFromDTO != null && currentStationNameFromDTO.isNotEmpty()) {
+                                    "$currentStationNameFromDTO 역"
+                                } else if (location != "알 수 없음" && location.isNotEmpty()) {
+                                    // 지하철 location이 ORD 인덱스이고 transferStations가 이름 리스트라면
+                                    // location을 인덱스로 활용 (DBUsage 0 로직과 유사)
+                                    val locationIndex = location.toIntOrNull()
+                                    if (locationIndex != null && locationIndex >= 0 && locationIndex < (transferStations?.size ?: 0)) {
+                                        transferStations?.getOrNull(locationIndex) + " 역"
+                                    } else {
+                                        "$location 역" // 매칭되지 않으면 ORD 값 그대로 표시
+                                    }
+                                } else {
+                                    "알 수 없는 역"
+                                }
+
+                                dynamicMessage = "$typeText, $boardingText. 현재 ${subwayCurrentStationText}. "
+                                if (predict1 != null && predict1 != "도착 정보 없음") {
+                                    dynamicMessage += "첫차 ${predict1}. "
+                                }
+                                if (predict2 != null && predict2 != "도착 정보 없음") {
+                                    dynamicMessage += "둘째차 ${predict2}."
+                                }
+                                if ((predict1 == null || predict1 == "도착 정보 없음") && (predict2 == null || predict2 == "도착 정보 없음")) {
+                                    dynamicMessage += "도착 예정 정보 없음."
+                                }
+                            }
+                        }
+
+                        if (order < messagelist.size) {
+                            messagelist[order] = dynamicMessage
+                        } else {
+                            while (messagelist.size <= order) {
+                                messagelist.add("경로 정보 없음")
+                            }
+                            messagelist[order] = dynamicMessage
+                        }
+                        transInfoImgSwitcher.contentDescription = messagelist[order]
+                        Log.d("TalkBack", "Updated messagelist[$order]: ${messagelist[order]}")
+                        Log.d("TalkBack", "Updated contentDescription: ${transInfoImgSwitcher.contentDescription}")
+                    }
+
+                    // --- RealtimeDTO 업데이트 로직 ---
+                    when (currentTransitType) {
+                        2 -> { // 버스 로직
+                            val receivedVehId = response.vehId
+                            val receivedLocation = response.location // 서버에서 받은 ORD 값 (String)
+                            val locationInt = receivedLocation?.toIntOrNull() ?: 0 // ORD 값 (Int)
+
+                            var currentBoarding = currentRealtimeData?.boarding ?: 1
+
+                            // 현재 위치(ORD)가 시작 정류장(ORD)과 같으면 탑승 중으로 변경
+                            if (locationInt == startStationInfo) {
+                                currentBoarding = 2
+                                Log.d("BusRealtime", "버스 위치가 시작 지점과 일치, boarding을 2(탑승 중)으로 변경")
+                            }
+
+
+                            val currentStationIdForBus = route.stationInfo?.getOrNull(locationInt) ?: 0 // ORD 값을 인덱스로 사용! 검토 필요
+
+                            // RealtimeDTO의 startName을 현재 위치의 이름으로 업데이트
+                            val updatedStartNameForBus = if (currentBoarding == 1) {
+                                transferStations?.firstOrNull() ?: ""
+                            } else {
+                                // 탑승 중일 때 location (ORD)에 해당하는 정류장 이름을 찾아서 startName으로 업데이트
+                                val indexOffset = if (startStationInfo != null && locationInt != null) {
+                                    locationInt - startStationInfo
+                                } else {
+                                    null
+                                }
+                                if (indexOffset != null && indexOffset >= 0 && indexOffset < (transferStations?.size ?: 0)) {
+                                    transferStations?.getOrNull(indexOffset) ?: ""
+                                } else {
+                                    currentRealtimeData?.startName ?: "" // 매핑 실패 시 기존 이름 유지
+                                }
+                            }
+
+                            updatedRealtimeDTO = RealtimeDTO(
+                                type = 2,
+                                boarding = currentBoarding,
+                                transportLocalID = transportLocalID,
+                                stationId = currentStationIdForBus, // Int 타입 (주의: ORD를 인덱스로 쓰는 것이 맞는지 확인 필요)
+                                vehid = receivedVehId,
+                                startOrd = (startStationInfo ?: 0),
+                                endOrd = (endStationInfo ?: 0),
+                                location = receivedLocation, // 받은 ORD 값 그대로 유지
+                                startName = updatedStartNameForBus // DTO의 startName 업데이트
+                            )
+
+                            if (response.predictTimes1 == "데이터 없음" && response.predictTimes2 == "데이터 없음") {
+                                runOnUiThread {
+                                    Toast.makeText(this@TransportInformationActivity,
+                                        "현재 버스 노선은 도착 예정 시간을 지원하지 않습니다.",
+                                        Toast.LENGTH_LONG).show()
+                                    RealtimeProcessor.stopPolling()
+                                }
+                            }
+
+                            // 버스 최종 목적지에 도착했을 때 다이얼로그 표시 (전체 경로 마지막 단계 확인 추가)
+                            if (locationInt == (endStationInfo ?: -1) && isLastStepOfOverallRoute) {
+                                Log.d("BusRealtime", "버스 최종 목적지에 도착했습니다. 경로 종료.")
+                                runOnUiThread {
+                                    Toast.makeText(this@TransportInformationActivity, "{목적지에 도착했습니다}!", Toast.LENGTH_LONG).show()
+                                    RealtimeProcessor.stopPolling()
+                                    transInfoImgSwitcher.setImageResource(R.drawable.complete_btt)
+                                    transInfoImgSwitcher.contentDescription = "도착!"
+                                    transSavedDialogShow() // 다이얼로그 호출
+                                }
+                                return@realtimeResponse
+                            }
+                        }
+                        1 -> { // 지하철 로직
+                            val receivedPredictTimes1 = response.predictTimes1
+                            val receivedTrainNo = response.trainNo
+                            val receivedLocation = response.location
+
+                            var currentBoarding = currentRealtimeData?.boarding ?: 1
+                            val currentDBUsage = getDBUsage(transportLocalID)
+
+                            val previousTrainNo: String = currentRealtimeData?.trainNo ?: "0"
+                            var finalTrainNo: String = previousTrainNo
+
+                            if (!receivedTrainNo.equals("0")) {
+                                finalTrainNo = receivedTrainNo
+                                Log.d("SubwayRealtime", "새로운 trainNo ${finalTrainNo} 수신 및 반영.")
+                            }
+                            Log.d("SubwayRealtime", "현재 transportLocalID: $transportLocalID, 결정된 dbUsage: $currentDBUsage")
+
+                            // transferStations는 List<String>이므로, 인덱스 기반으로 접근
+                            var extractedStartName = currentRealtimeData?.startName ?: (transferStations?.getOrNull(0) ?: "")
+                            var extractedSecondName = currentRealtimeData?.secondName ?: (transferStations?.getOrNull(1) ?: "")
+                            val extractedEndName = currentRealtimeData?.endName ?: (transferStations?.lastOrNull() ?: "")
+
+                            var actualLocationForComparison: String? = null
+                            if (currentDBUsage == 1) {
+                                actualLocationForComparison = receivedLocation
+                            } else { // currentDBUsage == 0
+                                val locationIndex = receivedLocation?.toIntOrNull()
+                                if (locationIndex != null && locationIndex >= 0 && locationIndex < (transferStations?.size ?: 0)) {
+                                    actualLocationForComparison = transferStations?.getOrNull(locationIndex)
+                                    Log.d("SubwayRealtime", "DBUsage 0: Converted location index $receivedLocation to station name: $actualLocationForComparison")
+                                } else {
+                                    actualLocationForComparison = receivedLocation
+                                    Log.w("SubwayRealtime", "DBUsage 0: Invalid location index received or not an index. Using raw string: $receivedLocation")
+                                }
+                            }
+
+                            // DBUsage가 1일 때 로직 (기존과 동일)
+                            if (currentBoarding == 1 && receivedPredictTimes1 == "0분 후") {
+                                Log.d("SubwayRealtime", "DBUsage 1, 탑승 전 (1), '0분 후' 도착. 탑승 여부 확인 다이얼로그 표시.")
+                                runOnUiThread {
+                                    AlertDialog.Builder(this@TransportInformationActivity)
+                                        .setTitle("지하철 도착 알림")
+                                        .setMessage("현재 ${extractedStartName}역에 열차가 도착했습니다. 탑승하셨나요?")
+                                        .setPositiveButton("네, 탑승했습니다.") { dialog, _ ->
+                                            val newBoarding = 2
+                                            Log.d("SubwayRealtime", "사용자 탑승 확인 (0분 후, DBUsage 1). boarding을 2(탑승 중)으로 변경.")
+                                            updatedRealtimeDTO = RealtimeDTO(
+                                                type = 1, boarding = newBoarding, transportLocalID = transportLocalID,
+                                                dbUsage = currentDBUsage, trainNo = finalTrainNo,
+                                                startName = extractedStartName, secondName = extractedSecondName,
+                                                endName = extractedEndName, direction = (trainDirection ?: ""),
+                                                location = receivedLocation
+                                            )
+                                            updatedRealtimeDTO?.let { RealtimeProcessor.requestUpdate(it) }
+                                            dialog.dismiss()
+                                        }
+                                        .setNegativeButton("아니요, 아직입니다.") { dialog, _ ->
+                                            Log.d("SubwayRealtime", "사용자 탑승 취소 (0분 후, DBUsage 1). boarding 1(탑승 전) 유지.")
+                                            updatedRealtimeDTO = RealtimeDTO(
+                                                type = 1, boarding = currentBoarding, transportLocalID = transportLocalID,
+                                                dbUsage = currentDBUsage, trainNo = finalTrainNo,
+                                                startName = extractedStartName, secondName = extractedSecondName,
+                                                endName = extractedEndName, direction = (trainDirection ?: ""),
+                                                location = receivedLocation
+                                            )
+                                            updatedRealtimeDTO?.let { RealtimeProcessor.requestUpdate(it) }
+                                            dialog.dismiss()
+                                        }
+                                        .setCancelable(false)
+                                        .show()
+                                }
+                                return@realtimeResponse
+                            } else if (currentBoarding == 2 && receivedPredictTimes1 == "0분 후") {
+                                Log.d("SubwayRealtime", "DBUsage 1, 탑승 중 (2), '0분 후' 도착. 다음 역으로 이동.")
+                                val currentStationIndex = transferStations?.indexOf(extractedStartName) ?: -1
+                                if (currentStationIndex != -1 && currentStationIndex < (transferStations?.size ?: 0) - 1) {
+                                    val nextStationName = transferStations?.getOrNull(currentStationIndex + 1) ?: extractedStartName
+                                    val nextNextStationName = transferStations?.getOrNull(currentStationIndex + 2) ?: ""
+                                    Log.d("SubwayRealtime", "현재 역 (${extractedStartName}) -> 다음 역으로 이동: ${nextStationName}")
+                                    runOnUiThread {
+                                        if (nextStationName == extractedEndName) {
+                                            Toast.makeText(this@TransportInformationActivity, "${nextStationName}역입니다. 내리실 준비를 해주세요.", Toast.LENGTH_LONG).show()
+                                        } else {
+                                            Toast.makeText(this@TransportInformationActivity, "${nextStationName}역에 도착했습니다. 다음 역으로 진행합니다.", Toast.LENGTH_SHORT).show()
+                                        }
+                                    }
+                                    updatedRealtimeDTO = RealtimeDTO(
+                                        type = 1, boarding = 2, transportLocalID = transportLocalID,
+                                        dbUsage = currentDBUsage, trainNo = finalTrainNo,
+                                        startName = nextStationName, secondName = nextNextStationName,
+                                        endName = extractedEndName, direction = (trainDirection ?: ""),
+                                        location = receivedLocation
+                                    )
+                                } else if (extractedStartName == extractedEndName && isLastStepOfOverallRoute) {
+                                    Log.d("SubwayRealtime", "DBUsage 1, 최종 목적지에 도착했습니다. 경로 종료.")
+                                    runOnUiThread {
+                                        Toast.makeText(this@TransportInformationActivity,
+                                            "목적지에 도착했습니다!",
+                                            Toast.LENGTH_LONG).show()
+                                        RealtimeProcessor.stopPolling()
+                                        transInfoImgSwitcher.setImageResource(R.drawable.complete_btt)
+                                        transInfoImgSwitcher.contentDescription = "도착!"
+                                        transSavedDialogShow() // 다이얼로그 호출
+                                    }
+                                    return@realtimeResponse
+                                }
+                                updatedRealtimeDTO?.let { RealtimeProcessor.requestUpdate(it) }
+                                return@realtimeResponse
+                            }
+                            // --- DBUsage가 0일 때: location 비교가 우선적으로 중요 ---
+                            else {
+                                if (currentBoarding == 1 && actualLocationForComparison == extractedStartName) {
+                                    Log.d("SubwayRealtime", "DBUsage 0, location(${receivedLocation})이 출발역(${extractedStartName})과 일치. 탑승 여부 확인 다이얼로그 표시.")
+                                    runOnUiThread {
+                                        AlertDialog.Builder(this@TransportInformationActivity)
+                                            .setTitle("지하철 탑승 확인")
+                                            .setMessage("현재 ${extractedStartName}역에 열차가 도착했습니다. 지하철에 탑승하셨나요?")
+                                            .setPositiveButton("네, 탑승했습니다.") { dialog, _ ->
+                                                val newBoarding = 2
+                                                Log.d("SubwayRealtime", "사용자 탑승 확인 (DBUsage 0). boarding을 2(탑승 중)으로 변경.")
+                                                updatedRealtimeDTO = RealtimeDTO(
+                                                    type = 1,
+                                                    boarding = newBoarding,
+                                                    transportLocalID = transportLocalID,
+                                                    dbUsage = currentDBUsage,
+                                                    trainNo = finalTrainNo,
+                                                    startName = extractedStartName,
+                                                    secondName = extractedSecondName,
+                                                    endName = extractedEndName,
+                                                    direction = (trainDirection ?: ""),
+                                                    location = receivedLocation
+                                                )
+                                                updatedRealtimeDTO?.let { RealtimeProcessor.requestUpdate(it) }
+                                                dialog.dismiss()
+                                            }
+                                            .setNegativeButton("아니요, 아직입니다.") { dialog, _ ->
+                                                val newBoarding = 1
+                                                val newTrainNo = "0"
+                                                Log.d("SubwayRealtime", "사용자 탑승 취소 (DBUsage 0). boarding 1(탑승 전) 유지, trainNo ${newTrainNo}으로 초기화.")
+                                                updatedRealtimeDTO = RealtimeDTO(
+                                                    type = 1,
+                                                    boarding = newBoarding,
+                                                    transportLocalID = transportLocalID,
+                                                    dbUsage = currentDBUsage,
+                                                    trainNo = newTrainNo,
+                                                    startName = extractedStartName,
+                                                    secondName = extractedSecondName,
+                                                    endName = extractedEndName,
+                                                    direction = (trainDirection ?: ""),
+                                                    location = receivedLocation
+                                                )
+                                                updatedRealtimeDTO?.let { RealtimeProcessor.requestUpdate(it) }
+                                                dialog.dismiss()
+                                            }
+                                            .setCancelable(false)
+                                            .show()
+                                    }
+                                    return@realtimeResponse
+                                } else if (currentBoarding == 2 && actualLocationForComparison == extractedSecondName) {
+                                    Log.d("SubwayRealtime", "DBUsage 0, 탑승 중 (2), 다음 역 (${extractedSecondName})에 도착.")
+                                    val currentStationIndex = transferStations?.indexOf(extractedStartName) ?: -1
+                                    if (currentStationIndex != -1 && currentStationIndex < (transferStations?.size ?: 0) - 1) {
+                                        val nextStationName = transferStations?.getOrNull(currentStationIndex + 1) ?: extractedStartName
+                                        val nextNextStationName = transferStations?.getOrNull(currentStationIndex + 2) ?: ""
+                                        Log.d("SubwayRealtime", "현재 역 (${extractedStartName}) -> 다음 역으로 이동: ${nextStationName}")
+                                        runOnUiThread {
+                                            if (nextStationName == extractedEndName) {
+                                                Toast.makeText(this@TransportInformationActivity,
+                                                    "${nextStationName}역입니다. 내리실 준비를 해주세요.",
+                                                    Toast.LENGTH_LONG).show()
+                                            } else {
+                                                Toast.makeText(this@TransportInformationActivity,
+                                                    "${nextStationName}역에 도착했습니다. 다음 역으로 진행합니다.",
+                                                    Toast.LENGTH_SHORT).show()
+                                            }
+                                        }
+                                        updatedRealtimeDTO = RealtimeDTO(
+                                            type = 1,
+                                            boarding = 2,
+                                            transportLocalID = transportLocalID,
+                                            dbUsage = currentDBUsage,
+                                            trainNo = finalTrainNo,
+                                            startName = nextStationName,
+                                            secondName = nextNextStationName,
+                                            endName = extractedEndName,
+                                            direction = (trainDirection ?: ""),
+                                            location = receivedLocation
+                                        )
+                                    } else if (extractedStartName == extractedEndName && isLastStepOfOverallRoute) {
+                                        Log.d("SubwayRealtime", "DBUsage 0, 최종 목적지에 도착했습니다. 경로 종료.")
+                                        runOnUiThread {
+                                            Toast.makeText(this@TransportInformationActivity,
+                                                "목적지에 도착했습니다!",
+                                                Toast.LENGTH_LONG).show()
+                                            RealtimeProcessor.stopPolling()
+                                            transInfoImgSwitcher.setImageResource(R.drawable.complete_btt)
+                                            transInfoImgSwitcher.contentDescription = "도착!"
+                                            transSavedDialogShow() // 다이얼로그 호출
+                                        }
+                                        return@realtimeResponse
+                                    }
+                                    updatedRealtimeDTO?.let { RealtimeProcessor.requestUpdate(it) }
+                                    return@realtimeResponse
+                                }
+                            }
+                            updatedRealtimeDTO = RealtimeDTO(
+                                type = 1,
+                                boarding = currentBoarding,
+                                transportLocalID = transportLocalID,
+                                dbUsage = currentDBUsage,
+                                trainNo = finalTrainNo,
+                                startName = extractedStartName,
+                                secondName = extractedSecondName,
+                                endName = extractedEndName,
+                                direction = (trainDirection ?: ""),
+                                location = receivedLocation
+                            )
+                        }
+                    }
+
+                    updatedRealtimeDTO?.let {
+                        RealtimeProcessor.requestUpdate(it)
+                    }
+                }
+
+                val initialRealtimeDTO: RealtimeDTO? = when (currentTransitType) {
+                    2 -> { // 버스 초기 DTO
+                        // 초기 boarding은 1 (탑승 전)이므로, transferStations의 첫 번째 이름을 startName으로 사용
+                        val initialStartNameForBus = transferStations?.firstOrNull() ?: ""
+                        RealtimeDTO(
+                            type = 2, boarding = 1, transportLocalID = transportLocalID,
+                            stationId = (route.stationInfo?.first() ?: 0), // route.stationInfo는 List<Int>로 가정하고 첫 번째 ID 사용
+                            vehid = null,
+                            startOrd = (startStationInfo ?: 0),
+                            endOrd = (endStationInfo ?: 0),
+                            location = "0", // 초기 location은 0으로 설정
+                            startName = initialStartNameForBus // 초기 startName 설정
+                        )
+                    }
+                    1 -> { // 지하철 초기 DTO
+                        val initialDBUsage = getDBUsage(transportLocalID)
+                        Log.d("SubwayRealtime", "초기 RealtimeDTO - transportLocalID: $transportLocalID, initialDBUsage: $initialDBUsage")
+                        RealtimeDTO(
+                            type = 1, boarding = 1, transportLocalID = transportLocalID,
+                            dbUsage = initialDBUsage, trainNo = "0",
+                            startName = transferStations?.getOrNull(0) ?: "",
+                            secondName = transferStations?.getOrNull(1) ?: "",
+                            endName = transferStations?.lastOrNull() ?: "",
+                            direction = (trainDirection ?: ""),
+                            location = "null"
+                        )
+                    }
+                    else -> null
+                }
+
+                initialRealtimeDTO?.let {
+                    RealtimeProcessor.stopPolling()
+                    RealtimeProcessor.startPolling(
+                        endpoint = "/api/realTime",
+                        initialRealtimeData = it,
+                        onResponse = onRealtimeResponse,
+                        onError = { errorMessage, errorCode ->
+                            runOnUiThread {
+                                if (errorCode == 500) {
+                                    Toast.makeText(this@TransportInformationActivity,
+                                        "현재 노선은 실시간 정보 조회를 지원하지 않습니다.",
+                                        Toast.LENGTH_LONG).show()
+                                    RealtimeProcessor.stopPolling()
+                                } else {
+                                    Toast.makeText(this@TransportInformationActivity,
+                                        "실시간 정보 조회 중 오류 발생: $errorMessage",
+                                        Toast.LENGTH_LONG).show()
+                                }
+                            }
+                        }
+                    )
+                } ?: run {
+                    RealtimeProcessor.stopPolling()
+                }
+            } ?: run {
+                RealtimeProcessor.stopPolling()
+                Log.e("RouteInfo", "currentRouteId is null for order $order. Stopping polling.")
+            }
+        }
     }
 
+    // 기존 transSavedDialogShow 함수는 변경 없이 유지됩니다.
 
+
+
+    /**
+     * 현재 위치를 가져오는 더미 함수. 실제 구현에서는 FusedLocationProviderClient를 사용하여 위치를 요청해야 합니다.
+     * `getLastLocation`에서 실제 위치를 가져오므로 이 함수는 사용되지 않을 것으로 보입니다.
+     */
     private fun getCurrentLocation(): Location {
-        // Implement logic to get the current location
-        // This is a placeholder implementation
+        // 실제로는 FusedLocationProviderClient.getCurrentLocation 또는 LocationRequest 등을 사용하여 위치를 가져와야 합니다.
+        // 현재는 더미 Location 객체를 반환합니다.
         return Location("provider")
     }
 
     /* dialog 관련 function */
+
+    /**
+     * 경로 저장 여부를 묻는 다이얼로그를 표시합니다.
+     */
     private fun transSavedDialogShow(){
-        // 뷰 바인딩 확인
         val transSavedDialogBinding = try {
             TransSavedDialogBinding.inflate(layoutInflater)
         } catch (e: Exception) {
@@ -192,36 +766,33 @@ class TransportInformationActivity : AppCompatActivity() {
             return
         }
 
-        //Alertdialog.Builder 를 통한 다이얼로그 생성
         val dialog = AlertDialog.Builder(this, R.style.CustomDialogTheme)
             .setView(transSavedDialogBinding.root)
             .create()
 
-        //dialog 동작 후 크기 조정
         dialog.show()
         dialog.window?.setLayout(
             (resources.displayMetrics.widthPixels * 0.9).toInt(), // 화면 너비의 90%
             LinearLayout.LayoutParams.WRAP_CONTENT
         )
 
-        //버튼 관련 변수 설정
         val yesSavedBtt: TextView = transSavedDialogBinding.YesSavedBtt
         val noSavedBtt: TextView = transSavedDialogBinding.NoSavedBtt
 
-        //버튼 관련 설정 진행
         yesSavedBtt.setOnClickListener{
-            //Yes 클릭 시 동작
-            transSavedNicknameDialogShow()
+             transSavedNicknameDialogShow() // '예' 선택 시 별명 설정 다이얼로그 표시
             dialog.dismiss()
-            //원하는 추가 작업
         }
 
         noSavedBtt.setOnClickListener{
-            dialog.dismiss()
+            dialog.dismiss() // '아니오' 선택 시 다이얼로그 닫기
         }
     }
 
-    //다이얼로그 의 yes 버튼 클릭 시 동작 되어야 할 코드.
+
+    /**
+     * 저장할 경로의 별명을 입력받는 다이얼로그를 표시합니다.
+     */
     private fun transSavedNicknameDialogShow(){
         val transSavedConfirmDialogBinding = try {
             TransSavedConfirmDialogBinding.inflate(layoutInflater)
@@ -235,68 +806,86 @@ class TransportInformationActivity : AppCompatActivity() {
             return
         }
 
-        //Alertdialog.Builder 를 통한 다이얼로그 생성
         val dialog2 = AlertDialog.Builder(this, R.style.CustomDialogTheme)
             .setView(transSavedConfirmDialogBinding.root)
             .create()
 
-        //다이얼로그 동작 후 크기 조정
         dialog2.show()
         dialog2.window?.setLayout(
-            (resources.displayMetrics.widthPixels * 0.9).toInt(), // 화면 너비의 90%
+            (resources.displayMetrics.widthPixels * 0.9).toInt(),
             LinearLayout.LayoutParams.WRAP_CONTENT)
 
-        //요소 바인딩
         val transSavedConfirmBtt: TextView = transSavedConfirmDialogBinding.transSavedConfirmBtt
         val cancelBtt: TextView = transSavedConfirmDialogBinding.cancelBtt
         val addressNickNameEditText: EditText = transSavedConfirmDialogBinding.addressNickNameEditText
         val savedConfirmTextView: TextView = transSavedConfirmDialogBinding.savedConfirmTextView
 
         transSavedConfirmBtt.setOnClickListener{
-            //텍스트 입력 확인
-            if(!TextUtils.isEmpty(addressNickNameEditText.getText())){
-                //만약 textLine 내에 text 가 입력 되었다면
-                //그 text 를 외부로 전달,  경로의 값을 데이터베이스 에 save 하도록 구현 필요
-                Log.d("log","텍스트 전달됨. ${addressNickNameEditText.getText()}")
-                dialog2.dismiss()
+            if(!TextUtils.isEmpty(addressNickNameEditText.text)){ // 별명이 비어있지 않은 경우
+                Log.d("log","텍스트 전달됨. ${addressNickNameEditText.text}")
+                lifecycleScope.launch {
+                    val savedSuccessfully = RouteProcessor.DBSaveRoute(
+                     departureName,
+                     destinationName,
+                     startLat,
+                     startLng,
+                     endLat,
+                     endLng,
+                    addressNickNameEditText.text.toString() // 별명
+                 )
+                    if (savedSuccessfully) {
+                        Toast.makeText(this@TransportInformationActivity, "경로가 저장되었습니다!", Toast.LENGTH_SHORT).show()
+                        dialog2.dismiss() // 저장 성공 시 다이얼로그 닫기
+                    } else {
+                        Toast.makeText(this@TransportInformationActivity, "경로 저장에 실패했습니다.", Toast.LENGTH_SHORT).show()
+                        // 실패 시 다이얼로그를 닫지 않거나, 다른 피드백 제공
+                    }
+                }
             }else{
-                //만약 비어 있다면, "별명을 빈 칸으로 지정할 수 없습니다" 출력
-                savedConfirmTextView.text = "별명을 빈 칸으로 지정할 수 없습니다."
+                savedConfirmTextView.text = "별명을 빈 칸으로 지정할 수 없습니다." // 별명이 빈 경우 오류 메시지
             }
         }
 
-        //취소 버튼
         cancelBtt.setOnClickListener {
-            dialog2.dismiss();
+            dialog2.dismiss()
         }
     }
 
-    //imgSwitcher 초기화 function
+
+    /**
+     * ImageSwitcher를 초기화하고 기본 이미지를 설정합니다.
+     */
     private fun initTransImgSwitcher(){
-        Log.d("현빈", "함수입성")
-        transInfoImgSwitcher.setFactory({val imgView = ImageView(applicationContext)
+        Log.d("hyunbin", "함수 입성")
+        transInfoImgSwitcher.setFactory({
+            val imgView = ImageView(applicationContext)
             imgView.scaleType = ImageView.ScaleType.FIT_CENTER
-            Log.d("현빈", "버그1")
-            //imgView.setPadding(2, 2, 2, 2)
+            Log.d("hyunbin", "버그1")
             imgView
         })
-        Log.d("현빈", "버그2")
-        //imageSwitcher 에 imageView 설정
+        Log.d("hyunbin", "버그2")
         transInfoImgSwitcher.setImageResource(R.drawable.default_btt)
-        Log.d("현빈", "버그3")
+        Log.d("hyunbin", "버그3")
     }
 
-    /* 교통 안내 변경 시, 버스, 지하철, ... 에 따라 사진 바뀌도록 구현 */
+
+    /**
+     * (현재 사용되지 않는) ImageSwitcher의 이미지를 다음으로 변경하는 함수입니다.
+     * `transInfoImgArray`가 더미 데이터로 보이며, `updateCurrentTransportationInfo`에서 직접 이미지를 설정합니다.
+     */
     private fun whatIsNext(index:Int = 0) {
-        //만약 배열의 크기 보다 크다면 0으로 바꾼다.
-        if(index>=transInfoImgArray.size) {
+        if(index >= transInfoImgArray.size) {
             transInfoImgSwitcher.setImageResource(transInfoImgArray[0])
         }else{
             transInfoImgSwitcher.setImageResource(transInfoImgArray[index])
         }
-
-        return;
+        return
     }
+
+
+    /**
+     * 마지막으로 알려진 위치를 가져오거나, 가져올 수 없을 경우 위치 업데이트를 요청합니다.
+     */
     private fun getLastLocation() {
         try {
             fusedLocationClient.lastLocation
@@ -304,11 +893,10 @@ class TransportInformationActivity : AppCompatActivity() {
                     location?.let {
                         curLat = it.latitude
                         curLon = it.longitude
-                        Log.d("현빈", "Latitude: $curLat, Longitude: $curLon")
-                        // 얻은 위도, 경도 사용
+                        Log.d("hyunbin", "Latitude: $curLat, Longitude: $curLon")
                     } ?: run {
-                        Log.w("현빈", "Last known location was null, try requesting location updates.")
-                        requestLocationUpdates() // 마지막 위치가 없는 경우 업데이트 요청
+                        Log.w("hyunbin", "Last known location was null, try requesting location updates.")
+                        requestLocationUpdates() // 마지막 위치가 없으면 위치 업데이트 요청
                     }
                 }
                 .addOnFailureListener { e ->
@@ -319,11 +907,13 @@ class TransportInformationActivity : AppCompatActivity() {
         }
     }
 
-    private fun requestLocationUpdates() {
-        // 위치 업데이트 요청 설정 (원하는 정확도, 빈도 등)
-        // ...
 
-        // fusedLocationClient.requestLocationUpdates(...) // 구현 필요
-        Log.w("Location", "requestLocationUpdates() not fully implemented.")
+    /**
+     * 위치 업데이트를 요청하는 함수입니다. 현재는 구현이 미완성입니다.
+     * 주기적인 위치 업데이트가 필요하다면 이 함수를 완성해야 합니다.
+     */
+    private fun requestLocationUpdates() {
+        Log.w("Location", "requestLocationUpdates() not fully implemented. Implement LocationRequest and LocationCallback for continuous updates.")
+        // TODO: LocationRequest 및 LocationCallback을 사용하여 주기적인 위치 업데이트 로직 구현
     }
 }
