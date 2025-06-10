@@ -54,6 +54,7 @@ public class SmartThingsAuthService {
                     .onStatus(status -> status.is5xxServerError(), response -> response.bodyToMono(String.class).map(body -> new WebClientResponseException(response.statusCode().value(), response.statusCode().toString(), null, body.getBytes(), null)))
                     .bodyToMono(Map.class)
                     .block();
+            System.out.println("SmartThings token exchange response: " + tokenResponse); // log.info 대신 System.out.println 사용
 
             if (tokenResponse == null || !tokenResponse.containsKey("access_token")) {
                 System.err.println("SmartThings token exchange failed. No access_token in response: " + tokenResponse); // 오류는 System.err.println

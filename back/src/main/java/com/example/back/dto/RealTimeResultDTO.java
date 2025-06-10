@@ -13,6 +13,6 @@ public class RealTimeResultDTO {
     @JsonInclude(value = JsonInclude.Include.NON_EMPTY)
     private String location; // 현재 위치
 
-    private String predictTimes1;
-    private String predictTimes2;
+    private String predictTimes1 = "데이터 없음";
+    private String predictTimes2 = "데이터 없음";
 }

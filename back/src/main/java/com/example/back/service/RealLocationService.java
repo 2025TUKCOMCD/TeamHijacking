@@ -252,16 +252,23 @@ public class RealLocationService {
         BusArriveProcessDTO.arriveDetail busArrivals = apiService.fetchAndBusArrive(data.getStationId(),data.getTransportLocalID(),data.getStartOrd());
         String vehId = busArrivals.getMsgBody().getItemList().get(0).getVehId1();
         System.out.println("Bus Arrivals: " + busArrivals);
+        if(!vehId.equals("0")){
+            RealBusLocationDTO busLocations = apiService.fetchAndBusLocation(data.getVehid());
+            String stOrd= busLocations.getMsgBody().getItemList().get(0).getStOrd();
+            realTimeResultDTO.setLocation(stOrd); // 현재 위치 정보
+        }
+
         if (busArrivals != null && busArrivals.getMsgBody() != null && busArrivals.getMsgBody().getItemList() != null) {
             List<BusArriveProcessDTO.Item> itemList = busArrivals.getMsgBody().getItemList();
             if (!itemList.isEmpty()) {
                 System.out.println("Item List: " + itemList);
+                System.out.println("Item List: " + itemList);
                 predictTime1String = itemList.get(0).getArrmsg1(); // 첫 번째 예측 시간
                 predictTime2String = itemList.get(0).getArrmsg2(); // 두 번째 예측 시간
+            }else if(itemList == null ||itemList.isEmpty()){
+                predictTime1String = "도착 정보 없음";
+                predictTime2String = "도착 정보 없음";
             }
-        }else{
-            predictTime1String = "도착 정보 없음";
-            predictTime2String = "도착 정보 없음";
         }
 
         realTimeResultDTO.setNextRequest(1); // 다음 대중교통 정보 요청
