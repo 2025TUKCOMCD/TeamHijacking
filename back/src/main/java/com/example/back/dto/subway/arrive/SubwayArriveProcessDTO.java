@@ -28,6 +28,7 @@ public class SubwayArriveProcessDTO {
         private String barvlDt;
         private String statnId;
         private String statnNm;
+        private String btrainNo;
         private String bstatnId;
         private String bstatnNm;
         private String arvlMsg2;

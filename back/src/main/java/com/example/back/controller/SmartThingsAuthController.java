@@ -9,11 +9,12 @@ import org.springframework.ui.Model; // HTML 템플릿에 데이터 전달용
 import org.springframework.web.bind.annotation.GetMapping; // GET 요청으로 변경
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 
-@Controller // View를 반환하므로 @Controller 사용
+@RestController // View를 반환하므로 @Controller 사용
 @RequestMapping("/callback") // SmartThings redirect_uri와 일치해야 합니다. (예: https://seemore.io.kr/callback)
 @RequiredArgsConstructor
 @Slf4j // 로깅 사용을 원한다면 주석 해제 (IntelliJ Lombok 설정 필요)
@@ -21,9 +22,6 @@ public class SmartThingsAuthController {
 
     private final SmartThingsAuthService smartThingsAuthService;
 
-    public SmartThingsAuthController(SmartThingsAuthService smartThingsAuthService) {
-        this.smartThingsAuthService = smartThingsAuthService;
-    }
 
     // @RequiredArgsConstructor가 생성자를 자동으로 만들어주므로 수동으로 추가할 필요 없습니다.
     // public SmartThingsAuthController(SmartThingsAuthService smartThingsAuthService) {
@@ -40,6 +38,7 @@ public class SmartThingsAuthController {
      * @param model Thymeleaf 템플릿에 데이터를 전달하기 위한 Model 객체
      * @return HTML 템플릿 이름 (성공 또는 실패 페이지)
      */
+
     @GetMapping // 이 @GetMapping은 클래스 레벨의 @RequestMapping("/callback")에 대한 상대 경로를 의미합니다.
     public String handleSmartThingsCallback(
             @RequestParam("code") String code,
@@ -74,6 +73,7 @@ public class SmartThingsAuthController {
         }
 
         try {
+            System.out.println(code+ " " + state + " " + userId); // 디버깅용 출력
             smartThingsAuthService.exchangeCodeForTokens(code, state, userId);
 
             model.addAttribute("success", true);

@@ -33,7 +33,6 @@ public class RouteTimeService {
         Map<String, Integer> stationSLLTravelTime = new HashMap<>();
         Map<String, Integer> stationGTXTravelTime = new HashMap<>();
 
-
         //  메인 노선 (연천 ~ 구로)
         station1TravelTime.put("연천-전곡", 8);
         station1TravelTime.put("전곡-청산", 5);
