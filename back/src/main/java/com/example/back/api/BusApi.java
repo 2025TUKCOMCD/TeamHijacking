@@ -16,15 +16,12 @@ public interface BusApi {
             @Query("resultType") String resultType
     );
 
-    // 버스 실시간 위치정보
-    @GET("buspos/getBusPosByRouteSt")
-    Call<ResponseBody> getBusPosByRouteSt(
-            @Query("ServiceKey")String ServiceKey,
-            @Query("busRouteId")int busRouteId,
-            @Query("startOrd")int startOrd,
-            @Query("endOrd")int endOrd,
-            @Query("resultType")String resultType
+    // 특정 버스 실시간 위치정보
+    @GET("buspos/getBusPosByVehId")
+    Call<ResponseBody> getBusPosByVehId(
+            @Query("ServiceKey") String ServiceKey,
+            @Query("vehId") String vehId,
+            @Query("resultType") String resultType
     );
-
 
 }

@@ -3,23 +3,18 @@ package com.example.front.login
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
-import android.util.Log.e
 import android.widget.ImageButton
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.front.MainActivity
 import com.example.front.databinding.ActivityLoginBinding
-import com.example.front.login.data.User
-import com.example.front.login.processor.RetrofitClient
+import com.example.front.login.data.UserRequest
 import com.example.front.login.processor.UserProcessor
 import com.kakao.sdk.auth.model.OAuthToken
 import com.kakao.sdk.common.model.ClientError
 import com.kakao.sdk.common.model.ClientErrorCause
 import com.kakao.sdk.user.UserApiClient
 import com.kakao.sdk.common.util.Utility
-import retrofit2.Call
-import retrofit2.Response
-import com.kakao.sdk.auth.model.Prompt
 
 
 class LoginActivity : AppCompatActivity() {
@@ -48,30 +43,30 @@ class LoginActivity : AppCompatActivity() {
     private fun kakaoLogin() {
 
         try {
-            // kakaoTalk 설치 여부 확인 후 로그인 실행, else 카카오 계정 으로 로그인
+                    // kakaoTalk 설치 여부 확인 후 로그인 실행
             if (UserApiClient.instance.isKakaoTalkLoginAvailable(this)) {
-                Log.d("login", "kakaoTalk 설치 되어 있음")
+                                Log.d("login", "kakaoTalk 설치 되어 있음")
                 UserApiClient.instance.loginWithKakaoTalk(this) { token, error ->
-                    Log.d("login", "callback 실행됨 - loginWithKaKaoTalk")
+                                Log.d("login", "callback 실행됨 - loginWithKaKaoTalk")
 
-                    //kakaoTalk 설치 후 device 권한 요청 화면 에서 로그인 취소한 경우 의도적 로그인 취소로 보고 카카오 계정 로그인 시도 없이 로그인 취소로 처리(예: 뒤로 가기)
+                    //의도적 로그인 취소 체크
                     if (error is ClientError && error.reason == ClientErrorCause.Cancelled) {
                         return@loginWithKakaoTalk
                     }
                     handleLoginResult(token, error) //콜백을 함수로 분리
                 }
             } else {
-                Log.d("login", "kakaoTalk 설치 되어 있지 않음, 계정 로그인 시도")
+                                Log.d("login", "kakaoTalk 설치 되어 있지 않음, 계정 로그인 시도")
                 UserApiClient.instance.loginWithKakaoAccount(
                     context = this,
                     prompts = listOf(com.kakao.sdk.auth.model.Prompt.LOGIN)
                 ) { token, error ->
-                    Log.d("login", "callback 실행됨 - login With kakaoAccount")
+                                Log.d("login", "callback 실행됨 - login With kakaoAccount")
                     handleLoginResult(token, error)
                 }
             }
         } catch (e: Exception) {
-            Log.e("login", "로그인 실행 중 예외 발생: ${e.message}")
+                                Log.e("login", "로그인 실행 중 예외 발생: ${e.message}")
         }
 
 
@@ -99,7 +94,9 @@ class LoginActivity : AppCompatActivity() {
     private fun fetchKakaoUserInfo() {
         Log.d("login", "fetch kakao UserInfo() 실행됨")
 
+
         UserApiClient.instance.me { user, error ->
+            Log.d("login", user?.kakaoAccount?.email.toString())
             if (error != null) {
                 Toast.makeText(this, "사용자 정보 요청 실패: ${error.message}", Toast.LENGTH_SHORT).show()
                 Log.e("login","사용자 정보 요청 실패: ${error.message}")
@@ -128,13 +125,18 @@ class LoginActivity : AppCompatActivity() {
                         "\n 닉네임: ${user.kakaoAccount?.profile?.nickname}")
 
                 //사용자 정보 객체 생성
-                val user = User(
+                val user = UserRequest(
                     name = "${user.kakaoAccount?.profile?.nickname}",
-                    loginId = "${user.id}")
+                    loginId = "${user.id}",
+                    email = "${user.kakaoAccount?.email}"
+                )
 
-                //리스폰스 확인
+                Log.d("login", "객체 생성 제대로 됨")
 
+                //response 확인, 객체 response 받기 전 오류면
+                //registerUser에서 오류가 난 것 같다
                 UserProcessor.registerUser(user) { response ->
+                    Log.d("login", response.code().toString())
                     when (response.code()) {
                         201 -> {
                             val registeredUser = response.body()
@@ -153,18 +155,23 @@ class LoginActivity : AppCompatActivity() {
                             Toast.makeText(this, "등록 실패 (오류 코드: ${response.code()})", Toast.LENGTH_SHORT).show()
                         }
                     }
+
+                    Log.d("login", "등록 처리도 잘 됨 안 되었을수도")
                 }
+                moveToMain("일단아무거나")
+
             }
         }
         //사용자 정보를 활용해 추가 로직 구현 가능
     }
 
     // sharedPreferences 에 로그인 정보 저장
-    private fun saveLoginInfo(user: User) {
+    private fun saveLoginInfo(user: UserRequest) {
         val sharedPref = getSharedPreferences("userPrefs", MODE_PRIVATE)
         with(sharedPref.edit()) {
             putString("loginId", user.loginId)
             putString("name", user.name)
+//            putString("email", user.email)
             apply()
         }
     }

@@ -16,6 +16,6 @@ public interface SubwayApi {
     @GET("{apiKey}/json/realtimePosition/0/1000/{routeName}")
     Call<ResponseBody> getRealtimePosition(
             @Path("apiKey") String apiKey,
-            @Path("stationName") String routeName
+            @Path("routeName") String routeName
     );
 }

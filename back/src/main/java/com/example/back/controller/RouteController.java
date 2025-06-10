@@ -34,7 +34,9 @@ public class RouteController {
     }
     @PostMapping("/realTime")
     public ResponseEntity<RealTimeResultDTO> getRealBusRoute(@RequestBody RealtimeDTO realtimeDTO)  {
+        System.out.println("Received RealtimeDTO: " + realtimeDTO);
         RealTimeResultDTO response = realLocationService.getRealTime(realtimeDTO);
         return ResponseEntity.ok(response);
     }
+//    @PostMapping("/DBSaveRoute")
 }

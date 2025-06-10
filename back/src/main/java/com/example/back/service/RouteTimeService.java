@@ -33,7 +33,6 @@ public class RouteTimeService {
         Map<String, Integer> stationSLLTravelTime = new HashMap<>();
         Map<String, Integer> stationGTXTravelTime = new HashMap<>();
 
-
         //  메인 노선 (연천 ~ 구로)
         station1TravelTime.put("연천-전곡", 8);
         station1TravelTime.put("전곡-청산", 5);
@@ -147,58 +146,59 @@ public class RouteTimeService {
         station1TravelTime.put("온양온천-신창", 5);
         stationTravelTime.put(1001, station1TravelTime);
 
+
         // 메인 노선 (오이도 ~ 불암산)
-        station4TravelTime.put("오이도-정왕",3);
-        station4TravelTime.put("정왕-신길온천",3);
-        station4TravelTime.put("신길온천-안산",3);
-        station4TravelTime.put("안산-초지",3);
-        station4TravelTime.put("초지-고잔",2);
-        station4TravelTime.put("고잔-중앙",2);
-        station4TravelTime.put("중앙-한대앞",3);
-        station4TravelTime.put("한대앞-상록수",2);
-        station4TravelTime.put("상록수-반월",3);
-        station4TravelTime.put("반월-대야미",3);
-        station4TravelTime.put("대야미-수리산",3);
-        station4TravelTime.put("수리산-산본",2);
-        station4TravelTime.put("산본-금정",5);
-        station4TravelTime.put("금정-범계",3);
-        station4TravelTime.put("범계-평촌",2);
-        station4TravelTime.put("평촌-인덕원",3);
-        station4TravelTime.put("인덕원-정부과천청사",3);
-        station4TravelTime.put("정부과천청사-과천",2);
-        station4TravelTime.put("과천-대공원",2);
-        station4TravelTime.put("대공원-경마공원",2);
-        station4TravelTime.put("경마공원-선바위",2);
-        station4TravelTime.put("선바위-남태령",3);
-        station4TravelTime.put("남태령-사당",3);
-        station4TravelTime.put("사당-총신대입구(이수)",2); // 총신대입구랑 이수역 이름이 두개인데 뭐로 해야함?
-        station4TravelTime.put("총신대입구-동작",3);
-        station4TravelTime.put("동작-이촌",3);
-        station4TravelTime.put("이촌-신용산",3);
-        station4TravelTime.put("신용산-삼각지",1);
-        station4TravelTime.put("삼각지-숙대입구",2);
-        station4TravelTime.put("숙대입구-서울",2);
-        station4TravelTime.put("서울-회현",2);
-        station4TravelTime.put("회현-명동",2);
-        station4TravelTime.put("명동-충무로",1);
-        station4TravelTime.put("충무로-동대문역사문화공원",3);
-        station4TravelTime.put("동대문역사문화공원-동대문",1);
-        station4TravelTime.put("동대문-혜화",3);
-        station4TravelTime.put("혜화-한성대입구",2);
-        station4TravelTime.put("한성대입구-성신여대입구",2);
-        station4TravelTime.put("성신여대입구-길음",2);
-        station4TravelTime.put("길음-미아사거리",3);
-        station4TravelTime.put("미아사거리-미아",2);
-        station4TravelTime.put("미아-수유",2);
-        station4TravelTime.put("수유-쌍문",3);
-        station4TravelTime.put("쌍문-창동",2);
-        station4TravelTime.put("창동-노원",2);
-        station4TravelTime.put("노원-상계",2);
-        station4TravelTime.put("상계-불암산",3);
+        station4TravelTime.put("정왕-오이도",3); // 변경됨
+        station4TravelTime.put("신길온천-정왕",3); // 변경됨
+        station4TravelTime.put("안산-신길온천",3); // 변경됨
+        station4TravelTime.put("초지-안산",3); // 변경됨
+        station4TravelTime.put("고잔-초지",2); // 변경됨
+        station4TravelTime.put("중앙-고잔",2); // 변경됨
+        station4TravelTime.put("한대앞-중앙",3); // 변경됨
+        station4TravelTime.put("상록수-한대앞",2); // 변경됨
+        station4TravelTime.put("반월-상록수",3); // 변경됨
+        station4TravelTime.put("대야미-반월",3); // 변경됨
+        station4TravelTime.put("수리산-대야미",3); // 변경됨
+        station4TravelTime.put("산본-수리산",2); // 변경됨
+        station4TravelTime.put("금정-산본",5); // 변경됨
+        station4TravelTime.put("범계-금정",3); // 변경됨
+        station4TravelTime.put("평촌-범계",2); // 변경됨
+        station4TravelTime.put("인덕원-평촌",3); // 변경됨
+        station4TravelTime.put("정부과천청사-인덕원",3); // 변경됨
+        station4TravelTime.put("과천-정부과천청사",2); // 변경됨
+        station4TravelTime.put("대공원-과천",2); // 변경됨
+        station4TravelTime.put("경마공원-대공원",2); // 변경됨
+        station4TravelTime.put("선바위-경마공원",2); // 변경됨
+        station4TravelTime.put("남태령-선바위",3); // 변경됨
+        station4TravelTime.put("사당-남태령",3); // 변경됨
+        station4TravelTime.put("총신대입구(이수)-사당",2); // 변경됨
+        station4TravelTime.put("동작-총신대입구(이수)",3); // 변경됨
+        station4TravelTime.put("이촌-동작",3); // 변경됨
+        station4TravelTime.put("신용산-이촌",3); // 변경됨
+        station4TravelTime.put("삼각지-신용산",1); // 변경됨
+        station4TravelTime.put("숙대입구-삼각지",2); // 변경됨
+        station4TravelTime.put("서울-숙대입구",2); // 변경됨
+        station4TravelTime.put("회현-서울",2); // 변경됨
+        station4TravelTime.put("명동-회현",2); // 변경됨
+        station4TravelTime.put("충무로-명동",1); // 변경됨
+        station4TravelTime.put("동대문역사문화공원-충무로",3); // 변경됨
+        station4TravelTime.put("동대문-동대문역사문화공원",1); // 변경됨
+        station4TravelTime.put("혜화-동대문",3); // 변경됨
+        station4TravelTime.put("한성대입구-혜화",2); // 변경됨
+        station4TravelTime.put("성신여대입구-한성대입구",2); // 변경됨
+        station4TravelTime.put("길음-성신여대입구",2); // 변경됨
+        station4TravelTime.put("미아사거리-길음",3); // 변경됨
+        station4TravelTime.put("미아-미아사거리",2); // 변경됨
+        station4TravelTime.put("수유-미아",2); // 변경됨
+        station4TravelTime.put("쌍문-수유",3); // 변경됨
+        station4TravelTime.put("창동-쌍문",2); // 변경됨
+        station4TravelTime.put("노원-창동",2); // 변경됨
+        station4TravelTime.put("상계-노원",2); // 변경됨
+        station4TravelTime.put("불암산-상계",3); // 변경됨
         //불암산에서 진접 까진 다른 경로
-        station4TravelTime.put("불암산-별내별가람",5);
-        station4TravelTime.put("별내별가람-오남",7);
-        station4TravelTime.put("오남-진접",3);
+        station4TravelTime.put("별내별가람-불암산",5); // 변경됨
+        station4TravelTime.put("오남-별내별가람",7); // 변경됨
+        station4TravelTime.put("진접-오남",3); // 변경됨
         stationTravelTime.put(1004, station4TravelTime);
 
         // 8호선
@@ -560,8 +560,10 @@ public class RouteTimeService {
         queue.offer(startPath);
         visited.add(start);
 
+
         while (!queue.isEmpty()) {
             List<String> path = queue.poll();
+            //큐에서 하나의 경로를 꺼냄
             String lastStation = path.get(path.size() - 1);
 
             // 도착역에 도달 시 경로 반환

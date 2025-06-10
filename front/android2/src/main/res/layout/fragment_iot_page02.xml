@@ -7,9 +7,27 @@
     android:orientation="vertical"
     tools:context=".MainActivity">
     <!-- 장치 추가 페이지 -->
-    <Button
-        android:id="@+id/data_btn2"
-        android:layout_width="wrap_content"
+
+    <LinearLayout
+        android:layout_width="350dp"
         android:layout_height="wrap_content"
-        android:text="@string/defaultText" />
+        android:minHeight="100dp"
+        android:minWidth="100dp"
+        android:padding="15dp"
+        android:gravity="start"
+        android:background="@drawable/add_iot_background"
+        android:orientation="vertical">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="30sp"
+            android:text="@string/addSamsung"
+            android:paddingBottom="40dp"/>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_gravity="fill_horizontal">
+        </LinearLayout>
+    </LinearLayout>
 </LinearLayout>

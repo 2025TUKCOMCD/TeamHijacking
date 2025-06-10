@@ -1,11 +1,18 @@
 package com.example.back.dto;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Data;
 
 @Data
 public class RealTimeResultDTO {
-    private int trainNo; // 기차 번호
+    @JsonInclude(value = JsonInclude.Include.NON_EMPTY)
+    private String trainNo; // 기차 번호
+    @JsonInclude(value = JsonInclude.Include.NON_EMPTY)
+    private String vehId;
     private int nextRequest; // 1: 현재 대중교통 2: 다음 대중교통
-    private String predictTimes1;
-    private String predictTimes2;
+    @JsonInclude(value = JsonInclude.Include.NON_EMPTY)
+    private String location; // 현재 위치
+
+    private String predictTimes1 = "데이터 없음";
+    private String predictTimes2 = "데이터 없음";
 }
