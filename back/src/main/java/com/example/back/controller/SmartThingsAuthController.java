@@ -78,7 +78,7 @@ public class SmartThingsAuthController {
         }
 
         // 필수 파라미터 유효성 검사
-        if (code == null || userId == null || userId.trim().isEmpty()) {
+        if (code == null) {
             String errorMessage = "SmartThings 연동에 필요한 정보(code 또는 userId)가 부족합니다.";
             log.error(errorMessage);
             model.addAttribute("success", false);
