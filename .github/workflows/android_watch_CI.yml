@@ -88,8 +88,6 @@ jobs:
         # 'front' 디렉토리 내에 'app' 모듈이 있다고 가정하고 테스트 명령 명시
         working-directory: ./front 
         run: ./gradlew :app:testDebugUnitTest
-        # gradlew 파일은 프로젝트 루트에 있으므로 working-directory 없이 실행
-        run: chmod +x ./gradlew
 
       - name: Stop any running Gradle daemons
         # gradlew 파일은 프로젝트 루트에 있으므로 working-directory 없이 실행
