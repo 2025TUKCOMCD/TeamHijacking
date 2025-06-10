@@ -31,6 +31,8 @@ jobs:
         with:
           path: ~/.gradle/caches
           # 캐시 키는 그대로 유지: build.gradle, settings.gradle, libs.versions.toml, gradle-wrapper.properties 파일 변경 시 캐시 갱신
+          # 캐시 키를 더 안정적으로 조정: 동적으로 생성되는 파일은 제외
+
           key: ${{ runner.os }}-gradle-${{ hashFiles('**/build.gradle', '**/settings.gradle', '**/gradle/libs.versions.toml', '**/gradle-wrapper.properties') }}
           restore-keys: |
             ${{ runner.os }}-gradle-
@@ -44,12 +46,12 @@ jobs:
       
       - name: Copy root gradle.properties to front module
         # 생성된 gradle.properties를 'front' 디렉토리 내부로 복사
+        # 프로젝트 루트에 gradle.properties 파일 생성 및 설정
         run: |
-          if [ -d "./front" ]; then
-            cp gradle.properties ./front/gradle.properties || true
-          else
-            echo "::warning::'front' directory not found. Skipping gradle.properties copy to front module."
-          fi
+          echo "android.useAndroidX=true" > gradle.properties
+          echo "android.enableJetifier=true" >> gradle.properties
+          # CI 환경에서 메모리 부족 방지를 위해 JVM 메모리 상향 조정
+          echo "org.gradle.jvmargs=-Xmx6g -XX:+HeapDumpOnOutOfMemoryError -Dfile.encoding=UTF-8" >> gradle.properties
 
       - name: Create local.properties for front module (Corrected Path)
         run: |
@@ -60,6 +62,7 @@ jobs:
           echo "Public_Bus_APIKEY=${{ secrets.Public_Bus_APIKEY }}" >> ./front/local.properties
           echo "Public_Subway_APIKEY=${{ secrets.Public_Subway_APIKEY }}" >> ./front/local.properties
           echo "KAKAO_NATIVE_API_KEY=${{ secrets.KAKAO_NATIVE_API_KEY }}" >> ./front/local.properties
+
 
           echo "--- Contents of ./front/ directory after local.properties creation ---"
           ls -al ./front/ # 이 줄을 추가하여 파일 생성 여부 확인
@@ -85,6 +88,20 @@ jobs:
         # 'front' 디렉토리 내에 'app' 모듈이 있다고 가정하고 테스트 명령 명시
         working-directory: ./front 
         run: ./gradlew :app:testDebugUnitTest
+        # gradlew 파일은 프로젝트 루트에 있으므로 working-directory 없이 실행
+        run: chmod +x ./gradlew
+
+      - name: Stop any running Gradle daemons
+        # gradlew 파일은 프로젝트 루트에 있으므로 working-directory 없이 실행
+        run: ./gradlew --stop || true
+
+      - name: Build with Gradle
+        # gradlew 파일은 프로젝트 루트에 있으므로 working-directory 없이 실행하며, 모듈을 명시
+        run: ./gradlew :front:app:assembleDebug --stacktrace --info
+
+      - name: Run unit tests
+        # gradlew 파일은 프로젝트 루트에 있으므로 working-directory 없이 실행하며, 모듈을 명시
+        run: ./gradlew :front:app:testDebugUnitTest
 
       - name: Upload test results
         uses: actions/upload-artifact@v4
@@ -92,6 +109,7 @@ jobs:
         with:
           name: test-results
           # 경로는 'front' 디렉토리를 기준으로 지정
+          # 경로는 저장소 루트를 기준으로 지정
           path: ./front/app/build/reports/tests/testDebugUnitTest 
 
       - name: Upload APK (Debug)
@@ -100,4 +118,5 @@ jobs:
         with:
           name: app-debug
           # 경로는 'front' 디렉토리를 기준으로 지정
+          # 경로는 저장소 루트를 기준으로 지정
           path: ./front/app/build/outputs/apk/debug/*.apk
