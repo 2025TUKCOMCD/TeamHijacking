@@ -12,7 +12,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 @Controller // 템플릿 뷰를 반환할 수 있도록 @Controller 사용 (리다이렉션 필요)
 @RequestMapping("/oauth")
-public class OAuthController {https://enterprise.smartthings.com/locations
+public class OAuthController {
 
     private final OAuthService oAuthService;
 

@@ -148,15 +148,6 @@ public class SubwayService {
     }
 
     // 경로 탐색
-    // public List<String> findRoute(int subwayCode, String start, String end) {
-    //    Map<String, List<String>> network = networkService.getNetwork(subwayCode,start);
-    //    if (network == null || network.isEmpty()) {
-    //        System.out.println("네트워크 정보가 없습니다. 올바른 지하철 코드를 입력했는지 확인하세요.");
-    //        return Collections.emptyList();
-    //    }
-    //    return routeTimeService.findRoute(network, start, end);
-    // }
-    // 경로 탐색
     public List<String> findRoute(int subwayCode, String start, String end) {
         // 1. findRoute 메서드 호출 시 입력 파라미터 로깅
         System.out.println("findRoute 호출: subwayCode=" + subwayCode + ", start='" + start + "', end='" + end + "'");
@@ -229,11 +220,10 @@ public class SubwayService {
         }
         // 하행
         else if (direction.equals("하행")) {
-            for (int i = route.size() - 1; i > 0; i--) {
-                String key = route.get(i) + "-" + route.get(i - 1);
-                travelTimes[route.size() - i - 1] = travelTimeMap.getOrDefault(key, 0);
-                System.out.println(travelTimes[i]);
-
+            for (int i = 0; i < route.size() - 1; i++) { // 상행과 동일하게 순방향 루프
+                String key = route.get(i) + "-" + route.get(i + 1); // 올바른 키: 이전 역 -> 다음 역
+                travelTimes[i] = travelTimeMap.getOrDefault(key, 0); // 배열에 순차적으로 저장
+                System.out.println("하행 " + route.get(i) + "->" + route.get(i+1) + " 시간: " + travelTimes[i]);
             }
         }
         return travelTimes;

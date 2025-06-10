@@ -10,7 +10,9 @@
         android:orientation="vertical"
         android:padding="24dp"
         android:background="@android:color/white">
-        <!-- 기기 이름 상태 및 텍스트 => 상태 함수가 이상해서 추후 수정 -->
+
+
+        <!-- 기기 이름 상태 및 텍스트 -->
         <TextView
             android:id="@+id/textDeviceStatus"
             android:layout_width="match_parent"
@@ -18,6 +20,8 @@
             android:text="기기 정보 로딩 중..."
             android:textAppearance="?android:attr/textAppearanceMedium"
             android:paddingBottom="16dp" />
+
+
         <!-- 밝기 SeekBar 제거, 버튼 형식으로 교체함 -->
         <TextView
             android:layout_width="match_parent"
@@ -47,6 +51,7 @@
                 android:text="밝기 +10"
                 android:contentDescription="@string/btn_brightnessDescription2"/>
         </LinearLayout>
+
 
         <!-- 채도 SeekBar 제거, 버튼 형식으로 교체함 -->
         <TextView
@@ -78,6 +83,7 @@
                 android:contentDescription="@string/btn_btnSaturationDescription2"/>
         </LinearLayout>
 
+
         <!-- 전원 토글 -->
         <Button
             android:id="@+id/btnTogglePower"
@@ -87,3 +93,4 @@
             android:layout_marginTop="8dp" />
     </LinearLayout>
 </ScrollView>
+

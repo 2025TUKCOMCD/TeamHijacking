@@ -119,7 +119,7 @@ class DeviceControlHelper(private val apiToken: String) {
     }
 
 
-    // 기기 상태 불러옴
+    // 기기 상태 불러옴, Online, Offline 확인 가능하게 추후 수정
     fun getDeviceStatus(deviceId: String, onSuccess: (DeviceStatusResponse) -> Unit, onError: (String) -> Unit) {
         apiService.getDeviceStatus(deviceId, apiToken).enqueue(object : Callback<DeviceStatusResponse> {
             override fun onResponse(call: Call<DeviceStatusResponse>, response: Response<DeviceStatusResponse>) {

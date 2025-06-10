@@ -19,7 +19,9 @@ import org.springframework.web.reactive.function.BodyInserters;
 import org.springframework.web.reactive.function.client.WebClient;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList; // ArrayList import 추가
 import java.util.List;
+import java.util.Optional; // Optional import 추가
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -157,9 +159,16 @@ public class OAuthService {
         authorizationCodeRepository.save(authCode);
 
         // 기존에 발급된 동일한 client_id, user_id, token_type의 액세스/리프레시 토큰이 있다면 무효화 또는 갱신 처리 (선택 사항)
-        // 예를 들어, 기존 액세스 토큰과 리프레시 토큰을 찾아서 만료 처리할 수 있습니다.
-        List<AccessToken> existingTokens = accessTokenRepository.findByUserIdAndClientIdAndTokenType(authCode.getUserId(), clientId, "access_token");
-        existingTokens.addAll(accessTokenRepository.findByUserIdAndClientIdAndTokenType(authCode.getUserId(), clientId, "refresh_token"));
+        List<AccessToken> existingTokens = new ArrayList<>(); // List를 먼저 초기화합니다.
+
+        // access_token 조회 및 추가
+        accessTokenRepository.findByUserIdAndClientIdAndTokenType(authCode.getUserId(), clientId, "access_token")
+                .ifPresent(existingTokens::add); // Optional에 값이 있으면 리스트에 추가합니다.
+
+        // refresh_token 조회 및 추가
+        accessTokenRepository.findByUserIdAndClientIdAndTokenType(authCode.getUserId(), clientId, "refresh_token")
+                .ifPresent(existingTokens::add); // Optional에 값이 있으면 리스트에 추가합니다.
+
         for (AccessToken token : existingTokens) {
             token.setExpiresAt(LocalDateTime.now().minusSeconds(1)); // 즉시 만료 처리
             accessTokenRepository.save(token);

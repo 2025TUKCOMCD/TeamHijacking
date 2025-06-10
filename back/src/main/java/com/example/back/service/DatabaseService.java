@@ -27,10 +27,36 @@ public class DatabaseService {
         return statn_id;
     }
 
-    public List<TimeTable> findNextSubwayArrivals(int subwayCode, String startName, Time seoulTime, String currentDayType) {
+    public List<TimeTable> findTrainNoSubwayArrivals(int subwayCode, String startName, Time seoulTime ,String currentDayType, String TrainNo, String direction) {
+        System.out.println("Querying TimeTable with:");
+        System.out.println("  routeId: " + subwayCode);
+        System.out.println("  stationName: " + startName);
+        System.out.println("  currentTime: " + seoulTime);
+        System.out.println("  TrainNo: " + TrainNo);
+        System.out.println("  dayType: " + currentDayType);
+
         // Repository 호출하여 현재 시간 이후의 도착 정보를 가져오기
-        return timeTableRepository.findNextSubwayByRouteIdAndStationNameAndDayType(
-                subwayCode, startName, seoulTime, currentDayType
+        List<TimeTable> result = timeTableRepository.findTrainNoSubwayByRouteIdAndStationNameAndDayTypeAndDirection(
+                subwayCode, startName, seoulTime, currentDayType, TrainNo, direction
         );
+        System.out.println("DatabaseService - findTrainNoSubwayArrivals: " + result);
+        return result;
     }
+
+    public List<TimeTable> findNextSubwayArrivals(int subwayCode, String startName, Time seoulTime, String currentDayType, String direction) {
+        System.out.println("Querying TimeTable with:");
+        System.out.println("  routeId: " + subwayCode);
+        System.out.println("  stationName: " + startName);
+        System.out.println("  currentTime: " + seoulTime);
+        System.out.println("  dayType: " + currentDayType);
+        System.out.println("  direction: " + direction);
+
+        // Repository 호출하여 현재 시간 이후의 도착 정보를 가져오기
+        List<TimeTable> result = timeTableRepository.findNextSubwayByRouteIdAndStationNameAndDayTypeAndDirection(
+                subwayCode, startName, seoulTime, currentDayType, direction
+        );
+        System.out.println("DatabaseService - findNextSubwayArrivals: " + result);
+        return result;
+    }
+
 }

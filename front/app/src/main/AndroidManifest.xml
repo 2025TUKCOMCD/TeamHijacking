@@ -33,6 +33,18 @@
             android:exported="false"
             android:taskAffinity=""
             android:theme="@style/Transportation_Main_Theme" />
+
+        <!--<activity android:name=".iot.smartthingsOauth.AuthCallbackActivity" android:exported="true">-->
+            <!--<intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="https"
+                    android:host="seemore.io.kr"
+                    android:pathPrefix="/callback" />
+            </intent-filter>
+        </activity>-->
+
         <activity
             android:name=".transportation.TransportDetailRouteControlActivity"
             android:exported="false"
