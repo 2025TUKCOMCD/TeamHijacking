@@ -5,7 +5,6 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.Button
-import android.widget.SeekBar
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
@@ -40,6 +39,8 @@ class MyIotActivity : AppCompatActivity() {
             when(device.label){
                 "Galaxy Home Mini (3NPH)" -> {showGalaxyHomeMiniControl(device)}
                 "c2c-rgb-color-bulb" -> {showRgbColorBulbControl(device)}
+                "Hejhome Smart Mood Light" -> {showRgbColorBulbControl(device)}
+                // 무드등 추가 예정
             }
         }
         recyclerView.layoutManager = LinearLayoutManager(this)
