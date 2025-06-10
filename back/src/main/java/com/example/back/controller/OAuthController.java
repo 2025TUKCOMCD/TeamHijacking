@@ -35,7 +35,7 @@ public class OAuthController {
     }
 
     /**
-     * SmartThings 인가 요청 처리 (Step 1: Authorization Code 요청)
+     * SmartThings 인가 요청 처리 (Step 1: Authorization Code 요ㅁ청)
      * 사용자를 카카오 로그인 페이지로 리다이렉트
      * GET /oauth/authorize
      */
