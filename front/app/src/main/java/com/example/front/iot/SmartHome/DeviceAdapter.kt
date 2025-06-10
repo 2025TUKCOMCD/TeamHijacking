@@ -39,6 +39,7 @@ class DeviceAdapter(
         return when (devices[position].name) {
             "Galaxy Home Mini (3NPH)" -> VIEW_TYPE_LIGHT
             "c2c-rgb-color-bulb" -> VIEW_TYPE_AISPEAKER
+            "Hejhome Smart Mood Light" -> VIEW_TYPE_LIGHT
             // ... 다른 장치 유형에 대한 View Type 반환
             else -> {
                 Log.d("현빈", "그런 기기 없음")}
