@@ -1,20 +1,33 @@
+import java.io.FileInputStream
 import java.util.Properties
 
 plugins {
     alias(libs.plugins.androidApplication)
-    id("org.jetbrains.kotlin.android") version "1.9.24"
+    alias(libs.plugins.jetbrainsKotlinAndroid)
 }
 
 android {
     namespace = "com.example.front"
     compileSdk = 34
-
-    // local.properties에서 API 키와 호스트 URL을 가져옴
+    //뭔가뭔가
+    // local.properties 에서 API 키와 호스트 URL 을 가져옴
     val localProperties = Properties().apply {
-        load(project.rootProject.file("local.properties").inputStream())
+        // 중요한 변경: 'front' 디렉토리 바로 아래에 있는 local.properties를 읽도록 경로를 명확히 지정합니다.
+        // project.rootProject는 Git 저장소의 가장 상위 디렉토리(TeamHijacking/)를 나타냅니다.
+        // 그 아래에 "front/local.properties"가 있으므로, 이 경로를 사용합니다.
+        val localPropertiesFile = File(rootDir, "local.properties")
+
+        if (localPropertiesFile.exists()) {
+            load(FileInputStream(localPropertiesFile))
+        } else {
+            // 파일이 없는 경우 경고만 출력하고 빌드가 실패하지 않도록 처리합니다.
+            println("WARNING: local.properties file not found at ${localPropertiesFile.absolutePath}. Using empty strings for API keys.")
+        }
     }
     val KAKAO_NATIVE_API_KEY = localProperties.getProperty("KAKAO_NATIVE_API_KEY", "")
     val HOST_URL = localProperties.getProperty("Host_URL", "")
+
+    //로컬 프로퍼티가 가져온게 제대로 됐는지 확인
 
     defaultConfig {
         minSdk = 30
@@ -54,7 +67,7 @@ android {
     }
 
     composeOptions {
-        kotlinCompilerExtensionVersion = "1.5.14"
+        kotlinCompilerExtensionVersion = "1.5.15"
     }
 
     kotlinOptions {
@@ -63,26 +76,30 @@ android {
 }
 
 dependencies {
+    implementation(platform(libs.compose.bom))
+
+    implementation(libs.ui) // androidx.compose.ui:ui
+    implementation(libs.ui.tooling.preview) // androidx.compose.ui:ui-tooling-preview
+    implementation(libs.activity.compose) // activity-compose
+    // implementation(libs.compose.runtime) // 일반적으로 ui 라이브러리가 transitively 가져오므로 명시적으로 추가할 필요는 없지만, 문제가 지속되면 추가 고려
+    // --- Compose 라이브러리 추가 끝 ---
+
+
     implementation(libs.core.ktx)
     implementation(libs.appcompat)
     implementation(libs.material)
     implementation(libs.activity)
     implementation(libs.constraintlayout)
     implementation(libs.play.services.wearable)
-    implementation("androidx.appcompat:appcompat:1.7.0")
-    implementation("com.google.android.material:material:1.12.0")
-    implementation("androidx.activity:activity:1.9.3")
-    implementation("androidx.constraintlayout:constraintlayout:2.2.1")
+    implementation(libs.compose.material3)
     testImplementation(libs.junit)
-    // 카카오 로그인용
+    // 카카오 로그인 용
     implementation(libs.v2.user)
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso.core)
-    implementation("androidx.compose.runtime:runtime:1.5.2")
     implementation("com.google.android.gms:play-services-location:21.0.1")
-    implementation("com.google.android.gms:play-services-wearable:18.1.0") // 데이터 레이블 사용 가능하게 해주는 코드
     // JSON, XML 처리용
-    implementation("com.squareup.retrofit2:retrofit:2.9.0")  // API 처리용, Retrofit 사용 위해 추가해야 한다고 함
+    implementation("com.squareup.retrofit2:retrofit:2.9.0")  // API 처리용, Retrofit 사용 위해 추가 해야 한다고 함
     implementation("com.squareup.retrofit2:converter-gson:2.9.0")
     implementation("com.squareup.okhttp3:okhttp:4.12.0")
     implementation("com.google.code.gson:gson:2.11.0") // 혹시 모르니 넣어봄

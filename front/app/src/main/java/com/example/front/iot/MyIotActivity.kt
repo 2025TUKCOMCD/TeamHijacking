@@ -5,7 +5,6 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.Button
-import android.widget.SeekBar
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
@@ -27,21 +26,26 @@ class MyIotActivity : AppCompatActivity() {
     private val apiToken = "Bearer ${BuildConfig.SMARTTHINGS_API_TOKEN}"
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        Log.d("현빈", "oncreate들어옴")
+        Log.d("현빈", "oncreate 들어옴")
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_my_iot)
         Log.d("현빈", "activity 할당")
         deviceControlHelper = DeviceControlHelper(apiToken)
-        Log.d("현빈", "토큰할당함")
+        Log.d("현빈", "토큰 할당함")
 
         // RecyclerView 설정
         val recyclerView = findViewById<RecyclerView>(R.id.recyclerViewMyDevices)
         deviceAdapter = DeviceAdapter(deviceList) { device ->
-            showDeviceDetailDialog(device)
+            when(device.label){
+                "Galaxy Home Mini (3NPH)" -> {showGalaxyHomeMiniControl(device)}
+                "c2c-rgb-color-bulb" -> {showRgbColorBulbControl(device)}
+                "Hejhome Smart Mood Light" -> {showRgbColorBulbControl(device)}
+                // 무드등 추가 예정
+            }
         }
         recyclerView.layoutManager = LinearLayoutManager(this)
         recyclerView.adapter = deviceAdapter
-        Log.d("현빈", "디바이스 불러오기전")
+        Log.d("현빈", "디바이스 불러오기 전")
 
         //디바이스 목록 불러오기
         fetchDeviceList()
@@ -58,6 +62,7 @@ class MyIotActivity : AppCompatActivity() {
                 val devices = response.body()?.items ?: emptyList()
                 deviceList.clear()
                 deviceList.addAll(devices)
+                Log.d("현빈", deviceList[0].name)
                 deviceAdapter.notifyDataSetChanged()
             } else {
                 Toast.makeText(this@MyIotActivity, "기기 불러오기 실패", Toast.LENGTH_SHORT).show()
@@ -69,17 +74,28 @@ class MyIotActivity : AppCompatActivity() {
         }
     })
     }
+    private fun showGalaxyHomeMiniControl(device: Device){
 
-    private fun showDeviceDetailDialog(device: Device) {
+    }
+
+
+
+    //무드등 제어 만약 device이름이 c2c-rgb-color-bulb이라면 여기로 이동시키면 됨 추후에 넣어야 할듯
+    private fun showRgbColorBulbControl(device: Device) {
         val view = LayoutInflater.from(this).inflate(R.layout.dialog_device_detail, null)
         val statusText = view.findViewById<TextView>(R.id.textDeviceStatus)
-        val seekBarBrightness = view.findViewById<SeekBar>(R.id.seekBarBrightness)
-        val seekBarSaturation = view.findViewById<SeekBar>(R.id.seekBarSaturation)
+        val btnBrightnessUp = view.findViewById<Button>(R.id.btnBrightnessUp)
+        val btnBrightnessDown = view.findViewById<Button>(R.id.btnBrightnessDown)
+        val btnSaturationUp = view.findViewById<Button>(R.id.btnSaturationUp)
+        val btnSaturationDown = view.findViewById<Button>(R.id.btnSaturationDown)
         val btnTogglePower = view.findViewById<Button>(R.id.btnTogglePower)
 
         statusText.text = "기기 이름: ${device.label}\n기기 ID: ${device.deviceId}"
 
         var isPowerOn = false
+
+        var brightnessValue = 50
+        var saturationValue = 50
 
         deviceControlHelper.getDeviceStatus(
             device.deviceId,
@@ -90,15 +106,15 @@ class MyIotActivity : AppCompatActivity() {
                     val switchValue = mainComponent.switch?.switch?.value
                     isPowerOn = switchValue.equals("on", ignoreCase = true)
 
-                    val brightnessValue = mainComponent.switchLevel?.value?.toIntOrNull()
-                    brightnessValue?.let {
-                        seekBarBrightness.progress = it
-                    }
+                    //val brightnessValue = mainComponent.switchLevel?.value?.toIntOrNull()
+                    //brightnessValue?.let {
+                        //seekBarBrightness.progress = it
+                    //}
 
-                    val saturationValue = mainComponent.colorControl?.saturation?.value?.toInt()
-                    saturationValue?.let {
-                        seekBarSaturation.progress = it
-                    }
+                    //val saturationValue = mainComponent.colorControl?.saturation?.value?.toInt()
+                    //saturationValue?.let {
+                        //seekBarSaturation.progress = it
+                    //}
                 } else {
                     Toast.makeText(this, "Main 컴포넌트 없음", Toast.LENGTH_SHORT).show()
                 }
@@ -121,36 +137,38 @@ class MyIotActivity : AppCompatActivity() {
             )
         }
 
+        // 밝기, 채도 각각 +- 버튼 총 4개 만듦. 추후, 테스트 예정
+        btnBrightnessUp.setOnClickListener {
+            brightnessValue = (brightnessValue + 10).coerceAtMost(100)
+            deviceControlHelper.setBrightness(device.deviceId, brightnessValue,
+                onSuccess = {},
+                onError = { Toast.makeText(this, "밝기 조절 실패", Toast.LENGTH_SHORT).show() }
+            )
+        }
 
+        btnBrightnessDown.setOnClickListener {
+            brightnessValue = (brightnessValue - 10).coerceAtLeast(0)
+            deviceControlHelper.setBrightness(device.deviceId, brightnessValue,
+                onSuccess = {},
+                onError = { Toast.makeText(this, "밝기 조절 실패", Toast.LENGTH_SHORT).show() }
+            )
+        }
 
-        seekBarBrightness.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
-            override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
-                if (fromUser) {
-                    deviceControlHelper.setBrightness(device.deviceId, progress,
-                        onSuccess = { },
-                        onError = { }
-                    )
-                }
+        btnSaturationUp.setOnClickListener {
+            saturationValue = (saturationValue + 10).coerceAtMost(100)
+            deviceControlHelper.setColorWithAutoMode(device.deviceId, hue = 50, saturation = saturationValue,
+                onSuccess = {},
+                onError = { Toast.makeText(this, "채도 조절 실패", Toast.LENGTH_SHORT).show() }
+            )
+        }
 
-            }
-
-            override fun onStartTrackingTouch(seekBar: SeekBar?) {}
-            override fun onStopTrackingTouch(seekBar: SeekBar?) {}
-        })
-
-        seekBarSaturation.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
-            override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
-                if (fromUser) {
-                    deviceControlHelper.setColor(device.deviceId, hue = 50, saturation = progress,
-                        onSuccess = { },
-                        onError = { }
-                    )
-                }
-            }
-
-            override fun onStartTrackingTouch(seekBar: SeekBar?) {}
-            override fun onStopTrackingTouch(seekBar: SeekBar?) {}
-        })
+        btnSaturationDown.setOnClickListener {
+            saturationValue = (saturationValue - 10).coerceAtLeast(0)
+            deviceControlHelper.setColorWithAutoMode(device.deviceId, hue = 50, saturation = saturationValue,
+                onSuccess = {},
+                onError = { Toast.makeText(this, "채도 조절 실패", Toast.LENGTH_SHORT).show() }
+            )
+        }
 
         AlertDialog.Builder(this)
             .setTitle("기기 상태 및 제어")

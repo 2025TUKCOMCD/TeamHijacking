@@ -6,7 +6,6 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
 import android.widget.TextView
 import androidx.appcompat.widget.AppCompatImageButton
 import com.example.front.R
@@ -37,7 +36,7 @@ class SubwayFragment : Fragment() {
         view.findViewById<TextView>(R.id.subwayLineTextView).text = "지하철 노선: $subwayLine"
         view.findViewById<TextView>(R.id.subwayStationTextView).text = "지하철 역: $subwayStation"
 
-        val nextButton = view.findViewById<AppCompatImageButton>(R.id.nextButton) // AppCompatImageButton으로 캐스팅
+        val nextButton = view.findViewById<AppCompatImageButton>(R.id.nextButton) // AppCompatImageButton  캐스팅
         nextButton.setOnClickListener {
             navigation?.showNextFragment()
         }

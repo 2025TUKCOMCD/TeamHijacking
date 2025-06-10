@@ -4,4 +4,25 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="login">카카오톡으로 로그인</string>
     <string name="kakaologin_contentDescription">카카오톡 로그인 버튼입니다. 애플리케이션의 실행 및 IOT 기기 관리를 위해 로그인을 진행해주십시오.</string>
+    <string name="backStep">뒤로가기</string>
+    <string name="toolBarText">IoT 기기 관리</string>
+    <string name="profileText">프로필</string>
+    <string name="settingText">설정</string>
+    <string name="InfoText">정보</string>
+    <string name="logout">로그아웃</string>
+    <string name="QAText">문의하기</string>
+    <string name="changeNickname">닉네임 변경</string>
+    <string name="faq">FAQ</string>
+    <string name="qna"><![CDATA[Q&A]]></string>
+    <string name="termOfUse">이용약관</string>
+    <string name="privacyPolicy">개인정보 정책</string>
+    <string name="openSource">오픈소스</string>
+    <string name="version">버전: 0.0.0</string>
+    <string name="howToDoTextView">앱 실행 방법</string>
+    <string name="contactToDev">개발자에게 연락 하기</string>
+    <string name="defaultText">기본 텍스트입니다.</string>
+    <string name="selectIoT">사용자분께서 선택하신 IoT 기종을 이미지로 알려주는 곳입니다.</string>
+    <string name="defaultIotText">"<b>"IOT 기기의 디폴트 이름"</b>"</string>
+    <string name="additionalExplanation">기본설명입니다기본설명입니다기본설명입니다기본설명입니다기본설명입니다기본설명입니다기본설명입니다기본설명입니다기본설명입니다기본설명입니다</string>
+    <string name="addSamsung">삼성 기기 추가</string>
 </resources>

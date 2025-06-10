@@ -5,9 +5,11 @@ import com.example.back.api.RouteApi;
 import com.example.back.api.SubwayApi;
 import com.example.back.dto.bus.arrive.BusArriveProcessDTO;
 import com.example.back.dto.bus.detail.BusDetailProcessDTO;
+import com.example.back.dto.bus.realtime.RealBusLocationDTO;
 import com.example.back.dto.route.RouteDTO;
 import com.example.back.dto.route.RouteProcessDTO;
-import com.example.back.dto.subway.SubwayArriveProcessDTO;
+import com.example.back.dto.subway.arrive.SubwayArriveProcessDTO;
+import com.example.back.dto.subway.realtime.RealSubwayLocationDTO;
 import com.google.gson.Gson;
 import okhttp3.OkHttpClient;
 import okhttp3.ResponseBody;
@@ -101,7 +103,7 @@ public class APIService {
         }
     }
 
-    // Odsay 버스 도착 정보 조회
+    // 버스 도착 정보 조회
     public BusArriveProcessDTO.arriveDetail fetchAndBusArrive(int stId, int busRouteId, int ord) throws IOException {
         Call<ResponseBody> call = busApi.getArrInfoByRoute(
                 Seoul_Bus_apiKey,
@@ -135,5 +137,37 @@ public class APIService {
             return new SubwayArriveProcessDTO();
         }
 
+    }
+
+    // 버스 실시간 위치 정보 조회
+    public RealBusLocationDTO fetchAndBusLocation(String vehid) throws IOException {
+        Call<ResponseBody> call = busApi.getBusPosByVehId(
+                Seoul_Bus_apiKey,
+                vehid,
+                "json"
+        );
+        ResponseBody responseBody = call.execute().body();
+        if (responseBody != null) {
+            String rawJson = responseBody.string();
+            RealBusLocationDTO parsedResponse = gson.fromJson(rawJson, RealBusLocationDTO.class);
+
+            return parsedResponse != null ? parsedResponse : new RealBusLocationDTO();
+        } else {
+            return new RealBusLocationDTO();
+        }
+    }
+
+    // 서울 지하철 실시간 위치 정보 조회
+    public RealSubwayLocationDTO fetchAndSubwayLocation(String routeName) throws IOException {
+        Call<ResponseBody> call = subwayApi.getRealtimePosition(Seoul_Subway_apiKey, routeName);
+        ResponseBody responseBody = call.execute().body(); // 동기 호출
+        if (responseBody != null) {
+            String rawJson = responseBody.string();
+            RealSubwayLocationDTO parsedResponse = gson.fromJson(rawJson, RealSubwayLocationDTO.class);
+            // 도착 정보 리스트 반환
+            return parsedResponse != null ? parsedResponse : new RealSubwayLocationDTO();
+        } else {
+            return new RealSubwayLocationDTO();
+        }
     }
 }

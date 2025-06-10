@@ -1,18 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android" >
     <!-- 필요한 권한 -->
-    <uses-permission android:name="com.google.android.permission.PROVIDE_BACKGROUND" /> <!-- 백그라운드 동기화 권한 -->
+    <uses-permission android:name="com.google.android.permission.PROVIDE_BACKGROUND" /> <!-- background 동기화 권한 -->
     <uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-permission android:name="android.permission.INTERNET" /> <!-- Wear OS 지원 -->
     <uses-feature android:name="android.hardware.type.watch" /> <!-- 정밀 위치 권한 요청 -->
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" /> <!-- 사용자 위치 받아오기 -->
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" /> <!-- 사용자 위치 받아 오기 -->
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION" />
     <uses-permission android:name="android.permission.RECORD_AUDIO" /> <!-- 오디오 권한 요청 -->
     <uses-permission android:name="android.permission.BLUETOOTH_ADVERTISE" />
-    <uses-permission android:name="android.permission.BLUETOOTH_SCAN" /> <!-- 페어링된 기기를 확인하기 위한 권한 -->
+    <uses-permission android:name="android.permission.BLUETOOTH_SCAN" /> <!-- 페어링 된 기기를 확인 하기 위한 권한 -->
     <uses-permission android:name="android.permission.BLUETOOTH_CONNECT" />
-    <uses-permission android:name="android.permission.BLUETOOTH" /> <!-- 블루투스 권한 요청 -->
-    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" /> <!-- 기기 검색을 위한 권한(위치가 필요하지 않고 장비만 검색하기 위해 위치는 무시) -->
+    <uses-permission android:name="android.permission.BLUETOOTH" /> <!-- bluetooth 권한 요청 -->
+    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" /> <!-- 기기 검색을 위한 권한(위치가 필요 없이 장비만 검색 위해 위치 무시) -->
     <uses-feature
         android:name="android.hardware.bluetooth"
         android:required="true" />
@@ -30,10 +31,24 @@
         <activity
             android:name=".iot.MyIotActivity"
             android:exported="false"
+            android:taskAffinity=""
             android:theme="@style/Transportation_Main_Theme" />
+
+        <!--<activity android:name=".iot.smartthingsOauth.AuthCallbackActivity" android:exported="true">-->
+            <!--<intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="https"
+                    android:host="seemore.io.kr"
+                    android:pathPrefix="/callback" />
+            </intent-filter>
+        </activity>-->
+
         <activity
             android:name=".transportation.TransportDetailRouteControlActivity"
             android:exported="false"
+            android:taskAffinity=""
             android:theme="@style/Transportation_Main_Theme" />
         <activity
             android:name=".transportation.TransRealtimeLocationActivity"
@@ -54,13 +69,8 @@
             android:name=".transportation.TransportInformationActivity"
             android:exported="false"
             android:taskAffinity=""
-            android:theme="@style/Transportation_Main_Theme" />
-        <!--
- <activity
-            android:name=".transportation.dialog.TransSavedDialog"
-            android:exported="false"
-            android:theme="@style/Transportation_Main_Theme" />
-        -->
+            android:theme="@style/Transportation_Main_Theme" >
+        </activity>
         <activity
             android:name=".transportation.TransportDoyouWantSaveActivity"
             android:exported="false"
@@ -104,7 +114,7 @@
 
         <meta-data
             android:name="com.google.android.wearable.standalone"
-            android:value="false" /> <!-- 시계 앱이 비독립형임을 선업 하는 코드 -->
+            android:value="false" /> <!-- 시계 앱이 비 독립형 임을 선업 하는 코드 -->
         <activity
             android:name=".presentation.MainActivity"
             android:exported="true"
@@ -117,13 +127,13 @@
             </intent-filter>
         </activity>
 
-        <service
-            android:name=".iot.DataListenerService"
-            android:exported="true" >
-            <intent-filter>
-                <action android:name="com.google.android.gms.wearable.BIND_LISTENER" />
-            </intent-filter>
-        </service>
+<!--        <service-->
+<!--            android:name=".iot.DataListenerService"-->
+<!--            android:exported="true" >-->
+<!--            <intent-filter>-->
+<!--                <action android:name="com.google.android.gms.wearable.BIND_LISTENER" />-->
+<!--            </intent-filter>-->
+<!--        </service>-->
     </application>
 
 </manifest>

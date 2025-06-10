@@ -8,7 +8,7 @@ import java.sql.Timestamp;
 
 @Data
 @Entity
-@Table(name = "user")
+@Table(name = "`user`")
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
@@ -30,15 +30,10 @@ public class User {
     @Column(name = "update_at", nullable = false)  //@Column이 자동 변환을 시켜중
     private Timestamp updateAt;
 
-    /*entity 는 setter 를 사용 하지 않는다 고 한다. 대신 생성자 를 사용 한다고.
-    @NoArgConstructor 와 @AllArgsConstructor 를 이용해 생성자 는 자동 생성 된다.  */
+    @Column(name = "email", length = 320, nullable = false)
+    private String email;
 
-    /*Entity 가 Persist(데이터 베이스 에 삽입) 또는 Update(데이터 베이스 에 수정) 되기 전
-    JPA Provider 가 자동 으로 실행 해야 하는 메서드 를 지정 하는 데 사용 되는 JPA annotation.
-    PrePersist annotation 은 Entity 가 영속화 되기 직전에 실행 되어야 하는 Entity class 의 method 를
-    표시 하는 데에 사용 하는 것. Entity 가 데이터 베이스 에 저장 되기 전 JPA 의 annotation 에 의해 사용 된다.
-    PreUpdate 는 Entity 가 update 되기 직전에 실행 되어야 하는 entity 클래스 의 메서드 를 표시 하는 데에
-    사용 된다. */
+    /*@NoArgConstructor 와 @AllArgsConstructor 를 이용해 생성자 자동 생성 */
     @PrePersist
     protected void onCreate() {
         this.createAt = Timestamp.valueOf(LocalDateTime.now());

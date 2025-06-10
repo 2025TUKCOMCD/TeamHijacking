@@ -8,6 +8,7 @@ import retrofit2.Response
 class DeviceControlHelper(private val apiToken: String) {
     private val apiService = RetrofitClient.instance
 
+
     // 기기 명령 전송
     fun sendDeviceCommand(deviceId: String, capability: String, command: String, onSuccess: () -> Unit, onError: (String) -> Unit) {
         val commandBody = CommandBody(
@@ -33,6 +34,9 @@ class DeviceControlHelper(private val apiToken: String) {
             }
         })
     }
+
+
+
     private fun sendCommand(deviceId: String, commandBody: CommandBody, onSuccess: () -> Unit, onError: (String) -> Unit) {
         apiService.sendCommand(deviceId, commandBody, apiToken).enqueue(object : Callback<Unit> {
             override fun onResponse(call: Call<Unit>, response: Response<Unit>) {
@@ -57,40 +61,65 @@ class DeviceControlHelper(private val apiToken: String) {
         sendDeviceCommand(deviceId, "switch", command, onSuccess, onError)
     }
 
+
     // 밝기 조절
     fun setBrightness(deviceId: String, brightness: Int, onSuccess: () -> Unit, onError: (String) -> Unit) {
         val commandBody = CommandBody(
             commands = listOf(
-                Command(
-                    capability = "switchLevel",
-                    command = "setLevel",
-                    arguments = listOf(brightness)
-                )
+                Command("switchLevel", "setLevel", listOf(brightness))
             )
         )
         sendCommand(deviceId, commandBody, onSuccess, onError)
     }
 
-    // 색상 조절
+
+    // 색상 및 채도 조절
     fun setColor(deviceId: String, hue: Int, saturation: Int, onSuccess: () -> Unit, onError: (String) -> Unit) {
         val commandBody = CommandBody(
             commands = listOf(
                 Command(
-                    capability = "colorControl",
-                    command = "setColor",
-                    arguments = listOf(
-                        mapOf(
-                            "hue" to hue,
-                            "saturation" to saturation
-                        )
-                    )
+                    "colorControl", "setColor",
+                    listOf(mapOf("hue" to hue, "saturation" to saturation))
                 )
             )
         )
         sendCommand(deviceId, commandBody, onSuccess, onError)
     }
 
-    // ✅ 상태 조회 추가 (DeviceStatus 가져오기)
+
+    // 모드 전환: WHITE <-> COLOUR, 추후 만들 모드 전환 스위치를 위한 함수
+    fun setLightMode(deviceId: String, mode: String, onSuccess: () -> Unit, onError: (String) -> Unit) {
+        val commandBody = CommandBody(
+            commands = listOf(
+                Command("custom.lightMode", "setLightMode", listOf(mode))
+            )
+        )
+        sendCommand(deviceId, commandBody, onSuccess, onError)
+    }
+
+
+    // 모드를 자동으로 확인 후, 컬러 설정 함 -> 테스트하기 용이하기 위함
+    fun setColorWithAutoMode(deviceId: String, hue: Int, saturation: Int, onSuccess: () -> Unit, onError: (String) -> Unit) {
+        getDeviceStatus(deviceId,
+            onSuccess = { status ->
+                val currentMode = status.components["main"]?.custom?.lightMode?.lightMode?.value
+                if (currentMode.equals("COLOUR", ignoreCase = true)) {
+                    setColor(deviceId, hue, saturation, onSuccess, onError)
+                } else {
+                    setLightMode(deviceId, "COLOUR",
+                        onSuccess = {
+                            setColor(deviceId, hue, saturation, onSuccess, onError)
+                        },
+                        onError = onError
+                    )
+                }
+            },
+            onError = onError
+        )
+    }
+
+
+    // 기기 상태 불러옴, Online, Offline 확인 가능하게 추후 수정
     fun getDeviceStatus(deviceId: String, onSuccess: (DeviceStatusResponse) -> Unit, onError: (String) -> Unit) {
         apiService.getDeviceStatus(deviceId, apiToken).enqueue(object : Callback<DeviceStatusResponse> {
             override fun onResponse(call: Call<DeviceStatusResponse>, response: Response<DeviceStatusResponse>) {

@@ -3,13 +3,33 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:gravity="center"
+    android:layout_gravity="center"
+    android:gravity="center_horizontal"
     android:orientation="vertical"
-    tools:context=".login.LoginActivity">
-    <!-- -->
+    tools:context=".MainActivity"
+    android:id="@+id/iotDeviceControlLayout"
+    android:layout_margin="10dp">
+    <!-- 장치 관리 페이지 -->
+
     <Button
-        android:id="@+id/data_btn1"
-        android:layout_width="wrap_content"
+        android:layout_marginTop="40dp"
+        android:layout_width="200dp"
+        android:layout_height="80dp"
+        android:id = "@+id/addViewBtn"
+        android:text="버튼 추가" />
+    <ScrollView
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="데이터 전송" />
+        android:id="@+id/iotScrollView"
+        android:padding="10dp">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id = "@+id/iotLinearLayout"
+            android:orientation = "vertical"
+            android:gravity="center"
+            android:padding="10dp">
+
+        </LinearLayout>
+    </ScrollView>
 </LinearLayout>

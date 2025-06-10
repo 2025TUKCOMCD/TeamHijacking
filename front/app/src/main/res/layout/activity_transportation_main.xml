@@ -9,55 +9,38 @@
     android:background="@color/backgroundDark"
     tools:context=".presentation.MainActivity">
 
-    <ScrollView
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        app:layout_constraintBottom_toBottomOf="parent"
+    <LinearLayout
+        android:layout_width="wrap_content"  android:layout_height="wrap_content" android:gravity="center"
+        android:orientation="vertical"
+        android:paddingBottom="0dp" app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <LinearLayout
-            android:layout_width="match_parent"
+        <ImageButton
+            android:id="@+id/btn_saved_path"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:gravity="center_horizontal"
-            android:orientation="vertical"
-            android:padding="10dp">
+            android:layout_marginBottom="10dp"
+            android:background="@android:color/transparent"
+            android:src="@drawable/saved_root"
+            android:contentDescription="@string/btn_saved_path_description"
+            android:text="@string/btn_saved_path"
+            android:textColor="#000000"
+            android:textSize="12sp" />
 
-            <!-- 저장된 경로로 탐색 버튼, 클릭 시 GOO와 상세 설명 나오도록.., -->
-            <ImageButton
-                android:id="@+id/btn_saved_path"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="10dp"
-                android:background="@android:color/transparent"
-                android:src="@drawable/saved_root"
-                android:contentDescription="@string/btn_saved_path_description"
-                android:text="@string/btn_saved_path"
-                android:textColor="#000000"
-                android:textSize="12sp" />
+        <ImageButton
+            android:id="@+id/btn_new_path"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="0dp"
+            android:background="@android:color/transparent"
+            android:src="@drawable/new_root"
+            android:contentDescription="@string/btn_new_path_description"
+            android:text="@string/btn_new_path"
+            android:textColor="#000000"
+            android:textSize="12sp" />
 
-            <!-- 저장된 경로로 탐색 버튼, 클릭 시 GOO와 상세 설명 나오도록.., -->
-            <ImageButton
-                android:id="@+id/btn_new_path"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="10dp"
-                android:background="@android:color/transparent"
-                android:src="@drawable/new_root"
-                android:contentDescription="@string/btn_new_path_description"
-                android:text="@string/btn_new_path"
-                android:textColor="#000000"
-                android:textSize="12sp" />
+    </LinearLayout>
 
-
-            <Button
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="임시 버튼"
-                android:id="@+id/imsiBtt"
-                />
-        </LinearLayout>
-
-    </ScrollView>
 </androidx.constraintlayout.widget.ConstraintLayout>

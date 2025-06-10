@@ -3,6 +3,7 @@ package com.example.back.dto.bus.arrive;
 import lombok.Data;
 
 import java.util.List;
+
 @Data
 public class BusArriveProcessDTO {
 
@@ -18,6 +19,7 @@ public class BusArriveProcessDTO {
 
     @Data
     public static class Item {
+        private String vehId1; // 첫 번째 차량 ID
         private String arrmsg1; // 첫 번째 도착 메시지
         private String arrmsg2; // 두 번째 도착 메시지
     }

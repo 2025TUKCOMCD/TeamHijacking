@@ -6,6 +6,7 @@ import retrofit2.http.GET;
 import retrofit2.http.Query;
 
 public interface BusApi {
+    // 버스 실시간 도착정보
     @GET("arrive/getArrInfoByRoute")
     Call<ResponseBody> getArrInfoByRoute(
             @Query("ServiceKey") String ServiceKey,
@@ -15,14 +16,12 @@ public interface BusApi {
             @Query("resultType") String resultType
     );
 
-    @GET("buspos/getBusPosByRouteSt")
-    Call<ResponseBody> getBusPosByRouteSt(
-            @Query("ServiceKey")String ServiceKey,
-            @Query("busRouteId")int busRouteId,
-            @Query("startOrd")int startOrd,
-            @Query("endOrd")int endOrd,
-            @Query("resultType")String resultType
+    // 특정 버스 실시간 위치정보
+    @GET("buspos/getBusPosByVehId")
+    Call<ResponseBody> getBusPosByVehId(
+            @Query("ServiceKey") String ServiceKey,
+            @Query("vehId") String vehId,
+            @Query("resultType") String resultType
     );
-
 
 }

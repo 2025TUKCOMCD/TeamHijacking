@@ -27,6 +27,8 @@ public class RouteIdSetDTO {
     @JsonInclude(value = JsonInclude.Include.NON_EMPTY)
     private List<Integer> stationInfo = new ArrayList<>(); // 정류장/역 정보 리스트
     // 예측 시간을 버스/지하철에 공통으로 사용
+    @JsonInclude(value = JsonInclude.Include.NON_EMPTY)
+    private List<Integer> networkTime = new ArrayList<>(); // 지하철 노선별 시간
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private String predictTimes1 ; // 여러 교통수단의 예상 도착 시간 리스트 1
     @JsonInclude(JsonInclude.Include.NON_NULL)

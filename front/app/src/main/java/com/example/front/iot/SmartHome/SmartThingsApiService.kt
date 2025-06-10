@@ -26,7 +26,7 @@ interface SmartThingsApiService {
         @Header("Authorization") token: String
     ): Call<DeviceStatusResponse>
 
-    // ✅ 무드등 밝기(광도) 조절 API
+    // 광도 조절 => 추후 수정 예정
     @POST("v1/devices/{deviceId}/commands")
     fun setBrightness(
         @Path("deviceId") deviceId: String,
@@ -34,7 +34,7 @@ interface SmartThingsApiService {
         @Header("Authorization") token: String
     ): Call<Unit>
 
-    // ✅ 무드등 색상(채도) 조절 API
+    // 채도 조절 => 추후 수정예정
     @POST("v1/devices/{deviceId}/commands")
     fun setColor(
         @Path("deviceId") deviceId: String,
