@@ -21,10 +21,24 @@ import com.example.front.databinding.ActivityMainBinding
 import com.example.front.iot.HomeIotActivity
 import com.example.front.setting.SettingActivity
 import com.example.front.transportation.TransportationMainActivity
+import com.google.android.gms.tasks.Tasks
+import com.google.android.gms.wearable.DataClient
+import com.google.android.gms.wearable.DataItemBuffer
+import com.google.android.gms.wearable.DataMapItem
+import com.google.android.gms.wearable.Wearable
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
+
+    private val TAG = "워치_MainActivity"
+    private val DATA_PATH = "/my_data" // 모바일 앱에서 사용한 데이터 경로
+    private val KEY_MESSAGE = "my_message" // 모바일 앱에서 보낸 데이터의 키
+
 
     // LocalBroadcastManager로부터 메시지를 수신할 Receiver 정의
     private val dataReceiver = object : BroadcastReceiver() {
@@ -76,6 +90,7 @@ class MainActivity : AppCompatActivity() {
             val intent = Intent(this, SettingActivity::class.java)
             startActivity(intent)
         }
+        checkExistingData()
     }
 
     // 액티비티가 다시 시작될 때 브로드캐스트 리시버 등록
@@ -93,6 +108,60 @@ class MainActivity : AppCompatActivity() {
     override fun onPause() {
         super.onPause()
         LocalBroadcastManager.getInstance(this).unregisterReceiver(dataReceiver)
+    }
+
+    private fun checkExistingData() {
+        // 비동기적으로 데이터 조회를 수행하기 위해 코루틴을 사용합니다.
+        // IO 디스패처는 네트워크 또는 디스크 I/O 작업에 적합합니다.
+        CoroutineScope(Dispatchers.IO).launch {
+            try {
+                val dataClient: DataClient = Wearable.getDataClient(this@MainActivity)
+                // 현재 연결된 노드로부터 모든 DataItem을 조회합니다.
+                // 특정 경로의 데이터만 조회하려면 Uri.parse("wear://*/my_data")와 같이 사용할 수도 있습니다.
+                val dataItemsTask = dataClient.getDataItems()
+                val dataItemBuffer: DataItemBuffer = Tasks.await(dataItemsTask) // Task가 완료될 때까지 대기
+
+                var foundData = false
+                // 조회된 각 DataItem을 반복하여 확인합니다.
+                for (dataItem in dataItemBuffer) {
+                    // DataItem의 경로가 우리가 원하는 경로와 일치하는지 확인합니다.
+                    if (dataItem.uri.path == DATA_PATH) {
+                        val dataMap = DataMapItem.fromDataItem(dataItem).getDataMap()
+                        // DataMap에서 "my_message" 키와 "timestamp" 키의 값을 추출합니다.
+                        val message = dataMap.getString(KEY_MESSAGE, "데이터 없음")
+                        val timestamp = dataMap.getLong("timestamp", 0L)
+
+                        Log.d(TAG, "기존 데이터 발견: 메시지='$message', 타임스탬프=$timestamp")
+
+                        // UI 업데이트는 메인 스레드에서 수행되어야 합니다.
+                        withContext(Dispatchers.Main) {
+                            Log.d("현빈","초기 로드: $message" )
+                            Log.d("현빈", "시간: ${java.text.SimpleDateFormat("HH:mm:ss").format(java.util.Date(timestamp))}")
+                        }
+                        foundData = true
+                        break // 필요한 데이터 하나를 찾았으므로 더 이상 검색할 필요가 없습니다.
+                    }
+                }
+                dataItemBuffer.release() // DataItemBuffer는 사용 후 반드시 릴리스해야 합니다.
+
+                // 만약 특정 경로의 데이터를 찾지 못했다면 UI에 해당 상태를 표시합니다.
+                if (!foundData) {
+                    withContext(Dispatchers.Main) {
+                        Log.d("현빈", "메시지: 기존 데이터 없음")
+                        Log.d("현빈", "시간: N/A")
+                    }
+                    Log.d(TAG, "경로 $DATA_PATH 에서 기존 데이터 없음")
+                }
+
+            } catch (e: Exception) {
+                // 데이터 조회 중 오류 발생 시 처리
+                Log.e(TAG, "기존 데이터 확인 중 오류 발생: ${e.message}", e)
+                withContext(Dispatchers.Main) {
+                    Log.d("현빈", "메시지: 데이터 로드 오류")
+                    Log.d("현빈", "시간: N/A")
+                }
+            }
+        }
     }
 
 }
