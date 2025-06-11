@@ -37,7 +37,7 @@ class MainActivity : AppCompatActivity() {
 
     private val TAG = "워치_MainActivity"
     private val DATA_PATH = "/my_data" // 모바일 앱에서 사용한 데이터 경로
-    private val KEY_MESSAGE = "my_message" // 모바일 앱에서 보낸 데이터의 키
+    private val KEY_MESSAGE = "아무데이터" // 모바일 앱에서 보낸 데이터의 키
 
 
     // LocalBroadcastManager로부터 메시지를 수신할 Receiver 정의
@@ -100,7 +100,7 @@ class MainActivity : AppCompatActivity() {
         // 예시: "com.example.yourpackage.app.DATA_RECEIVED"
         LocalBroadcastManager.getInstance(this).registerReceiver(
             dataReceiver,
-            IntentFilter("com.example.yourpackage.app.DATA_RECEIVED") // 워치 앱의 정확한 패키지 이름으로 변경!
+            IntentFilter("com.example.front.presentation") // 워치 앱의 정확한 패키지 이름으로 변경!
         )
     }
 
