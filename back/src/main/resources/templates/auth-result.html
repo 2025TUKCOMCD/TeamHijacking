@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SmartThings 연동 결과</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            background-color: #f4f4f4;
+            text-align: center;
+        }
+        .container {
+            background-color: #fff;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            max-width: 400px;
+            width: 90%;
+        }
+        h1 {
+            color: #333;
+            margin-bottom: 20px;
+        }
+        p {
+            color: #666;
+            line-height: 1.6;
+            margin-bottom: 30px;
+        }
+        .success {
+            color: #4CAF50; /* Green */
+        }
+        .failure {
+            color: #f44336; /* Red */
+        }
+        .button-group {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        .app-button {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            font-weight: bold;
+            transition: background-color 0.3s ease;
+        }
+        .app-button:hover {
+            background-color: #0056b3;
+        }
+        .deep-link-info {
+            margin-top: 20px;
+            padding: 10px;
+            background-color: #e9ecef;
+            border-radius: 5px;
+            font-size: 0.8em;
+            word-break: break-all;
+            text-align: left;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1 th:if="${success}" class="success">✅ SmartThings 연동 성공!</h1>
+    <h1 th:unless="${success}" class="failure">❌ SmartThings 연동 실패</h1>
+
+    <p th:text="${message}"></p>
+
+    <div class="button-group">
+        <a th:href="${androidDeepLink}" class="app-button">앱으로 돌아가기</a>
+    </div>
+
+</div>
+
+
+</body>
+</html>
