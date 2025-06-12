@@ -42,7 +42,7 @@ class IotPage01 : Fragment() {
         val iotLinearLayout = binding.iotLinearLayout
 
         //데이터 전송 테스트
-        sendData(requireContext(),"아무데이터","갔나?")
+        sendData(requireContext(),"아무데이터",System.currentTimeMillis().toString())
 
         addViewBtn.setOnClickListener {
             addIoTDeviceView("아무 이름")
