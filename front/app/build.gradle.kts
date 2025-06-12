@@ -112,6 +112,9 @@ dependencies {
 
     implementation("com.google.firebase:firebase-crashlytics-buildtools:3.0.2")
 
+    //watch, app간 데이터 전송
+    implementation("com.google.android.gms:play-services-wearable:18.1.0")
+
 
     // ✅ life cycle 및 뷰모델
     implementation(libs.lifecycle.livedata.ktx)

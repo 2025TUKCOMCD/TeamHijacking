@@ -15,7 +15,7 @@ android {
         // 중요한 변경: 'front' 디렉토리 바로 아래에 있는 local.properties를 읽도록 경로를 명확히 지정합니다.
         // project.rootProject는 Git 저장소의 가장 상위 디렉토리(TeamHijacking/)를 나타냅니다.
         // 그 아래에 "front/local.properties"가 있으므로, 이 경로를 사용합니다.
-        val localPropertiesFile = File(rootDir, "local.properties")
+        val localPropertiesFile = File(rootDir, "/front/local.properties")
 
         if (localPropertiesFile.exists()) {
             load(FileInputStream(localPropertiesFile))
@@ -79,10 +79,14 @@ dependencies {
     implementation(platform(libs.compose.bom))
 
     implementation(libs.ui) // androidx.compose.ui:ui
-    implementation(libs.ui.tooling.preview) // androidx.compose.ui:ui-tooling-preview
+    implementation(libs.ui.tooling.preview) // androidx.compose.ui:ui-tooling-preview   
     implementation(libs.activity.compose) // activity-compose
     // implementation(libs.compose.runtime) // 일반적으로 ui 라이브러리가 transitively 가져오므로 명시적으로 추가할 필요는 없지만, 문제가 지속되면 추가 고려
     // --- Compose 라이브러리 추가 끝 ---
+
+
+    //watch, app간 데이터 전송
+    implementation("com.google.android.gms:play-services-wearable:18.1.0")
 
 
     implementation(libs.core.ktx)

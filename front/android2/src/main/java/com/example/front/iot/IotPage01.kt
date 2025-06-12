@@ -41,6 +41,9 @@ class IotPage01 : Fragment() {
         val iotScrollView = binding.iotScrollView
         val iotLinearLayout = binding.iotLinearLayout
 
+        //데이터 전송 테스트
+        sendData(requireContext(),"/my_data","아무데이터",System.currentTimeMillis().toString())
+
         addViewBtn.setOnClickListener {
             addIoTDeviceView("아무 이름")
         }
@@ -82,9 +85,9 @@ class IotPage01 : Fragment() {
 
 
     //android 로부터 watch 로 데이터 보내기 위한 테스트 코드
-    private fun sendData(context: Context, key: String, value: String) {
+    fun sendData(context: Context,requestapi : String, key: String, value: String) {
         val dataClient = Wearable.getDataClient(context)
-        val putDataReq = PutDataMapRequest.create("/my_data").run {
+        val putDataReq = PutDataMapRequest.create(requestapi).run {
             dataMap.putString(key, value)
             asPutDataRequest()
         }
