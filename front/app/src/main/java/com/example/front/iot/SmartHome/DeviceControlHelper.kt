@@ -130,7 +130,15 @@ class DeviceControlHelper(private val apiToken: String) {
     }
 
 
-
+    // AI 스피커 제어: 볼륨 설정
+    fun setVolume(deviceId: String, volume: Int, onSuccess: () -> Unit, onError: (String) -> Unit) {
+        val commandBody = CommandBody(
+            commands = listOf(
+                Command("audioVolume", "setVolume", listOf(volume))
+            )
+        )
+        sendCommand(deviceId, commandBody, onSuccess, onError)
+    }
 
 
     // 기기 상태 불러옴, Online, Offline 확인 가능하게 추후 수정
