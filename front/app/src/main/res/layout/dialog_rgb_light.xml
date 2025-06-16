@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:fillViewport="true"
+    android:background="@android:color/black">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="24dp"
+        android:background="@android:color/black">
+
+    <!-- 기기 상태 텍스트 -->
+    <TextView
+        android:id="@+id/textDeviceStatus"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="기기 정보 로딩 중..."
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textColor="@android:color/white"
+        android:paddingBottom="16dp"
+        android:contentDescription="현재 기기의 상태를 표시합니다" />
+
+
+    <!-- 밝기 조절 -->
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="밝기 조절"
+        android:textStyle="bold"
+        android:textColor="@android:color/white" />
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginBottom="16dp">
+
+
+    <Button
+        android:id="@+id/btnBrightnessDown"
+        android:layout_width="0dp"
+        android:layout_weight="1"
+        android:layout_height="wrap_content"
+        android:text="밝기 ↓"
+        android:contentDescription="밝기를 줄이는 버튼입니다" />
+
+        <Button
+            android:id="@+id/btnBrightnessUp"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:text="밝기 ↑"
+            android:contentDescription="밝기를 높이는 버튼입니다" />
+    </LinearLayout>
+
+
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
