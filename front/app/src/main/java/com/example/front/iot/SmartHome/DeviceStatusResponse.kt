@@ -13,7 +13,21 @@ data class ComponentStatus(
     val switchLevel: CapabilityStatus?,
     val colorControl: ColorControlStatus?,
     val custom: CustomStatus?, // <- 새로 추가한 모드 정보 커스텀상태
-    val healthStats: HealthStats? // 온, 오프라인 확인
+    val healthStats: HealthStats?, // 온, 오프라인 확인
+    val mediaPlayback: MediaPlaybackCapability?,
+    val audioVolume: AudioVolumeCapability?
+)
+
+data class MediaPlaybackCapability(
+    val playbackStatus: StatusField
+)
+
+data class AudioVolumeCapability(
+    val volume: StatusField
+)
+
+data class StatusField(
+    val value: String
 )
 
 data class HealthStats(

@@ -36,9 +36,23 @@ class MyIotActivity : AppCompatActivity() {
         // RecyclerView 설정
         val recyclerView = findViewById<RecyclerView>(R.id.recyclerViewMyDevices)
         deviceAdapter = DeviceAdapter(deviceList) { device ->
-            when(device.label){
-                "Galaxy Home Mini (3NPH)" -> {showGalaxyHomeMiniControl(device)}
-                "Hejhome Smart Mood Light" -> {showRgbColorBulbControl(device)}
+            val name = device.label.lowercase()
+
+            Log.d("DeviceClick", "클릭된 기기 label = ${device.label}")
+
+            when {
+                name.contains("galaxy home") -> {
+                    Log.d("DeviceClick", "AI 스피커로 인식됨")
+                    showGalaxyHomeMiniControl(device)
+                }
+                name.contains("hejhome") || name.contains("무드등") || name.contains("mood light") -> {
+                    Log.d("DeviceClick", "무드등으로 인식됨")
+                    showRgbColorBulbControl(device)
+                }
+                else -> {
+                    Log.w("DeviceClick", "분기 실패 → 지원 안 함: $name")
+                    Toast.makeText(this, "지원되지 않는 기기입니다", Toast.LENGTH_SHORT).show()
+                }
             }
         }
         recyclerView.layoutManager = LinearLayoutManager(this)
