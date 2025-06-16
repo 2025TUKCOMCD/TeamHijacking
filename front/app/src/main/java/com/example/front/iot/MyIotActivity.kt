@@ -72,9 +72,84 @@ class MyIotActivity : AppCompatActivity() {
         }
     })
     }
-    private fun showGalaxyHomeMiniControl(device: Device){
+    private fun showGalaxyHomeMiniControl(device: Device) {
+        val view = LayoutInflater.from(this).inflate(R.layout.dialog_ai_speaker, null)
+        val statusText = view.findViewById<TextView>(R.id.textSpeakerStatus)
+        val btnPlayPause = view.findViewById<Button>(R.id.btnPlayPause)
+        val btnVolumeUp = view.findViewById<Button>(R.id.btnVolumeUp)
+        val btnVolumeDown = view.findViewById<Button>(R.id.btnVolumeDown)
 
+        statusText.text = "기기 이름: ${device.label}\n상태 확인 중..."
+
+        deviceControlHelper.getDeviceStatus(
+            device.deviceId,
+            onSuccess = { status ->
+                val main = status.components["main"]
+                val playback = main?.mediaPlayback
+                val volume = main?.audioVolume
+
+                val isPlaying = playback?.playbackStatus?.value.equals("playing", ignoreCase = true)
+                val currentVolume = volume?.volume?.value?.toIntOrNull() ?: -1
+
+                statusText.text = buildString {
+                    append("재생 상태: ${playback?.playbackStatus?.value ?: "알 수 없음"}\n")
+                    append("볼륨: ${if (currentVolume >= 0) "$currentVolume%" else "정보 없음"}")
+                }
+
+                btnPlayPause.setOnClickListener {
+                    val command = if (isPlaying) "pause" else "play"
+                    deviceControlHelper.sendMediaCommand(
+                        device.deviceId,
+                        command,
+                        onSuccess = {
+                            Toast.makeText(this@MyIotActivity, "명령 실행됨: $command", Toast.LENGTH_SHORT).show()
+                        },
+                        onError = {
+                            Toast.makeText(this@MyIotActivity, "재생 제어 실패", Toast.LENGTH_SHORT).show()
+                        }
+                    )
+                }
+
+                btnVolumeUp.setOnClickListener {
+                    val newVolume = (currentVolume + 10).coerceAtMost(100)
+                    deviceControlHelper.setVolume(
+                        device.deviceId, newVolume,
+                        onSuccess = {
+                            Toast.makeText(this@MyIotActivity, "볼륨 ↑", Toast.LENGTH_SHORT).show()
+                        },
+                        onError = {
+                            Toast.makeText(this@MyIotActivity, "볼륨 조절 실패", Toast.LENGTH_SHORT).show()
+                        }
+                    )
+                }
+
+                btnVolumeDown.setOnClickListener {
+                    val newVolume = (currentVolume - 10).coerceAtLeast(0)
+                    deviceControlHelper.setVolume(
+                        device.deviceId, newVolume,
+                        onSuccess = {
+                            Toast.makeText(this@MyIotActivity, "볼륨 ↓", Toast.LENGTH_SHORT).show()
+                        },
+                        onError = {
+                            Toast.makeText(this@MyIotActivity, "볼륨 조절 실패", Toast.LENGTH_SHORT).show()
+                        }
+                    )
+                }
+
+            },
+            onError = { error ->
+                statusText.text = "상태 불러오기 실패: $error"
+                Toast.makeText(this, "기기 상태 가져오기 실패", Toast.LENGTH_SHORT).show()
+            }
+        )
+
+        AlertDialog.Builder(this)
+            .setTitle("AI 스피커 제어")
+            .setView(view)
+            .setNeutralButton("닫기", null)
+            .show()
     }
+
 
 
 
