@@ -42,16 +42,16 @@ class MyIotActivity : AppCompatActivity() {
 
             when {
                 name.contains("galaxy home") -> {
-                    Log.d("DeviceClick", "AI 스피커로 인식됨")
+                    Log.d("DeviceClick", "AI 스피커 인식")
                     showGalaxyHomeMiniControl(device)
                 }
                 name.contains("hejhome") || name.contains("무드등") || name.contains("mood light") -> {
-                    Log.d("DeviceClick", "무드등으로 인식됨")
+                    Log.d("DeviceClick", "무드등 인식")
                     showRgbColorBulbControl(device)
                 }
                 else -> {
                     Log.w("DeviceClick", "분기 실패 → 지원 안 함: $name")
-                    Toast.makeText(this, "지원되지 않는 기기입니다", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this, "지원 안함", Toast.LENGTH_SHORT).show()
                 }
             }
         }
