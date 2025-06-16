@@ -171,13 +171,15 @@ class MyIotActivity : AppCompatActivity() {
 
     //무드등 제어 만약 device이름이 c2c-rgb-color-bulb이라면 여기로 이동시키면 됨 추후에 넣어야 할듯
     private fun showRgbColorBulbControl(device: Device) {
-        val view = LayoutInflater.from(this).inflate(R.layout.dialog_device_detail, null)
+        val view = LayoutInflater.from(this).inflate(R.layout.dialog_rgb_light, null)
         val statusText = view.findViewById<TextView>(R.id.textDeviceStatus)
         val btnBrightnessUp = view.findViewById<Button>(R.id.btnBrightnessUp)
         val btnBrightnessDown = view.findViewById<Button>(R.id.btnBrightnessDown)
         val btnSaturationUp = view.findViewById<Button>(R.id.btnSaturationUp)
         val btnSaturationDown = view.findViewById<Button>(R.id.btnSaturationDown)
         val btnTogglePower = view.findViewById<Button>(R.id.btnTogglePower)
+        val textPowerStatus = view.findViewById<TextView>(R.id.textPowerStatus)
+        val textBrightnessStatus = view.findViewById<TextView>(R.id.textBrightnessStatus)
 
         statusText.text = "기기 이름: ${device.label}\n기기 ID: ${device.deviceId}"
 
@@ -195,15 +197,24 @@ class MyIotActivity : AppCompatActivity() {
                     val switchValue = mainComponent.switch?.switch?.value
                     isPowerOn = switchValue.equals("on", ignoreCase = true)
 
-                    //val brightnessValue = mainComponent.switchLevel?.value?.toIntOrNull()
-                    //brightnessValue?.let {
-                        //seekBarBrightness.progress = it
-                    //}
 
-                    //val saturationValue = mainComponent.colorControl?.saturation?.value?.toInt()
-                    //saturationValue?.let {
-                        //seekBarSaturation.progress = it
-                    //}
+                    val level = mainComponent.switchLevels?.level?.value?.toIntOrNull()
+                    if (level != null) {
+                        brightnessValue = level
+                        textBrightnessStatus.text = "현재 밝기: ${brightnessValue}%"
+                    } else {
+                        textBrightnessStatus.text = "현재 밝기: 정보 없음"
+                    }
+
+
+                    val saturation = mainComponent.colorControl?.saturation?.value?.toInt()
+                    val textSaturationStatus = view.findViewById<TextView>(R.id.textSaturationStatus)
+                    if (saturation != null) {
+                        saturationValue = saturation
+                        textSaturationStatus.text = "현재 채도: ${saturationValue}%"
+                    } else {
+                        textSaturationStatus.text = "현재 채도: 정보 없음"
+                    }
                 } else {
                     Toast.makeText(this, "Main 컴포넌트 없음", Toast.LENGTH_SHORT).show()
                 }

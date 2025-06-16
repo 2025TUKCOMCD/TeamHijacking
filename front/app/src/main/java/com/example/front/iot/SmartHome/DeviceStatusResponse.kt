@@ -11,11 +11,16 @@ data class ComponentStatus(
     val temperatureMeasurement: TemperatureStatus?,
     val contactSensor: ContactSensorStatus?,
     val switchLevel: CapabilityStatus?,
+    val switchLevels: SwitchLevelStatus?,
     val colorControl: ColorControlStatus?,
     val custom: CustomStatus?, // <- 새로 추가한 모드 정보 커스텀상태
     val healthStats: HealthStats?, // 온, 오프라인 확인
     val mediaPlayback: MediaPlaybackCapability?,
     val audioVolume: AudioVolumeCapability?
+)
+
+data class SwitchLevelStatus(
+    val level: ValueStatus
 )
 
 data class MediaPlaybackCapability(
@@ -45,10 +50,12 @@ data class LightModeStatus(
 data class CapabilityStatus(
     val value: String
 )
+
 data class ColorControlStatus(
     val hue: AttributeValue?,
     val saturation: AttributeValue?
 )
+
 data class SwitchStatus(
     val switch: ValueStatus
 )

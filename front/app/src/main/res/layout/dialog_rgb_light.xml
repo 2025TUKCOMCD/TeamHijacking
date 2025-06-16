@@ -12,16 +12,49 @@
         android:padding="24dp"
         android:background="@android:color/black">
 
-    <!-- 기기 상태 텍스트 -->
-    <TextView
-        android:id="@+id/textDeviceStatus"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="기기 정보 로딩 중..."
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:textColor="@android:color/white"
-        android:paddingBottom="16dp"
-        android:contentDescription="현재 기기의 상태를 표시합니다" />
+        <!-- 기존 기기 이름 및 ID 출력용 -->
+        <TextView
+            android:id="@+id/textDeviceStatus"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="기기 정보 로딩 중..."
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:textColor="@android:color/white"
+            android:paddingBottom="8dp"
+            android:contentDescription="현재 기기의 정보입니다" />
+
+
+        <!-- 전원 상태 -->
+        <TextView
+            android:id="@+id/textPowerStatus"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="전원 상태 확인 중..."
+            android:textColor="@android:color/white"
+            android:paddingBottom="4dp"
+            android:contentDescription="무드등의 전원 상태입니다" />
+
+
+        <!-- 밝기 상태 -->
+        <TextView
+            android:id="@+id/textBrightnessStatus"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="밝기 상태 확인 중..."
+            android:textColor="@android:color/white"
+            android:paddingBottom="4dp"
+            android:contentDescription="무드등의 밝기 상태입니다" />
+
+
+        <!-- 채도 상태 -->
+        <TextView
+            android:id="@+id/textSaturationStatus"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="채도 상태 확인 중..."
+            android:textColor="@android:color/white"
+            android:paddingBottom="16dp"
+            android:contentDescription="무드등의 채도 상태입니다" />
 
 
     <!-- 밝기 조절 -->
