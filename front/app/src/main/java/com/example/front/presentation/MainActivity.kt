@@ -16,6 +16,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.example.front.R
+import com.example.front.app.WatchAppOpener
 import com.example.front.audioguide.AudioGuideBLEConnectActivity
 import com.example.front.databinding.ActivityMainBinding
 import com.example.front.iot.HomeIotActivity
@@ -91,6 +92,10 @@ class MainActivity : AppCompatActivity() {
             startActivity(intent)
         }
         checkExistingData()
+
+        // 요청 코드 여기에 함수를 더 적어야함 ex 어떻게 하면 핸드폰으로 보낼 껀지 등등
+//        val opener = WatchAppOpener() // WatchAppOpener 인스턴스 생성
+//        opener.sendOpenAppRequestToPhone(this, "워치에서 앱 열기 요청!") // 스마트폰 앱 열기 요청 전송
     }
 
     // 액티비티가 다시 시작될 때 브로드캐스트 리시버 등록
