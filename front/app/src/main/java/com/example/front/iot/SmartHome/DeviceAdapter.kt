@@ -23,8 +23,9 @@ class DeviceAdapter(
         }
     }
 
+    // 스피커
     inner class AiSpeakerViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-        val deviceLabel: TextView = view.findViewById(R.id.deviceLabel) // R.id.deviceLabel을 각 레이아웃에 맞게 변경
+        val deviceLabel: TextView = view.findViewById(R.id.deviceLabel)
         init {
             view.setOnClickListener {
                 onDeviceClick(devices[adapterPosition])
@@ -35,12 +36,15 @@ class DeviceAdapter(
     // ... 필요한 다른 장치 유형에 대한 ViewHolder 추가
 
     override fun getItemViewType(position: Int): Int {
-        return when (devices[position].name) {
-            "Galaxy Home Mini (3NPH)" -> VIEW_TYPE_AISPEAKER
-            "Hejhome Smart Mood Light" -> VIEW_TYPE_LIGHT
-            // ... 다른 장치 유형에 대한 View Type 반환
+        val name = devices[position].label.lowercase()
+
+        return when {
+            name.contains("galaxy home") -> VIEW_TYPE_AISPEAKER
+            name.contains("무드등") || name.contains("light") -> VIEW_TYPE_LIGHT
             else -> {
-                Log.d("현빈", "그런 기기 없음")}
+                Log.w("DeviceAdapter", "Unknown device type: $name")
+                VIEW_TYPE_AISPEAKER
+            }
         }
     }
 
