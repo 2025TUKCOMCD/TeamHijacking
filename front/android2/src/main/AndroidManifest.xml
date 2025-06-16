@@ -19,10 +19,10 @@
         <activity
             android:name=".login.SplashActivity"
             android:exported="true">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" /> <!-- 이 Activity 가 최초 activity 이며, application 시작 관리자 에 목록 으로 게재됨 -->
-            </intent-filter>
+<!--            <intent-filter>-->
+<!--                <action android:name="android.intent.action.MAIN" />-->
+<!--                <category android:name="android.intent.category.LAUNCHER" /> &lt;!&ndash; 이 Activity 가 최초 activity 이며, application 시작 관리자 에 목록 으로 게재됨 &ndash;&gt;-->
+<!--            </intent-filter>-->
         </activity>
 
         <activity
@@ -41,11 +41,11 @@
         <activity
             android:name=".MainActivity"
             android:exported="true" >
-<!--            <intent-filter>-->
-<!--                <action android:name="android.intent.action.MAIN" />-->
-<!--                <category android:name="android.intent.category.LAUNCHER" /> &lt;!&ndash; 이 Activity 가 최초 activity 이며, application 시작 관리자 에 목록 으로 게재됨 &ndash;&gt;-->
-<!--            </intent-filter>-->
-             <!-- 카카오 인증을 위한 AuthCodeHandlerActivity 설정 -->
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" /> <!-- 이 Activity 가 최초 activity 이며, application 시작 관리자 에 목록 으로 게재됨 -->
+            </intent-filter>
+<!--              카카오 인증을 위한 AuthCodeHandlerActivity 설정 -->
         </activity>
         <activity
             android:name="com.kakao.sdk.auth.AuthCodeHandlerActivity"
@@ -61,6 +61,22 @@
                     android:scheme="kakaocf939a3f6eb2a3a0c85cce072098dba2" /> <!-- YOUR_NATIVE_APP_KEY 부분을 native 앱 키로 변경 -->
             </intent-filter>
         </activity>
+
+
+        <!-- 워치로부터 메시지를 수신하기 위한 서비스 등록 -->
+        <service
+            android:name=".PhoneMessageListenerService"
+            android:enabled="true"
+            android:exported="true">
+            <intent-filter>
+                <!-- Wear OS Message API 액션 -->
+                <action android:name="com.google.android.gms.wearable.MESSAGE_RECEIVED" />
+                <data
+                    android:host="*"
+                    android:pathPrefix="/open_phone_app"
+                    android:scheme="wear" />
+            </intent-filter>
+        </service>
     </application>
 
 </manifest>
