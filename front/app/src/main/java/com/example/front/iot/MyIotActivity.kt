@@ -55,6 +55,8 @@ class MyIotActivity : AppCompatActivity() {
                 }
             }
         }
+
+
         recyclerView.layoutManager = LinearLayoutManager(this)
         recyclerView.adapter = deviceAdapter
         Log.d("현빈", "디바이스 불러오기 전")
