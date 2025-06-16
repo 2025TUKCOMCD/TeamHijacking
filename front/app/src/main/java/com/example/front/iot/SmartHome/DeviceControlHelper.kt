@@ -119,6 +119,20 @@ class DeviceControlHelper(private val apiToken: String) {
     }
 
 
+    // AI 스피커 제어: 재생 / 일시정지
+    fun sendMediaCommand(deviceId: String, command: String, onSuccess: () -> Unit, onError: (String) -> Unit) {
+        val commandBody = CommandBody(
+            commands = listOf(
+                Command("mediaPlayback", command)
+            )
+        )
+        sendCommand(deviceId, commandBody, onSuccess, onError)
+    }
+
+
+
+
+
     // 기기 상태 불러옴, Online, Offline 확인 가능하게 추후 수정
     fun getDeviceStatus(deviceId: String, onSuccess: (DeviceStatusResponse) -> Unit, onError: (String) -> Unit) {
         apiService.getDeviceStatus(deviceId, apiToken).enqueue(object : Callback<DeviceStatusResponse> {
