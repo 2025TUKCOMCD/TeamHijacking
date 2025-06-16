@@ -13,10 +13,9 @@ class DeviceAdapter(
     private val onDeviceClick: (Device) -> Unit
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() { // ViewHolder 타입을 RecyclerView.ViewHolder로 변경
 
-    // 각 장치 유형에 맞는 ViewHolder 클래스 정의
+    // 무드등
     inner class LightViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-        val deviceLabel: TextView = view.findViewById(R.id.deviceLabel) // R.id.deviceLabel을 각 레이아웃에 맞게 변경
-        // Light 관련 UI 요소들
+        val deviceLabel: TextView = view.findViewById(R.id.deviceLabel)
         init {
             view.setOnClickListener {
                 onDeviceClick(devices[adapterPosition])
@@ -37,8 +36,7 @@ class DeviceAdapter(
 
     override fun getItemViewType(position: Int): Int {
         return when (devices[position].name) {
-            "Galaxy Home Mini (3NPH)" -> VIEW_TYPE_LIGHT
-            "c2c-rgb-color-bulb" -> VIEW_TYPE_AISPEAKER
+            "Galaxy Home Mini (3NPH)" -> VIEW_TYPE_AISPEAKER
             "Hejhome Smart Mood Light" -> VIEW_TYPE_LIGHT
             // ... 다른 장치 유형에 대한 View Type 반환
             else -> {

@@ -38,9 +38,7 @@ class MyIotActivity : AppCompatActivity() {
         deviceAdapter = DeviceAdapter(deviceList) { device ->
             when(device.label){
                 "Galaxy Home Mini (3NPH)" -> {showGalaxyHomeMiniControl(device)}
-                "c2c-rgb-color-bulb" -> {showRgbColorBulbControl(device)}
                 "Hejhome Smart Mood Light" -> {showRgbColorBulbControl(device)}
-                // 무드등 추가 예정
             }
         }
         recyclerView.layoutManager = LinearLayoutManager(this)
