@@ -68,17 +68,10 @@ class DeviceAdapter(
         val device = devices[position]
         when (holder.itemViewType) {
             VIEW_TYPE_LIGHT -> {
-                (holder as LightViewHolder).apply {
-                    deviceLabel.text = device.label
-                    // Light 관련 데이터 바인딩
-                }
+                (holder as LightViewHolder).deviceLabel.text = device.label
             }
             VIEW_TYPE_AISPEAKER -> {
-                (holder as AiSpeakerViewHolder).apply {
-                    deviceLabel.text = device.label
-                    // Temperature 관련 데이터 바인딩 (예: device.currentTemperature 또는 유사한 속성)
-                    // temperatureValue.text = "${device.currentTemperature}°C"
-                }
+                (holder as AiSpeakerViewHolder).deviceLabel.text = device.label
             }
         }
     }
