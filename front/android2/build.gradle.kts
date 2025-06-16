@@ -15,7 +15,7 @@ android {
         // 중요한 변경: 'front' 디렉토리 바로 아래에 있는 local.properties를 읽도록 경로를 명확히 지정합니다.
         // project.rootProject는 Git 저장소의 가장 상위 디렉토리(TeamHijacking/)를 나타냅니다.
         // 그 아래에 "front/local.properties"가 있으므로, 이 경로를 사용합니다.
-        val localPropertiesFile = File(rootDir, "/front/local.properties")
+        val localPropertiesFile = File(rootDir, "front/local.properties")
 
         if (localPropertiesFile.exists()) {
             load(FileInputStream(localPropertiesFile))
