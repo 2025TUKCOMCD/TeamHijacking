@@ -119,6 +119,24 @@ class DeviceControlHelper(private val apiToken: String) {
     }
 
 
+    // 기기 상태 불러옴, Online, Offline 확인 가능하게 추후 수정
+    fun getDeviceStatus(deviceId: String, onSuccess: (DeviceStatusResponse) -> Unit, onError: (String) -> Unit) {
+        apiService.getDeviceStatus(deviceId, apiToken).enqueue(object : Callback<DeviceStatusResponse> {
+            override fun onResponse(call: Call<DeviceStatusResponse>, response: Response<DeviceStatusResponse>) {
+                if (response.isSuccessful && response.body() != null) {
+                    onSuccess(response.body()!!)
+                } else {
+                    onError("Failed to fetch device status: ${response.code()}")
+                }
+            }
+
+            override fun onFailure(call: Call<DeviceStatusResponse>, t: Throwable) {
+                onError("Error fetching device status: ${t.message}")
+            }
+        })
+    }
+
+
     // AI 스피커 제어: 재생 / 일시정지
     fun sendMediaCommand(deviceId: String, command: String, onSuccess: () -> Unit, onError: (String) -> Unit) {
         val commandBody = CommandBody(
@@ -138,23 +156,5 @@ class DeviceControlHelper(private val apiToken: String) {
             )
         )
         sendCommand(deviceId, commandBody, onSuccess, onError)
-    }
-
-
-    // 기기 상태 불러옴, Online, Offline 확인 가능하게 추후 수정
-    fun getDeviceStatus(deviceId: String, onSuccess: (DeviceStatusResponse) -> Unit, onError: (String) -> Unit) {
-        apiService.getDeviceStatus(deviceId, apiToken).enqueue(object : Callback<DeviceStatusResponse> {
-            override fun onResponse(call: Call<DeviceStatusResponse>, response: Response<DeviceStatusResponse>) {
-                if (response.isSuccessful && response.body() != null) {
-                    onSuccess(response.body()!!)
-                } else {
-                    onError("Failed to fetch device status: ${response.code()}")
-                }
-            }
-
-            override fun onFailure(call: Call<DeviceStatusResponse>, t: Throwable) {
-                onError("Error fetching device status: ${t.message}")
-            }
-        })
     }
 }
