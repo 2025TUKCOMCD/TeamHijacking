@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:fillViewport="true"
@@ -57,7 +57,44 @@
             android:contentDescription="밝기를 높이는 버튼입니다" />
     </LinearLayout>
 
+        <!-- 채도 조절 -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="채도 조절"
+            android:textStyle="bold"
+            android:textColor="@android:color/white" />
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginBottom="16dp">
 
+            <Button
+                android:id="@+id/btnSaturationDown"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:text="채도 ↓"
+                android:contentDescription="채도를 줄이는 버튼입니다" />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+            <Button
+                android:id="@+id/btnSaturationUp"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:text="채도 ↑"
+                android:contentDescription="채도를 높이는 버튼입니다" />
+        </LinearLayout>
+
+        <!-- 전원 토글 -->
+        <Button
+            android:id="@+id/btnTogglePower"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="전원 ON / OFF"
+            android:layout_marginTop="8dp"
+            android:contentDescription="전원을 켜거나 끄는 버튼입니다" />
+    </LinearLayout>
+</ScrollView>
