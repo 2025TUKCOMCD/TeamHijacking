@@ -1,11 +1,16 @@
 package com.example.front.login
 
+import android.content.ActivityNotFoundException
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.widget.ImageButton
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.browser.customtabs.CustomTabsIntent
+import androidx.core.content.ContextCompat
+import com.example.front.BuildConfig
 import com.example.front.MainActivity
 import com.example.front.databinding.ActivityLoginBinding
 import com.example.front.login.data.UserRequest
@@ -15,10 +20,22 @@ import com.kakao.sdk.common.model.ClientError
 import com.kakao.sdk.common.model.ClientErrorCause
 import com.kakao.sdk.user.UserApiClient
 import com.kakao.sdk.common.util.Utility
+import java.security.SecureRandom
+import java.util.Base64
 
 
 class LoginActivity : AppCompatActivity() {
     private lateinit var binding: ActivityLoginBinding
+
+    // SmartThings OAuth 관련 상수 (BuildConfig에서 가져옴)
+    private val SMARTTHINGS_AUTHORIZE_URL = BuildConfig.SMARTTHINGS_AUTHORIZE_URL
+    private val SMARTTHINGS_CLIENT_ID = BuildConfig.SMARTTHINGS_CLIENT_ID
+    private val SMARTTHINGS_REDIRECT_URI = BuildConfig.SMARTTHINGS_REDIRECT_URI
+    private val SMARTTHINGS_SCOPE = "r%3Adevices%3A%2A" // SmartThings API 접근 권한
+
+    // CSRF 토큰 생성을 위한 SecureRandom 인스턴스
+    private val secureRandom = SecureRandom()
+
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -132,6 +149,7 @@ class LoginActivity : AppCompatActivity() {
 
                 Log.d("login", "객체 생성 제대로 됨")
 
+
                 //response 확인, 객체 response 받기 전 오류면
                 //registerUser에서 오류가 난 것 같다
                 UserProcessor.registerUser(user) { response ->
@@ -142,6 +160,8 @@ class LoginActivity : AppCompatActivity() {
                             if (registeredUser != null ) {
                                 //로그인 정보 저장 + 메인 화면 이동
                                 saveLoginInfo(registeredUser)
+                                // 여기에 코드 추가
+                                initiateSmartThingsOAuth(registeredUser.loginId)
                                 moveToMain(registeredUser.name)
                             }
                         }
@@ -149,6 +169,8 @@ class LoginActivity : AppCompatActivity() {
                             Toast.makeText(this, "이미 등록된 사용자 입니다.", Toast.LENGTH_SHORT).show()
                             //이미 등록된 사용자 처리 로직
                             saveLoginInfo(user)
+                            // 여기에 코드 추가
+                            initiateSmartThingsOAuth(user.loginId)
                             moveToMain(user.name)
                         }
                         else -> {
@@ -185,5 +207,62 @@ class LoginActivity : AppCompatActivity() {
 
     private fun updateProfile() {
 
+    }
+    /**
+     * SmartThings OAuth 인증 흐름을 시작합니다.
+     * 사용자를 SmartThings 인증 페이지로 리디렉션합니다.
+     * @param userId SmartThings 연동에 사용할 사용자 ID (백엔드에서 토큰과 매핑하기 위해 state에 포함)
+     */
+    private fun initiateSmartThingsOAuth(userId: String) {
+        // CSRF 보호를 위한 state 값 생성 (userId와 랜덤 문자열 조합)
+//        val csrfBytes = ByteArray(16)
+//        secureRandom.nextBytes(csrfBytes)
+//        val csrfToken = Base64.getUrlEncoder().withoutPadding().encodeToString(csrfBytes)
+        val state = "${userId}" // 백엔드가 userId를 추출할 수 있도록 형식 지정
+
+        // SmartThings 인증 URL 구성
+        val authUrl = Uri.parse(SMARTTHINGS_AUTHORIZE_URL).buildUpon()
+            .appendQueryParameter("response_type", "code") // OAuth 2.0 Authorization Code Flow
+            .appendQueryParameter("client_id", SMARTTHINGS_CLIENT_ID)
+            .appendQueryParameter("scope", SMARTTHINGS_SCOPE)
+            .appendQueryParameter("redirect_uri", SMARTTHINGS_REDIRECT_URI)
+            .appendQueryParameter("state", state) // CSRF 토큰과 사용자 ID 포함
+            .build()
+            .toString()
+
+        Log.d("SmartThingsOAuth", "SmartThings OAuth URL: $authUrl")
+
+        // Chrome Custom Tabs를 사용하여 웹 페이지 열기 시도
+        try {
+            val customTabsIntent = CustomTabsIntent.Builder()
+                .setShowTitle(true) // 툴바에 웹 페이지 제목 표시
+                .setColorScheme(CustomTabsIntent.COLOR_SCHEME_SYSTEM) // 시스템 테마에 맞춤
+                .setToolbarColor(ContextCompat.getColor(this, com.example.front.R.color.iotColor)) // 툴바 색상 설정 (예시 색상, 프로젝트에 맞게 변경)
+                .build()
+
+            customTabsIntent.launchUrl(this, Uri.parse(authUrl))
+            Log.d("SmartThingsOAuth", "SmartThings 인증 페이지 Custom Tabs로 열기 성공")
+            Toast.makeText(this, "SmartThings 인증을 진행해주세요.", Toast.LENGTH_LONG).show()
+        } catch (e: ActivityNotFoundException) {
+            // Custom Tabs (Chrome)이 설치되어 있지 않을 경우 일반 웹 브라우저로 폴백
+            Log.e("SmartThingsOAuth", "Custom Tabs를 사용할 수 없습니다. 일반 웹 브라우저로 시도: ${e.message}", e)
+            try {
+                val fallbackIntent = Intent(Intent.ACTION_VIEW, Uri.parse(authUrl))
+                if (fallbackIntent.resolveActivity(packageManager) != null) {
+                    startActivity(fallbackIntent)
+                    Log.d("SmartThingsOAuth", "SmartThings 인증 페이지 일반 브라우저로 열기 성공")
+                    Toast.makeText(this, "SmartThings 인증을 진행해주세요.", Toast.LENGTH_LONG).show()
+                } else {
+                    Log.e("SmartThingsOAuth", "SmartThings 인증 URL을 처리할 앱(웹 브라우저 등)을 찾을 수 없습니다: $authUrl")
+                    Toast.makeText(this, "웹 브라우저를 찾을 수 없습니다. SmartThings 인증을 진행할 수 없습니다.", Toast.LENGTH_LONG).show()
+                }
+            } catch (e: Exception) {
+                Log.e("SmartThingsOAuth", "SmartThings 인증 페이지 열기 중 폴백 오류: ${e.message}", e)
+                Toast.makeText(this, "SmartThings 인증을 시작할 수 없습니다. ${e.message}", Toast.LENGTH_LONG).show()
+            }
+        } catch (e: Exception) {
+            Log.e("SmartThingsOAuth", "SmartThings 인증 페이지 열기 중 예상치 못한 오류: ${e.message}", e)
+            Toast.makeText(this, "SmartThings 인증을 시작할 수 없습니다. ${e.message}", Toast.LENGTH_LONG).show()
+        }
     }
 }
