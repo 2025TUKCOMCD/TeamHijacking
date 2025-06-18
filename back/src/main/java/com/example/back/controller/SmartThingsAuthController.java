@@ -79,9 +79,8 @@ public class SmartThingsAuthController {
 
         // state 값에서 userId 추출 (형식: userId_csrfToken)
         String userId = "test"; // 초기화
-        if (state != null && state.contains("_")) {
-            String[] parts = state.split("_", 2);
-            userId = parts[0];
+        if (state != null ){
+            userId = state;
             // csrfToken = parts[1]; // CSRF 토큰은 여기서는 사용하지 않음
         }
 
