@@ -9,17 +9,28 @@
     android:layout_gravity="center"
     android:minWidth="200dp"
     android:minHeight="200dp"
-    android:id="@+id/settingFAQDialog">
+    android:id="@+id/settingQnADialog">
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="15dp">
-        <TextView
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:minHeight="80dp"
-            android:textSize="12sp"
-            android:text="뭐라도 써야하는 것은 사실임" />
+            android:orientation="vertical">
+            <TextView
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:textSize="28sp"
+                android:text="@string/QnAText"
+                android:layout_marginBottom="12dp" />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:minHeight="80dp"
+                android:textSize="12sp"
+                android:text="@string/QnAExplainText" />
+        </LinearLayout>
     </ScrollView>
     <Button
         android:layout_width="wrap_content"

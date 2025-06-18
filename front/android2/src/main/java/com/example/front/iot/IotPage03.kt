@@ -9,6 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.LinearLayout
+import android.widget.TextView
 import androidx.fragment.app.Fragment
 import com.example.front.databinding.FragmentIotPage03Binding
 import com.kakao.sdk.user.UserApiClient
@@ -38,6 +39,13 @@ class IotPage03 : Fragment() {
         val questionLittleLayout: LinearLayout = binding.QuestionLittleLayout
         val realProfileLayout: LinearLayout = binding.realProfileLayout
         val littleProfileLayout: LinearLayout = binding.littleProfileLayout
+        val faq: TextView = binding.FAQ
+        val qna: TextView = binding.QNA
+        val termOfUse: TextView = binding.termOfUse
+        val privacyPolicy: TextView = binding.privacyPolicy
+        val openSource: TextView = binding.openSource
+        val howToDo: TextView = binding.howToDo
+        val contactToDev: TextView = binding.contactToDev
 
         logoutBtn.setOnClickListener {
             //1. 카카오 logout
@@ -86,6 +94,36 @@ class IotPage03 : Fragment() {
             }
         }
 
+        //dialog 출력을 위한 코드들
+        faq.setOnClickListener {
+
+        }
+
+        qna.setOnClickListener {
+
+        }
+
+        termOfUse.setOnClickListener {
+
+        }
+
+        privacyPolicy.setOnClickListener {
+
+        }
+
+        openSource.setOnClickListener {
+
+        }
+
+        howToDo.setOnClickListener {
+
+        }
+
+        contactToDev.setOnClickListener {
+
+        }
+
+        //https://coding-juuwon2.tistory.com/114
         return binding.root
     }
 
