@@ -3,6 +3,7 @@ package com.example.front.transportation
 import android.Manifest
 import android.content.ContentValues.TAG
 import android.content.Context
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.location.Location
 import android.location.LocationManager
@@ -33,6 +34,7 @@ import com.google.android.gms.location.LocationServices
 import android.view.accessibility.AccessibilityEvent
 import androidx.core.location.LocationManagerCompat.requestLocationUpdates
 import androidx.lifecycle.lifecycleScope
+import com.example.front.presentation.MainActivity
 import com.example.front.transportation.data.realTime.RealtimeDTO
 import com.example.front.transportation.data.realTime.RealtimeResponseDTO
 import com.example.front.transportation.processor.RealtimeProcessor
@@ -55,6 +57,11 @@ class TransportInformationActivity : AppCompatActivity() {
     private var endLng: Double = 0.0
     private var departureName: String = "출발지" // 출발지 이름
     private var destinationName: String = "도착지" // 도착지 이름
+
+    private var receivedTransportRouteKey: Int? = null
+    private var receivedIsFavorite: Boolean = false
+    private var receivedIsSelected: Boolean = false
+    private var receivedSavedRouteName: String? = null
 
     // Intent에서 전달받을 데이터
     private var pathTransitType: ArrayList<Int>? = null
@@ -141,7 +148,12 @@ class TransportInformationActivity : AppCompatActivity() {
         endLng = intent.getDoubleExtra("endLng", 0.0)
         departureName = intent.getStringExtra("departureName") ?: "출발지"
         destinationName = intent.getStringExtra("destinationName") ?: "도착지"
-
+        intent.extras?.let {
+            receivedTransportRouteKey = it.getInt("transportRouteKey", -1).takeIf { key -> key != -1 }
+            receivedIsFavorite = it.getBoolean("isFavorite", false)
+            receivedIsSelected = it.getBoolean("isSelected", false)
+            receivedSavedRouteName = it.getString("savedRouteName")
+        }
         Log.d("log", "pathTransitType: $pathTransitType")
         Log.d("log", "transitTypeNo: $transitTypeNo")
         Log.d("log", "routeIds: $routeIds")
@@ -170,7 +182,49 @@ class TransportInformationActivity : AppCompatActivity() {
                     transOrder++
                     updateCurrentTransportationInfo(transOrder)
                 } else {
-                    transSavedDialogShow() // Toast가 끝난 후에 함수 호출
+                    if (receivedIsSelected) {
+                        // --- 변경된 로직: isSelected가 true일 때 Toast 없이 데이터 전송 후 종료 ---
+                        lifecycleScope.launch {
+                            val responseDTO = RouteProcessor.DBSaveRoute(
+                                departureName,
+                                destinationName,
+                                startLat,
+                                startLng,
+                                endLat,
+                                endLng,
+                                receivedSavedRouteName ?: "$departureName - $destinationName", // 기존 저장된 이름 사용 또는 기본값
+                                receivedTransportRouteKey,
+                                receivedIsFavorite
+                                 // isSelected 정보 전달
+                                // loginId 등 다른 필요한 필드 추가
+                            )
+
+                            if (responseDTO != null && responseDTO.success) {
+                                Log.d(
+                                    "TransportInfoActivity",
+                                    "저장된 경로 데이터 업데이트 성공: ${responseDTO.message}"
+                                )
+                                // Toast를 보여주지 않고 바로 다음 액티비티로 이동
+                            } else {
+                                Log.e(
+                                    "TransportInfoActivity",
+                                    "저장된 경로 데이터 업데이트 실패: ${responseDTO?.message ?: "알 수 없는 오류"}"
+                                )
+                                // 실패 시에도 사용자 경험을 위해 강제로 이동
+                            }
+
+                            // 지연 없이 바로 다음 액티비티로 이동
+                            val intent =
+                                Intent(this@TransportInformationActivity, MainActivity::class.java)
+                            startActivity(intent)
+                            finish() // 현재 액티비티 종료
+                        }
+
+                    } else {
+                        // 새로운 경로를 통해 넘어온 경우: 저장 여부 다이얼로그 표시 (기존 로직 유지)
+                        Toast.makeText(this, "마지막 경로입니다. 경로를 저장하시겠습니까?", Toast.LENGTH_SHORT).show()
+                        transSavedDialogShow()
+                    }
                 }
             }
         }
@@ -443,7 +497,7 @@ class TransportInformationActivity : AppCompatActivity() {
                                     RealtimeProcessor.stopPolling()
                                     transInfoImgSwitcher.setImageResource(R.drawable.complete_btt)
                                     transInfoImgSwitcher.contentDescription = "도착!"
-                                    transSavedDialogShow() // 다이얼로그 호출
+                                    //transSavedDialogShow() // 다이얼로그 호출
                                 }
                                 return@realtimeResponse
                             }
@@ -550,7 +604,7 @@ class TransportInformationActivity : AppCompatActivity() {
                                         RealtimeProcessor.stopPolling()
                                         transInfoImgSwitcher.setImageResource(R.drawable.complete_btt)
                                         transInfoImgSwitcher.contentDescription = "도착!"
-                                        transSavedDialogShow() // 다이얼로그 호출
+                                        //transSavedDialogShow() // 다이얼로그 호출
                                     }
                                     return@realtimeResponse
                                 }
@@ -820,25 +874,44 @@ class TransportInformationActivity : AppCompatActivity() {
         val addressNickNameEditText: EditText = transSavedConfirmDialogBinding.addressNickNameEditText
         val savedConfirmTextView: TextView = transSavedConfirmDialogBinding.savedConfirmTextView
 
+        // 여기서 addressNickNameEditText의 기본값을 설정합니다.
+        addressNickNameEditText.setText("$departureName - $destinationName")
+
         transSavedConfirmBtt.setOnClickListener{
             if(!TextUtils.isEmpty(addressNickNameEditText.text)){ // 별명이 비어있지 않은 경우
                 Log.d("log","텍스트 전달됨. ${addressNickNameEditText.text}")
                 lifecycleScope.launch {
-                    val savedSuccessfully = RouteProcessor.DBSaveRoute(
-                     departureName,
-                     destinationName,
-                     startLat,
-                     startLng,
-                     endLat,
-                     endLng,
-                    addressNickNameEditText.text.toString() // 별명
-                 )
-                    if (savedSuccessfully) {
-                        Toast.makeText(this@TransportInformationActivity, "경로가 저장되었습니다!", Toast.LENGTH_SHORT).show()
+                    Log.d("startLat", startLat.toString())
+                    Log.d("startLng",startLng.toString())
+                    Log.d("endLat",endLat.toString())
+                    Log.d("endLng",endLng.toString())
+                    val responseDTO = RouteProcessor.DBSaveRoute( // 변수명을 responseDTO로 변경하여 명확하게
+                        departureName,
+                        destinationName,
+                        startLat,
+                        startLng,
+                        endLat,
+                        endLng,
+                        addressNickNameEditText.text.toString() // 별명
+                    )
+
+                    // 응답 DTO가 null이 아니고, 성공 플래그가 true인 경우
+                    if (responseDTO != null && responseDTO.success) {
+                        // 백엔드로부터 받은 'message'를 직접 토스트로 표시하여 더 자세한 피드백 제공
+                        Toast.makeText(this@TransportInformationActivity, responseDTO.message, Toast.LENGTH_SHORT).show()
                         dialog2.dismiss() // 저장 성공 시 다이얼로그 닫기
+
+                        // --- MainActivity로 이동 ---
+                        val intent = Intent(this@TransportInformationActivity, MainActivity::class.java)
+                        kotlinx.coroutines.delay(2000L)
+                        startActivity(intent)
+                        finish() // 현재 TransportationInformationActivity 종료
                     } else {
-                        Toast.makeText(this@TransportInformationActivity, "경로 저장에 실패했습니다.", Toast.LENGTH_SHORT).show()
-                        // 실패 시 다이얼로그를 닫지 않거나, 다른 피드백 제공
+                        // 응답 DTO가 null이거나 success가 false일 경우의 오류 메시지
+                        // responseDTO가 null이면 일반적인 실패 메시지, 아니면 responseDTO.message 사용
+                        val errorMessage = responseDTO?.message ?: "경로 저장에 실패했습니다. 다시 시도해주세요."
+                        Toast.makeText(this@TransportInformationActivity, errorMessage, Toast.LENGTH_SHORT).show()
+                        // 실패 시 다이얼로그는 닫지 않거나, 다른 피드백 제공 (여기서는 닫지 않음)
                     }
                 }
             }else{
@@ -850,7 +923,6 @@ class TransportInformationActivity : AppCompatActivity() {
             dialog2.dismiss()
         }
     }
-
 
     /**
      * ImageSwitcher를 초기화하고 기본 이미지를 설정합니다.
