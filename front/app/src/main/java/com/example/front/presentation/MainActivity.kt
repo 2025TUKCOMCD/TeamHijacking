@@ -16,6 +16,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.example.front.R
+import com.example.front.app.PhoneLoginPromptDialog
 import com.example.front.app.WatchAppOpener
 import com.example.front.audioguide.AudioGuideBLEConnectActivity
 import com.example.front.databinding.ActivityMainBinding
@@ -40,6 +41,7 @@ class MainActivity : AppCompatActivity() {
     private val DATA_PATH = "/my_data" // 모바일 앱에서 사용한 데이터 경로
     private val LOGIN_PATH = "/kakao" // 모바일 앱에서 사용한 데이터 경로
     private val KEY_MESSAGE = "아무데이터" // 모바일 앱에서 보낸 데이터의 키
+    private var loginPromptDialog: PhoneLoginPromptDialog? = null
 
 
     // LocalBroadcastManager로부터 메시지를 수신할 Receiver 정의
@@ -49,8 +51,18 @@ class MainActivity : AppCompatActivity() {
                 val receivedMessage = it.getStringExtra("received_message")
                 val receivedTimestamp = it.getLongExtra("received_timestamp", 0L)
 
-                Log.d("현빈","Message: $receivedMessage")
-                Log.d("현빈","Time: ${java.text.SimpleDateFormat("HH:mm:ss").format(java.util.Date(receivedTimestamp))}")
+                Log.d(TAG,"실시간 Message: $receivedMessage")
+                Log.d(TAG,"실시간 Time: ${java.text.SimpleDateFormat("HH:mm:ss").format(java.util.Date(receivedTimestamp))}")
+
+                // 데이터 수신 시, 만약 로그인 프롬프트 다이얼로그가 열려있다면 상태 업데이트
+                // 여기서는 receivedMessage가 로그인 성공 여부를 나타내는 ID라고 가정
+                if (!receivedMessage.isNullOrEmpty()) { // 수신된 메시지가 null이 아니거나 비어있지 않으면 로그인 성공으로 간주
+                    loginPromptDialog?.updateLoginStatus(receivedMessage) // 다이얼로그의 상태 업데이트
+                    // 로그인 성공 시 다이얼로그를 자동으로 닫으려면 여기서 dismiss() 호출
+                    loginPromptDialog?.dismiss() // **다이얼로그 닫기 추가**
+                    // 그리고 로그인 성공 후 메인 화면의 다른 UI나 로직을 업데이트 (예: 앱의 실제 데이터 로드 시작)
+                    // (checkExistingData(DATA_PATH)를 다시 호출하여 UI를 완전히 새로고침하는 것도 방법)
+                }
             }
         }
     }
@@ -92,7 +104,7 @@ class MainActivity : AppCompatActivity() {
             val intent = Intent(this, SettingActivity::class.java)
             startActivity(intent)
         }
-        checkExistingData(DATA_PATH)
+        //checkExistingData(DATA_PATH)
 
 //        if(checkExistingData(LOGIN_PATH) == null){
 //            // 요청 코드 여기에 함수를 더 적어야함 ex 어떻게 하면 핸드폰으로 보낼 껀지 등등
@@ -102,6 +114,7 @@ class MainActivity : AppCompatActivity() {
         // 앱 시작 시 로그인 상태 (DATA_PATH) 확인 및 UI 업데이트
         CoroutineScope(Dispatchers.Main).launch {
             val existingData = checkExistingData(LOGIN_PATH) // 데이터 경로로 DATA_PATH 전달
+            Log.d(TAG, existingData.toString())
             if (existingData != null) {
                 val message = existingData
                 Log.d(TAG, "초기 로드 (기존 데이터): 메시지='$message'")
@@ -110,8 +123,8 @@ class MainActivity : AppCompatActivity() {
 
                 // DATA_PATH에 데이터가 비어있을 경우 (로그인 필요 상황 가정)
                 // 커스텀 다이얼로그 띄우기
-                val dialog = PhoneLoginPromptDialog(this@MainActivity)
-                dialog.show()
+                loginPromptDialog = PhoneLoginPromptDialog(this@MainActivity) // 다이얼로그 인스턴스 생성 및 참조 저장
+                loginPromptDialog?.show() // 다이얼로그 표시
 
                 // 그리고 로그인 요청 메시지 보내기
                 val opener = WatchAppOpener() // WatchAppOpener 인스턴스 생성
@@ -127,72 +140,60 @@ class MainActivity : AppCompatActivity() {
         // 예시: "com.example.yourpackage.app.DATA_RECEIVED"
         LocalBroadcastManager.getInstance(this).registerReceiver(
             dataReceiver,
-            IntentFilter("com.example.front.presentation") // 워치 앱의 정확한 패키지 이름으로 변경!
+            IntentFilter("com.example.front.DATA_RECEIVED") // 워치 앱의 정확한 패키지 이름으로 변경!
         )
+        Log.d(TAG, "BroadcastReceiver 등록 완료")
     }
 
     // 액티비티가 일시 정지될 때 브로드캐스트 리시버 해제
     override fun onPause() {
         super.onPause()
+        // BroadcastReceiver 해제
         LocalBroadcastManager.getInstance(this).unregisterReceiver(dataReceiver)
+        Log.d(TAG, "BroadcastReceiver 해제 완료")
+        // 액티비티가 일시 정지될 때 다이얼로그가 열려있다면 닫기
+        loginPromptDialog?.dismiss() // **다이얼로그 닫기 추가**
+        loginPromptDialog = null // **다이얼로그 참조 해제**
     }
 
-    private fun checkExistingData(path : String) : String? {
-        // 비동기적으로 데이터 조회를 수행하기 위해 코루틴을 사용합니다.
-        // IO 디스패처는 네트워크 또는 디스크 I/O 작업에 적합합니다.
-        var getMessage: String? = null
-        CoroutineScope(Dispatchers.IO).launch {
-            try {
+    /**
+     * Wear OS 데이터 레이어에 특정 경로의 데이터가 있는지 확인하고 메시지 문자열을 반환하는 함수입니다.
+     * 데이터가 있으면 문자열 메시지를 반환하고, 없거나 오류 발생 시 null을 반환합니다.
+     * @param path 확인할 데이터 아이템의 경로 (예: "/my_data", "/kakao")
+     * @return String? (메시지) 또는 null
+     */
+    private suspend fun checkExistingData(path: String): String? { // **suspend fun으로 변경, 반환 타입 String?**
+        return try {
+            // withContext(Dispatchers.IO)를 사용하여 백그라운드 스레드에서 Tasks.await()를 호출합니다.
+            val message = withContext(Dispatchers.IO) { // **이 부분 추가/변경됨**
                 val dataClient: DataClient = Wearable.getDataClient(this@MainActivity)
-                // 현재 연결된 노드로부터 모든 DataItem을 조회합니다.
-                // 특정 경로의 데이터만 조회하려면 Uri.parse("wear://*/my_data")와 같이 사용할 수도 있습니다.
                 val dataItemsTask = dataClient.getDataItems()
-                val dataItemBuffer: DataItemBuffer = Tasks.await(dataItemsTask) // Task가 완료될 때까지 대기
+                val dataItemBuffer: DataItemBuffer = Tasks.await(dataItemsTask) // 비동기 작업이 완료될 때까지 대기
 
-                var foundData = false
-                // 조회된 각 DataItem을 반복하여 확인합니다.
+                var foundMessage: String? = null // 찾은 메시지를 저장할 변수
+
                 for (dataItem in dataItemBuffer) {
-                    // DataItem의 경로가 우리가 원하는 경로와 일치하는지 확인합니다.
-                    if (dataItem.uri.path == DATA_PATH) {
+                    // DataItem의 경로가 인자로 받은 'path'와 일치하는지 확인
+                    if (dataItem.uri.path == path) { // **path 인자를 사용하도록 수정**
                         val dataMap = DataMapItem.fromDataItem(dataItem).getDataMap()
-                        // DataMap에서 "my_message" 키와 "timestamp" 키의 값을 추출합니다.
-                        val message = dataMap.getString(KEY_MESSAGE, null.toString())
-                        val timestamp = dataMap.getLong("timestamp", 0L)
+                        val currentMessage = dataMap.getString(KEY_MESSAGE, null.toString()) // **KEY_MESSAGE 사용**
+                        // val timestamp = dataMap.getLong("timestamp", 0L) // 타임스탬프는 반환하지 않으므로 사용하지 않음
 
-                        Log.d(TAG, "기존 데이터 발견: 메시지='$message', 타임스탬프=$timestamp")
-                        getMessage = message
+                        Log.d(TAG, "경로 '$path'에서 데이터 발견: 메시지='$currentMessage'")
 
-                        // UI 업데이트는 메인 스레드에서 수행되어야 합니다.
-                        withContext(Dispatchers.Main) {
-                            Log.d("현빈","초기 로드: $message" )
-                            Log.d("현빈", "시간: ${java.text.SimpleDateFormat("HH:mm:ss").format(java.util.Date(timestamp))}")
-                        }
-                        foundData = true
+                        foundMessage = currentMessage // 메시지 결과만 저장
                         break // 필요한 데이터 하나를 찾았으므로 더 이상 검색할 필요가 없습니다.
                     }
                 }
                 dataItemBuffer.release() // DataItemBuffer는 사용 후 반드시 릴리스해야 합니다.
-                // 만약 특정 경로의 데이터를 찾지 못했다면 UI에 해당 상태를 표시합니다.
-                if (!foundData) {
-                    withContext(Dispatchers.Main) {
-                        Log.d("현빈", "메시지: 기존 데이터 없음")
-                        Log.d("현빈", "시간: N/A")
-                    }
-                    Log.d(TAG, "경로 $DATA_PATH 에서 기존 데이터 없음")
-                }
-
-            } catch (e: Exception) {
-                // 데이터 조회 중 오류 발생 시 처리
-                Log.e(TAG, "기존 데이터 확인 중 오류 발생: ${e.message}", e)
-                withContext(Dispatchers.Main) {
-                    Log.d("현빈", "메시지: 데이터 로드 오류")
-                    Log.d("현빈", "시간: N/A")
-                }
+                foundMessage // withContext 블록의 최종 결과로 메시지 반환
             }
+            message // try 블록의 최종 결과로 메시지 반환
 
+        } catch (e: Exception) {
+            Log.e(TAG, "경로 '$path'의 기존 데이터 확인 중 오류 발생: ${e.message}", e)
+            null // 오류 발생 시 null 반환
         }
-        Log.d("현빈", getMessage.toString())
-        return getMessage
     }
 
 }
