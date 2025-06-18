@@ -148,6 +148,7 @@ class LoginActivity : AppCompatActivity() {
                         409 -> {
                             Toast.makeText(this, "이미 등록된 사용자 입니다.", Toast.LENGTH_SHORT).show()
                             //이미 등록된 사용자 처리 로직
+                            saveLoginInfo(user)
                             moveToMain(user.name)
                         }
                         else -> {
