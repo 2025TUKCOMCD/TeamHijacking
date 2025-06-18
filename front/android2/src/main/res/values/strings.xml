@@ -25,4 +25,9 @@
     <string name="defaultIotText">"<b>"IOT 기기의 디폴트 이름"</b>"</string>
     <string name="additionalExplanation">기본설명입니다기본설명입니다기본설명입니다기본설명입니다기본설명입니다기본설명입니다기본설명입니다기본설명입니다기본설명입니다기본설명입니다</string>
     <string name="addSamsung">삼성 기기 추가</string>
+    <string name="close">닫기</string>
+    <string name="faqText">질문이 들어오면 추가되고 수정됩니다.</string>
+    <string name="change_nickname">닉네임 변경</string>
+    <string name="editNicknameText">수정할 닉네임을 입력해주십시오.</string>
+    <string name="change">변경</string>
 </resources>

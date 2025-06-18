@@ -15,9 +15,23 @@
         android:layout_height="wrap_content"
         android:padding="15dp">
         <TextView
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:minHeight="80dp"
             android:textSize="12sp"
             android:text="뭐라도 써야하는 것은 사실임" />
     </ScrollView>
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:minHeight="50dp"
+        android:minWidth="100dp"
+        android:layout_gravity="end"
+        android:layout_margin="15dp"
+        android:textSize="15sp"
+        android:text="@string/close"
+        android:textColor="@android:color/white"
+        android:padding="2dp"
+        android:background="@drawable/setting_btn_layout"
+        android:id="@+id/settingOpenSourceDismissBtn"/>
 </LinearLayout>
