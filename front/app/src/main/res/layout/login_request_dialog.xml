@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="16dp"
+    android:background="@drawable/setting_view"
+    android:gravity="center">
+
+    <TextView
+        android:id="@+id/dialogMessage"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="로그인 이후 서비스 이용이 가능합니다. \n핸드폰에서 로그인후 다시 워치앱 사용을 시작해주세요. \n 확인버튼을 누르시면 핸드폰어플이 실행됩니다."
+        android:textColor="@android:color/white"
+        android:textSize="16sp"
+        android:gravity="center"
+        android:layout_marginBottom="16dp"/>
+
+    <Button
+        android:id="@+id/dialogOkButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="확인"
+        android:textColor="@android:color/black"
+        android:backgroundTint="@android:color/white"
+        android:paddingStart="24dp"
+        android:paddingEnd="24dp"/>
+</LinearLayout>

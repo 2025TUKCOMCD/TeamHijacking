@@ -43,12 +43,11 @@ class LoginActivity : AppCompatActivity() {
     private fun kakaoLogin() {
 
         try {
-                    // kakaoTalk 설치 여부 확인 후 로그인 실행
+            // kakaoTalk 설치 여부 확인 후 로그인 실행
             if (UserApiClient.instance.isKakaoTalkLoginAvailable(this)) {
-                                Log.d("login", "kakaoTalk 설치 되어 있음")
+                Log.d("login", "kakaoTalk 설치 되어 있음")
                 UserApiClient.instance.loginWithKakaoTalk(this) { token, error ->
-                                Log.d("login", "callback 실행됨 - loginWithKaKaoTalk")
-
+                    Log.d("login", "callback 실행됨 - loginWithKaKaoTalk")
                     //의도적 로그인 취소 체크
                     if (error is ClientError && error.reason == ClientErrorCause.Cancelled) {
                         return@loginWithKakaoTalk
@@ -56,17 +55,17 @@ class LoginActivity : AppCompatActivity() {
                     handleLoginResult(token, error) //콜백을 함수로 분리
                 }
             } else {
-                                Log.d("login", "kakaoTalk 설치 되어 있지 않음, 계정 로그인 시도")
+                Log.d("login", "kakaoTalk 설치 되어 있지 않음, 계정 로그인 시도")
                 UserApiClient.instance.loginWithKakaoAccount(
                     context = this,
                     prompts = listOf(com.kakao.sdk.auth.model.Prompt.LOGIN)
                 ) { token, error ->
-                                Log.d("login", "callback 실행됨 - login With kakaoAccount")
+                    Log.d("login", "callback 실행됨 - login With kakaoAccount")
                     handleLoginResult(token, error)
                 }
             }
         } catch (e: Exception) {
-                                Log.e("login", "로그인 실행 중 예외 발생: ${e.message}")
+            Log.e("login", "로그인 실행 중 예외 발생: ${e.message}")
         }
 
 
@@ -149,6 +148,7 @@ class LoginActivity : AppCompatActivity() {
                         409 -> {
                             Toast.makeText(this, "이미 등록된 사용자 입니다.", Toast.LENGTH_SHORT).show()
                             //이미 등록된 사용자 처리 로직
+                            saveLoginInfo(user)
                             moveToMain(user.name)
                         }
                         else -> {
@@ -158,8 +158,6 @@ class LoginActivity : AppCompatActivity() {
 
                     Log.d("login", "등록 처리도 잘 됨 안 되었을수도")
                 }
-                moveToMain("일단아무거나")
-
             }
         }
         //사용자 정보를 활용해 추가 로직 구현 가능

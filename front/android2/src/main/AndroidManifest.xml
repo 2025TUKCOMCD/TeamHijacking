@@ -28,24 +28,19 @@
         <activity
             android:name=".login.LoginActivity"
             android:exported="true">
-            <intent-filter>
-                <action android:name="android.intent.action.VIEW" /> <!-- 데이터 보여 주는 기능일 시에 선언, activity 가 사용자 에게 표시할 수 있는 어떤 정보를 가지고 있을 때, startActivity()가 있는 intent 에서 사용 -->
-                <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="android.intent.category.BROWSABLE" /> <!-- 대상 activity 가 web Browser 를 통해 시작 되도록 허용 하고 이미지, 이메일 메시지 등 링크로 참조 data 를 표시 하게 함 -->
-                <!-- Redirect URI: "kakao${NATIVE_APP_KEY}://oauth" -->
-                <data
-                    android:host="oauth"
-                    android:scheme="kakaocf939a3f6eb2a3a0c85cce072098dba2" />
-            </intent-filter>
+<!--            <intent-filter>-->
+<!--                <action android:name="android.intent.action.VIEW" /> &lt;!&ndash; 데이터 보여 주는 기능일 시에 선언, activity 가 사용자 에게 표시할 수 있는 어떤 정보를 가지고 있을 때, startActivity()가 있는 intent 에서 사용 &ndash;&gt;-->
+<!--                <category android:name="android.intent.category.DEFAULT" />-->
+<!--                <category android:name="android.intent.category.BROWSABLE" /> &lt;!&ndash; 대상 activity 가 web Browser 를 통해 시작 되도록 허용 하고 이미지, 이메일 메시지 등 링크로 참조 data 를 표시 하게 함 &ndash;&gt;-->
+<!--                &lt;!&ndash; Redirect URI: "kakao${NATIVE_APP_KEY}://oauth" &ndash;&gt;-->
+<!--                <data-->
+<!--                    android:host="oauth"-->
+<!--                    android:scheme="kakaocf939a3f6eb2a3a0c85cce072098dba2" />-->
+<!--            </intent-filter>-->
         </activity>
         <activity
             android:name=".MainActivity"
             android:exported="false" >
-<!--            <intent-filter>-->
-<!--                <action android:name="android.intent.action.MAIN" />-->
-<!--                <category android:name="android.intent.category.LAUNCHER" /> &lt;!&ndash; 이 Activity 가 최초 activity 이며, application 시작 관리자 에 목록 으로 게재됨 &ndash;&gt;-->
-<!--            </intent-filter>-->
-<!--              카카오 인증을 위한 AuthCodeHandlerActivity 설정 -->
         </activity>
         <activity
             android:name="com.kakao.sdk.auth.AuthCodeHandlerActivity"
@@ -73,7 +68,7 @@
                 <action android:name="com.google.android.gms.wearable.MESSAGE_RECEIVED" />
                 <data
                     android:host="*"
-                    android:pathPrefix="/open_phone_app"
+                    android:pathPrefix="/kakao"
                     android:scheme="wear" />
             </intent-filter>
         </service>
