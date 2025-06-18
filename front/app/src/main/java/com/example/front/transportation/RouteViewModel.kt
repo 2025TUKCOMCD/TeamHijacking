@@ -13,9 +13,9 @@ class RouteViewModel : ViewModel() {
     private val _routeData = MutableLiveData<List<Route>>()
     val routeData: LiveData<List<Route>> get() = _routeData
 
-    fun fetchRoute(startLng: Double, startLat: Double, endLng: Double, endLat: Double) {
+    fun fetchRoute(startLat: Double, startLng: Double,endLat: Double, endLng: Double ) {
         viewModelScope.launch {
-            val result = RouteProcessor.fetchRoute(startLng, startLat, endLng, endLat)
+            val result = RouteProcessor.fetchRoute(startLat, startLng, endLat, endLng )
             _routeData.value = result ?: emptyList()
         }
     }
