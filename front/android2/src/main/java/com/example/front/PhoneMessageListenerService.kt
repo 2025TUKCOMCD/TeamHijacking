@@ -18,26 +18,25 @@ class PhoneMessageListenerService : WearableListenerService() {
     private val MESSAGE_PATH_OPEN_APP = "/kakao"
 
     override fun onMessageReceived(messageEvent: MessageEvent) {
-        Log.d(TAG, "메시지 수신됨: ${messageEvent.getPath()}")
+        try {
+            Log.d(TAG, "메시지 수신됨: ${messageEvent.getPath()}")
 
-        // 수신된 메시지 경로가 앱 열기 요청 경로와 일치하는지 확인
-        if (messageEvent.getPath() == MESSAGE_PATH_OPEN_APP) {
-            val message = String(messageEvent.getData(), StandardCharsets.UTF_8)
-            Log.d(TAG, "앱 열기 요청 메시지 수신: $message")
+            if (messageEvent.getPath() == MESSAGE_PATH_OPEN_APP) {
+                val message = String(messageEvent.getData(), StandardCharsets.UTF_8)
+                Log.d(TAG, "앱 열기 요청 메시지 수신: $message")
 
-            // 스마트폰 앱의 메인 액티비티를 실행합니다.
-            // packageManager.getLaunchIntentForPackage()를 사용하여 앱의 런처 액티비티 Intent를 가져옵니다.
-            // "com.example.front"는 스마트폰 앱의 실제 applicationId로 변경해야 합니다.
-            val launchIntent = packageManager.getLaunchIntentForPackage("com.example.front")
-            // 서비스에서 액티비티를 시작할 때는 FLAG_ACTIVITY_NEW_TASK 플래그가 필요합니다.
-            launchIntent?.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                val launchIntent = packageManager.getLaunchIntentForPackage("com.example.front")
+                launchIntent?.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
 
-            if (launchIntent != null) {
-                startActivity(launchIntent)
-                Log.d(TAG, "스마트폰 앱 'com.example.front' 실행 시도")
-            } else {
-                Log.e(TAG, "스마트폰 앱 'com.example.front'을(를) 찾을 수 없거나 실행할 수 없습니다.")
+                if (launchIntent != null) {
+                    startActivity(launchIntent)
+                    Log.d(TAG, "스마트폰 앱 'com.example.front' 실행 시도")
+                } else {
+                    Log.e(TAG, "스마트폰 앱 'com.example.front'을(를) 찾을 수 없거나 실행할 수 없습니다.")
+                }
             }
+        } catch (e: Exception) {
+            Log.e(TAG, "onMessageReceived 처리 중 예외 발생: ${e.message}", e)
         }
     }
 }
