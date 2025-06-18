@@ -94,10 +94,29 @@ class MainActivity : AppCompatActivity() {
         }
         checkExistingData(DATA_PATH)
 
-        if(checkExistingData(LOGIN_PATH) == null){
-            // 요청 코드 여기에 함수를 더 적어야함 ex 어떻게 하면 핸드폰으로 보낼 껀지 등등
-            val opener = WatchAppOpener() // WatchAppOpener 인스턴스 생성
-            opener.sendOpenAppRequestToPhone(this, "워치에서 앱 열기 요청!") // 스마트폰 앱 열기 요청 전송
+//        if(checkExistingData(LOGIN_PATH) == null){
+//            // 요청 코드 여기에 함수를 더 적어야함 ex 어떻게 하면 핸드폰으로 보낼 껀지 등등
+//            val opener = WatchAppOpener() // WatchAppOpener 인스턴스 생성
+//            opener.sendOpenAppRequestToPhone(this, "워치에서 앱 열기 요청!") // 스마트폰 앱 열기 요청 전송
+//        }
+        // 앱 시작 시 로그인 상태 (DATA_PATH) 확인 및 UI 업데이트
+        CoroutineScope(Dispatchers.Main).launch {
+            val existingData = checkExistingData(LOGIN_PATH) // 데이터 경로로 DATA_PATH 전달
+            if (existingData != null) {
+                val message = existingData
+                Log.d(TAG, "초기 로드 (기존 데이터): 메시지='$message'")
+            } else {
+                Log.d(TAG, "초기 로드 (기존 데이터 없음): 메시지='기존 데이터 없음'")
+
+                // DATA_PATH에 데이터가 비어있을 경우 (로그인 필요 상황 가정)
+                // 커스텀 다이얼로그 띄우기
+                val dialog = PhoneLoginPromptDialog(this@MainActivity)
+                dialog.show()
+
+                // 그리고 로그인 요청 메시지 보내기
+                val opener = WatchAppOpener() // WatchAppOpener 인스턴스 생성
+                opener.sendOpenAppRequestToPhone(this@MainActivity, "워치에서 앱 열기 요청!") // 스마트폰 앱 열기 요청 전송
+            }
         }
     }
 
