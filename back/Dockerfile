@@ -47,5 +47,13 @@ COPY --from=builder /back/build/libs/*.jar /back/app.jar
 # Expose the port the application runs on
 EXPOSE 8080
 
-# Set the entry point to run the application
-ENTRYPOINT ["java", "-jar", "/back/app.jar"]
+# --- 여기부터 시간대 설정 추가 ---
+# 1. 시스템 시간대 설정 (권장하는 방법)
+# 이 방법은 Java 애플리케이션뿐만 아니라 컨테이너 전체의 시스템 시간대를 설정합니다.
+ENV TZ=Asia/Seoul
+RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
+
+# 2. JVM 시작 옵션에 시간대 지정 (이전 답변에서 권장했던 방법)
+# ENTRYPOINT 명령에 -Duser.timezone=Asia/Seoul 옵션을 추가합니다.
+# 이미 위에서 시스템 시간대를 설정했으므로 중복일 수 있지만, 명시적인 설정을 위해 함께 사용해도 무방합니다.
+ENTRYPOINT ["java", "-Duser.timezone=Asia/Seoul", "-jar", "/back/app.jar"]
