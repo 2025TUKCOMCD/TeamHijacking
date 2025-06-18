@@ -7,274 +7,283 @@
     android:gravity="start"
     android:orientation="vertical"
     tools:context=".login.LoginActivity">
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
     <!-- 설정 페이지 -->
-    <LinearLayout
-        android:id = "@+id/ProfileLayout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:minHeight="70dp"
-        android:orientation="vertical"
-        android:paddingBottom="10dp">
         <LinearLayout
+            android:id = "@+id/ProfileLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:minHeight="70dp"
-            android:orientation="horizontal"
-            android:id="@+id/realProfileLayout"
-            android:background="@drawable/setting_border_layout"
-            android:layout_marginStart="10dp"
-            android:layout_marginEnd="10dp">
-            <ImageView
-                android:layout_width="70dp"
-                android:layout_height="70dp"
-                android:minHeight="70dp"
-                android:minWidth="70dp"
-                android:padding="10dp"
-                android:background="@android:color/transparent"
-                android:src="@drawable/profile_user"
-                android:scaleType="centerInside"
-                android:importantForAccessibility="no"/>
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:minHeight="70dp"
-                android:paddingStart="30dp"
-                android:paddingEnd="10dp"
-                android:text="@string/profileText"
-                android:textSize="40sp"
-                android:textColor="@color/select"
-                android:textAlignment="center"
-                android:layout_marginEnd="35dp"/>
-        </LinearLayout>
-
-        <!-- id가 realProfileLayout 인 것 눌렀을 시 출력될 친구들 -->
-        <!-- 프로필 정보 수정, 폰트 수정, 색 수정, 접근성, 닉네임 수정, 연동된 Google 계정 등 지원 했으면 함-->
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/littleProfileLayout"
-            android:layout_marginStart="40dp"
-            android:orientation="horizontal"
-            android:background="@drawable/setting_border_layout"
-            android:layout_marginEnd="15dp"
-            android:visibility="visible">
-            <ImageView
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:padding = "4dp"
-                android:background="@android:color/transparent"
-                android:scaleType="centerInside"
-                android:src="@drawable/nickname"
-                android:importantForAccessibility="no"/>
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:minHeight="50dp"
-                android:textColor="@color/select"
-                android:textSize="30sp"
-                android:paddingStart="20dp"
-                android:paddingEnd="10dp"
-                android:text="@string/changeNickname"
-                android:textAlignment="center" />
-        </LinearLayout>
-    </LinearLayout>
-
-
-    <!-- 정보 페이지 -->
-    <LinearLayout
-        android:id = "@+id/InfoLayout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:minHeight="70dp"
-        android:orientation="vertical"
-        android:paddingBottom="10dp">
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:minHeight="70dp"
-            android:orientation="horizontal"
-            android:id="@+id/realInfoLayout"
-            android:background="@drawable/setting_border_layout"
-            android:layout_marginStart="10dp"
-            android:layout_marginEnd="10dp">
-            <ImageView
-                android:layout_width="70dp"
-                android:layout_height="70dp"
-                android:minHeight="70dp"
-                android:minWidth="70dp"
-                android:padding="10dp"
-                android:background="@android:color/transparent"
-                android:src="@drawable/info"
-                android:scaleType="centerInside"
-                android:importantForAccessibility="no"/>
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:minHeight="70dp"
-                android:paddingStart="30dp"
-                android:paddingEnd="10dp"
-                android:text="@string/InfoText"
-                android:textSize="40sp"
-                android:textColor="@color/select"
-                android:textAlignment="center" />
-        </LinearLayout>
-
-        <!-- id가 realInfoLayout 인 것 눌렀을 시 출력될 친구들 -->
-        <!-- 실행 방법, FAQ, Q&A, 이용 약관, 개인 정보 정책, 오픈 소스, 버전 등이 출력 -->
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/InfoLittleLayout"
             android:orientation="vertical"
-            android:visibility="gone">
-            <TextView
+            android:paddingBottom="10dp">
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="70dp"
-                android:minHeight="50dp"
-                android:textSize="30sp"
-                android:textColor="@color/select"
-                android:text="@string/faq"
+                android:minHeight="70dp"
+                android:orientation="horizontal"
+                android:id="@+id/realProfileLayout"
                 android:background="@drawable/setting_border_layout"
-                android:layout_marginEnd="20dp"
-                android:id = "@+id/FAQ"/>
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="70dp"
-                android:minHeight="50dp"
-                android:textSize="30sp"
-                android:textColor="@color/select"
-                android:text="@string/qna"
-                android:background="@drawable/setting_border_layout"
-                android:layout_marginEnd="20dp"
-                android:id = "@+id/QNA"/>
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="70dp"
-                android:minHeight="50dp"
-                android:textSize="30sp"
-                android:textColor="@color/select"
-                android:text="@string/termOfUse"
-                android:background="@drawable/setting_border_layout"
-                android:layout_marginEnd="20dp"
-                android:id = "@+id/termOfUse"/>
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="70dp"
-                android:minHeight="50dp"
-                android:textSize="30sp"
-                android:textColor="@color/select"
-                android:text="@string/privacyPolicy"
-                android:background="@drawable/setting_border_layout"
-                android:layout_marginEnd="20dp"
-                android:id = "@+id/privacyPolicy"/>
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="70dp"
-                android:minHeight="50dp"
-                android:textSize="30sp"
-                android:textColor="@color/select"
-                android:text="@string/openSource"
-                android:background="@drawable/setting_border_layout"
-                android:layout_marginEnd="20dp"
-                android:id = "@+id/openSource"/>
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="70dp"
-                android:minHeight="50dp"
-                android:textSize="30sp"
-                android:textColor="@color/select"
-                android:text="@string/version"
-                android:background="@drawable/setting_border_layout"
-                android:layout_marginEnd="20dp"
-                android:id = "@+id/version"/>
-        </LinearLayout>
-    </LinearLayout>
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="10dp">
+                <ImageView
+                    android:layout_width="70dp"
+                    android:layout_height="70dp"
+                    android:minHeight="70dp"
+                    android:minWidth="70dp"
+                    android:padding="10dp"
+                    android:background="@android:color/transparent"
+                    android:src="@drawable/profile_user"
+                    android:scaleType="centerInside"
+                    android:importantForAccessibility="no"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:minHeight="70dp"
+                    android:paddingStart="30dp"
+                    android:paddingEnd="10dp"
+                    android:text="@string/profileText"
+                    android:textSize="40sp"
+                    android:textColor="@color/select"
+                    android:textAlignment="center"
+                    android:layout_marginEnd="35dp"/>
+            </LinearLayout>
 
-    <!-- 문의 페이지 -->
-    <LinearLayout
-        android:id = "@+id/QuestionLayout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:minHeight="70dp"
-        android:orientation="vertical"
-        android:paddingBottom="10dp">
+            <!-- id가 realProfileLayout 인 것 눌렀을 시 출력될 친구들 -->
+            <!-- 프로필 정보 수정, 폰트 수정, 색 수정, 접근성, 닉네임 수정, 연동된 Google 계정 등 지원 했으면 함-->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/littleProfileLayout"
+                android:layout_marginStart="40dp"
+                android:orientation="horizontal"
+                android:background="@drawable/setting_border_layout"
+                android:layout_marginEnd="15dp"
+                android:visibility="visible">
+                <ImageView
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:padding = "4dp"
+                    android:background="@android:color/transparent"
+                    android:scaleType="centerInside"
+                    android:src="@drawable/nickname"
+                    android:importantForAccessibility="no"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:minHeight="50dp"
+                    android:textColor="@color/select"
+                    android:textSize="30sp"
+                    android:paddingStart="20dp"
+                    android:paddingEnd="10dp"
+                    android:text="@string/changeNickname"
+                    android:textAlignment="center" />
+            </LinearLayout>
+        </LinearLayout>
+
+
+        <!-- 정보 페이지 -->
         <LinearLayout
+            android:id = "@+id/InfoLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:minHeight="70dp"
-            android:orientation="horizontal"
-            android:id="@+id/realQuestionLayout"
-            android:background="@drawable/setting_border_layout"
-            android:layout_marginStart="10dp"
-            android:layout_marginEnd="10dp">
-            <ImageView
-                android:layout_width="70dp"
-                android:layout_height="70dp"
-                android:minHeight="70dp"
-                android:minWidth="70dp"
-                android:padding="10dp"
-                android:background="@android:color/transparent"
-                android:src="@drawable/question"
-                android:scaleType="centerInside"
-                android:importantForAccessibility="no"/>
-            <TextView
-                android:layout_width="wrap_content"
+            android:orientation="vertical"
+            android:paddingBottom="10dp">
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:minHeight="70dp"
-                android:paddingStart="30dp"
-                android:paddingEnd="10dp"
-                android:text="@string/QAText"
-                android:textSize="40sp"
-                android:textColor="@color/select"
-                android:textAlignment="center" />
+                android:orientation="horizontal"
+                android:id="@+id/realInfoLayout"
+                android:background="@drawable/setting_border_layout"
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="10dp">
+                <ImageView
+                    android:layout_width="70dp"
+                    android:layout_height="70dp"
+                    android:minHeight="70dp"
+                    android:minWidth="70dp"
+                    android:padding="10dp"
+                    android:background="@android:color/transparent"
+                    android:src="@drawable/info"
+                    android:scaleType="centerInside"
+                    android:importantForAccessibility="no"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:minHeight="70dp"
+                    android:paddingStart="30dp"
+                    android:paddingEnd="10dp"
+                    android:text="@string/InfoText"
+                    android:textSize="40sp"
+                    android:textColor="@color/select"
+                    android:textAlignment="center" />
+            </LinearLayout>
+
+            <!-- id가 realInfoLayout 인 것 눌렀을 시 출력될 친구들 -->
+            <!-- 실행 방법, FAQ, Q&A, 이용 약관, 개인 정보 정책, 오픈 소스, 버전 등이 출력 -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/InfoLittleLayout"
+                android:orientation="vertical"
+                android:visibility="gone">
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="70dp"
+                    android:minHeight="50dp"
+                    android:textSize="30sp"
+                    android:textColor="@color/select"
+                    android:text="@string/faq"
+                    android:background="@drawable/setting_border_layout"
+                    android:layout_marginEnd="20dp"
+                    android:id = "@+id/FAQ"/>
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="70dp"
+                    android:minHeight="50dp"
+                    android:textSize="30sp"
+                    android:textColor="@color/select"
+                    android:text="@string/qna"
+                    android:background="@drawable/setting_border_layout"
+                    android:layout_marginEnd="20dp"
+                    android:id = "@+id/QNA"/>
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="70dp"
+                    android:minHeight="50dp"
+                    android:textSize="30sp"
+                    android:textColor="@color/select"
+                    android:text="@string/termOfUse"
+                    android:background="@drawable/setting_border_layout"
+                    android:layout_marginEnd="20dp"
+                    android:id = "@+id/termOfUse"/>
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="70dp"
+                    android:minHeight="50dp"
+                    android:textSize="30sp"
+                    android:textColor="@color/select"
+                    android:text="@string/privacyPolicy"
+                    android:background="@drawable/setting_border_layout"
+                    android:layout_marginEnd="20dp"
+                    android:id = "@+id/privacyPolicy"/>
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="70dp"
+                    android:minHeight="50dp"
+                    android:textSize="30sp"
+                    android:textColor="@color/select"
+                    android:text="@string/openSource"
+                    android:background="@drawable/setting_border_layout"
+                    android:layout_marginEnd="20dp"
+                    android:id = "@+id/openSource"/>
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="70dp"
+                    android:minHeight="50dp"
+                    android:textSize="30sp"
+                    android:textColor="@color/select"
+                    android:text="@string/version"
+                    android:background="@drawable/setting_border_layout"
+                    android:layout_marginEnd="20dp"
+                    android:id = "@+id/version"/>
+            </LinearLayout>
         </LinearLayout>
 
-        <!-- id가 realInfoLayout 인 것 눌렀을 시 출력될 친구들 -->
-        <!-- 실행 방법, FAQ, Q&A, 이용 약관, 개인 정보 정책, 오픈 소스, 버전 등이 출력 -->
+        <!-- 문의 페이지 -->
         <LinearLayout
+            android:id = "@+id/QuestionLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/QuestionLittleLayout"
+            android:minHeight="70dp"
             android:orientation="vertical"
-            android:visibility="gone">
-            <TextView
+            android:paddingBottom="10dp">
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="70dp"
-                android:minHeight="50dp"
-                android:textSize="30sp"
-                android:textColor="@color/select"
-                android:text="@string/howToDoTextView"
+                android:minHeight="70dp"
+                android:orientation="horizontal"
+                android:id="@+id/realQuestionLayout"
                 android:background="@drawable/setting_border_layout"
-                android:layout_marginEnd="20dp"
-                android:id = "@+id/howToDo"/>
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="70dp"
-                android:minHeight="50dp"
-                android:textSize="30sp"
-                android:textColor="@color/select"
-                android:text="@string/contactToDev"
-                android:background="@drawable/setting_border_layout"
-                android:layout_marginEnd="20dp"
-                android:id = "@+id/contactToDev"/>
-        </LinearLayout>
-    </LinearLayout>
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="10dp">
+                <ImageView
+                    android:layout_width="70dp"
+                    android:layout_height="70dp"
+                    android:minHeight="70dp"
+                    android:minWidth="70dp"
+                    android:padding="10dp"
+                    android:background="@android:color/transparent"
+                    android:src="@drawable/question"
+                    android:scaleType="centerInside"
+                    android:importantForAccessibility="no"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:minHeight="70dp"
+                    android:paddingStart="30dp"
+                    android:paddingEnd="10dp"
+                    android:text="@string/QAText"
+                    android:textSize="40sp"
+                    android:textColor="@color/select"
+                    android:textAlignment="center" />
+            </LinearLayout>
 
-    <Button
-        android:id = "@+id/logoutBtn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="20dp"
-        android:layout_marginTop="10dp"
-        android:text = "@string/logout"
-        android:textSize="20sp"
-        android:layout_gravity="end" />
+            <!-- id가 realInfoLayout 인 것 눌렀을 시 출력될 친구들 -->
+            <!-- 실행 방법, FAQ, Q&A, 이용 약관, 개인 정보 정책, 오픈 소스, 버전 등이 출력 -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/QuestionLittleLayout"
+                android:orientation="vertical"
+                android:visibility="gone">
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="70dp"
+                    android:minHeight="50dp"
+                    android:textSize="30sp"
+                    android:textColor="@color/select"
+                    android:text="@string/howToDoTextView"
+                    android:background="@drawable/setting_border_layout"
+                    android:layout_marginEnd="20dp"
+                    android:id = "@+id/howToDo"/>
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="70dp"
+                    android:minHeight="50dp"
+                    android:textSize="30sp"
+                    android:textColor="@color/select"
+                    android:text="@string/contactToDev"
+                    android:background="@drawable/setting_border_layout"
+                    android:layout_marginEnd="20dp"
+                    android:id = "@+id/contactToDev"/>
+            </LinearLayout>
+        </LinearLayout>
+
+        <Button
+            android:id = "@+id/logoutBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="20dp"
+            android:layout_marginTop="10dp"
+            android:text = "@string/logout"
+            android:textSize="20sp"
+            android:layout_gravity="end" />
+        </LinearLayout>
+    </ScrollView>
 </LinearLayout>
