@@ -18,6 +18,6 @@ class MyApplication: Application() {
         val keyHash = Utility.getKeyHash(this)
         Log.d("키 확인", keyHash)
         //카카오 SDK 초기화, native 앱 키를 사용해 SDK 초기화
-        KakaoSdk.init(this, BuildConfig.KAKAO_NATIVE_API_KEY)
+        KakaoSdk.init(this, "cf939a3f6eb2a3a0c85cce072098dba2")
     }
 }

@@ -19,10 +19,10 @@
         <activity
             android:name=".login.SplashActivity"
             android:exported="true">
-<!--            <intent-filter>-->
-<!--                <action android:name="android.intent.action.MAIN" />-->
-<!--                <category android:name="android.intent.category.LAUNCHER" /> &lt;!&ndash; 이 Activity 가 최초 activity 이며, application 시작 관리자 에 목록 으로 게재됨 &ndash;&gt;-->
-<!--            </intent-filter>-->
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" /> <!-- 이 Activity 가 최초 activity 이며, application 시작 관리자 에 목록 으로 게재됨 -->
+            </intent-filter>
         </activity>
 
         <activity
@@ -40,11 +40,11 @@
         </activity>
         <activity
             android:name=".MainActivity"
-            android:exported="true" >
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" /> <!-- 이 Activity 가 최초 activity 이며, application 시작 관리자 에 목록 으로 게재됨 -->
-            </intent-filter>
+            android:exported="false" >
+<!--            <intent-filter>-->
+<!--                <action android:name="android.intent.action.MAIN" />-->
+<!--                <category android:name="android.intent.category.LAUNCHER" /> &lt;!&ndash; 이 Activity 가 최초 activity 이며, application 시작 관리자 에 목록 으로 게재됨 &ndash;&gt;-->
+<!--            </intent-filter>-->
 <!--              카카오 인증을 위한 AuthCodeHandlerActivity 설정 -->
         </activity>
         <activity
@@ -73,7 +73,7 @@
                 <action android:name="com.google.android.gms.wearable.MESSAGE_RECEIVED" />
                 <data
                     android:host="*"
-                    android:pathPrefix="/open_phone_app"
+                    android:pathPrefix="/kakao"
                     android:scheme="wear" />
             </intent-filter>
         </service>

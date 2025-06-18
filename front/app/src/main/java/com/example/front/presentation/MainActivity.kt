@@ -38,6 +38,7 @@ class MainActivity : AppCompatActivity() {
 
     private val TAG = "워치_MainActivity"
     private val DATA_PATH = "/my_data" // 모바일 앱에서 사용한 데이터 경로
+    private val LOGIN_PATH = "/kakao" // 모바일 앱에서 사용한 데이터 경로
     private val KEY_MESSAGE = "아무데이터" // 모바일 앱에서 보낸 데이터의 키
 
 
@@ -91,11 +92,13 @@ class MainActivity : AppCompatActivity() {
             val intent = Intent(this, SettingActivity::class.java)
             startActivity(intent)
         }
-        checkExistingData()
+        checkExistingData(DATA_PATH)
 
-        // 요청 코드 여기에 함수를 더 적어야함 ex 어떻게 하면 핸드폰으로 보낼 껀지 등등
-//        val opener = WatchAppOpener() // WatchAppOpener 인스턴스 생성
-//        opener.sendOpenAppRequestToPhone(this, "워치에서 앱 열기 요청!") // 스마트폰 앱 열기 요청 전송
+        if(checkExistingData(LOGIN_PATH) == null){
+            // 요청 코드 여기에 함수를 더 적어야함 ex 어떻게 하면 핸드폰으로 보낼 껀지 등등
+            val opener = WatchAppOpener() // WatchAppOpener 인스턴스 생성
+            opener.sendOpenAppRequestToPhone(this, "워치에서 앱 열기 요청!") // 스마트폰 앱 열기 요청 전송
+        }
     }
 
     // 액티비티가 다시 시작될 때 브로드캐스트 리시버 등록
@@ -115,9 +118,10 @@ class MainActivity : AppCompatActivity() {
         LocalBroadcastManager.getInstance(this).unregisterReceiver(dataReceiver)
     }
 
-    private fun checkExistingData() {
+    private fun checkExistingData(path : String) : String? {
         // 비동기적으로 데이터 조회를 수행하기 위해 코루틴을 사용합니다.
         // IO 디스패처는 네트워크 또는 디스크 I/O 작업에 적합합니다.
+        var getMessage: String? = null
         CoroutineScope(Dispatchers.IO).launch {
             try {
                 val dataClient: DataClient = Wearable.getDataClient(this@MainActivity)
@@ -133,10 +137,11 @@ class MainActivity : AppCompatActivity() {
                     if (dataItem.uri.path == DATA_PATH) {
                         val dataMap = DataMapItem.fromDataItem(dataItem).getDataMap()
                         // DataMap에서 "my_message" 키와 "timestamp" 키의 값을 추출합니다.
-                        val message = dataMap.getString(KEY_MESSAGE, "데이터 없음")
+                        val message = dataMap.getString(KEY_MESSAGE, null.toString())
                         val timestamp = dataMap.getLong("timestamp", 0L)
 
                         Log.d(TAG, "기존 데이터 발견: 메시지='$message', 타임스탬프=$timestamp")
+                        getMessage = message
 
                         // UI 업데이트는 메인 스레드에서 수행되어야 합니다.
                         withContext(Dispatchers.Main) {
@@ -148,7 +153,6 @@ class MainActivity : AppCompatActivity() {
                     }
                 }
                 dataItemBuffer.release() // DataItemBuffer는 사용 후 반드시 릴리스해야 합니다.
-
                 // 만약 특정 경로의 데이터를 찾지 못했다면 UI에 해당 상태를 표시합니다.
                 if (!foundData) {
                     withContext(Dispatchers.Main) {
@@ -166,7 +170,10 @@ class MainActivity : AppCompatActivity() {
                     Log.d("현빈", "시간: N/A")
                 }
             }
+
         }
+        Log.d("현빈", getMessage.toString())
+        return getMessage
     }
 
 }
