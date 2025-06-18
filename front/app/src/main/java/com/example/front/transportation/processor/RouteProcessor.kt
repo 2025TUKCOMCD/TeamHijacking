@@ -3,7 +3,9 @@ package com.example.front.transportation.processor
 import RouteService
 import android.util.Log
 import com.example.front.BuildConfig
-import com.example.front.transportation.data.DB.DBSave
+import com.example.front.transportation.data.DB.DBSaveDTO
+import com.example.front.transportation.data.DB.GetRouteResponseDTO
+import com.example.front.transportation.data.DB.SavedRouteResponseDTO
 import com.example.front.transportation.data.searchPath.Route
 import com.example.front.transportation.data.searchPath.RouteRequest
 import com.google.gson.Gson
@@ -13,7 +15,10 @@ import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.util.concurrent.TimeUnit
-import com.example.front.transportation.data.DB.Time
+
+// 필수 import 추가
+import retrofit2.Response // retrofit2.Response 클래스를 import 해야 isSuccessful, body, errorBody 사용 가능
+import retrofit2.awaitResponse // Call<T>.awaitResponse() 확장 함수 사용을 위해 필요
 
 object RouteProcessor {
     private const val Host_URL = BuildConfig.Host_URL
@@ -48,56 +53,61 @@ object RouteProcessor {
             null
         }
     }
-//    suspend fun DBSaveRoute(startName : String, endName : String, startLat: Double, startLng: Double,
-//                            endLat: Double, endLng: Double, savedRouteName: String): Unit? {
-//        return try {
-//
-//            val DBSave = DBSave(startName, endName, startLat, startLng, endLat, endLng, savedRouteName)
-//            Log.d("RouteProcessor", "요청 보냄: $DBSave")
-//
-//            val response = withContext(Dispatchers.IO) {
-//                routeService.saveDBRoute(DBSave)
-//            }
-//            Log.d("RouteProcessor", "응답 받음: $response")
-//
-//            response
-//        } catch (e: Exception) {
-//            Log.e("RouteProcessor", "Error fetching route", e)
-//            null
-//        }
-//    }
-    suspend fun DBSaveRoute(startName: String,endName: String, startLat: Double, startLng: Double, endLat: Double, endLng: Double, savedRouteName: String): Boolean { // 저장 성공 여부만 반환하도록 Boolean으로 가정
+
+    suspend fun DBSaveRoute(
+        startName: String,
+        endName: String,
+        startLat: Double,
+        startLng: Double,
+        endLat: Double,
+        endLng: Double,
+        savedRouteName: String,
+        transportRouteKey: Int? = 0, // Int? 타입으로 변경
+        isFavorite: Boolean = false,     // Boolean 타입으로 변경
+    ): SavedRouteResponseDTO? {
         return try {
-            // 현재 시간을 밀리초 타임스탬프로 가져옴
-
-            val currentTime = Time.now() // Time 객체 생성
-            val mysqlDateTimeString = currentTime.toMySQLDateTimeString() // <-- MySQL DATETIME 형식 문자열로 변환
-
-            val dbSave = DBSave(
+            val dbSave = DBSaveDTO(
                 startName,
                 endName,
-                whenFirstGo = mysqlDateTimeString,   // 처음 저장하는 것이므로 현재 시간
-                whenLastGo = mysqlDateTimeString,    // 처음 저장하는 것이므로 현재 시간
-                userouteCount = 1,                 // 처음 저장하는 것이므로 1
-                isFavorite = false,                 // 처음 저장하는 것이므로 false
+                userRouteCount = 1, // 필요에 따라 이 값을 동적으로 설정할 수 있습니다.
+                isFavorite = isFavorite, // 전달받은 isFavorite 값 사용
                 startLat,
                 startLng,
                 endLat,
                 endLng,
-                savedRouteName    // 저장된 경로 이름
+                savedRouteName,
+                loginId = "3970421203", // 사용자 ID, 실제 앱에서는 로그인한 사용자 ID로 변경 필요
+                // DTO에 transportRouteKey와 isSelected 필드가 필요합니다.
+                // DBSaveDTO에도 이 필드를 추가해야 합니다.
+                transportrouteKey = transportRouteKey,
             )
-            Log.d("RouteProcessor", "DB 저장 요청 보냄: $dbSave")
+            Log.d("RouteProcessor", "DB 저장/업데이트 요청 보냄: $dbSave")
 
-            val response = withContext(Dispatchers.IO) {
+            val response: SavedRouteResponseDTO = withContext(Dispatchers.IO) {
                 routeService.saveDBRoute(dbSave)
             }
-            Log.d("RouteProcessor", "DB 저장 응답 받음: $response")
+            Log.d("RouteProcessor", "DB 저장/업데이트 응답 받음: $response")
 
-            // 백엔드가 성공 시 true를 반환한다고 가정
-            response // 백엔드 API의 실제 반환 타입에 따라 이 부분 수정 필요
+            response
         } catch (e: Exception) {
-            Log.e("RouteProcessor", "Error saving route to DB", e) // 로그 메시지 변경
-            false // 실패 시 false 반환
+            Log.e("RouteProcessor", "Error saving/updating route to DB", e)
+            null
         }
     }
+    suspend fun DBGetRoute(loginId: String): List<GetRouteResponseDTO>? { // loginId를 파라미터로 받음
+        return try {
+            Log.d("RouteProcessor", "저장된 DB 경로 요청 보냄: loginId=$loginId")
+
+            val response: List<GetRouteResponseDTO> = withContext(Dispatchers.IO) {
+                // RouteService 인터페이스에 정의된 getSavedRoutes 함수 호출
+                routeService.getSavedRoute(loginId)
+            }
+            Log.d("RouteProcessor", "저장된 DB 경로 응답 받음: $response")
+            response
+        } catch (e: Exception) {
+            Log.e("RouteProcessor", "DB 경로 가져오기 오류 발생", e)
+            null // 오류 발생 시 null 반환
+        }
+    }
+    // suspend fun updateFavoriteStatus()
 }

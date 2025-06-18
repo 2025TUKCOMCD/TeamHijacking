@@ -13,10 +13,9 @@ class DeviceAdapter(
     private val onDeviceClick: (Device) -> Unit
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() { // ViewHolder 타입을 RecyclerView.ViewHolder로 변경
 
-    // 각 장치 유형에 맞는 ViewHolder 클래스 정의
+    // 무드등
     inner class LightViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-        val deviceLabel: TextView = view.findViewById(R.id.deviceLabel) // R.id.deviceLabel을 각 레이아웃에 맞게 변경
-        // Light 관련 UI 요소들
+        val deviceLabel: TextView = view.findViewById(R.id.deviceLabel)
         init {
             view.setOnClickListener {
                 onDeviceClick(devices[adapterPosition])
@@ -24,8 +23,9 @@ class DeviceAdapter(
         }
     }
 
+    // 스피커
     inner class AiSpeakerViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-        val deviceLabel: TextView = view.findViewById(R.id.deviceLabel) // R.id.deviceLabel을 각 레이아웃에 맞게 변경
+        val deviceLabel: TextView = view.findViewById(R.id.deviceLabel)
         init {
             view.setOnClickListener {
                 onDeviceClick(devices[adapterPosition])
@@ -36,13 +36,15 @@ class DeviceAdapter(
     // ... 필요한 다른 장치 유형에 대한 ViewHolder 추가
 
     override fun getItemViewType(position: Int): Int {
-        return when (devices[position].name) {
-            "Galaxy Home Mini (3NPH)" -> VIEW_TYPE_LIGHT
-            "c2c-rgb-color-bulb" -> VIEW_TYPE_AISPEAKER
-            "Hejhome Smart Mood Light" -> VIEW_TYPE_LIGHT
-            // ... 다른 장치 유형에 대한 View Type 반환
+        val name = devices[position].label.lowercase()
+
+        return when {
+            name.contains("galaxy home") -> VIEW_TYPE_AISPEAKER
+            name.contains("무드등") || name.contains("light") -> VIEW_TYPE_LIGHT
             else -> {
-                Log.d("현빈", "그런 기기 없음")}
+                Log.w("DeviceAdapter", "Unknown device type: $name")
+                VIEW_TYPE_AISPEAKER
+            }
         }
     }
 
@@ -66,17 +68,10 @@ class DeviceAdapter(
         val device = devices[position]
         when (holder.itemViewType) {
             VIEW_TYPE_LIGHT -> {
-                (holder as LightViewHolder).apply {
-                    deviceLabel.text = device.label
-                    // Light 관련 데이터 바인딩
-                }
+                (holder as LightViewHolder).deviceLabel.text = device.label
             }
             VIEW_TYPE_AISPEAKER -> {
-                (holder as AiSpeakerViewHolder).apply {
-                    deviceLabel.text = device.label
-                    // Temperature 관련 데이터 바인딩 (예: device.currentTemperature 또는 유사한 속성)
-                    // temperatureValue.text = "${device.currentTemperature}°C"
-                }
+                (holder as AiSpeakerViewHolder).deviceLabel.text = device.label
             }
         }
     }

@@ -15,7 +15,7 @@ class MyWearableListenerService : WearableListenerService() {
     private val TAG = "WatchListenerService"
     // 모바일 앱에서 PutDataMapRequest.create()에 사용한 경로와 동일해야 합니다.
     private val DATA_PATH = "/my_data"
-    private val KEY_MESSAGE = "my_message" // 모바일 앱에서 보낸 데이터의 키와 동일해야 합니다.
+    private val KEY_MESSAGE = "아무데이터" // 모바일 앱에서 보낸 데이터의 키와 동일해야 합니다.
 
     override fun onDataChanged(dataEvents: DataEventBuffer) {
         Log.d(TAG, "onDataChanged: ${dataEvents.count} data events received.")
@@ -35,7 +35,7 @@ class MyWearableListenerService : WearableListenerService() {
                     Log.d(TAG, "Received DataItem: Message='$receivedMessage', Timestamp=$timestamp")
 
                     // UI 업데이트를 위해 MainActivity로 메시지를 전달 (로컬 브로드캐스트 사용)
-                    val messageIntent = Intent("com.example.yourpackage.app.DATA_RECEIVED")
+                    val messageIntent = Intent("com.example.front.DATA_RECEIVED")
                     messageIntent.putExtra("received_message", receivedMessage)
                     messageIntent.putExtra("received_timestamp", timestamp)
                     LocalBroadcastManager.getInstance(this).sendBroadcast(messageIntent)
