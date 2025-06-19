@@ -6,6 +6,8 @@ import android.content.ContentValues.TAG
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.location.Location
 import android.location.LocationManager
 import android.os.Bundle
@@ -562,6 +564,10 @@ class TransportInformationActivity : AppCompatActivity() {
                                         width = WindowManager.LayoutParams.WRAP_CONTENT // 내용에 맞게 너비 조절
                                         height = WindowManager.LayoutParams.WRAP_CONTENT // 내용에 맞게 높이 조절
                                     }
+
+
+                                    // 주변 투명하게 보이게 함
+                                    dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
                                     dialog.window?.attributes = layoutParams
                                     // *** 다이얼로그를 중앙에 띄우기 위한 코드 끝 ***
 
@@ -653,15 +659,14 @@ class TransportInformationActivity : AppCompatActivity() {
                                         }
                                         dialog.window?.attributes = layoutParams
                                         // *** 다이얼로그를 중앙에 띄우기 위한 코드 끝 ***
+                                        // 주변 투명하게 보이게 함
+                                        dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
 
                                         // 커스텀 다이얼로그의 뷰 참조 가져오기
-                                        val titleTextView = dialog.findViewById<TextView>(R.id.dialog_title)
                                         val messageTextView = dialog.findViewById<TextView>(R.id.dialog_message)
                                         val btnYesBoarded = dialog.findViewById<Button>(R.id.btn_yes_boarded)
                                         val btnNoBoarded = dialog.findViewById<Button>(R.id.btn_no_boarded)
 
-                                        // 다이얼로그 제목 설정 (기존 AlertDialog의 setTitle에 해당)
-                                        titleTextView.text = "지하철 탑승 확인"
                                         // 동적 메시지 설정 (기존 AlertDialog의 setMessage에 해당)
                                         messageTextView.text = "현재 ${extractedStartName}역에 열차가 도착했습니다. 지하철에 탑승하셨나요?"
 

@@ -14,7 +14,7 @@
     android:layout_margin="20dp" >
 
     <TextView
-        android:id="@+id/doYouWantSaveTextView"
+        android:id="@+id/dialog_message"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
@@ -34,7 +34,7 @@
         android:gravity="end">
 
         <TextView
-            android:id="@+id/YesSavedBtt"
+            android:id="@+id/btn_yes_boarded"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="탑승"
@@ -47,7 +47,7 @@
             android:textAlignment="center" />
 
         <TextView
-            android:id="@+id/NoSavedBtt"
+            android:id="@+id/btn_no_boarded"
             android:layout_width="wrap_content"
             android:minWidth="48dp"
             android:layout_height="wrap_content"
