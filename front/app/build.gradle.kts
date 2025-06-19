@@ -19,6 +19,7 @@ android {
     val Public_Bus_APIKEY = localProperties.getProperty("Public_Bus_APIKEY", "")
     val Public_Subway_APIKEY = localProperties.getProperty("Public_Subway_APIKEY", "")
     val Host_URL = localProperties.getProperty("Host_URL", "")
+    // SmartThings OAuth 관련 정보 (application.properties 또는 local.properties에서 가져온다고 가정)
 
     defaultConfig {
         applicationId = "com.example.front"
