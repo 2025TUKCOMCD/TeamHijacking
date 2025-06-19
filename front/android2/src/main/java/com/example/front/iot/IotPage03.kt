@@ -131,4 +131,32 @@ class IotPage03 : Fragment() {
         super.onDestroyView()
         _binding = null
     }
+
+    fun showFaQDialog() {
+
+    }
+
+    fun showQnADialog() {
+
+    }
+
+    fun showTermOfUseDialog() {
+
+    }
+
+    fun showPrivacyPolicyDialog() {
+
+    }
+
+    fun showOpenSourceDialog() {
+
+    }
+
+    fun showHowToDoDialog() {
+
+    }
+
+    fun showContactToDevDialog() {
+
+    }
 }
