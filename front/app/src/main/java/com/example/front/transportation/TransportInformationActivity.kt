@@ -1,15 +1,20 @@
 package com.example.front.transportation
 
 import android.Manifest
+import android.app.Dialog
 import android.content.ContentValues.TAG
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.location.Location
 import android.location.LocationManager
 import android.os.Bundle
 import android.text.TextUtils
 import android.util.Log
+import android.view.Gravity
+import android.view.WindowManager
 import androidx.appcompat.app.AppCompatActivity
 
 import android.widget.Button
@@ -542,36 +547,60 @@ class TransportInformationActivity : AppCompatActivity() {
                             if (currentBoarding == 1 && receivedPredictTimes1 == "0분 후") {
                                 Log.d("SubwayRealtime", "DBUsage 1, 탑승 전 (1), '0분 후' 도착. 탑승 여부 확인 다이얼로그 표시.")
                                 runOnUiThread {
-                                    AlertDialog.Builder(this@TransportInformationActivity)
-                                        .setTitle("지하철 도착 알림")
-                                        .setMessage("현재 ${extractedStartName}역에 열차가 도착했습니다. 탑승하셨나요?")
-                                        .setPositiveButton("네, 탑승했습니다.") { dialog, _ ->
-                                            val newBoarding = 2
-                                            Log.d("SubwayRealtime", "사용자 탑승 확인 (0분 후, DBUsage 1). boarding을 2(탑승 중)으로 변경.")
-                                            updatedRealtimeDTO = RealtimeDTO(
-                                                type = 1, boarding = newBoarding, transportLocalID = transportLocalID,
-                                                dbUsage = currentDBUsage, trainNo = finalTrainNo,
-                                                startName = extractedStartName, secondName = extractedSecondName,
-                                                endName = extractedEndName, direction = (trainDirection ?: ""),
-                                                location = receivedLocation
-                                            )
-                                            updatedRealtimeDTO?.let { RealtimeProcessor.requestUpdate(it) }
-                                            dialog.dismiss()
-                                        }
-                                        .setNegativeButton("아니요, 아직입니다.") { dialog, _ ->
-                                            Log.d("SubwayRealtime", "사용자 탑승 취소 (0분 후, DBUsage 1). boarding 1(탑승 전) 유지.")
-                                            updatedRealtimeDTO = RealtimeDTO(
-                                                type = 1, boarding = currentBoarding, transportLocalID = transportLocalID,
-                                                dbUsage = currentDBUsage, trainNo = finalTrainNo,
-                                                startName = extractedStartName, secondName = extractedSecondName,
-                                                endName = extractedEndName, direction = (trainDirection ?: ""),
-                                                location = receivedLocation
-                                            )
-                                            updatedRealtimeDTO?.let { RealtimeProcessor.requestUpdate(it) }
-                                            dialog.dismiss()
-                                        }
-                                        .setCancelable(false)
-                                        .show()
+                                    val dialog = Dialog(this@TransportInformationActivity)
+                                    dialog.setContentView(R.layout.transportation_arrival_dialog) // 커스텀 레이아웃 설정
+                                    dialog.setCancelable(false) // 외부 탭 또는 뒤로가기 버튼으로 닫히지 않도록 방지
+
+                                    // 커스텀 다이얼로그의 뷰 참조 가져오기
+                                    val messageTextView = dialog.findViewById<TextView>(R.id.dialog_message)
+                                    val btnYesBoarded = dialog.findViewById<Button>(R.id.btn_yes_boarded)
+                                    val btnNoBoarded = dialog.findViewById<Button>(R.id.btn_no_boarded)
+
+                                    // *** 다이얼로그를 중앙에 띄우기 위한 코드 시작 ***
+                                    val layoutParams = WindowManager.LayoutParams().apply {
+                                        copyFrom(dialog.window?.attributes)
+                                        gravity = Gravity.CENTER // 다이얼로그를 중앙에 위치
+                                        width = WindowManager.LayoutParams.WRAP_CONTENT // 내용에 맞게 너비 조절
+                                        height = WindowManager.LayoutParams.WRAP_CONTENT // 내용에 맞게 높이 조절
+                                    }
+
+
+                                    // 주변 투명하게 보이게 함
+                                    dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+                                    dialog.window?.attributes = layoutParams
+                                    // *** 다이얼로그를 중앙에 띄우기 위한 코드 끝 ***
+
+                                    // 동적 메시지 설정
+                                    messageTextView.text = "현재 ${extractedStartName}역에 열차가 도착했습니다. 탑승하셨나요?"
+
+                                    btnYesBoarded.setOnClickListener {
+                                        val newBoarding = 2
+                                        Log.d("SubwayRealtime", "사용자 탑승 확인 (0분 후, DBUsage 1). boarding을 2(탑승 중)으로 변경.")
+                                        updatedRealtimeDTO = RealtimeDTO(
+                                            type = 1, boarding = newBoarding, transportLocalID = transportLocalID,
+                                            dbUsage = currentDBUsage, trainNo = finalTrainNo,
+                                            startName = extractedStartName, secondName = extractedSecondName,
+                                            endName = extractedEndName, direction = (trainDirection ?: ""),
+                                            location = receivedLocation
+                                        )
+                                        updatedRealtimeDTO?.let { RealtimeProcessor.requestUpdate(it) }
+                                        dialog.dismiss() // 커스텀 다이얼로그 닫기
+                                    }
+
+                                    btnNoBoarded.setOnClickListener {
+                                        Log.d("SubwayRealtime", "사용자 탑승 취소 (0분 후, DBUsage 1). boarding 1(탑승 전) 유지.")
+                                        updatedRealtimeDTO = RealtimeDTO(
+                                            type = 1, boarding = currentBoarding, transportLocalID = transportLocalID,
+                                            dbUsage = currentDBUsage, trainNo = finalTrainNo,
+                                            startName = extractedStartName, secondName = extractedSecondName,
+                                            endName = extractedEndName, direction = (trainDirection ?: ""),
+                                            location = receivedLocation
+                                        )
+                                        updatedRealtimeDTO?.let { RealtimeProcessor.requestUpdate(it) }
+                                        dialog.dismiss() // 커스텀 다이얼로그 닫기
+                                    }
+
+                                    dialog.show() // 커스텀 다이얼로그 표시
                                 }
                                 return@realtimeResponse
                             } else if (currentBoarding == 2 && receivedPredictTimes1 == "0분 후") {
@@ -616,48 +645,70 @@ class TransportInformationActivity : AppCompatActivity() {
                                 if (currentBoarding == 1 && actualLocationForComparison == extractedStartName) {
                                     Log.d("SubwayRealtime", "DBUsage 0, location(${receivedLocation})이 출발역(${extractedStartName})과 일치. 탑승 여부 확인 다이얼로그 표시.")
                                     runOnUiThread {
-                                        AlertDialog.Builder(this@TransportInformationActivity)
-                                            .setTitle("지하철 탑승 확인")
-                                            .setMessage("현재 ${extractedStartName}역에 열차가 도착했습니다. 지하철에 탑승하셨나요?")
-                                            .setPositiveButton("네, 탑승했습니다.") { dialog, _ ->
-                                                val newBoarding = 2
-                                                Log.d("SubwayRealtime", "사용자 탑승 확인 (DBUsage 0). boarding을 2(탑승 중)으로 변경.")
-                                                updatedRealtimeDTO = RealtimeDTO(
-                                                    type = 1,
-                                                    boarding = newBoarding,
-                                                    transportLocalID = transportLocalID,
-                                                    dbUsage = currentDBUsage,
-                                                    trainNo = finalTrainNo,
-                                                    startName = extractedStartName,
-                                                    secondName = extractedSecondName,
-                                                    endName = extractedEndName,
-                                                    direction = (trainDirection ?: ""),
-                                                    location = receivedLocation
-                                                )
-                                                updatedRealtimeDTO?.let { RealtimeProcessor.requestUpdate(it) }
-                                                dialog.dismiss()
-                                            }
-                                            .setNegativeButton("아니요, 아직입니다.") { dialog, _ ->
-                                                val newBoarding = 1
-                                                val newTrainNo = "0"
-                                                Log.d("SubwayRealtime", "사용자 탑승 취소 (DBUsage 0). boarding 1(탑승 전) 유지, trainNo ${newTrainNo}으로 초기화.")
-                                                updatedRealtimeDTO = RealtimeDTO(
-                                                    type = 1,
-                                                    boarding = newBoarding,
-                                                    transportLocalID = transportLocalID,
-                                                    dbUsage = currentDBUsage,
-                                                    trainNo = newTrainNo,
-                                                    startName = extractedStartName,
-                                                    secondName = extractedSecondName,
-                                                    endName = extractedEndName,
-                                                    direction = (trainDirection ?: ""),
-                                                    location = receivedLocation
-                                                )
-                                                updatedRealtimeDTO?.let { RealtimeProcessor.requestUpdate(it) }
-                                                dialog.dismiss()
-                                            }
-                                            .setCancelable(false)
-                                            .show()
+                                        val dialog = Dialog(this@TransportInformationActivity)
+                                        dialog.setContentView(R.layout.transportation_arrival_dialog) // 커스텀 레이아웃 설정
+                                        dialog.setCancelable(false) // 외부 탭 또는 뒤로가기 버튼으로 닫히지 않도록 방지
+
+                                        // *** 다이얼로그를 중앙에 띄우기 위한 코드 시작 ***
+                                        val layoutParams = WindowManager.LayoutParams().apply {
+                                            copyFrom(dialog.window?.attributes)
+                                            gravity = Gravity.CENTER // 다이얼로그를 중앙에 위치
+                                            width = WindowManager.LayoutParams.WRAP_CONTENT // 내용에 맞게 너비 조절
+                                            height = WindowManager.LayoutParams.WRAP_CONTENT // 내용에 맞게 높이 조절
+                                        }
+                                        dialog.window?.attributes = layoutParams
+                                        // *** 다이얼로그를 중앙에 띄우기 위한 코드 끝 ***
+                                        // 주변 투명하게 보이게 함
+                                        dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+
+                                        // 커스텀 다이얼로그의 뷰 참조 가져오기
+                                        val messageTextView = dialog.findViewById<TextView>(R.id.dialog_message)
+                                        val btnYesBoarded = dialog.findViewById<Button>(R.id.btn_yes_boarded)
+                                        val btnNoBoarded = dialog.findViewById<Button>(R.id.btn_no_boarded)
+
+                                        // 동적 메시지 설정 (기존 AlertDialog의 setMessage에 해당)
+                                        messageTextView.text = "현재 ${extractedStartName}역에 열차가 도착했습니다. 지하철에 탑승하셨나요?"
+
+                                        btnYesBoarded.setOnClickListener {
+                                            val newBoarding = 2
+                                            Log.d("SubwayRealtime", "사용자 탑승 확인 (DBUsage 0). boarding을 2(탑승 중)으로 변경.")
+                                            updatedRealtimeDTO = RealtimeDTO(
+                                                type = 1,
+                                                boarding = newBoarding,
+                                                transportLocalID = transportLocalID,
+                                                dbUsage = currentDBUsage,
+                                                trainNo = finalTrainNo,
+                                                startName = extractedStartName,
+                                                secondName = extractedSecondName,
+                                                endName = extractedEndName,
+                                                direction = (trainDirection ?: ""),
+                                                location = receivedLocation
+                                            )
+                                            updatedRealtimeDTO?.let { RealtimeProcessor.requestUpdate(it) }
+                                            dialog.dismiss() // 커스텀 다이얼로그 닫기
+                                        }
+
+                                        btnNoBoarded.setOnClickListener {
+                                            val newBoarding = 1
+                                            val newTrainNo = "0" // 추가된 로직
+                                            Log.d("SubwayRealtime", "사용자 탑승 취소 (DBUsage 0). boarding 1(탑승 전) 유지, trainNo ${newTrainNo}으로 초기화.")
+                                            updatedRealtimeDTO = RealtimeDTO(
+                                                type = 1,
+                                                boarding = newBoarding,
+                                                transportLocalID = transportLocalID,
+                                                dbUsage = currentDBUsage,
+                                                trainNo = newTrainNo, // 추가된 로직 적용
+                                                startName = extractedStartName,
+                                                secondName = extractedSecondName,
+                                                endName = extractedEndName,
+                                                direction = (trainDirection ?: ""),
+                                                location = receivedLocation
+                                            )
+                                            updatedRealtimeDTO?.let { RealtimeProcessor.requestUpdate(it) }
+                                            dialog.dismiss() // 커스텀 다이얼로그 닫기
+                                        }
+
+                                        dialog.show() // 커스텀 다이얼로그 표시
                                     }
                                     return@realtimeResponse
                                 } else if (currentBoarding == 2 && actualLocationForComparison == extractedSecondName) {
