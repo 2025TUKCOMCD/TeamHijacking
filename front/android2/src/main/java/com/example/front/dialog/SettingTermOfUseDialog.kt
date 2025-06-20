@@ -1,13 +1,14 @@
-package com.example.front.dialog;
+package com.example.front.dialog
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.DialogFragment
 import com.example.front.databinding.SettingTermOfUseDialogBinding
 
-public class SettingTermOfUseDialog : DialogFragment() {
+class SettingTermOfUseDialog : DialogFragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         isCancelable = true
@@ -26,13 +27,15 @@ public class SettingTermOfUseDialog : DialogFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-//        val text = "Hello, Welcome to blackjin Tisotry"
 //
 //        binding.tvSample.text = text
 //
 //        binding.btnSample.setOnClickListener {
 //            Toast.makeText(requireContext(), text, Toast.LENGTH_SHORT).show()
 //        }
+        binding.settingTermOfUseDismissBtn.setOnClickListener {
+            Log.d("dialog", "이용 약관 다이얼로그 삭제")
+            dismiss()
+        }
     }
 }

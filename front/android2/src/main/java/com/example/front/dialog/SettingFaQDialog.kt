@@ -6,9 +6,9 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.DialogFragment
 import com.example.front.databinding.SettingFaqDialogBinding
-import com.example.front.databinding.SettingTermOfUseDialogBinding
+import android.util.Log
 
-public class SettingFaQDialog: DialogFragment() {
+class SettingFaQDialog: DialogFragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         isCancelable = true
@@ -28,12 +28,15 @@ public class SettingFaQDialog: DialogFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-//        val text = "Hello, Welcome to blackjin Tisotry"
 //
 //        binding.tvSample.text = text
 //
 //        binding.btnSample.setOnClickListener {
 //            Toast.makeText(requireContext(), text, Toast.LENGTH_SHORT).show()
 //        }
+        binding.settingFAQDismissBtn.setOnClickListener {
+            Log.d("dialog", "FaQ 다이얼로그 삭제")
+            dismiss()
+        }
     }
 }

@@ -21,7 +21,7 @@ object UserProcessor {
         call.enqueue(object : Callback<UserRequest> {
             override fun onResponse(call: Call<UserRequest>, response: Response<UserRequest>) {
                 if (response.isSuccessful) {
-                    Log.d("response","${response}")
+                    Log.d("response","$response")
                     Log.d("UserProcessor", "등록 성공: ${response.body()}")
                 } else {
                     Log.w("UserProcessor", "등록 실패 - 상태 코드: ${response.code()}")
@@ -77,4 +77,5 @@ object UserProcessor {
             }
         })
     }
+
 }

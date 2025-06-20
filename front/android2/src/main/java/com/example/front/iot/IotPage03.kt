@@ -15,6 +15,10 @@ import com.example.front.databinding.FragmentIotPage03Binding
 import com.kakao.sdk.user.UserApiClient
 import androidx.core.content.edit
 import androidx.core.view.isGone
+import androidx.fragment.app.DialogFragment
+import com.example.front.dialog.SettingFaQDialog
+import com.example.front.dialog.SettingQnADialog
+import com.example.front.dialog.SettingTermOfUseDialog
 
 class IotPage03 : Fragment() {
 
@@ -96,15 +100,15 @@ class IotPage03 : Fragment() {
 
         //dialog 출력을 위한 코드들
         faq.setOnClickListener {
-
+            showDialog(SettingFaQDialog(), "FAQ")
         }
 
         qna.setOnClickListener {
-
+            showDialog(SettingQnADialog(), "Q&A")
         }
 
         termOfUse.setOnClickListener {
-
+            showDialog(SettingTermOfUseDialog(), "이용 약관")
         }
 
         privacyPolicy.setOnClickListener {
@@ -132,31 +136,7 @@ class IotPage03 : Fragment() {
         _binding = null
     }
 
-    fun showFaQDialog() {
-
-    }
-
-    fun showQnADialog() {
-
-    }
-
-    fun showTermOfUseDialog() {
-
-    }
-
-    fun showPrivacyPolicyDialog() {
-
-    }
-
-    fun showOpenSourceDialog() {
-
-    }
-
-    fun showHowToDoDialog() {
-
-    }
-
-    fun showContactToDevDialog() {
-
+    private fun showDialog(dialog: DialogFragment, tag: String) {
+        dialog.show(parentFragmentManager, tag)
     }
 }
