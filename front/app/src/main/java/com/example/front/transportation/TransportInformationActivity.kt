@@ -723,7 +723,6 @@ class TransportInformationActivity : AppCompatActivity() {
                                     // 커스텀 다이얼로그의 뷰 참조 가져오기
                                     // 주의: transportation_arrival_dialog.xml에 dialog_title 이라는 ID가 없으므로,
                                     // 해당 TextView를 사용하려면 XML에 <TextView android:id="@+id/dialog_title" ... /> 을 추가해야 합니다.
-                                    val titleTextView = dialog.findViewById<TextView>(R.id.dialog_title)
                                     val messageTextView = dialog.findViewById<TextView>(R.id.dialog_message)
                                     // XML의 구성에 맞춰 TextView로 참조합니다.
                                     val btnYesBoarded = dialog.findViewById<TextView>(R.id.btn_yes_boarded)
@@ -731,7 +730,6 @@ class TransportInformationActivity : AppCompatActivity() {
 
                                     // 다이얼로그 제목 설정 (XML에 dialog_title이 있는 경우에만 유효)
                                     // 현재 XML에는 dialog_title이 없으므로, 이 줄은 효과가 없거나 titleTextView가 null일 수 있습니다.
-                                    titleTextView?.text = "지하철 도착 알림" // 만약 XML에 dialog_title이 있다면 이 주석을 해제하고 사용하세요.
 
                                     // 동적 메시지 설정
                                     messageTextView.text = "현재 ${extractedStartName}역에 열차가 도착했습니다. 지하철에 탑승하셨나요?"
