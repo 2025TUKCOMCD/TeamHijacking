@@ -13,6 +13,11 @@ import android.widget.Toast
 import androidx.core.content.edit
 
 class SettingChangeNicknameDialog: DialogFragment() {
+    override fun onStart() {
+        super.onStart()
+        dialog?.window?.setBackgroundDrawableResource(android.R.color.transparent)
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         isCancelable = true
