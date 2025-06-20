@@ -552,7 +552,6 @@ class TransportInformationActivity : AppCompatActivity() {
                                     dialog.setCancelable(false) // 외부 탭 또는 뒤로가기 버튼으로 닫히지 않도록 방지
 
                                     // 커스텀 다이얼로그의 뷰 참조 가져오기
-                                    val titleTextView = dialog.findViewById<TextView>(R.id.dialog_title)
                                     val messageTextView = dialog.findViewById<TextView>(R.id.dialog_message)
                                     val btnYesBoarded = dialog.findViewById<Button>(R.id.btn_yes_boarded)
                                     val btnNoBoarded = dialog.findViewById<Button>(R.id.btn_no_boarded)
