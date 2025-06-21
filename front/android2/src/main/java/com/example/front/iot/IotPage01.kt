@@ -1,6 +1,8 @@
 package com.example.front.iot
 
 import android.content.Context
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -42,7 +44,8 @@ class IotPage01 : Fragment() {
         val iotLinearLayout = binding.iotLinearLayout
 
         //데이터 전송 테스트
-        sendData(requireContext(),"/my_data","아무데이터",System.currentTimeMillis().toString())
+
+
 
         addViewBtn.setOnClickListener {
             addIoTDeviceView("아무 이름")
@@ -84,29 +87,6 @@ class IotPage01 : Fragment() {
     }
 
 
-    //android 로부터 watch 로 데이터 보내기 위한 테스트 코드
-    fun sendData(context: Context,requestapi : String, key: String, value: String) {
-        val dataClient = Wearable.getDataClient(context)
-        val putDataReq = PutDataMapRequest.create(requestapi).run {
-            dataMap.putString(key, value)
-            asPutDataRequest()
-        }
 
-        val putDataTask: Task<DataItem> = dataClient.putDataItem(putDataReq)
-
-        putDataTask.addOnSuccessListener {
-            Log.d(TAG, "데이터 전송 성공: $key = $value")
-            Toast.makeText(context, "데이터 전송 성공", Toast.LENGTH_SHORT).show()
-        }.addOnFailureListener { exception ->
-            Log.e(TAG, "데이터 전송 실패: ${exception.message}", exception)
-            Toast.makeText(context, "데이터 전송 실패: ${exception.message}", Toast.LENGTH_SHORT).show()
-
-            if (exception is ApiException) {
-                val apiException = exception
-                Log.e(TAG, "API Exception Status Code: ${apiException.statusCode}")
-                // 필요에 따라 추가적인 오류 처리 로직 구현 (예: 특정 상태 코드에 따른 다른 UI 표시)
-            }
-        }
-    }
 
 }

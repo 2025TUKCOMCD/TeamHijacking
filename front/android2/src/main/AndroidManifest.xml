@@ -49,8 +49,8 @@
                 <category android:name="android.intent.category.BROWSABLE" />
 
                 <data
-                    android:host="seemore"
-                    android:scheme="main" />
+                    android:host="main"
+                    android:scheme="seemore" />
             </intent-filter>
         </activity> <!-- 카카오 인증을 위한 AuthCodeHandlerActivity 설정 -->
         <activity
