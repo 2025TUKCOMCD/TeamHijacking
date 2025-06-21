@@ -16,7 +16,6 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Front"
         android:usesCleartextTraffic="true">
-
         <activity
             android:name=".login.SplashActivity"
             android:exported="true">
@@ -29,41 +28,28 @@
         <activity
             android:name=".login.LoginActivity"
             android:exported="true">
-            <!-- **카카오 로그인 Redirect URI 처리 (주석 해제됨)** -->
             <intent-filter>
-                <action android:name="android.intent.action.VIEW" />
+                <action android:name="android.intent.action.VIEW" /> <!-- 데이터 보여 주는 기능일 시에 선언, activity 가 사용자 에게 표시할 수 있는 어떤 정보를 가지고 있을 때, startActivity()가 있는 intent 에서 사용 -->
                 <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="android.intent.category.BROWSABLE" />
+                <category android:name="android.intent.category.BROWSABLE" /> <!-- 대상 activity 가 web Browser 를 통해 시작 되도록 허용 하고 이미지, 이메일 메시지 등 링크로 참조 data 를 표시 하게 함 -->
                 <!-- Redirect URI: "kakao${NATIVE_APP_KEY}://oauth" -->
                 <data
                     android:host="oauth"
                     android:scheme="kakaocf939a3f6eb2a3a0c85cce072098dba2" />
             </intent-filter>
         </activity>
-
         <activity
             android:name=".MainActivity"
-            android:exported="true" > <!-- 일반적인 사용을 위해 exported="true" 유지 -->
-            <!-- Note: 현재 SplashActivity가 LAUNCHER이므로 MainActivity는 LAUNCHER가 아님.
-                      SmartThings 딥 링크 처리는 LoginActivity로 이동했으므로 여기서는 불필요. -->
-            <!-- **SmartThings OAuth 인증 후 백엔드로부터 돌아오는 딥 링크를 LoginActivity가 처리** -->
-            <intent-filter>
-                <action android:name="android.intent.action.VIEW" />
-                <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="android.intent.category.BROWSABLE" />
-                <data
-                    android:scheme="seemore"
-                    android:host="main" /> <!-- 딥 링크 호스트 -->
-            </intent-filter>
-        </activity>
-
+            android:exported="false" /> <!-- 카카오 인증을 위한 AuthCodeHandlerActivity 설정 -->
         <activity
             android:name="com.kakao.sdk.auth.AuthCodeHandlerActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
+
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
+
                 <data
                     android:host="oauth"
                     android:scheme="kakaocf939a3f6eb2a3a0c85cce072098dba2" /> <!-- YOUR_NATIVE_APP_KEY 부분을 native 앱 키로 변경 -->
@@ -71,7 +57,7 @@
         </activity>
 
 
-        <!-- 워치로부터 메시지를 수신하기 위한 서비스 등록 (기존과 동일) -->
+        <!-- 워치로부터 메시지를 수신하기 위한 서비스 등록 -->
         <service
             android:name=".PhoneMessageListenerService"
             android:enabled="true"
