@@ -24,7 +24,7 @@ class BleCustomAdapter(context: Context, private val devices: ArrayList<Bluetoot
 
         // Log.d("현빈", deviceName) // 디버깅용 로그
 
-        val viewType = if (deviceName.startsWith("G")) TYPE_AGH else TYPE_BGH
+        val viewType = if (deviceName.startsWith("AGH")) TYPE_AGH else if (deviceName.startsWith("BGH")) TYPE_BGH else null
         var currentView = convertView
 
         // 현재 뷰 타입과 재활용될 뷰 타입이 다르면 새로 생성 (중요!)
@@ -32,11 +32,15 @@ class BleCustomAdapter(context: Context, private val devices: ArrayList<Bluetoot
         if (currentView == null || (currentView.tag as? Int) != viewType) {
             currentView = if (viewType == TYPE_AGH) {
                 LayoutInflater.from(context).inflate(R.layout.agh_list_item, parent, false)
-            } else { // TYPE_BGH
+            } else if (viewType == TYPE_BGH) { // TYPE_BGH
                 LayoutInflater.from(context).inflate(R.layout.bgh_list_item, parent, false)
+            } else {
+                null
             }
             // 새로 생성된 뷰에 뷰 타입을 태그로 저장 (재활용 시 비교를 위해)
-            currentView.tag = viewType
+            if (currentView != null) {
+                currentView.tag = viewType
+            }
         }
 
 
@@ -45,6 +49,13 @@ class BleCustomAdapter(context: Context, private val devices: ArrayList<Bluetoot
         val deviceNameTextView = currentView?.findViewById<TextView>(R.id.ble_name) // 예시: 주소 표시용 TextView
 
         // TextView에 텍스트 설정
+        if (viewType == TYPE_AGH) {
+            deviceNameTextView?.text = "음향신호기"
+        } else if (viewType == TYPE_BGH) { // TYPE_BGH
+            deviceNameTextView?.text = "음성유도기"
+        } else {
+            null
+        }
         deviceNameTextView?.text = deviceName
 
         return currentView!!
@@ -53,7 +64,7 @@ class BleCustomAdapter(context: Context, private val devices: ArrayList<Bluetoot
     override fun getItemViewType(position: Int): Int {
         val device = getItem(position)
         val deviceName = device?.name ?: "Unknown Device"
-        return if (deviceName.startsWith("G")) TYPE_AGH else TYPE_BGH
+        return if (deviceName.startsWith("AGH")) TYPE_AGH else TYPE_BGH
     }
 
     override fun getViewTypeCount(): Int {
