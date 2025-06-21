@@ -44,7 +44,10 @@ class TransportNewPathSearchActivity : AppCompatActivity() {
         val endLng = intent.getDoubleExtra("endLng", 127.0900351)
         val departureName = intent.getStringExtra("departureName") ?: "출발지"
         val destinationName = intent.getStringExtra("destinationName") ?: "도착지"
-
+        Log.d("startLat",startLat.toString())
+        Log.d("startLng",startLng.toString())
+        Log.d("endLat",endLat.toString())
+        Log.d("endLng",endLng.toString())
         // --- Intent에서 플래그 데이터 받기 ---
         val bundle = intent.extras
         bundle?.let {
