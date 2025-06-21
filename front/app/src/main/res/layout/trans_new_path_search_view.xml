@@ -3,10 +3,11 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="162dp"
     android:layout_height="wrap_content"
+    android:layout_gravity="center"
     android:minHeight="100dp"
     android:background="@drawable/some_chip"
     android:id="@+id/someRootLayout2"
-    android:padding="5dp"
+    android:padding="7dp"
     android:orientation="vertical"
     android:layout_marginBottom="10dp"
     >
@@ -16,49 +17,62 @@
         android:orientation="horizontal"
         android:layout_marginBottom="5dp">
         <TextView
-            android:layout_width="79dp"
+            android:id="@+id/mainTransitTypesView"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="12sp"
+            android:layout_gravity="start"
             android:text="@string/defaultText"
             android:textColor="@android:color/white"
-            android:id="@+id/mainTransitTypesView"
-            android:layout_gravity="start"/>
+            android:textSize="12sp"
+            android:layout_weight="1"
+            android:ellipsize="end"
+            android:maxLines="1"
+            />
         <TextView
+            android:id="@+id/transitCountView"
             android:layout_width="wrap_content"
-            android:maxWidth="18dp"
             android:layout_height="wrap_content"
-            android:textSize="8sp"
+            android:layout_marginStart="8dp"
+            android:padding="2dp"
             android:text="@string/n"
             android:textColor="#cccccc"
-            android:id="@+id/transitCountView"
-            android:padding="2dp"/>
+            android:textSize="8sp"
+            android:layout_gravity="center_vertical"
+            />
         <TextView
+            android:id="@+id/totalTimeView"
             android:layout_width="wrap_content"
-            android:maxWidth="47dp"
-            android:textAlignment="textEnd"
             android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
             android:text="@string/n_nn"
+            android:textAlignment="textEnd"
             android:textColor="@android:color/white"
             android:textSize="10sp"
-            android:id="@+id/totalTimeView" />
+            android:layout_gravity="end"
+            />
     </LinearLayout>
     <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/defaultText"
-        android:textSize="11sp"
-        android:textColor="#cccccc"
         android:id="@+id/detatiledPathView"
-        android:paddingStart="5dp"
-        android:paddingEnd="5dp" />
-    <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/code"
-        android:textSize="10sp"
-        android:id="@+id/routeStationsAndBusesView"
         android:paddingStart="5dp"
         android:paddingEnd="5dp"
+        android:text="@string/defaultText"
         android:textColor="#cccccc"
-        android:textAlignment="textEnd"/>
+        android:textSize="11sp" />
+    <TextView
+        android:id="@+id/predictTimeView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingStart="5dp"
+        android:paddingEnd="5dp"
+        android:text="@string/code"
+        android:textSize="10sp"
+        android:textColor="#cccccc"
+        android:textAlignment="textEnd"
+        android:gravity="bottom|end"
+        android:layout_weight="1"
+        android:maxHeight="40dp"
+        android:scrollbars="vertical"
+        />
 </LinearLayout>

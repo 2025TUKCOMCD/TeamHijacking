@@ -125,16 +125,18 @@ class AudioGuideBLEConnectActivity : AppCompatActivity() {
 
 
             // AGH 기기 필터링 및 추가
-            if (!aghDevices.contains(device) && deviceName.startsWith("G")) {
+            if (!aghDevices.contains(device) && deviceName.startsWith("AGH")) {
                 aghDevices.add(device)
                 aghArrayAdapter.notifyDataSetChanged()
+                Toast.makeText(this@AudioGuideBLEConnectActivity, "음향신호기", Toast.LENGTH_SHORT).show()
                 Log.d("bluetoothconnect", "Found AGH device: $deviceName - ${device.address}")
             }
             // BGH 기기 필터링 및 추가
             else
-                if (!bghDevices.contains(device)) {
+                if (!bghDevices.contains(device) && deviceName.startsWith("BGH")) {
                     bghDevices.add(device)
                     bghArrayAdapter.notifyDataSetChanged()
+                    Toast.makeText(this@AudioGuideBLEConnectActivity, "음성유도기", Toast.LENGTH_SHORT).show()
                     Log.d("bluetoothconnect", "Found BGH device: $deviceName - ${device.address}")
                 }
 
