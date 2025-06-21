@@ -38,9 +38,8 @@ class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
 
     private val TAG = "워치_MainActivity"
-    private val DATA_PATH = "/my_data" // 모바일 앱에서 사용한 데이터 경로
     private val LOGIN_PATH = "/kakao" // 모바일 앱에서 사용한 데이터 경로
-    private val KEY_MESSAGE = "아무데이터" // 모바일 앱에서 보낸 데이터의 키
+    private val KEY_MESSAGE = "login_id" // 모바일 앱에서 보낸 데이터의 키
     private var loginPromptDialog: PhoneLoginPromptDialog? = null
 
 
@@ -59,7 +58,11 @@ class MainActivity : AppCompatActivity() {
                 if (!receivedMessage.isNullOrEmpty()) { // 수신된 메시지가 null이 아니거나 비어있지 않으면 로그인 성공으로 간주
                     loginPromptDialog?.updateLoginStatus(receivedMessage) // 다이얼로그의 상태 업데이트
                     // 로그인 성공 시 다이얼로그를 자동으로 닫으려면 여기서 dismiss() 호출
-                    loginPromptDialog?.dismiss() // **다이얼로그 닫기 추가**
+                    //loginPromptDialog?.dismiss() // **다이얼로그 닫기 추가**
+                    //전역변수로 처리
+
+
+
                     // 그리고 로그인 성공 후 메인 화면의 다른 UI나 로직을 업데이트 (예: 앱의 실제 데이터 로드 시작)
                     // (checkExistingData(DATA_PATH)를 다시 호출하여 UI를 완전히 새로고침하는 것도 방법)
                 }
