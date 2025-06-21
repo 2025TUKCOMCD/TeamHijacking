@@ -136,7 +136,7 @@
                 <action android:name="com.google.android.gms.wearable.DATA_CHANGED" />
                 <data
                     android:host="*"
-                    android:pathPrefix="/my_data"
+                    android:pathPrefix="/kakao"
                     android:scheme="wear" />
             </intent-filter>
         </service>
