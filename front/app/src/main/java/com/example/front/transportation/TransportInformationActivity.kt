@@ -565,7 +565,7 @@ class TransportInformationActivity : AppCompatActivity() {
                                 RealtimeProcessor.currentRealtimeData?.startName + " 역"
                             } // 탑승 후의 경우
                             else {
-                                RealtimeProcessor.currentRealtimeData?.startName + " 역"
+                                RealtimeProcessor.currentRealtimeData?.location + " 역"
                             }
 
                             // 지하철 , 탑승 전/후 첫차 ?분 후, 둘째차 ?분 후 도착 예정

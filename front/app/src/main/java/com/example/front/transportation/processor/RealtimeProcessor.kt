@@ -17,7 +17,7 @@ import java.util.concurrent.atomic.AtomicBoolean
 object RealtimeProcessor {
 
     private const val Host_URL = BuildConfig.Host_URL
-    private const val POLLING_INTERVAL_MS = 30 * 1000L // 30초 (밀리초 단위)
+    private const val POLLING_INTERVAL_MS = 10 * 1000L // 30초 (밀리초 단위)
     private val JSON_MEDIA_TYPE = "application/json; charset=utf-8".toMediaType()
     private val gson = Gson()
 
