@@ -107,14 +107,18 @@ public class DatabaseService {
 
             // DTO의 필드로 엔티티 업데이트
             existingRoute.setDepartureName(savedRouteDTO.getDepartureName());
-            existingRoute.setDepartureName(savedRouteDTO.getDepartureName());
+            existingRoute.setDestinationName(savedRouteDTO.getDestinationName()); // destinationName으로 수정
             existingRoute.setStartLat(savedRouteDTO.getStartLat());
             existingRoute.setStartLng(savedRouteDTO.getStartLng());
             existingRoute.setEndLat(savedRouteDTO.getEndLat());
             existingRoute.setEndLng(savedRouteDTO.getEndLng());
             existingRoute.setSavedRouteName(savedRouteDTO.getSavedRouteName());
-            existingRoute.setUserRouteCount(savedRouteDTO.getUserRouteCount());
             existingRoute.setIsFavorite(savedRouteDTO.getIsFavorite()); // 즐겨찾기 상태 업데이트
+
+            // userRouteCount를 1 증가시키고 whenLastGo를 현재 시간으로 업데이트
+            existingRoute.setUserRouteCount((existingRoute.getUserRouteCount() != null ? existingRoute.getUserRouteCount() : 0) + 1);
+            existingRoute.setWhenLastGo(LocalDateTime.now());
+
 
             // DB에 변경사항 저장 (JPA Dirty Checking으로 인해 save 호출 없이도 트랜잭션 종료 시 자동 반영될 수 있으나, 명시적으로 호출)
             SavedRoute updatedRoute = savedRouteRepository.save(existingRoute);
@@ -156,7 +160,7 @@ public class DatabaseService {
             System.out.println("Route already exists with transportRouteKey: " + existingRoute.getTransportrouteKey());
 
             // userRouteCount 증가
-            existingRoute.setUserRouteCount(existingRoute.getUserRouteCount() + 1);
+            existingRoute.setUserRouteCount((existingRoute.getUserRouteCount() != null ? existingRoute.getUserRouteCount() : 0) + 1); // null 체크 추가
             // isFavorite 업데이트 (DTO에서 값이 제공되면 업데이트)
             if (savedRouteDTO.getIsFavorite() != null) {
                 existingRoute.setIsFavorite(savedRouteDTO.getIsFavorite());

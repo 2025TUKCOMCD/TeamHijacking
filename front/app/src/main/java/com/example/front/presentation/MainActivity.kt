@@ -40,7 +40,7 @@ class MainActivity : AppCompatActivity() {
     private val TAG = "워치_MainActivity"
     private val DATA_PATH = "/my_data" // 모바일 앱에서 사용한 데이터 경로
     private val LOGIN_PATH = "/kakao" // 모바일 앱에서 사용한 데이터 경로
-    private val KEY_MESSAGE = "아무데이터" // 모바일 앱에서 보낸 데이터의 키
+    private val KEY_MESSAGE = "login_id" // 모바일 앱에서 보낸 데이터의 키
     private var loginPromptDialog: PhoneLoginPromptDialog? = null
 
 
@@ -70,6 +70,8 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
+
+        val app = this.applicationContext as? userid
 
         // activity_main.xml 레이아웃 설정
         setContentView(binding.main)
@@ -118,6 +120,8 @@ class MainActivity : AppCompatActivity() {
             if (existingData != null) {
                 val message = existingData
                 Log.d(TAG, "초기 로드 (기존 데이터): 메시지='$message'")
+                app?.receivedMessage = message
+
             } else {
                 Log.d(TAG, "초기 로드 (기존 데이터 없음): 메시지='기존 데이터 없음'")
 

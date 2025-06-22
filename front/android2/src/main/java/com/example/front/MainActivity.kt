@@ -2,6 +2,7 @@ package com.example.front
 
 
 import android.content.ContentValues.TAG
+import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
@@ -16,6 +17,11 @@ import com.example.front.databinding.ActivityMainBinding
 import com.example.front.iot.IotPage01
 //import com.example.front.iot.IotPage02
 import com.example.front.iot.IotPage03
+import com.google.android.gms.common.api.ApiException
+import com.google.android.gms.tasks.Task
+import com.google.android.gms.wearable.DataItem
+import com.google.android.gms.wearable.PutDataMapRequest
+import com.google.android.gms.wearable.Wearable
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 
@@ -49,6 +55,35 @@ class MainActivity : AppCompatActivity() {
         //이름을 받아올 수 있는지 테스트 위한 코드
         val name = intent.getStringExtra("name")
         Toast.makeText(this, "어서오세요 $name 님", Toast.LENGTH_SHORT).show()
+
+
+        // 딥링크 처리 로직 추가
+        val appLinkIntent: Intent = intent
+        val appLinkData: Uri? = appLinkIntent.data
+
+        appLinkData?.let { uri ->
+            // 딥링크 URI의 스킴과 호스트 확인 (seemore://main)
+            if (uri.scheme == "seemore" && uri.host == "main") {
+                val state = uri.getQueryParameter("state")
+                state?.let {
+                    sendData(this,"/kakao","login_id",it)
+
+                    Log.d("현빈", "Deep link 'state' parameter received: $it")
+                    Toast.makeText(this, "딥링크 'state' 값: $it", Toast.LENGTH_LONG).show()
+                    // 여기에서 'state' 값을 사용하여 필요한 작업을 수행할 수 있습니다.
+                    // 예: 특정 UI 업데이트, 데이터 로드, 로그인 상태 확인 등
+                } ?: run {
+                    Log.d("현빈", "Deep link received, but 'state' parameter is null.")
+                }
+            } else {
+                Log.d("현빈", "Non-seemore://main deep link received: $uri")
+            }
+        } ?: run {
+            Log.d("현빈", "No deep link data received on launch.")
+        }
+
+
+
 
         //탭 레이아웃 으로 하단에 나오는 버튼 이름을 일단 설정
         val tabLayout: TabLayout = binding.tabLayout
@@ -97,4 +132,31 @@ class MainActivity : AppCompatActivity() {
             /* 장치 추가 페이지 임시로 삭제, 페이지 두 개로 수정 */
         }
     }
+    //android 로부터 watch 로 데이터 보내기 위한 테스트 코드
+    fun sendData(context: Context, requestapi : String, key: String, value: String) {
+        val dataClient = Wearable.getDataClient(context)
+        val putDataReq = PutDataMapRequest.create(requestapi).run {
+            dataMap.putString(key, value)
+            asPutDataRequest()
+        }
+
+        val putDataTask: Task<DataItem> = dataClient.putDataItem(putDataReq)
+
+        putDataTask.addOnSuccessListener {
+            Log.d(TAG, "데이터 전송 성공: $key = $value")
+            Toast.makeText(context, "데이터 전송 성공", Toast.LENGTH_SHORT).show()
+        }.addOnFailureListener { exception ->
+            Log.e(TAG, "데이터 전송 실패: ${exception.message}", exception)
+            Toast.makeText(context, "데이터 전송 실패: ${exception.message}", Toast.LENGTH_SHORT).show()
+
+            if (exception is ApiException) {
+                val apiException = exception
+                Log.e(TAG, "API Exception Status Code: ${apiException.statusCode}")
+                // 필요에 따라 추가적인 오류 처리 로직 구현 (예: 특정 상태 코드에 따른 다른 UI 표시)
+            }
+        }
+    }
+
+
+
 }

@@ -162,7 +162,7 @@ class LoginActivity : AppCompatActivity() {
                                 saveLoginInfo(registeredUser)
                                 // 여기에 코드 추가
                                 initiateSmartThingsOAuth(registeredUser.loginId)
-                                moveToMain(registeredUser.name)
+                                //moveToMain(registeredUser.name)
                             }
                         }
                         409 -> {
@@ -171,7 +171,7 @@ class LoginActivity : AppCompatActivity() {
                             saveLoginInfo(user)
                             // 여기에 코드 추가
                             initiateSmartThingsOAuth(user.loginId)
-                            moveToMain(user.name)
+                            //moveToMain(user.name)
                         }
                         else -> {
                             Toast.makeText(this, "등록 실패 (오류 코드: ${response.code()})", Toast.LENGTH_SHORT).show()
@@ -184,7 +184,7 @@ class LoginActivity : AppCompatActivity() {
         }
         //사용자 정보를 활용해 추가 로직 구현 가능
     }
-
+/*TODO::mhhghghghgh*/
     // sharedPreferences 에 로그인 정보 저장
     private fun saveLoginInfo(user: UserRequest) {
         val sharedPref = getSharedPreferences("userPrefs", MODE_PRIVATE)
