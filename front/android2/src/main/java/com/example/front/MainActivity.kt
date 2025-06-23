@@ -76,7 +76,7 @@ class MainActivity : AppCompatActivity() {
                     Toast.makeText(this, "딥링크 'state' 값: $it", Toast.LENGTH_LONG).show()
                     // 여기에서 'state' 값을 사용하여 필요한 작업을 수행할 수 있습니다.
                     // 예: 특정 UI 업데이트, 데이터 로드, 로그인 상태 확인 등
-                    UserProcessor.getSmartThingsToken(state) { token ->
+                    UserProcessor.getSmartThingsToken(it) { token ->
                         if (token != null) {
                             saveSmartThingsToken(token)
                             Log.d("SmartThings", "토큰 저장 완료: $token")
