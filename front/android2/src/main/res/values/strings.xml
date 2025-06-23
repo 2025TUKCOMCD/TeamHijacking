@@ -37,4 +37,9 @@
     <string name="QnAExplainText">주로 들어오는 질문이 이 곳에 추가됩니다.</string>
     <string name="TermOfUseText">"이용 약관은 추후 수정해야 합니다. "</string>
     <string name="TermOfUseNameText">이용 약관</string>
+    <string name="privacyPolicyText">이용 약관</string>
+    <string name="privacyPolicyDescription">이용약관을 추가해야 합니다.</string>
+    <string name="howToDoDescription">"앱 실행 방법도 추가해야 합니다."</string>
+    <string name="developersName">개발자 이메일</string>
+    <string name="contactToDevDescription">한국공학대학교 컴퓨터공학전공 팀 하이재킹</string>
 </resources>

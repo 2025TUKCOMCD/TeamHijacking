@@ -16,7 +16,12 @@ import com.kakao.sdk.user.UserApiClient
 import androidx.core.content.edit
 import androidx.core.view.isGone
 import androidx.fragment.app.DialogFragment
+import com.example.front.dialog.SettingChangeNicknameDialog
+import com.example.front.dialog.SettingContactToDevDialog
 import com.example.front.dialog.SettingFaQDialog
+import com.example.front.dialog.SettingHowToDoDialog
+import com.example.front.dialog.SettingOpenSourceDialog
+import com.example.front.dialog.SettingPrivacyPolicyDialog
 import com.example.front.dialog.SettingQnADialog
 import com.example.front.dialog.SettingTermOfUseDialog
 
@@ -98,7 +103,12 @@ class IotPage03 : Fragment() {
             }
         }
 
+
         //dialog 출력을 위한 코드들
+        littleProfileLayout.setOnClickListener {
+            showDialog(SettingChangeNicknameDialog(), "닉네임 변경")
+        }
+
         faq.setOnClickListener {
             showDialog(SettingFaQDialog(), "FAQ")
         }
@@ -112,22 +122,21 @@ class IotPage03 : Fragment() {
         }
 
         privacyPolicy.setOnClickListener {
-
+            showDialog(SettingPrivacyPolicyDialog(), "개인 정보 정책")
         }
 
         openSource.setOnClickListener {
-
+            showDialog(SettingOpenSourceDialog(), "오픈 소스")
         }
 
         howToDo.setOnClickListener {
-
+            showDialog(SettingHowToDoDialog(), "사용 방법")
         }
 
         contactToDev.setOnClickListener {
-
+            showDialog(SettingContactToDevDialog(), "개발자 연락처")
         }
 
-        //https://coding-juuwon2.tistory.com/114
         return binding.root
     }
 

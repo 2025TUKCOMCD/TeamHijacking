@@ -9,6 +9,11 @@ import androidx.fragment.app.DialogFragment
 import com.example.front.databinding.SettingQaDialogBinding
 
 class SettingQnADialog: DialogFragment() {
+    override fun onStart() {
+        super.onStart()
+        dialog?.window?.setBackgroundDrawableResource(android.R.color.transparent)
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         isCancelable = true

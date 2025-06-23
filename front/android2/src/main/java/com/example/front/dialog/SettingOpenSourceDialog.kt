@@ -1,15 +1,15 @@
 package com.example.front.dialog
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.DialogFragment
-import com.example.front.databinding.SettingFaqDialogBinding
-import android.util.Log
+import com.example.front.databinding.SettingOpensourceDialogBinding
 
-class SettingFaQDialog: DialogFragment() {
-    private lateinit var binding: SettingFaqDialogBinding
+class SettingOpenSourceDialog: DialogFragment() {
+    private lateinit var binding: SettingOpensourceDialogBinding
 
     override fun onStart() {
         super.onStart()
@@ -26,15 +26,15 @@ class SettingFaQDialog: DialogFragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        binding = SettingFaqDialogBinding.inflate(inflater, container, false)
+        binding = SettingOpensourceDialogBinding.inflate(inflater, container, false)
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding.settingFAQDismissBtn.setOnClickListener {
-            Log.d("dialog", "FaQ 다이얼로그 삭제")
+        binding.settingOpenSourceDismissBtn.setOnClickListener {
+            Log.d("dialog", "오픈 소스 다이얼로그 삭제")
             dismiss()
         }
     }
