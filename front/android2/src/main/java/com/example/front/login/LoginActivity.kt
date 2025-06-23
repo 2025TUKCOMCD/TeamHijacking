@@ -31,7 +31,7 @@ class LoginActivity : AppCompatActivity() {
     private val SMARTTHINGS_AUTHORIZE_URL = BuildConfig.SMARTTHINGS_AUTHORIZE_URL
     private val SMARTTHINGS_CLIENT_ID = BuildConfig.SMARTTHINGS_CLIENT_ID
     private val SMARTTHINGS_REDIRECT_URI = BuildConfig.SMARTTHINGS_REDIRECT_URI
-    private val SMARTTHINGS_SCOPE = "r%3Adevices%3A%2A" // SmartThings API 접근 권한
+    private val SMARTTHINGS_SCOPE = "r:devices:* w:devices:* x:devices:*" // SmartThings API 접근 권한
 
     // CSRF 토큰 생성을 위한 SecureRandom 인스턴스
     private val secureRandom = SecureRandom()
