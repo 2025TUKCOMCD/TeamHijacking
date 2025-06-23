@@ -174,7 +174,7 @@ class LoginActivity : AppCompatActivity() {
                             saveLoginInfo(user)
                             // 여기에 코드 추가
 
-                            // initiateSmartThingsOAuth(user.loginId)
+                            initiateSmartThingsOAuth(user.loginId)
                             //moveToMain(user.name)
                         }
                         else -> {
