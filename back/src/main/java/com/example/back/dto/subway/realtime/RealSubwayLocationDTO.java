@@ -21,7 +21,7 @@ public class RealSubwayLocationDTO {
         private String subwayNm;
         private String statnId;
         private String statnNm;
-        private int trainNo;
+        private String trainNo;
         private int lastRecptnDt;
         private String recptnDt;
         private int updnLine;   // String으로 변경

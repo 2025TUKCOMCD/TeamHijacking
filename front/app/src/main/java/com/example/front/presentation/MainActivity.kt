@@ -40,28 +40,28 @@ class MainActivity : AppCompatActivity() {
     private val TAG = "워치_MainActivity"
     private val DATA_PATH = "/my_data" // 모바일 앱에서 사용한 데이터 경로
     private val LOGIN_PATH = "/kakao" // 모바일 앱에서 사용한 데이터 경로
-    private val KEY_MESSAGE = "아무데이터" // 모바일 앱에서 보낸 데이터의 키
+    private val KEY_MESSAGE = "login_id" // 모바일 앱에서 보낸 데이터의 키
     private var loginPromptDialog: PhoneLoginPromptDialog? = null
 
 
-    // LocalBroadcastManager로부터 메시지를 수신할 Receiver 정의
+
     private val dataReceiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context?, intent: Intent?) {
             intent?.let {
                 val receivedMessage = it.getStringExtra("received_message")
                 val receivedTimestamp = it.getLongExtra("received_timestamp", 0L)
 
+                val app = context?.applicationContext as? userid
+                app?.receivedMessage = receivedMessage
+                app?.receivedTimestamp = receivedTimestamp
+
                 Log.d(TAG,"실시간 Message: $receivedMessage")
                 Log.d(TAG,"실시간 Time: ${java.text.SimpleDateFormat("HH:mm:ss").format(java.util.Date(receivedTimestamp))}")
 
-                // 데이터 수신 시, 만약 로그인 프롬프트 다이얼로그가 열려있다면 상태 업데이트
-                // 여기서는 receivedMessage가 로그인 성공 여부를 나타내는 ID라고 가정
-                if (!receivedMessage.isNullOrEmpty()) { // 수신된 메시지가 null이 아니거나 비어있지 않으면 로그인 성공으로 간주
-                    loginPromptDialog?.updateLoginStatus(receivedMessage) // 다이얼로그의 상태 업데이트
-                    // 로그인 성공 시 다이얼로그를 자동으로 닫으려면 여기서 dismiss() 호출
-                    loginPromptDialog?.dismiss() // **다이얼로그 닫기 추가**
-                    // 그리고 로그인 성공 후 메인 화면의 다른 UI나 로직을 업데이트 (예: 앱의 실제 데이터 로드 시작)
-                    // (checkExistingData(DATA_PATH)를 다시 호출하여 UI를 완전히 새로고침하는 것도 방법)
+                // ... rest of your existing logic
+                if (!receivedMessage.isNullOrEmpty()) {
+                    loginPromptDialog?.updateLoginStatus(receivedMessage)
+                    loginPromptDialog?.dismiss()
                 }
             }
         }
@@ -70,6 +70,8 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
+
+        val app = this.applicationContext as? userid
 
         // activity_main.xml 레이아웃 설정
         setContentView(binding.main)
@@ -118,6 +120,8 @@ class MainActivity : AppCompatActivity() {
             if (existingData != null) {
                 val message = existingData
                 Log.d(TAG, "초기 로드 (기존 데이터): 메시지='$message'")
+                app?.receivedMessage = message
+
             } else {
                 Log.d(TAG, "초기 로드 (기존 데이터 없음): 메시지='기존 데이터 없음'")
 
