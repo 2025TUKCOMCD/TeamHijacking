@@ -1,6 +1,7 @@
 package com.example.front.login.processor
 
 import android.util.Log
+import com.example.front.Login.data.SmartThingsRequest
 import com.example.front.login.data.UserRequest
 import retrofit2.Call
 import retrofit2.Callback
@@ -77,5 +78,22 @@ object UserProcessor {
             }
         })
     }
+    fun getSmartThingsToken(userId: String, callback: (String?) -> Unit) {
+        userService.getSmartThingsToken(userId).enqueue(object : Callback<SmartThingsRequest> {
+            override fun onResponse(call: Call<SmartThingsRequest>, response: Response<SmartThingsRequest>) {
+                if (response.isSuccessful) {
+                    Log.d("UserProcessor", "토큰 조회 성공: ${response.body()}")
+                    callback(response.body()?.accessToken)
+                } else {
+                    Log.e("UserProcessor", "토큰 조회 실패 - 서버 오류: ${response.code()}")
+                    callback(null)
+                }
+            }
 
+            override fun onFailure(call: Call<SmartThingsRequest>, t: Throwable) {
+                Log.e("UserProcessor", "토큰 조회 실패 - 통신 오류: ${t.message}")
+                callback(null)
+            }
+        })
+    }
 }

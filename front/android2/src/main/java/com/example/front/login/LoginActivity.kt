@@ -15,6 +15,8 @@ import com.example.front.MainActivity
 import com.example.front.databinding.ActivityLoginBinding
 import com.example.front.login.data.UserRequest
 import com.example.front.login.processor.UserProcessor
+import com.example.front.login.processor.UserProcessor.getSmartThingsToken
+import com.example.front.login.service.UserService
 import com.kakao.sdk.auth.model.OAuthToken
 import com.kakao.sdk.common.model.ClientError
 import com.kakao.sdk.common.model.ClientErrorCause
@@ -31,7 +33,8 @@ class LoginActivity : AppCompatActivity() {
     private val SMARTTHINGS_AUTHORIZE_URL = BuildConfig.SMARTTHINGS_AUTHORIZE_URL
     private val SMARTTHINGS_CLIENT_ID = BuildConfig.SMARTTHINGS_CLIENT_ID
     private val SMARTTHINGS_REDIRECT_URI = BuildConfig.SMARTTHINGS_REDIRECT_URI
-    private val SMARTTHINGS_SCOPE = "r:devices:* w:devices:* x:devices:*" // SmartThings API 접근 권한
+    private val SMARTTHINGS_SCOPE = "r%3Adevices%3A%2A" // SmartThings API 접근 권한
+    private var SMARTTHINGS_TOKEN : Unit? = null // SmartThings 토큰을 저장할 변수;
 
     // CSRF 토큰 생성을 위한 SecureRandom 인스턴스
     private val secureRandom = SecureRandom()
@@ -110,7 +113,6 @@ class LoginActivity : AppCompatActivity() {
     private fun fetchKakaoUserInfo() {
         Log.d("login", "fetch kakao UserInfo() 실행됨")
 
-
         UserApiClient.instance.me { user, error ->
             Log.d("login", user?.kakaoAccount?.email.toString())
             if (error != null) {
@@ -162,6 +164,15 @@ class LoginActivity : AppCompatActivity() {
                                 saveLoginInfo(registeredUser)
                                 // 여기에 코드 추가
                                 initiateSmartThingsOAuth(registeredUser.loginId)
+                                getSmartThingsToken(registeredUser.loginId){
+                                    token ->
+                                    if (token != null) {
+                                        saveSmartThingsToken(token)
+                                        Log.d("SmartThings", "토큰 저장 완료: $token")
+                                    } else {
+                                        Log.e("SmartThings", "토큰 저장 실패")
+                                    }
+                                }
                                 //moveToMain(registeredUser.name)
                             }
                         }
@@ -170,7 +181,17 @@ class LoginActivity : AppCompatActivity() {
                             //이미 등록된 사용자 처리 로직
                             saveLoginInfo(user)
                             // 여기에 코드 추가
-                            initiateSmartThingsOAuth(user.loginId)
+                            getSmartThingsToken(user.loginId) {
+                                    token ->
+                                if (token != null) {
+
+                                    saveSmartThingsToken(token)
+                                    Log.d("SmartThings", "토큰 저장 완료: $token")
+                                } else {
+                                    Log.e("SmartThings", "토큰 저장 실패")
+                                }
+                            }
+                            // initiateSmartThingsOAuth(user.loginId)
                             //moveToMain(user.name)
                         }
                         else -> {
@@ -194,6 +215,15 @@ class LoginActivity : AppCompatActivity() {
 //            putString("email", user.email)
             apply()
         }
+    }
+
+    private fun saveSmartThingsToken(token: String) {
+        val sharedPref = getSharedPreferences("smartThingsPrefs", MODE_PRIVATE)
+        with(sharedPref.edit()) {
+            putString("smartThingsToken", token)
+            apply()
+        }
+        Log.d("SmartThings", "토큰 저장 완료: $token")
     }
 
     //MainActivity 로 이동 위한 코드
