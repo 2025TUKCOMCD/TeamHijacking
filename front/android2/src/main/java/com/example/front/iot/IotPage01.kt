@@ -1,8 +1,5 @@
 package com.example.front.iot
 
-import android.content.Context
-import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -11,15 +8,10 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.example.front.R
 import com.example.front.databinding.FragmentIotPage01Binding
-import com.google.android.gms.tasks.Task
-import com.google.android.gms.wearable.DataItem
-import com.google.android.gms.wearable.PutDataMapRequest
-import com.google.android.gms.wearable.Wearable
-import com.google.android.gms.common.api.ApiException
+import com.example.front.iot.smartHome.Device
 
 class IotPage01 : Fragment() {
 
@@ -27,6 +19,8 @@ class IotPage01 : Fragment() {
     private var _binding: FragmentIotPage01Binding? = null
     private  val binding get() = _binding!!
     private val TAG = "Iot_page01"
+//    private lateinit var deviceControlHelper: DeviceControlHelper  여기에 제어 기능을 넣을 생각은 없기에 배제
+    private val deviceList = mutableListOf<Device>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
