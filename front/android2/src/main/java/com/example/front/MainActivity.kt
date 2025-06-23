@@ -18,6 +18,7 @@ import com.example.front.iot.IotPage01
 import com.example.front.iot.IotPage02
 //import com.example.front.iot.IotPage02
 import com.example.front.iot.IotPage03
+import com.example.front.login.processor.UserProcessor
 import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.tasks.Task
 import com.google.android.gms.wearable.DataItem
@@ -58,6 +59,7 @@ class MainActivity : AppCompatActivity() {
         Toast.makeText(this, "어서오세요 $name 님", Toast.LENGTH_SHORT).show()
 
 
+
         // 딥링크 처리 로직 추가
         val appLinkIntent: Intent = intent
         val appLinkData: Uri? = appLinkIntent.data
@@ -73,6 +75,14 @@ class MainActivity : AppCompatActivity() {
                     Toast.makeText(this, "딥링크 'state' 값: $it", Toast.LENGTH_LONG).show()
                     // 여기에서 'state' 값을 사용하여 필요한 작업을 수행할 수 있습니다.
                     // 예: 특정 UI 업데이트, 데이터 로드, 로그인 상태 확인 등
+                    UserProcessor.getSmartThingsToken(state) { token ->
+                        if (token != null) {
+                            saveSmartThingsToken(token)
+                            Log.d("SmartThings", "토큰 저장 완료: $token")
+                        } else {
+                            Log.e("SmartThings", "토큰 저장 실패")
+                        }
+                    }
                 } ?: run {
                     Log.d("현빈", "Deep link received, but 'state' parameter is null.")
                 }
@@ -155,7 +165,12 @@ class MainActivity : AppCompatActivity() {
             }
         }
     }
-
-
-
+    private fun saveSmartThingsToken(token: String) {
+        val sharedPref = getSharedPreferences("smartThingsPrefs", AppCompatActivity.MODE_PRIVATE)
+        with(sharedPref.edit()) {
+            putString("smartThingsToken", token)
+            apply()
+        }
+        Log.d("SmartThings", "토큰 저장 완료: $token")
+    }
 }

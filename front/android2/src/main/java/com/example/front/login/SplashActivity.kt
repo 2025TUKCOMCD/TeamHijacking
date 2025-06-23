@@ -3,6 +3,7 @@ package com.example.front.login
 import android.content.Context.MODE_PRIVATE
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import com.example.front.MainActivity
 import com.example.front.login.processor.UserProcessor
@@ -41,4 +42,5 @@ class SplashActivity : AppCompatActivity() {
             finish()
         }
     }
+
 }

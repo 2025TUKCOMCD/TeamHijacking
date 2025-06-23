@@ -164,15 +164,7 @@ class LoginActivity : AppCompatActivity() {
                                 saveLoginInfo(registeredUser)
                                 // 여기에 코드 추가
                                 initiateSmartThingsOAuth(registeredUser.loginId)
-                                getSmartThingsToken(registeredUser.loginId){
-                                    token ->
-                                    if (token != null) {
-                                        saveSmartThingsToken(token)
-                                        Log.d("SmartThings", "토큰 저장 완료: $token")
-                                    } else {
-                                        Log.e("SmartThings", "토큰 저장 실패")
-                                    }
-                                }
+
                                 //moveToMain(registeredUser.name)
                             }
                         }
@@ -181,16 +173,7 @@ class LoginActivity : AppCompatActivity() {
                             //이미 등록된 사용자 처리 로직
                             saveLoginInfo(user)
                             // 여기에 코드 추가
-                            getSmartThingsToken(user.loginId) {
-                                    token ->
-                                if (token != null) {
 
-                                    saveSmartThingsToken(token)
-                                    Log.d("SmartThings", "토큰 저장 완료: $token")
-                                } else {
-                                    Log.e("SmartThings", "토큰 저장 실패")
-                                }
-                            }
                             // initiateSmartThingsOAuth(user.loginId)
                             //moveToMain(user.name)
                         }
@@ -217,14 +200,6 @@ class LoginActivity : AppCompatActivity() {
         }
     }
 
-    private fun saveSmartThingsToken(token: String) {
-        val sharedPref = getSharedPreferences("smartThingsPrefs", MODE_PRIVATE)
-        with(sharedPref.edit()) {
-            putString("smartThingsToken", token)
-            apply()
-        }
-        Log.d("SmartThings", "토큰 저장 완료: $token")
-    }
 
     //MainActivity 로 이동 위한 코드
     private fun moveToMain(userName: String) {
