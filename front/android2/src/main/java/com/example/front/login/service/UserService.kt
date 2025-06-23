@@ -1,6 +1,6 @@
 package com.example.front.login.service
 
-import com.example.front.Login.data.SmartThingsRequest
+import com.example.front.login.data.SmartThingsRequest
 import com.example.front.login.data.UserRequest
 import retrofit2.Call
 import retrofit2.http.Body
