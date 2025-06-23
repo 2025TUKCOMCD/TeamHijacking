@@ -1,4 +1,4 @@
-package com.example.front.Login.data
+package com.example.front.login.data
 
 data class SmartThingsRequest(
     val accessToken : String = "",
