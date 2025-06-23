@@ -83,8 +83,6 @@ class MainActivity : AppCompatActivity() {
         }
 
 
-
-
         //탭 레이아웃 으로 하단에 나오는 버튼 이름을 일단 설정
         val tabLayout: TabLayout = binding.tabLayout
         TabLayoutMediator(tabLayout, viewPager) { tab, position ->

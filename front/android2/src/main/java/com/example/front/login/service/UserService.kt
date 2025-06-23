@@ -1,5 +1,6 @@
 package com.example.front.login.service
 
+import com.example.front.Login.data.SmartThingsRequest
 import com.example.front.login.data.UserRequest
 import retrofit2.Call
 import retrofit2.http.Body
@@ -7,6 +8,7 @@ import retrofit2.http.Path
 import retrofit2.http.POST
 import retrofit2.http.GET
 import retrofit2.http.PUT
+import retrofit2.http.Query
 
 interface UserService {
     //사용자 등록
@@ -22,4 +24,8 @@ interface UserService {
     fun updateUser(
         @Path("loginId") loginId: String,
         @Body user: UserRequest): Call<UserRequest>
+
+    @GET("smartthings")
+    fun getSmartThingsToken(@Query("userId") userId: String): Call<SmartThingsRequest>
+
 }
