@@ -1,6 +1,7 @@
 package com.example.front.login.processor
 
 import android.util.Log
+import androidx.appcompat.app.AppCompatActivity
 import com.example.front.Login.data.SmartThingsRequest
 import com.example.front.login.data.UserRequest
 import retrofit2.Call
@@ -78,6 +79,7 @@ object UserProcessor {
             }
         })
     }
+
     fun getSmartThingsToken(userId: String, callback: (String?) -> Unit) {
         userService.getSmartThingsToken(userId).enqueue(object : Callback<SmartThingsRequest> {
             override fun onResponse(call: Call<SmartThingsRequest>, response: Response<SmartThingsRequest>) {
