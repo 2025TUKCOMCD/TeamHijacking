@@ -1,8 +1,10 @@
 package com.example.front.login.processor
 
 import android.util.Log
-import androidx.appcompat.app.AppCompatActivity
-import com.example.front.Login.data.SmartThingsRequest
+
+
+import com.example.front.login.data.SmartThingsRequest
+
 import com.example.front.login.data.UserRequest
 import retrofit2.Call
 import retrofit2.Callback
@@ -10,7 +12,6 @@ import retrofit2.Response
 
 /* 실제 API 호출을 처리 하고, 응답 처리 로직을 담당 */
 object UserProcessor {
-
 
     private val userService = RetrofitClient.userService
 

@@ -125,7 +125,7 @@ class AudioGuideBLEConnectActivity : AppCompatActivity() {
 
 
             // AGH 기기 필터링 및 추가
-            if (!aghDevices.contains(device) && deviceName.startsWith("AGH")) {
+            if (!aghDevices.contains(device) && deviceName.startsWith("AHG")) {
                 aghDevices.add(device)
                 aghArrayAdapter.notifyDataSetChanged()
                 Toast.makeText(this@AudioGuideBLEConnectActivity, "음향신호기", Toast.LENGTH_SHORT).show()
@@ -133,7 +133,7 @@ class AudioGuideBLEConnectActivity : AppCompatActivity() {
             }
             // BGH 기기 필터링 및 추가
             else
-                if (!bghDevices.contains(device) && deviceName.startsWith("BGH")) {
+                if (!bghDevices.contains(device)&& deviceName.startsWith("BHG")) {
                     bghDevices.add(device)
                     bghArrayAdapter.notifyDataSetChanged()
                     Toast.makeText(this@AudioGuideBLEConnectActivity, "음성유도기", Toast.LENGTH_SHORT).show()
