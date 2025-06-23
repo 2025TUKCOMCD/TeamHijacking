@@ -66,6 +66,7 @@ class MainActivity : AppCompatActivity() {
             // 딥링크 URI의 스킴과 호스트 확인 (seemore://main)
             if (uri.scheme == "seemore" && uri.host == "main") {
                 val state = uri.getQueryParameter("state")
+
                 state?.let {
                     sendData(this,"/kakao","login_id",it)
 
