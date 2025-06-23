@@ -14,6 +14,7 @@ import retrofit2.Response
 object UserProcessor {
 
     private val userService = RetrofitClient.userService
+    private val apiService = RetrofitClient.apiService
 
     //오류 여기서 가능성
     fun registerUser(user: UserRequest, callback: (Response<UserRequest>) -> Unit) {
@@ -82,7 +83,7 @@ object UserProcessor {
     }
 
     fun getSmartThingsToken(userId: String, callback: (String?) -> Unit) {
-        userService.getSmartThingsToken(userId).enqueue(object : Callback<SmartThingsRequest> {
+        apiService.getSmartThingsToken(userId).enqueue(object : Callback<SmartThingsRequest> {
             override fun onResponse(call: Call<SmartThingsRequest>, response: Response<SmartThingsRequest>) {
                 if (response.isSuccessful) {
                     Log.d("UserProcessor", "토큰 조회 성공: ${response.body()}")

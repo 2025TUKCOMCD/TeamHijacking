@@ -1,7 +1,9 @@
 package com.example.front.login.processor
 
 import com.example.front.BuildConfig
+import com.example.front.Login.service.ApiService
 import com.example.front.login.service.UserService
+import com.google.android.gms.common.api.Api
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
@@ -22,5 +24,13 @@ object RetrofitClient {
         retrofit.create(UserService::class.java)
     }
 
+    val apiService : ApiService by lazy {
+        val retrofit = Retrofit.Builder()
+            .baseUrl(HOST_URL)
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
+
+        retrofit.create(ApiService::class.java)
+    }
 
 }

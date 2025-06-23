@@ -1,6 +1,6 @@
 package com.example.front.login.service
 
-import com.example.front.Login.data.SmartThingsRequest
+import com.example.front.login.data.SmartThingsRequest
 import com.example.front.login.data.UserRequest
 import retrofit2.Call
 import retrofit2.http.Body
@@ -24,8 +24,5 @@ interface UserService {
     fun updateUser(
         @Path("loginId") loginId: String,
         @Body user: UserRequest): Call<UserRequest>
-
-    @GET("smartthings")
-    fun getSmartThingsToken(@Query("userId") userId: String): Call<SmartThingsRequest>
 
 }
