@@ -24,7 +24,7 @@ class BleCustomAdapter(context: Context, private val devices: ArrayList<Bluetoot
 
         // Log.d("현빈", deviceName) // 디버깅용 로그
 
-        val viewType = if (deviceName.startsWith("AGH")) TYPE_AGH else if (deviceName.startsWith("BGH")) TYPE_BGH else null
+        val viewType = if (deviceName.startsWith("AHG")) TYPE_AGH else if  (deviceName.startsWith("BHG")) TYPE_BGH else null
         var currentView = convertView
 
         // 현재 뷰 타입과 재활용될 뷰 타입이 다르면 새로 생성 (중요!)
@@ -64,7 +64,7 @@ class BleCustomAdapter(context: Context, private val devices: ArrayList<Bluetoot
     override fun getItemViewType(position: Int): Int {
         val device = getItem(position)
         val deviceName = device?.name ?: "Unknown Device"
-        return if (deviceName.startsWith("AGH")) TYPE_AGH else TYPE_BGH
+        return if (deviceName.startsWith("AHG")) TYPE_AGH else TYPE_BGH
     }
 
     override fun getViewTypeCount(): Int {
