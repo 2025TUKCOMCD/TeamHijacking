@@ -15,6 +15,7 @@ import androidx.viewpager2.adapter.FragmentStateAdapter
 import androidx.viewpager2.widget.ViewPager2
 import com.example.front.databinding.ActivityMainBinding
 import com.example.front.iot.IotPage01
+import com.example.front.iot.IotPage02
 //import com.example.front.iot.IotPage02
 import com.example.front.iot.IotPage03
 import com.google.android.gms.common.api.ApiException
@@ -28,13 +29,13 @@ import com.google.android.material.tabs.TabLayoutMediator
 // FragmentStateAdapter
 //Fragment 화면 이동 하게 해주는 코드
 class MyPagerAdapter(fragmentActivity: FragmentActivity) : FragmentStateAdapter(fragmentActivity) {
-    override fun getItemCount(): Int = 2
+    override fun getItemCount(): Int = 3
 
     override fun createFragment(position: Int): Fragment {
         return when (position) {
             0 -> IotPage01()
-//            1 -> IotPage02()
-            1 -> IotPage03()
+            1 -> IotPage02()
+            2 -> IotPage03()
             else -> throw IllegalStateException("Invalid position")
         }
     }
@@ -91,11 +92,11 @@ class MainActivity : AppCompatActivity() {
                     tab.setIcon(R.drawable.ic_home) // 아이콘 설정
                     tab.text = "관리" // 텍스트
                 }
-//                1 -> {
-//                    tab.setIcon(R.drawable.ic_add)
-//                    tab.text = "추가"
-//                }
                 1 -> {
+                    tab.setIcon(R.drawable.ic_add)
+                    tab.text = "추가"
+                }
+                2 -> {
                     tab.setIcon(R.drawable.ic_settings)
                     tab.text = "설정"
                 }
@@ -109,8 +110,8 @@ class MainActivity : AppCompatActivity() {
 
                 val title = when (position) {
                     0 -> "IoT 기기 관리"
-//                    1 -> "IoT 기기 추가"
-                    1 -> "설정"
+                    1 -> "IoT 기기 추가"
+                    2 -> "설정"
                     else -> "IoT 기기 관리"
                 }
                 binding.toolBarText.text = title
