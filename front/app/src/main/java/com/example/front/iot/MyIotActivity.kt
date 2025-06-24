@@ -37,6 +37,7 @@ class MyIotActivity : AppCompatActivity() {
                 // 토큰을 성공적으로 받은 경우
                 apiToken = "Bearer $receivedToken"
                 Log.d("현빈", "SmartThings API 토큰: $apiToken")
+                deviceControlHelper = DeviceControlHelper(apiToken)
                 fetchDeviceList()
 
                 // 이제 이 apiToken을 사용하여 SmartThings 디바이스 제어 API를 호출할 수 있습니다.
@@ -53,7 +54,6 @@ class MyIotActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_my_iot)
         Log.d("현빈", "activity 할당")
-        deviceControlHelper = DeviceControlHelper(apiToken)
         Log.d("현빈", "토큰 할당함")
 
         // RecyclerView 설정
@@ -218,12 +218,22 @@ class MyIotActivity : AppCompatActivity() {
 
                 if (mainComponent != null) {
                     val switchValue = mainComponent.switch?.switch?.value
+                    Log.d("현빈", switchValue.toString())
                     isPowerOn = switchValue.equals("on", ignoreCase = true)
+                    if (switchValue != null) {
+                        Log.d("현빈", brightnessValue.toString())
+                        textPowerStatus.text = "전원 상태: ${switchValue}"
+                    } else {
+                        textPowerStatus.text = "전원 상태: 정보 없음"
+                    }
+
+
 
 
                     val level = mainComponent.switchLevels?.level?.value?.toIntOrNull()
                     if (level != null) {
                         brightnessValue = level
+                        Log.d("현빈", brightnessValue.toString())
                         textBrightnessStatus.text = "현재 밝기: ${brightnessValue}%"
                     } else {
                         textBrightnessStatus.text = "현재 밝기: 정보 없음"
@@ -244,6 +254,7 @@ class MyIotActivity : AppCompatActivity() {
             },
             onError = { error ->
                 Toast.makeText(this, "상태 불러오기 실패: $error", Toast.LENGTH_SHORT).show()
+                Log.d("현빈", error.toString())
             }
         )
 
@@ -253,6 +264,12 @@ class MyIotActivity : AppCompatActivity() {
                 onSuccess = {
                     Toast.makeText(this, if (isPowerOn) "전원 OFF" else "전원 ON", Toast.LENGTH_SHORT).show()
                     isPowerOn = !isPowerOn
+                    if (isPowerOn){
+                        textPowerStatus.text = "전원 상태: on"
+                    }
+                    else{
+                        textPowerStatus.text = "전원 상태: off"
+                    }
                 },
                 onError = {
                     Toast.makeText(this, "전원 제어 실패", Toast.LENGTH_SHORT).show()
