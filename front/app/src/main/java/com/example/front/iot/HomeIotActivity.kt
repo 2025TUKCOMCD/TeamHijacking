@@ -2,16 +2,13 @@ package com.example.front.iot
 
 import android.content.ActivityNotFoundException
 import android.content.Intent
-import android.media.Image
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.widget.Button
 import android.widget.ImageButton
 import android.widget.Toast
-import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.ContextCompat.startActivity
 import com.example.front.BuildConfig
 import com.example.front.R
 import com.example.front.iot.SmartHome.*
@@ -69,7 +66,7 @@ class HomeIotActivity : AppCompatActivity() {
     // 🎤 음성 명령 예시 처리
     private fun processVoiceCommand(command: String) {
         showToast("음성 명령: \"$command\" 인식됨 (기능 연동 필요)")
-        // 실제 제어는 MyIotActivity에서 처리
+        // 실제 제어는 MyIotActivity 에서 처리
     }
 
     private fun showToast(message: String) {

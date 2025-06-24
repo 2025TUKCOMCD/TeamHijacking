@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:fillViewport="true"
+    android:background="@android:color/black">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="24dp"
+        android:background="@android:color/black">
+
+        <!-- 기존 기기 이름 및 ID 출력용 -->
+        <TextView
+            android:id="@+id/textDeviceStatus"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="기기 정보 로딩 중..."
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:textColor="@android:color/white"
+            android:paddingBottom="8dp"
+            android:contentDescription="현재 기기의 정보입니다" />
+
+
+        <!-- 전원 상태 -->
+        <TextView
+            android:id="@+id/textPowerStatus"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="전원 상태 확인 중..."
+            android:textColor="@android:color/white"
+            android:paddingBottom="4dp"
+            android:contentDescription="무드등의 전원 상태입니다" />
+
+
+        <!-- 밝기 상태 -->
+        <TextView
+            android:id="@+id/textBrightnessStatus"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="밝기 상태 확인 중..."
+            android:textColor="@android:color/white"
+            android:paddingBottom="4dp"
+            android:contentDescription="무드등의 밝기 상태입니다" />
+
+
+        <!-- 채도 상태 -->
+        <TextView
+            android:id="@+id/textSaturationStatus"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="채도 상태 확인 중..."
+            android:textColor="@android:color/white"
+            android:paddingBottom="16dp"
+            android:contentDescription="무드등의 채도 상태입니다" />
+
+
+    <!-- 밝기 조절 -->
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="밝기 조절"
+        android:textStyle="bold"
+        android:textColor="@android:color/white" />
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginBottom="16dp">
+
+
+    <Button
+        android:id="@+id/btnBrightnessDown"
+        android:layout_width="0dp"
+        android:layout_weight="1"
+        android:layout_height="wrap_content"
+        android:text="밝기 ↓"
+        android:contentDescription="@string/btn_brightnessDescription1" />
+
+        <Button
+            android:id="@+id/btnBrightnessUp"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:text="밝기 ↑"
+            android:contentDescription="@string/btn_brightnessDescription2" />
+    </LinearLayout>
+
+        <!-- 채도 조절 -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="채도 조절"
+            android:textStyle="bold"
+            android:textColor="@android:color/white" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginBottom="16dp">
+
+            <Button
+                android:id="@+id/btnSaturationDown"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:text="채도 ↓"
+                android:contentDescription="@string/btn_btnSaturationDescription1" />
+
+            <Button
+                android:id="@+id/btnSaturationUp"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:text="채도 ↑"
+                android:contentDescription="@string/btn_btnSaturationDescription2" />
+        </LinearLayout>
+
+        <!-- 전원 토글 -->
+        <Button
+            android:id="@+id/btnTogglePower"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="전원 ON / OFF"
+            android:layout_marginTop="8dp"
+            android:contentDescription="전원을 켜거나 끄는 버튼입니다" />
+    </LinearLayout>
+</ScrollView>

@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:background="@drawable/iot_device_bg"
+    android:layout_margin="30dp"
+    android:layout_gravity="center"
+    android:minWidth="200dp"
+    android:minHeight="200dp"
+    android:id="@+id/settingChangeNicknameDialog">
+   <TextView
+       android:layout_width="match_parent"
+       android:layout_height="wrap_content"
+       android:layout_gravity="start"
+       android:textSize="28sp"
+       android:text="@string/change_nickname"
+       android:layout_margin="20dp" />
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:autofillHints=""
+        android:inputType="text"
+        android:minHeight="90dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginBottom="20dp"
+        android:id="@+id/changeNicknameEditText"
+        android:hint="@string/editNicknameText" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="end">
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:minHeight="50dp"
+            android:minWidth="100dp"
+            android:layout_gravity="end"
+            android:layout_marginBottom="15dp"
+            android:layout_marginTop="15dp"
+            android:layout_marginStart="15dp"
+            android:layout_marginEnd="0dp"
+            android:textSize="20sp"
+            android:text="@string/close"
+            android:textColor="@android:color/white"
+            android:padding="2dp"
+            android:background="@drawable/setting_btn_layout"
+            android:id="@+id/settingChangeDismissBtn"/>
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:minHeight="50dp"
+            android:minWidth="100dp"
+            android:layout_gravity="end"
+            android:layout_margin="15dp"
+            android:textSize="15sp"
+            android:text="@string/change"
+            android:textColor="@android:color/white"
+            android:padding="2dp"
+            android:background="@drawable/setting_btn_layout"
+            android:id="@+id/settingChangeConfirmBtn"/>
+    </LinearLayout>
+</LinearLayout>

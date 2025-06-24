@@ -191,8 +191,9 @@ public class RealLocationService {
         if (arrivals != null && arrivals.length > 1) {
             predictTime2String = arrivals[1]; // predictTime2에 두 번째 할당
         }
-        trainNo1= arrivals[2];
-
+        if(data.getTrainNo().equals("0")) {
+            trainNo1 = arrivals[2];
+        }
         realTimeResultDTO.setNextRequest(1);
         realTimeResultDTO.setTrainNo(trainNo1);
         realTimeResultDTO.setLocation(location);
@@ -201,16 +202,7 @@ public class RealLocationService {
         return realTimeResultDTO;
     }
 
-    // 지하철 도착 정보 + 실시간 위치(탑승 중)
-    protected RealTimeResultDTO processSubwayAlightingData(RealtimeDTO data) throws IOException {
-        RealTimeResultDTO realTimeResultDTO = new RealTimeResultDTO();
-        String trainNo = subwayProcessService.getTranNo(data);
-        // 지하철 실시간 위치 정보 가져오기
 
-        realTimeResultDTO.setTrainNo(trainNo);
-        return realTimeResultDTO;
-
-    }
 
     // 지하철 도착 정보 + 실시간 위치(탑승 후)
     protected RealTimeResultDTO processSubwayAlightedData(RealtimeDTO data) throws IOException {
@@ -246,14 +238,21 @@ public class RealLocationService {
     protected RealTimeResultDTO processBusBoardingData(RealtimeDTO data) throws IOException{
         // 버스 도착 정보 가져오기
         RealTimeResultDTO realTimeResultDTO = new RealTimeResultDTO();
+        String vehId = "0"; // 버스 ID 초기화
         String predictTime1String = "도착 정보 없음";
         String predictTime2String = "도착 정보 없음";
 
+        // 실시간 도착 정보
         BusArriveProcessDTO.arriveDetail busArrivals = apiService.fetchAndBusArrive(data.getStationId(),data.getTransportLocalID(),data.getStartOrd());
-        String vehId = busArrivals.getMsgBody().getItemList().get(0).getVehId1();
         System.out.println("Bus Arrivals: " + busArrivals);
+        if(data.getVehid().equals("0")){
+            vehId = busArrivals.getMsgBody().getItemList().get(0).getVehId1();
+        }else {
+            vehId = data.getVehid();
+        }
+        System.out.println("VehId: " + vehId);
         if(!vehId.equals("0")){
-            RealBusLocationDTO busLocations = apiService.fetchAndBusLocation(data.getVehid());
+            RealBusLocationDTO busLocations = apiService.fetchAndBusLocation(vehId);
             String stOrd= busLocations.getMsgBody().getItemList().get(0).getStOrd();
             realTimeResultDTO.setLocation(stOrd); // 현재 위치 정보
         }
@@ -261,7 +260,6 @@ public class RealLocationService {
         if (busArrivals != null && busArrivals.getMsgBody() != null && busArrivals.getMsgBody().getItemList() != null) {
             List<BusArriveProcessDTO.Item> itemList = busArrivals.getMsgBody().getItemList();
             if (!itemList.isEmpty()) {
-                System.out.println("Item List: " + itemList);
                 System.out.println("Item List: " + itemList);
                 predictTime1String = itemList.get(0).getArrmsg1(); // 첫 번째 예측 시간
                 predictTime2String = itemList.get(0).getArrmsg2(); // 두 번째 예측 시간
@@ -278,18 +276,6 @@ public class RealLocationService {
         return realTimeResultDTO;
     }
 
-    // 버스 도착 정보 + 실시간 위치(탑승 중)
-    private RealTimeResultDTO processBusAlightingData(RealtimeDTO data) throws IOException{
-        RealTimeResultDTO realTimeResultDTO = new RealTimeResultDTO();
-        // 버스 도착 정보 가져오기
-        RealBusLocationDTO busLocations = apiService.fetchAndBusLocation(data.getVehid());
-        String stOrd= busLocations.getMsgBody().getItemList().get(0).getStOrd();
-
-        realTimeResultDTO.setNextRequest(1); // 다음 대중교통 정보 요청
-        realTimeResultDTO.setVehId(data.getVehid()); // 버스 차량 ID
-        realTimeResultDTO.setLocation(stOrd); // 현재 위치 정보
-        return realTimeResultDTO;
-    }
 
     // 버스 도착 정보 + 실시간 위치(탑승 후)
     protected RealTimeResultDTO processBusAlightedData(RealtimeDTO data) throws IOException{

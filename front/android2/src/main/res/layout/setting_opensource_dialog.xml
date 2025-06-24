@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:background="@drawable/iot_device_bg"
+    android:layout_margin="30dp"
+    android:layout_gravity="center"
+    android:minWidth="200dp"
+    android:minHeight="200dp"
+    android:id="@+id/settingOpenSourceDialog">
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="15dp">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+            <TextView
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:textSize="28sp"
+                android:text="@string/OpenSourceText"
+                android:layout_marginBottom="12dp" />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:minHeight="80dp"
+                android:textSize="12sp"
+                android:text="@string/opensource_Text" />
+        </LinearLayout>
+    </ScrollView>
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:minHeight="50dp"
+        android:minWidth="100dp"
+        android:layout_gravity="end"
+        android:layout_margin="15dp"
+        android:textSize="15sp"
+        android:text="@string/close"
+        android:textColor="@android:color/white"
+        android:padding="2dp"
+        android:background="@drawable/setting_btn_layout"
+        android:id="@+id/settingOpenSourceDismissBtn"/>
+</LinearLayout>

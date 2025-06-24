@@ -135,4 +135,26 @@ class DeviceControlHelper(private val apiToken: String) {
             }
         })
     }
+
+
+    // AI 스피커 제어: 재생 / 일시정지
+    fun sendMediaCommand(deviceId: String, command: String, onSuccess: () -> Unit, onError: (String) -> Unit) {
+        val commandBody = CommandBody(
+            commands = listOf(
+                Command("mediaPlayback", command)
+            )
+        )
+        sendCommand(deviceId, commandBody, onSuccess, onError)
+    }
+
+
+    // AI 스피커 제어: 볼륨 설정
+    fun setVolume(deviceId: String, volume: Int, onSuccess: () -> Unit, onError: (String) -> Unit) {
+        val commandBody = CommandBody(
+            commands = listOf(
+                Command("audioVolume", "setVolume", listOf(volume))
+            )
+        )
+        sendCommand(deviceId, commandBody, onSuccess, onError)
+    }
 }

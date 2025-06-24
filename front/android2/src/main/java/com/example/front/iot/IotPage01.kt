@@ -1,6 +1,6 @@
 package com.example.front.iot
 
-import android.content.Context
+import android.content.ActivityNotFoundException
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -9,22 +9,27 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.example.front.R
 import com.example.front.databinding.FragmentIotPage01Binding
-import com.google.android.gms.tasks.Task
-import com.google.android.gms.wearable.DataItem
-import com.google.android.gms.wearable.PutDataMapRequest
-import com.google.android.gms.wearable.Wearable
-import com.google.android.gms.common.api.ApiException
+import com.example.front.iot.smartHome.Device
+import com.example.front.login.processor.RetrofitClient
+import android.content.Context
+import android.content.Intent
+import android.net.Uri
+import android.widget.Toast
+import com.example.front.iot.smartHome.DeviceResponse
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 class IotPage01 : Fragment() {
 
     //binding
     private var _binding: FragmentIotPage01Binding? = null
     private  val binding get() = _binding!!
-    private val TAG = "Iot_page01"
+    private val tag = "Iot_page01"
+    private val deviceList = mutableListOf<Device>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -35,75 +40,87 @@ class IotPage01 : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         _binding = FragmentIotPage01Binding.inflate(inflater, container, false)
-
-        //임시 버튼
-        val addViewBtn = binding.addViewBtn
-        val iotScrollView = binding.iotScrollView
-        val iotLinearLayout = binding.iotLinearLayout
-
-        addViewBtn.setOnClickListener {
-            addIoTDeviceView("아무 이름")
-        }
-
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        fetchDeviceListFromSmartThings()
     }
 
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
 
     /*     ----   func area   ----      */
 
-    private fun addIoTDeviceView(deviceName: String = "기본 이름 삽입") {
-        // 1. 레이아웃 inflater 가져오기
+    private fun fetchDeviceListFromSmartThings() {
+        // 토큰을 SharedPreferences에서 가져옴
+        val sharedPref = requireContext().getSharedPreferences("smartThingsPrefs", Context.MODE_PRIVATE)
+        val token = sharedPref.getString("smartThingsToken", null)
+
+        if(token.isNullOrEmpty()) {
+            Toast.makeText(requireContext(), "API 토큰을 찾을 수 없습니다.", Toast.LENGTH_SHORT).show()
+            Log.e("iot","API 토큰 찾을 수 없음")
+            return
+        }
+
+        Log.d("iot", "토큰 잘 받오고 있나요? ${token}")
+        val apiToken = "Bearer $token"
+        val apiService = RetrofitClient.apiService
+
+        apiService.getDevices(apiToken).enqueue(object : Callback<DeviceResponse> {
+            override fun onResponse(call: Call<DeviceResponse>, response: Response<DeviceResponse>) {
+                if(response.isSuccessful) {
+                    val devices = response.body()?.items ?: emptyList()
+                    deviceList.clear()
+                    deviceList.addAll(devices)
+
+                    //동적 뷰 추가
+                    deviceList.forEach {
+                        device -> addIoTDeviceView(device)
+                    }
+                } else {
+                    Log.e(tag, "응답 실패. 코드: ${response.code()}, 메시지: ${response.message()}")
+                    Log.e(tag, "에러 바디: ${response.errorBody()?.string()}")
+                    Log.e(tag, "디바이스 불러오기 실패: ${response.code()}")
+                    Toast.makeText(requireContext(), "기기 불러오기 실패", Toast.LENGTH_SHORT).show()
+                }
+            }
+
+            override fun onFailure(call: Call<DeviceResponse>, t: Throwable) {
+                Log.e(tag, "네트워크 오류: ${t.message}")
+                Toast.makeText(requireContext(), "네트워크 오류", Toast.LENGTH_SHORT).show()
+            }
+        })
+    }
+
+    private fun addIoTDeviceView(device: Device) {
         val inflater = LayoutInflater.from(requireContext())
-        val newIotView = inflater.inflate(R.layout.iot_device_little_view, null)
+        val newView = inflater.inflate(R.layout.iot_device_little_view, null)
 
-        val iotNameTextView : TextView = newIotView.findViewById<TextView>(R.id.iotNameText)
-        val iotDeviceDescription : TextView = newIotView.findViewById<TextView>(R.id.iotDeviceDescription)
-        val iotImageView : ImageView = newIotView.findViewById<ImageView>(R.id.iotDeviceImageView)
+        val nameTextView = newView.findViewById<TextView>(R.id.iotNameText)
+        val descTextView = newView.findViewById<TextView>(R.id.iotDeviceDescription)
+        val imageView = newView.findViewById<ImageView>(R.id.iotDeviceImageView)
 
-        iotNameTextView.text = deviceName
-        //iotDeviceDescription :: 이 곳에 정리
+        nameTextView.text = device.label
+        descTextView.text = device.name
 
+        //이미지 설정은 상황에 맞게
+        imageView.setImageResource(R.drawable.iot)
 
-        val layoutParams = LinearLayout.LayoutParams(
+        val params = LinearLayout.LayoutParams(
             ViewGroup.LayoutParams.MATCH_PARENT,
             ViewGroup.LayoutParams.WRAP_CONTENT
         ).apply {
-            val marginInPx = (20 * resources.displayMetrics.density).toInt()
-            bottomMargin = marginInPx
-        }
-        newIotView.layoutParams = layoutParams          // layoutParams 적용
-
-        binding.iotLinearLayout.addView(newIotView)
-    }
-
-
-    //android 로부터 watch 로 데이터 보내기 위한 테스트 코드
-    private fun sendData(context: Context, key: String, value: String) {
-        val dataClient = Wearable.getDataClient(context)
-        val putDataReq = PutDataMapRequest.create("/my_data").run {
-            dataMap.putString(key, value)
-            asPutDataRequest()
+            val marginPx = (16 * resources.displayMetrics.density).toInt()
+            bottomMargin = marginPx
         }
 
-        val putDataTask: Task<DataItem> = dataClient.putDataItem(putDataReq)
-
-        putDataTask.addOnSuccessListener {
-            Log.d(TAG, "데이터 전송 성공: $key = $value")
-            Toast.makeText(context, "데이터 전송 성공", Toast.LENGTH_SHORT).show()
-        }.addOnFailureListener { exception ->
-            Log.e(TAG, "데이터 전송 실패: ${exception.message}", exception)
-            Toast.makeText(context, "데이터 전송 실패: ${exception.message}", Toast.LENGTH_SHORT).show()
-
-            if (exception is ApiException) {
-                val apiException = exception
-                Log.e(TAG, "API Exception Status Code: ${apiException.statusCode}")
-                // 필요에 따라 추가적인 오류 처리 로직 구현 (예: 특정 상태 코드에 따른 다른 UI 표시)
-            }
-        }
+        newView.layoutParams = params
+        binding.iotLinearLayout.addView(newView)
     }
 
 }

@@ -1,54 +1,42 @@
-package com.example.back.dto;
+package com.example.back.dto; // DTO의 정확한 패키지 경로를 사용해 주세요.
 
-import com.example.back.domain.User;
+import com.example.back.domain.User; // User 엔티티 클래스를 임포트합니다.
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.sql.Date;
-import java.sql.Time;
-import java.sql.Timestamp;
-import java.time.LocalDateTime;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@JsonIgnoreProperties(ignoreUnknown = true)
+@JsonIgnoreProperties(ignoreUnknown = true) // JSON 역직렬화 시 알 수 없는 속성 무시
 public class UserDTO {
-    private Integer id;           // `int unsigned`에 대응되는 Integer
-    private String name;          // `varchar(255)`에 대응되는 String
-    private String email;          //varchar(360)에 대응되어야 하는 String
-    private String loginId; // `varchar(255)`에 대응되는 String
-//    private Timestamp createAt;   // `datetime`
-//    private Timestamp updateAt;   // `datetime`에 대응되는 Timestamp
+    private Integer id;    // User 엔티티의 기본 키(PK)인 'id'와 대응
+    private String name;   // User 엔티티의 'name' 필드와 대응
+    private String email;  // User 엔티티의 'email' 필드와 대응
+    private String loginId; // User 엔티티의 'loginId' 필드와 대응
 
-    // 생성/수정 시간 은 DTO 에 포함 하지 말거나 클라이언트 요청에 포함하지 말자.
-    // @JsonIgnore
-    // private Timestamp createAt;
-    // @JsonIgnore
-    // private Timestamp updateAt;
 
-    //DTO -> Entity 변환
     public User toEntity(){
         return User.builder()
+                // ID는 DB에서 자동 생성되므로, 새로운 User 생성 시에는 이 필드를 포함하지 않습니다.
+                // 만약 기존 User를 업데이트하는 경우라면, id(this.id)를 추가할 수 있습니다.
                 .name(this.name)
                 .loginId(this.loginId)
                 .email(this.email)
-//                .createAt(Timestamp.valueOf(LocalDateTime.now()))
-//                .updateAt(Timestamp.valueOf(LocalDateTime.now()))
-                // createAt, updateAt 은 엔티티의 @PrePersist가 처리
                 .build();
     }
 
-    /* 더 나은 방법으로는
-    public User toEntity() {
-    return User.builder()
-            .name(this.name)
-            .loginId(this.loginId)
-            .build();
+
+    public static UserDTO fromEntity(User user) {
+        if (user == null) {
+            return null; // 또는 IllegalArgumentException 발생, 상황에 따라 처리
+        }
+        return UserDTO.builder()
+                .id(user.getId())       // 엔티티의 ID를 DTO에 매핑
+                .name(user.getName())
+                .loginId(user.getLoginId())
+                .email(user.getEmail())
+                .build();
     }
-    가 있다고 하니, 추후 수정하는 것도 나쁘지 않을 성 싶음 */
 }

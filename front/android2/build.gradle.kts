@@ -27,6 +27,12 @@ android {
     val KAKAO_NATIVE_API_KEY = localProperties.getProperty("KAKAO_NATIVE_API_KEY", "")
     val HOST_URL = localProperties.getProperty("Host_URL", "")
 
+    val SMARTTHINGS_CLIENT_ID = localProperties.getProperty("SmartThings_Client_ID", "")
+    val SMARTTHINGS_REDIRECT_URI = "https://seemore.io.kr/callback"
+    val SMARTTHINGS_AUTHORIZE_URL = "https://api.smartthings.com/oauth/authorize"
+
+
+    println("HOST_URL from local.properties: $HOST_URL")
     //로컬 프로퍼티가 가져온게 제대로 됐는지 확인
 
     defaultConfig {
@@ -40,6 +46,10 @@ android {
         // BuildConfig 필드에 API 키 추가
         buildConfigField("String", "KAKAO_NATIVE_API_KEY", "\"$KAKAO_NATIVE_API_KEY\"")
         buildConfigField("String", "HOST_URL", "\"$HOST_URL\"")
+
+        buildConfigField("String", "SMARTTHINGS_CLIENT_ID", "\"$SMARTTHINGS_CLIENT_ID\"")
+        buildConfigField("String", "SMARTTHINGS_REDIRECT_URI", "\"$SMARTTHINGS_REDIRECT_URI\"")
+        buildConfigField("String", "SMARTTHINGS_AUTHORIZE_URL", "\"$SMARTTHINGS_AUTHORIZE_URL\"")
         manifestPlaceholders["KAKAO_NATIVE_API_KEY"] = KAKAO_NATIVE_API_KEY
         manifestPlaceholders["HOST_URL"] = HOST_URL
     }
@@ -79,10 +89,14 @@ dependencies {
     implementation(platform(libs.compose.bom))
 
     implementation(libs.ui) // androidx.compose.ui:ui
-    implementation(libs.ui.tooling.preview) // androidx.compose.ui:ui-tooling-preview
+    implementation(libs.ui.tooling.preview) // androidx.compose.ui:ui-tooling-preview   
     implementation(libs.activity.compose) // activity-compose
     // implementation(libs.compose.runtime) // 일반적으로 ui 라이브러리가 transitively 가져오므로 명시적으로 추가할 필요는 없지만, 문제가 지속되면 추가 고려
     // --- Compose 라이브러리 추가 끝 ---
+
+
+    //watch, app간 데이터 전송
+    implementation("com.google.android.gms:play-services-wearable:18.1.0")
 
 
     implementation(libs.core.ktx)
@@ -92,12 +106,14 @@ dependencies {
     implementation(libs.constraintlayout)
     implementation(libs.play.services.wearable)
     implementation(libs.compose.material3)
+    implementation(libs.foundation.android)
     testImplementation(libs.junit)
     // 카카오 로그인 용
     implementation(libs.v2.user)
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso.core)
     implementation("com.google.android.gms:play-services-location:21.0.1")
+    implementation ("androidx.browser:browser:1.8.0")
     // JSON, XML 처리용
     implementation("com.squareup.retrofit2:retrofit:2.9.0")  // API 처리용, Retrofit 사용 위해 추가 해야 한다고 함
     implementation("com.squareup.retrofit2:converter-gson:2.9.0")

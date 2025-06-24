@@ -1,7 +1,9 @@
 package com.example.front.login.processor
 
 import com.example.front.BuildConfig
+import com.example.front.login.service.ApiService
 import com.example.front.login.service.UserService
+import com.google.android.gms.common.api.Api
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
@@ -12,6 +14,7 @@ object RetrofitClient {
     * => Retrofit 과 Server 간의 통신 준비 세팅을 하는 공간*/
 
     private const val HOST_URL = BuildConfig.HOST_URL
+    private const val BASE_URL = "https://api.smartthings.com/"
 
     val userService: UserService by lazy {
         val retrofit = Retrofit.Builder()
@@ -21,4 +24,14 @@ object RetrofitClient {
 
         retrofit.create(UserService::class.java)
     }
+
+    val apiService : ApiService by lazy {
+        val retrofit = Retrofit.Builder()
+            .baseUrl(BASE_URL)
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
+
+        retrofit.create(ApiService::class.java)
+    }
+
 }

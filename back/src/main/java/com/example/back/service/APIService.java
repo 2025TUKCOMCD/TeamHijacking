@@ -70,10 +70,10 @@ public class APIService {
     // Odsay 경로 조회
     public RouteProcessDTO.SearchPath fetchAndProcessRoutes(RouteDTO routeDTO) throws IOException {
         Call<ResponseBody> call = routeApi.searchPubTransPathT(
-                routeDTO.getStartLat(),
                 routeDTO.getStartLng(),
-                routeDTO.getEndLat(),
+                routeDTO.getStartLat(),
                 routeDTO.getEndLng(),
+                routeDTO.getEndLat(),
                 Odsay_apiKey
         );
 

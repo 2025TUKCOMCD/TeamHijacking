@@ -2,7 +2,7 @@
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="wrap_content"
+    android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@drawable/some_chip"
     android:id="@+id/savedPathRootLayout"
@@ -24,7 +24,10 @@
             android:text="@string/default_text"
             android:id="@+id/addressNicknameTextview"
             android:padding="5dp"
-            android:layout_weight="1"/>
+            android:layout_weight="1"
+            android:maxLines="1"
+            android:ellipsize="end"
+            />
         <ImageView
             android:layout_width="30dp"
             android:layout_height="30dp"
@@ -36,6 +39,8 @@
             android:layout_marginEnd="5dp"
             android:id="@+id/favouritePathStarBtt"
             app:tint="#cccccc"
+            android:maxLines="1"
+            android:ellipsize="end"
             />
     </LinearLayout>
 

@@ -22,6 +22,7 @@
         android:required="true" />
 
     <application
+        android:name= ".presentation.userid"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
@@ -127,6 +128,19 @@
             </intent-filter>
         </activity>
 
+        <service
+            android:name=".presentation.MyWearableListenerService"
+            android:enabled="true"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="com.google.android.gms.wearable.DATA_CHANGED" />
+                <data
+                    android:host="*"
+                    android:pathPrefix="/kakao"
+                    android:scheme="wear" />
+            </intent-filter>
+        </service>
+
 <!--        <service-->
 <!--            android:name=".iot.DataListenerService"-->
 <!--            android:exported="true" >-->
@@ -135,5 +149,6 @@
 <!--            </intent-filter>-->
 <!--        </service>-->
     </application>
+
 
 </manifest>

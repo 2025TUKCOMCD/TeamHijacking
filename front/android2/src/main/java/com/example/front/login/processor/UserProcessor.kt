@@ -1,6 +1,10 @@
 package com.example.front.login.processor
 
 import android.util.Log
+
+
+import com.example.front.login.data.SmartThingsRequest
+
 import com.example.front.login.data.UserRequest
 import retrofit2.Call
 import retrofit2.Callback
@@ -9,8 +13,8 @@ import retrofit2.Response
 /* 실제 API 호출을 처리 하고, 응답 처리 로직을 담당 */
 object UserProcessor {
 
-
     private val userService = RetrofitClient.userService
+    private val apiService = RetrofitClient.apiService
 
     //오류 여기서 가능성
     fun registerUser(user: UserRequest, callback: (Response<UserRequest>) -> Unit) {
@@ -21,7 +25,7 @@ object UserProcessor {
         call.enqueue(object : Callback<UserRequest> {
             override fun onResponse(call: Call<UserRequest>, response: Response<UserRequest>) {
                 if (response.isSuccessful) {
-                    Log.d("response","${response}")
+                    Log.d("response","$response")
                     Log.d("UserProcessor", "등록 성공: ${response.body()}")
                 } else {
                     Log.w("UserProcessor", "등록 실패 - 상태 코드: ${response.code()}")
@@ -73,6 +77,25 @@ object UserProcessor {
 
             override fun onFailure(call: Call<UserRequest>, t: Throwable) {
                 Log.e("UserProcessor", "수정 실패 - 통신 오류: ${t.message}")
+                callback(null)
+            }
+        })
+    }
+
+    fun getSmartThingsToken(userId: String, callback: (String?) -> Unit) {
+        userService.getSmartThingsToken(userId).enqueue(object : Callback<SmartThingsRequest> {
+            override fun onResponse(call: Call<SmartThingsRequest>, response: Response<SmartThingsRequest>) {
+                if (response.isSuccessful) {
+                    Log.d("UserProcessor", "토큰 조회 성공: ${response.body()}")
+                    callback(response.body()?.accessToken)
+                } else {
+                    Log.e("UserProcessor", "토큰 조회 실패 - 서버 오류: ${response.code()}")
+                    callback(null)
+                }
+            }
+
+            override fun onFailure(call: Call<SmartThingsRequest>, t: Throwable) {
+                Log.e("UserProcessor", "토큰 조회 실패 - 통신 오류: ${t.message}")
                 callback(null)
             }
         })

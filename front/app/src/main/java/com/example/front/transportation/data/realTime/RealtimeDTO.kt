@@ -10,7 +10,7 @@ data class RealtimeDTO(
     val startOrd: Int = 0, // 버스 : 위치 정보 첫번째 순서
     val endOrd: Int = 0, // 버스 : 위치 정보 마지막 순서
     val trainNo: String? = null, // 지하철 : 기차 번호
-    val vehid: String? = null, // 버스 : 차량 ID (vehId)
+    val vehid: String? = "0", // 버스 : 차량 ID (vehId)
     val startName: String? = null, // 지하철 : 지하철 역 이름
     val secondName: String? = null, // 지하철 : 두번째 지하철 역 이름
     val endName: String? = null, // 지하철 : 지하철 역 이름

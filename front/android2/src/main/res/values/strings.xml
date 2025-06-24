@@ -3,7 +3,7 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="login">카카오톡으로 로그인</string>
-    <string name="kakaologin_contentDescription">카카오톡 로그인 버튼입니다. 애플리케이션의 실행 및 IOT 기기 관리를 위해 로그인을 진행해주십시오.</string>
+    <string name="kakaologin_contentDescription">카카오톡 로그인 버튼입니다. 애플리케이션의 실행 및 IOT 기기 관리를 위해 로그인을 진행해주십시오. IoT 관리 기능을 위해 로그인 시 SmartThings 계정 로그인도 진행됩니다.</string>
     <string name="backStep">뒤로가기</string>
     <string name="toolBarText">IoT 기기 관리</string>
     <string name="profileText">프로필</string>
@@ -25,4 +25,22 @@
     <string name="defaultIotText">"<b>"IOT 기기의 디폴트 이름"</b>"</string>
     <string name="additionalExplanation">기본설명입니다기본설명입니다기본설명입니다기본설명입니다기본설명입니다기본설명입니다기본설명입니다기본설명입니다기본설명입니다기본설명입니다</string>
     <string name="addSamsung">삼성 기기 추가</string>
+    <string name="close">닫기</string>
+    <string name="faqText">질문이 들어오면 추가되고 수정됩니다.</string>
+    <string name="change_nickname">닉네임 변경</string>
+    <string name="editNicknameText">수정할 닉네임을 입력해주십시오.</string>
+    <string name="change">변경</string>
+    <string name="faqDialogName">FAQ</string>
+    <string name="QnAText"><![CDATA[Q&A]]></string>
+    <string name="OpenSourceText">오픈 소스</string>
+    <string name="opensource_Text">- Geolocation API (https://developer.mozilla.org/en-US/docs/Web/API/Geolocation_API)\n  The Geolocation API is used to retrieve the user\'s location, so that it can for example be used to display their position using a mapping API. This article explains the basics of how to use it. \n\n- ODsay API (https://lab.odsay.com/)\n  This terms and conditions is effective by disclosing to members. The purpose of the terms and conditions is to prescribe basic matters such as the conditions of use, rights and obligations. The terms of use may be amended within the scope of not violating the relevant laws and regulations. The amended terms and conditions is effective by announcing users, and important regulations such as users\' rights or obligations will be notified in advance. \n\n- SmartThings API (https://developer.smartthings.com/docs/api/public)\n  The SmartThings API consists of several endpoints, including Rules, Locations, Devices, and more. Even though each of these endpoints are not standalone APIs, you may hear them referred to as such. For example, the Rules API is used to build Automations. \n\n- 공공 데이터 포탈 (https://www.data.go.kr/) \n\n- Kakao Login API (https://developers.kakao.com/)</string>
+    <string name="QnAExplainText">주로 들어오는 질문이 이 곳에 추가됩니다.</string>
+    <string name="TermOfUseText">"이용 약관은 추후 수정해야 합니다. "</string>
+    <string name="TermOfUseNameText">이용 약관</string>
+    <string name="privacyPolicyText">이용 약관</string>
+    <string name="privacyPolicyDescription">이용약관을 추가해야 합니다.</string>
+    <string name="howToDoDescription">"앱 실행 방법도 추가해야 합니다."</string>
+    <string name="developersName">개발자 이메일</string>
+    <string name="contactToDevDescription">한국공학대학교 컴퓨터공학전공 팀 하이재킹</string>
+    <string name="addIoTContentDescription">IoT 장치 추가하기</string>
 </resources>

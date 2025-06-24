@@ -19,6 +19,7 @@ android {
     val Public_Bus_APIKEY = localProperties.getProperty("Public_Bus_APIKEY", "")
     val Public_Subway_APIKEY = localProperties.getProperty("Public_Subway_APIKEY", "")
     val Host_URL = localProperties.getProperty("Host_URL", "")
+    // SmartThings OAuth 관련 정보 (application.properties 또는 local.properties에서 가져온다고 가정)
 
     defaultConfig {
         applicationId = "com.example.front"
@@ -112,6 +113,9 @@ dependencies {
 
     implementation("com.google.firebase:firebase-crashlytics-buildtools:3.0.2")
 
+    //watch, app간 데이터 전송
+    implementation("com.google.android.gms:play-services-wearable:18.1.0")
+
 
     // ✅ life cycle 및 뷰모델
     implementation(libs.lifecycle.livedata.ktx)
@@ -122,7 +126,7 @@ dependencies {
     //implementation(project(":android2")) //Wear OS 전용 UI(곡선 리스트, BoxInsetLayout 등) 사용 가능
 
     // ✅ 테스트 라이브러리
-    androidTestImplementation(libs.ui.test.junit4)
+    androidTestImplementation("androidx.compose.ui:ui-test-junit4:1.6.0")
     debugImplementation(libs.ui.tooling)
     debugImplementation(libs.ui.test.manifest)
 }

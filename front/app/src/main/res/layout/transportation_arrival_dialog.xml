@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="152dp"
+    android:layout_height="wrap_content"
+    android:minHeight="90dp"
+    android:minWidth="152dp"
+    tools:context=".transportation.dialog.TransSavedDialog"
+    android:orientation="vertical"
+    android:background="@drawable/setting_view"
+    android:padding="10dp"
+    android:layout_margin="20dp" >
+
+    <TextView
+        android:id="@+id/dialog_message"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:minHeight="50sp"
+        android:textSize="12sp"
+        android:text="지하철 탑승 확인\n현재 [역 이름]역에 열차가 도착했습니다.\n지하철에 탑승하셨나요?"
+        android:contentDescription="지하철 탑승 확인 메시지"
+        android:gravity="center"
+        android:textColor="@android:color/black" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:minWidth="70dp"
+        android:layout_marginTop="10dp"
+        android:orientation="horizontal"
+        android:gravity="end">
+
+        <TextView
+            android:id="@+id/btn_yes_boarded"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="탑승"
+            android:contentDescription="네, 탑승했습니다."
+            android:minWidth="48dp"
+            android:textSize="12sp"
+            android:textColor="@android:color/black"
+            android:layout_margin="2dp"
+            android:background="@drawable/confirm_border"
+            android:textAlignment="center" />
+
+        <TextView
+            android:id="@+id/btn_no_boarded"
+            android:layout_width="wrap_content"
+            android:minWidth="48dp"
+            android:layout_height="wrap_content"
+            android:text="아니요"
+            android:contentDescription="아니요, 아직입니다."
+            android:textSize="12sp"
+            android:textColor="@android:color/black"
+            android:layout_margin="2dp"
+            android:background="@drawable/confirm_border"
+            android:textAlignment="center"/>
+    </LinearLayout>
+
+</LinearLayout>
