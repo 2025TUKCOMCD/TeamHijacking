@@ -83,7 +83,7 @@ object UserProcessor {
     }
 
     fun getSmartThingsToken(userId: String, callback: (String?) -> Unit) {
-        apiService.getSmartThingsToken(userId).enqueue(object : Callback<SmartThingsRequest> {
+        userService.getSmartThingsToken(userId).enqueue(object : Callback<SmartThingsRequest> {
             override fun onResponse(call: Call<SmartThingsRequest>, response: Response<SmartThingsRequest>) {
                 if (response.isSuccessful) {
                     Log.d("UserProcessor", "토큰 조회 성공: ${response.body()}")

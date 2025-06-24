@@ -25,4 +25,6 @@ interface UserService {
         @Path("loginId") loginId: String,
         @Body user: UserRequest): Call<UserRequest>
 
+    @GET("api/smartthings")
+    fun getSmartThingsToken(@Query("userId") userId: String): Call<SmartThingsRequest>
 }
