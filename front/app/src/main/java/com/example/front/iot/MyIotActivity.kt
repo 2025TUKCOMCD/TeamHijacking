@@ -230,7 +230,7 @@ class MyIotActivity : AppCompatActivity() {
 
 
 
-                    val level = mainComponent.switchLevels?.level?.value?.toIntOrNull()
+                    val level = mainComponent.switchLevel?.level?.value?.toIntOrNull()
                     if (level != null) {
                         brightnessValue = level
                         Log.d("현빈", brightnessValue.toString())

@@ -10,8 +10,8 @@ data class ComponentStatus(
     val switch: SwitchStatus?,
     val temperatureMeasurement: TemperatureStatus?,
     val contactSensor: ContactSensorStatus?,
-    val switchLevel: CapabilityStatus?,
-    val switchLevels: SwitchLevelStatus?,
+    val switchLevels: CapabilityStatus?,
+    val switchLevel: SwitchLevelStatus?,
     val colorControl: ColorControlStatus?,
     val custom: CustomStatus?, // <- 새로 추가한 모드 정보 커스텀상태
     val healthStats: HealthStats?, // 온, 오프라인 확인
