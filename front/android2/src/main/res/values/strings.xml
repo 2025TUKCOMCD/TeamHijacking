@@ -42,4 +42,5 @@
     <string name="howToDoDescription">"앱 실행 방법도 추가해야 합니다."</string>
     <string name="developersName">개발자 이메일</string>
     <string name="contactToDevDescription">한국공학대학교 컴퓨터공학전공 팀 하이재킹</string>
+    <string name="addIoTContentDescription">IoT 장치 추가하기</string>
 </resources>

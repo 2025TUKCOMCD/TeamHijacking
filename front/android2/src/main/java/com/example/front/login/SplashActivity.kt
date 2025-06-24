@@ -1,9 +1,7 @@
 package com.example.front.login
 
-import android.content.Context.MODE_PRIVATE
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import com.example.front.MainActivity
 import com.example.front.login.processor.UserProcessor
@@ -25,7 +23,7 @@ class SplashActivity : AppCompatActivity() {
             // 서버에 등록된 사용자 확인
             UserProcessor.getUserByLogin(loginId) { user ->
                 if (user != null) {
-                    // 등록된 사용자: 바로 메인으로 이동
+                    // 등록된 사용자: 바로 메인 으로 이동
                     val intent = Intent(this, MainActivity::class.java)
                     intent.putExtra("userName", user.name)
                     startActivity(intent)
@@ -37,7 +35,7 @@ class SplashActivity : AppCompatActivity() {
                 }
             }
         } else {
-            // SharedPreferences에 정보가 없는 경우 → 로그인 화면으로 이동
+            // SharedPreferences 에 정보가 없는 경우 → 로그인 화면 으로 이동
             startActivity(Intent(this, LoginActivity::class.java))
             finish()
         }

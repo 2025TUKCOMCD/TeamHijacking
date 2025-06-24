@@ -123,22 +123,4 @@ class IotPage01 : Fragment() {
         binding.iotLinearLayout.addView(newView)
     }
 
-    // 🔗 SmartThings 앱 열기 (설치되지 않았으면 Play Store로 이동)
-//    private fun openSmartThingsApp() {
-//        try {
-//            val intent = packageManager.getLaunchIntentForPackage("com.samsung.android.oneconnect")
-//            if (intent != null) {
-//                startActivity(intent)
-//            } else {
-//                val playStoreIntent = Intent(
-//                    Intent.ACTION_VIEW,
-//                    Uri.parse("market://details?id=com.samsung.android.oneconnect")
-//                )
-//                startActivity(playStoreIntent)
-//            }
-//        } catch (e: ActivityNotFoundException) {
-//            Log.e("iot", "smartThings 앱이 설치되어 있지 않습니다.")
-//        }
-//    }
-
 }
