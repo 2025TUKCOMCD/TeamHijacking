@@ -45,7 +45,7 @@ class MainActivity : AppCompatActivity() {
                 val receivedTimestamp = it.getLongExtra("received_timestamp", 0L)
 
                 val app = context?.applicationContext as? userid
-                app?.receivedMessage = receivedMessage
+                app?.receivedMessage = receivedMessage.toString()
                 app?.receivedTimestamp = receivedTimestamp
 
                 Log.d(TAG,"실시간 Message: $receivedMessage")

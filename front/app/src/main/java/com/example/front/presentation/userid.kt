@@ -4,7 +4,7 @@ import android.app.Application
 
 class userid : Application() {
 
-    var receivedMessage: String? = null
+    var receivedMessage: String = ""
     var receivedTimestamp: Long = 0L
 
     override fun onCreate() {
