@@ -221,7 +221,7 @@ class MyIotActivity : AppCompatActivity() {
                     isPowerOn = switchValue.equals("on", ignoreCase = true)
 
 
-                    val level = mainComponent.switchLevels?.level?.value?.toIntOrNull()
+                    val level = mainComponent.switchLevel?.level?.value?.toIntOrNull()
                     if (level != null) {
                         brightnessValue = level
                         textBrightnessStatus.text = "현재 밝기: ${brightnessValue}%"
