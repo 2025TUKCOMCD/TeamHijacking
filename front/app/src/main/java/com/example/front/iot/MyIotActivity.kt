@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.front.BuildConfig
 import com.example.front.R
 import com.example.front.iot.SmartHome.*
+import com.example.front.presentation.userid
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -23,9 +24,31 @@ class MyIotActivity : AppCompatActivity() {
     private lateinit var deviceControlHelper: DeviceControlHelper
     private lateinit var deviceAdapter: DeviceAdapter
     private val deviceList = mutableListOf<Device>()
-    private val apiToken = "Bearer ${BuildConfig.SMARTTHINGS_API_TOKEN}"
+    private val tokenapiService = RetrofitClient.tokenapiService
+    private var apiToken:String = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
+
+        val app = this.applicationContext as? userid
+        Log.d("현빈", app!!.receivedMessage)
+        getSmartThingsToken(app.receivedMessage) { receivedToken ->
+            // 이 람다 블록은 토큰을 비동기적으로 가져오는 작업이 완료된 후 실행됩니다.
+            if (receivedToken != null) {
+                // 토큰을 성공적으로 받은 경우
+                apiToken = "Bearer $receivedToken"
+                Log.d("현빈", "SmartThings API 토큰: $apiToken")
+                fetchDeviceList()
+
+                // 이제 이 apiToken을 사용하여 SmartThings 디바이스 제어 API를 호출할 수 있습니다.
+                // 예: callSmartThingsDeviceCommand(apiToken)
+                // UI 업데이트 (예: TextView에 토큰 표시) 등도 여기서 수행 가능
+            } else {
+                // 토큰을 가져오는 데 실패한 경우
+                Log.e("현빈", "SmartThings 토큰을 가져오지 못했습니다.")
+                // 사용자에게 오류 메시지를 표시하는 등의 적절한 에러 처리
+                fetchDeviceList()
+            }
+        }
         Log.d("현빈", "oncreate 들어옴")
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_my_iot)
@@ -62,12 +85,12 @@ class MyIotActivity : AppCompatActivity() {
         Log.d("현빈", "디바이스 불러오기 전")
 
         //디바이스 목록 불러오기
-        fetchDeviceList()
     }
 
     private fun fetchDeviceList() {
         val apiService = RetrofitClient.instance
         Log.d("현빈", "레트로핏 서비스 연결")
+        Log.d("현빈", apiToken)
 
         apiService.getDevices(apiToken).enqueue(object : Callback<DeviceResponse> {
 
@@ -275,5 +298,24 @@ class MyIotActivity : AppCompatActivity() {
             .setView(view)
             .setNeutralButton("닫기", null)
             .show()
+    }
+
+    fun getSmartThingsToken(userId: String, callback: (String?) -> Unit) {
+        tokenapiService.getSmartThingsToken(userId).enqueue(object : Callback<SmartThingsRequest> {
+            override fun onResponse(call: Call<SmartThingsRequest>, response: Response<SmartThingsRequest>) {
+                if (response.isSuccessful) {
+                    Log.d("UserProcessor", "토큰 조회 성공: ${response.body()}")
+                    callback(response.body()?.accessToken)
+                } else {
+                    Log.e("UserProcessor", "토큰 조회 실패 - 서버 오류: ${response.code()}")
+                    callback(null)
+                }
+            }
+
+            override fun onFailure(call: Call<SmartThingsRequest>, t: Throwable) {
+                Log.e("UserProcessor", "토큰 조회 실패 - 통신 오류: ${t.message}")
+                callback(null)
+            }
+        })
     }
 }
