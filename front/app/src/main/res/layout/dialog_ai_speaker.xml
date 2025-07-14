@@ -13,16 +13,16 @@
         android:background="@android:color/black">
 
 
-        <!-- 상태 텍스트 -->
-        <TextView
-            android:id="@+id/textSpeakerStatus"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="스피커 상태 확인 중..."
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:textColor="@android:color/white"
-            android:paddingBottom="16dp"
-            android:contentDescription="AI 스피커의 현재 상태를 나타냅니다" />
+<!--        &lt;!&ndash; 상태 텍스트 &ndash;&gt;-->
+<!--        <TextView-->
+<!--            android:id="@+id/textSpeakerStatus"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:text="스피커 상태 확인 중..."-->
+<!--            android:textAppearance="?android:attr/textAppearanceMedium"-->
+<!--            android:textColor="@android:color/white"-->
+<!--            android:paddingBottom="16dp"-->
+<!--            android:contentDescription="AI 스피커의 현재 상태를 나타냅니다" />-->
 
 
         <!-- 재생 / 일시정지 버튼 -->

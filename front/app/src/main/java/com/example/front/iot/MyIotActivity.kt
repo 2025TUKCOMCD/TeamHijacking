@@ -113,12 +113,12 @@ class MyIotActivity : AppCompatActivity() {
     }
     private fun showGalaxyHomeMiniControl(device: Device) {
         val view = LayoutInflater.from(this).inflate(R.layout.dialog_ai_speaker, null)
-        val statusText = view.findViewById<TextView>(R.id.textSpeakerStatus)
+        //val statusText = view.findViewById<TextView>(R.id.textSpeakerStatus)
         val btnPlayPause = view.findViewById<Button>(R.id.btnPlayPause)
         val btnVolumeUp = view.findViewById<Button>(R.id.btnVolumeUp)
         val btnVolumeDown = view.findViewById<Button>(R.id.btnVolumeDown)
 
-        statusText.text = "기기 이름: ${device.label}\n상태 확인 중..."
+        //statusText.text = "기기 이름: ${device.label}\n상태 확인 중..."
 
         deviceControlHelper.getDeviceStatus(
             device.deviceId,
@@ -130,10 +130,10 @@ class MyIotActivity : AppCompatActivity() {
                 val isPlaying = playback?.playbackStatus?.value.equals("playing", ignoreCase = true)
                 val currentVolume = volume?.volume?.value?.toIntOrNull() ?: -1
 
-                statusText.text = buildString {
-                    append("재생 상태: ${playback?.playbackStatus?.value ?: "알 수 없음"}\n")
-                    append("볼륨: ${if (currentVolume >= 0) "$currentVolume%" else "정보 없음"}")
-                }
+//                statusText.text = buildString {
+//                    append("재생 상태: ${playback?.playbackStatus?.value ?: "알 수 없음"}\n")
+//                    append("볼륨: ${if (currentVolume >= 0) "$currentVolume%" else "정보 없음"}")
+//                }
 
                 btnPlayPause.setOnClickListener {
                     val command = if (isPlaying) "pause" else "play"
@@ -177,7 +177,7 @@ class MyIotActivity : AppCompatActivity() {
 
             },
             onError = { error ->
-                statusText.text = "상태 불러오기 실패: $error"
+                //statusText.text = "상태 불러오기 실패: $error"
                 Toast.makeText(this, "기기 상태 가져오기 실패", Toast.LENGTH_SHORT).show()
             }
         )
@@ -195,16 +195,16 @@ class MyIotActivity : AppCompatActivity() {
     //무드등 제어 만약 device이름이 c2c-rgb-color-bulb이라면 여기로 이동시키면 됨 추후에 넣어야 할듯
     private fun showRgbColorBulbControl(device: Device) {
         val view = LayoutInflater.from(this).inflate(R.layout.dialog_rgb_light, null)
-        val statusText = view.findViewById<TextView>(R.id.textDeviceStatus)
+        //val statusText = view.findViewById<TextView>(R.id.textDeviceStatus)
         val btnBrightnessUp = view.findViewById<Button>(R.id.btnBrightnessUp)
         val btnBrightnessDown = view.findViewById<Button>(R.id.btnBrightnessDown)
         val btnSaturationUp = view.findViewById<Button>(R.id.btnSaturationUp)
         val btnSaturationDown = view.findViewById<Button>(R.id.btnSaturationDown)
         val btnTogglePower = view.findViewById<Button>(R.id.btnTogglePower)
-        val textPowerStatus = view.findViewById<TextView>(R.id.textPowerStatus)
-        val textBrightnessStatus = view.findViewById<TextView>(R.id.textBrightnessStatus)
+        //val textPowerStatus = view.findViewById<TextView>(R.id.textPowerStatus)
+        //val textBrightnessStatus = view.findViewById<TextView>(R.id.textBrightnessStatus)
 
-        statusText.text = "기기 이름: ${device.label}\n기기 ID: ${device.deviceId}"
+        //statusText.text = "기기 이름: ${device.label}\n기기 ID: ${device.deviceId}"
 
         var isPowerOn = false
 
@@ -222,9 +222,9 @@ class MyIotActivity : AppCompatActivity() {
                     isPowerOn = switchValue.equals("on", ignoreCase = true)
                     if (switchValue != null) {
                         Log.d("현빈", brightnessValue.toString())
-                        textPowerStatus.text = "전원 상태: ${switchValue}"
+                        //textPowerStatus.text = "전원 상태: ${switchValue}"
                     } else {
-                        textPowerStatus.text = "전원 상태: 정보 없음"
+                       // textPowerStatus.text = "전원 상태: 정보 없음"
                     }
 
 
@@ -234,19 +234,19 @@ class MyIotActivity : AppCompatActivity() {
                     if (level != null) {
                         brightnessValue = level
                         Log.d("현빈", brightnessValue.toString())
-                        textBrightnessStatus.text = "현재 밝기: ${brightnessValue}%"
+                       // textBrightnessStatus.text = "현재 밝기: ${brightnessValue}%"
                     } else {
-                        textBrightnessStatus.text = "현재 밝기: 정보 없음"
+                        //textBrightnessStatus.text = "현재 밝기: 정보 없음"
                     }
 
 
                     val saturation = mainComponent.colorControl?.saturation?.value?.toInt()
-                    val textSaturationStatus = view.findViewById<TextView>(R.id.textSaturationStatus)
+                    //val textSaturationStatus = view.findViewById<TextView>(R.id.textSaturationStatus)
                     if (saturation != null) {
                         saturationValue = saturation
-                        textSaturationStatus.text = "현재 채도: ${saturationValue}%"
+                        //textSaturationStatus.text = "현재 채도: ${saturationValue}%"
                     } else {
-                        textSaturationStatus.text = "현재 채도: 정보 없음"
+                        //textSaturationStatus.text = "현재 채도: 정보 없음"
                     }
                 } else {
                     Toast.makeText(this, "Main 컴포넌트 없음", Toast.LENGTH_SHORT).show()
@@ -265,10 +265,10 @@ class MyIotActivity : AppCompatActivity() {
                     Toast.makeText(this, if (isPowerOn) "전원 OFF" else "전원 ON", Toast.LENGTH_SHORT).show()
                     isPowerOn = !isPowerOn
                     if (isPowerOn){
-                        textPowerStatus.text = "전원 상태: on"
+                        //textPowerStatus.text = "전원 상태: on"
                     }
                     else{
-                        textPowerStatus.text = "전원 상태: off"
+                       // textPowerStatus.text = "전원 상태: off"
                     }
                 },
                 onError = {
