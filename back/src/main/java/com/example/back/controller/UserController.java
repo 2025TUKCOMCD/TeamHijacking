@@ -11,6 +11,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Collections;
+import java.util.Map;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
 @Slf4j
@@ -93,4 +95,28 @@ public class UserController {
         }
     }
 
+    @PutMapping("/{loginId}/nickname")
+    public ResponseEntity<?> updateNickname (
+            @PathVariable String loginId,
+            @RequestBody Map<String, String> updateData
+    ) {
+        try {
+            String newName = updateData.get("name");
+            if (newName == null || newName.isBlank()) {
+                return ResponseEntity.badRequest()
+                        .body(Collections.singletonMap("message", "닉네임은 비워둘 수 없습니다."));
+            }
+
+            User updatedUser = userService.updateNickname(loginId, newName);
+            return ResponseEntity.ok(UserDTO.fromEntity(updatedUser));
+
+        } catch (NoSuchElementException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(Collections.singletonMap("message", e.getMessage()));
+        } catch (Exception e) {
+            log.error("닉네임 변경 중 오류 발생", e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(Collections.singletonMap("message", "서버 오류가 발생했습니다."));
+        }
+    }
 }

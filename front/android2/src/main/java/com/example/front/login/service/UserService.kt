@@ -7,6 +7,7 @@ import retrofit2.http.Body
 import retrofit2.http.Path
 import retrofit2.http.POST
 import retrofit2.http.GET
+import retrofit2.http.PATCH
 import retrofit2.http.PUT
 import retrofit2.http.Query
 
@@ -27,4 +28,10 @@ interface UserService {
 
     @GET("api/smartthings")
     fun getSmartThingsToken(@Query("userId") userId: String): Call<SmartThingsRequest>
+
+    @PUT("users/{loginId}/nickname")
+    fun updateNickname(
+        @Path("loginId") loginId: String,
+        @Body updateMap: Map<String, String>
+    ): Call<UserRequest>
 }

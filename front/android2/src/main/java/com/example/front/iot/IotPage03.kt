@@ -106,7 +106,20 @@ class IotPage03 : Fragment() {
 
         //dialog 출력을 위한 코드들
         littleProfileLayout.setOnClickListener {
-            showDialog(SettingChangeNicknameDialog(), "닉네임 변경")
+            val loginId = requireActivity()
+                .getSharedPreferences("userPrefs", MODE_PRIVATE)
+                .getString("loginId", null)
+
+            if (loginId != null) {
+                val dialog = SettingChangeNicknameDialog().apply {
+                    arguments = Bundle().apply {
+                        putString("loginId", loginId)
+                    }
+                }
+                showDialog(dialog, "닉네임 변경")
+            } else {
+                Log.e("IoTPage03", "loginId 가 SharedPreferences 에 존재하지 않습니다. ")
+            }
         }
 
         faq.setOnClickListener {

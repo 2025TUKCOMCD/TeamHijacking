@@ -11,8 +11,16 @@ import com.example.front.databinding.SettingChangenickDialogBinding
 import android.util.Log
 import android.widget.Toast
 import androidx.core.content.edit
+import com.example.front.login.data.UserRequest
+import com.example.front.login.processor.RetrofitClient
+import retrofit2.Call
+import retrofit2.Response
 
 class SettingChangeNicknameDialog: DialogFragment() {
+
+    private lateinit var binding: SettingChangenickDialogBinding
+    private lateinit var sharedPrefs: SharedPreferences
+
     override fun onStart() {
         super.onStart()
         dialog?.window?.setBackgroundDrawableResource(android.R.color.transparent)
@@ -23,10 +31,7 @@ class SettingChangeNicknameDialog: DialogFragment() {
         isCancelable = true
     }
 
-    private lateinit var binding: SettingChangenickDialogBinding
-    private lateinit var sharedPrefs: SharedPreferences
-
-    override fun onCreateView(
+    override fun onCreateView (
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -39,6 +44,10 @@ class SettingChangeNicknameDialog: DialogFragment() {
         super.onViewCreated(view, savedInstanceState)
 
         sharedPrefs = requireContext().getSharedPreferences("userPrefs", Context.MODE_PRIVATE)
+        val loginId = arguments?.getString("loginId")  //전달받은 loginId 이곳에 삽입
+
+        Log.d("Retrofit", "닉네임 변경 요청 URL = https://seemore.io.kr/users/$loginId/nickname")
+
 
         initNickname()
         setupListeners()
@@ -57,21 +66,47 @@ class SettingChangeNicknameDialog: DialogFragment() {
 
         binding.settingChangeConfirmBtn.setOnClickListener {
             val newNick = binding.changeNicknameEditText.text.toString()
+            val loginId = sharedPrefs.getString("loginId", null)
 
             if (newNick.isEmpty()) {
                 Toast.makeText(requireContext(), "닉네임을 입력해주세요.", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
 
-            sharedPrefs.edit {
-                putString("name", newNick)
+            if (loginId == null) {
+                Toast.makeText(requireContext(), "로그인 정보가 없습니다.", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
             }
 
-            Log.d("dialog", "새 닉네임: $newNick")
-            Toast.makeText(activity, "새 닉네임: $newNick",Toast.LENGTH_SHORT).show()
+            val updateMap = mapOf("name" to newNick)
 
-            //닉네임 변경을 여러번 할 수 없도록 제한을 두어도 괜찮겠음
-            dismiss()
+            RetrofitClient.userService.updateNickname(loginId, updateMap)
+                .enqueue(object : retrofit2.Callback<UserRequest> {
+                    override fun onResponse(
+                        call: Call<UserRequest>,
+                        response: Response<UserRequest>
+                    ) {
+                        if (!isAdded) return
+
+                        if (response.isSuccessful) {
+                            sharedPrefs.edit {
+                                putString("name", newNick)
+                            }
+                            Toast.makeText(requireContext(), "닉네임이 변경되었습니다.", Toast.LENGTH_SHORT).show()
+                            Log.d("dialog", "닉네임 변경 완료: $newNick")
+                            dismiss()
+                        } else {
+                            Toast.makeText(requireContext(), "서버 오류로 닉네임을 변경하지 못했습니다.", Toast.LENGTH_SHORT).show()
+                            Log.d("dialog", "요청 보냄: loginId=$loginId, newNick=$newNick")
+                            Log.e("dialog", "닉네임 변경 실패: ${response.code()}")
+
+                        }
+                    }
+                    override fun onFailure(call: Call<UserRequest>, t: Throwable) {
+                        if (!isAdded) return
+                        Toast.makeText(requireContext(), "닉네임 변경 실패(네트워크 오류)", Toast.LENGTH_SHORT).show()
+                    }
+                })
         }
     }
 }

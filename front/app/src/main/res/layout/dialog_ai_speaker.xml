@@ -10,52 +10,73 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:padding="24dp"
-        android:background="@android:color/black">
+        android:background="@android:color/black"
+        android:gravity="center">
 
 
-<!--        &lt;!&ndash; 상태 텍스트 &ndash;&gt;-->
-<!--        <TextView-->
-<!--            android:id="@+id/textSpeakerStatus"-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:text="스피커 상태 확인 중..."-->
-<!--            android:textAppearance="?android:attr/textAppearanceMedium"-->
-<!--            android:textColor="@android:color/white"-->
-<!--            android:paddingBottom="16dp"-->
-<!--            android:contentDescription="AI 스피커의 현재 상태를 나타냅니다" />-->
-
-
-        <!-- 재생 / 일시정지 버튼 -->
-        <Button
-            android:id="@+id/btnPlayPause"
-            android:layout_width="match_parent"
+        <!-- 상태 텍스트 -->
+        <TextView
+            android:id="@+id/textSpeakerStatus"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="재생 / 일시정지"
-            android:layout_marginBottom="16dp"
-            android:contentDescription="재생 또는 일시정지 버튼입니다" />
+            android:text="스피커 상태 확인 중..."
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:textColor="@android:color/white"
+            android:paddingBottom="16dp"
+            android:contentDescription="AI 스피커의 현재 상태를 나타냅니다" />
 
 
-        <!-- 볼륨 조절 버튼 -->
         <LinearLayout
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
-            <Button
-                android:id="@+id/btnVolumeDown"
-                android:layout_width="0dp"
-                android:layout_weight="1"
+            android:orientation="horizontal"
+            android:layout_margin="2dp"
+            android:gravity="center">
+            <!-- 재생 / 일시정지 버튼 -->
+            <ImageButton
+                android:id="@+id/btnPlayPause"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="볼륨 ↓"
-                android:contentDescription="볼륨을 줄이는 버튼입니다" />
+                android:text="재생 / 일시정지"
+                android:src="@drawable/iot_play_btn"
+                android:background="@android:color/transparent"
+                android:minHeight="60dp"
+                android:minWidth="60dp"
+                android:contentDescription="@string/playOrPause"
+                android:layout_margin="10dp"/>
 
-            <Button
-                android:id="@+id/btnVolumeUp"
-                android:layout_width="0dp"
-                android:layout_weight="1"
+
+            <!-- 볼륨 조절 버튼 -->
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="볼륨 ↑"
-                android:contentDescription="볼륨을 높이는 버튼입니다" />
+                android:orientation="vertical"
+                android:paddingStart="10dp"
+                android:paddingEnd="10dp">
+
+                <ImageButton
+                    android:id="@+id/btnVolumeDown"
+                    android:layout_width="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
+                    android:text="볼륨 ↓"
+                    android:src="@drawable/iot_volume_up"
+                    android:background="@android:color/transparent"
+                    android:scaleType="fitCenter"
+                    android:paddingBottom="5dp"
+                    android:contentDescription="볼륨을 줄이는 버튼입니다" />
+
+                <ImageButton
+                    android:id="@+id/btnVolumeUp"
+                    android:layout_width="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
+                    android:text="볼륨 ↑"
+                    android:src="@drawable/iot_volume_down"
+                    android:background="@android:color/transparent"
+                    android:scaleType="fitCenter"
+                    android:contentDescription="볼륨을 높이는 버튼입니다" />
+            </LinearLayout>
         </LinearLayout>
     </LinearLayout>
 </ScrollView>
