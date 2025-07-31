@@ -6,7 +6,7 @@ plugins {
 }
 
 android {
-    namespace = "com.example.front"
+    namespace = "kr.io.seemore"
     compileSdk = 34
 
     // local.properties 파일에서 API 키 가져오기

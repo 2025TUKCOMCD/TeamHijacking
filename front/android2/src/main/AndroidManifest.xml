@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.front">
+    package="kr.io.seemore">
 
     <uses-permission android:name="android.permission.WAKE_LOCK" /> <!-- 화면 안 꺼지게 하기 -->
     <uses-permission android:name="com.google.android.permission.PROVIDE_BACKGROUND" /> <!-- Data 레이블 사용을 위한 background 권한 요청 -->
@@ -8,7 +8,7 @@
     <uses-permission android:name="android.permission.INTERNET" />
 
     <application
-        android:name=".MyApplication"
+        android:name="kr.io.seemore.MyApplication"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
@@ -17,7 +17,7 @@
         android:theme="@style/Theme.Front"
         android:usesCleartextTraffic="true">
         <activity
-            android:name=".login.SplashActivity"
+            android:name="kr.io.seemore.login.SplashActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -26,7 +26,7 @@
         </activity>
 
         <activity
-            android:name=".login.LoginActivity"
+            android:name="kr.io.seemore.login.LoginActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" /> <!-- 데이터 보여 주는 기능일 시에 선언, activity 가 사용자 에게 표시할 수 있는 어떤 정보를 가지고 있을 때, startActivity()가 있는 intent 에서 사용 -->
@@ -39,7 +39,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".MainActivity"
+            android:name="kr.io.seemore.MainActivity"
             android:exported="true">
 
             <intent-filter>
@@ -71,7 +71,7 @@
 
         <!-- 워치로부터 메시지를 수신하기 위한 서비스 등록 -->
         <service
-            android:name=".PhoneMessageListenerService"
+            android:name="kr.io.seemore.PhoneMessageListenerService"
             android:enabled="true"
             android:exported="true">
             <intent-filter>

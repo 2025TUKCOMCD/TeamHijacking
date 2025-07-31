@@ -7,7 +7,7 @@ plugins {
 }
 
 android {
-    namespace = "com.example.front"
+    namespace = "kr.io.seemore"
     compileSdk = 34
     //뭔가뭔가
     // local.properties 에서 API 키와 호스트 URL 을 가져옴
