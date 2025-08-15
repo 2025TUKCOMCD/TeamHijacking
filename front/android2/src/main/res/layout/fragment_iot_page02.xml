@@ -7,5 +7,9 @@
     android:orientation="vertical"
     tools:context=".MainActivity">
     <!-- 장치 추가 페이지 -->
-
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="전화 걸기 버튼(임시)"
+        android:id="@+id/telToSubwayBtn" />
 </LinearLayout>

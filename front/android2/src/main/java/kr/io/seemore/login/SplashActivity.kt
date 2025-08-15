@@ -17,6 +17,9 @@ class SplashActivity : AppCompatActivity() {
         val loginId = sharedPrefs.getString("loginId", null)
         val name = sharedPrefs.getString("name", null)
 
+        //위치 권한 등, 
+
+
 
         // 로그인 여부에 따라 화면 전환
         if (!loginId.isNullOrEmpty() && !name.isNullOrEmpty()) {
