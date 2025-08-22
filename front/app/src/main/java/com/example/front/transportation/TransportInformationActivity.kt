@@ -452,7 +452,7 @@ class TransportInformationActivity : AppCompatActivity() {
         }
     }
 
-    // 탑승 후 메시지 업데이트
+    // 탑승 전/후 메시지 업데이트
     private fun onRealtimeResponseCallback(currentTransitType: Int?, currentOrder: Int): (RealtimeResponseDTO) -> Unit {
         // 반환될 람다 정의
         return responseLambda@{ response -> // <--- 여기에 'responseLambda@' 레이블을 추가했습니다.
@@ -465,7 +465,7 @@ class TransportInformationActivity : AppCompatActivity() {
                 val predict2 = response.predictTimes2
                 val location = response.location ?: "알 수 없음"
 
-                // 도보 플래그 true 일 경우
+                // 도보 플래그 true 일 경우 UI 업데이트
                 if (isWalkingStep) {
                     val nextOrder = currentOrder + 1
                     val nextRouteId = routeIds?.getOrNull(getTransitRouteIndex(nextOrder))
@@ -498,7 +498,7 @@ class TransportInformationActivity : AppCompatActivity() {
                     }
 
                 }
-                // 도보 플래그 false 일경우 메시지 업데이트
+                // 도보 플래그 false 일경우 UI 업데이트
                 else {
                     val currentBoardingStatus = RealtimeProcessor.currentRealtimeData?.boarding ?: 1
                     val typeText = when (currentTransitType) {
@@ -570,11 +570,15 @@ class TransportInformationActivity : AppCompatActivity() {
 
                             // 지하철 , 탑승 전/후 첫차 ?분 후, 둘째차 ?분 후 도착 예정
                             dynamicMessage = "$typeText, $boardingText. 현재 ${subwayCurrentStationText}. "
-                            if (predict1 != null && predict1 != "도착 정보 없음") {
+                            if (predict1 != null && predict1 != "도착 정보 없음" && boardingText == "탑승 전") {
                                 dynamicMessage += "첫차 ${predict1}. "
+                            }else if(predict1 != null && predict1 != "도착 정보 없음" && boardingText == "탑승 중") {
+                                dynamicMessage += ""
                             }
-                            if (predict2 != null && predict2 != "도착 정보 없음") {
+                            if (predict2 != null && predict2 != "도착 정보 없음" && boardingText == "탑승 전") {
                                 dynamicMessage += "둘째차 ${predict2}."
+                            }else if( predict2 != null && predict2 != "도착 정보 없음" && boardingText == "탑승 중") {
+                                dynamicMessage += ""
                             }
                             if ((predict1 == null || predict1 == "도착 정보 없음") && (predict2 == null || predict2 == "도착 정보 없음")) {
                                 dynamicMessage += "도착 예정 정보 없음."
@@ -592,11 +596,12 @@ class TransportInformationActivity : AppCompatActivity() {
                     }
                     messagelist[currentOrder] = dynamicMessage
                 }
+                // 자동 talkback 포커스 및 음성 출력
+                transInfoImgSwitcher.announceForAccessibility(dynamicMessage)
                 transInfoImgSwitcher.contentDescription = messagelist[currentOrder]
                 Log.d("TalkBack", "Updated messagelist[${currentOrder}]: ${messagelist[currentOrder]}")
                 Log.d("TalkBack", "Updated contentDescription: ${transInfoImgSwitcher.contentDescription}")
             }
-
 
             // 도보 플래그 false 현재 대중교통 처리
             if (!isWalkingStep) {
@@ -652,6 +657,7 @@ class TransportInformationActivity : AppCompatActivity() {
                                 val currentStationName = transferStations?.firstOrNull() ?: "현재 정류장"
                                 messageTextView.text = "현재 ${currentStationName} 정류장에 버스가 도착했습니다. 탑승하셨나요?"
 
+                                // 탑승 여부 확인 다이얼로그 버튼 클릭 리스너 설정
                                 btnYesBoarded.setOnClickListener {
                                     currentBoarding = 2 // 사용자가 '네'를 선택하면 탑승 상태를 2로 변경
                                     Log.d("BusRealtime", "사용자 탑승 확인. boarding을 2(탑승 중)으로 변경.")
@@ -685,10 +691,10 @@ class TransportInformationActivity : AppCompatActivity() {
                                         transportLocalID = currentRouteId?.transportLocalID ?: 0,
                                         // 버스 DTO에 필요한 다른 필드들
                                         stationId = (currentRouteId?.stationInfo?.getOrNull(indexOffset) ?: 0), // 탑승 전이라도 0번 인덱스 사용 가능
-                                        vehid = receivedVehId, // 변경 없을 수 있음
+                                        vehid = "0", // 변경 없을 수 있음
                                         startOrd = (startStationInfo ?: 0),
                                         endOrd = (endStationInfo ?: 0),
-                                        location = receivedLocation,
+                                        location = "0",
                                         startName = transferStations?.firstOrNull() ?: "" // 탑승 전 startName은 첫 번째 역
                                     )
                                     updatedRealtimeDTO?.let { RealtimeProcessor.requestUpdate(it) }
@@ -717,10 +723,7 @@ class TransportInformationActivity : AppCompatActivity() {
                             }
                         }
 
-                        // RealtimeDTO 업데이트 (이 부분은 다이얼로그에서 이미 처리되었을 수 있으므로 로직 흐름 검토 필요)
-                        // 다이얼로그가 뜨고 return@responseLambda 되면 이 아래 코드는 실행되지 않습니다.
-                        // 다이얼로그를 띄우지 않는 다른 케이스에서만 실행되도록 하거나,
-                        // 다이얼로그 내부에서 DTO를 업데이트하지 않고, 다이얼로그 결과에 따라 여기서 업데이트되도록 재구성할 수 있습니다.
+                        //탑승 중 데이터 형태
                         updatedRealtimeDTO = RealtimeDTO(
                             type = 2, boarding = currentBoarding, transportLocalID = currentRouteId?.transportLocalID ?: 0,
                             stationId = (currentRouteId?.stationInfo?.getOrNull(indexOffset) ?: 0),
@@ -746,6 +749,7 @@ class TransportInformationActivity : AppCompatActivity() {
                                 RealtimeProcessor.stopPolling()
                                 transInfoImgSwitcher.setImageResource(R.drawable.complete_btt)
                                 messagelist[currentOrder] = "도착!"
+                                transInfoImgSwitcher.announceForAccessibility(messagelist[currentOrder])
                                 transInfoImgSwitcher.contentDescription = messagelist[currentOrder]
                                 //transSavedDialogShow() // 필요에 따라 다이얼로그 호출
                             }
@@ -779,7 +783,7 @@ class TransportInformationActivity : AppCompatActivity() {
                         val extractedEndName = currentRouteId?.transferStations?.lastOrNull() ?: ""
 
                         var actualLocationForComparison: String? = null
-                        if (initialDBUsage == 1) {
+                        if (initialDBUsage == 1) { // location값 DBUsage에서는 안쓰임
                             actualLocationForComparison = receivedLocation
                         } else {
                             val locationIndex = receivedLocation?.toIntOrNull()
@@ -887,6 +891,7 @@ class TransportInformationActivity : AppCompatActivity() {
                                     RealtimeProcessor.stopPolling()
                                     transInfoImgSwitcher.setImageResource(R.drawable.complete_btt)
                                     messagelist[currentOrder] = "도착!"
+                                    transInfoImgSwitcher.announceForAccessibility(messagelist[currentOrder])
                                     transInfoImgSwitcher.contentDescription = messagelist[currentOrder]
                                 }
                                 return@responseLambda // <--- 람다 레이블을 사용하여 해당 람다의 실행을 종료합니다.
@@ -1008,6 +1013,7 @@ class TransportInformationActivity : AppCompatActivity() {
                                         RealtimeProcessor.stopPolling()
                                         transInfoImgSwitcher.setImageResource(R.drawable.complete_btt)
                                         messagelist[currentOrder] = "도착!"
+                                        transInfoImgSwitcher.announceForAccessibility(messagelist[currentOrder])
                                         transInfoImgSwitcher.contentDescription = messagelist[currentOrder]
                                         transSavedDialogShow()
                                     }
