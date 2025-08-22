@@ -1,15 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:gravity="center"
-    android:orientation="vertical"
+    android:id = "@+id/subway_telephone_activity"
     tools:context=".MainActivity">
-    <!-- 장치 추가 페이지 -->
-    <Button
+    <ImageButton
+        android:id="@+id/subway_phone"
+        android:paddingTop="100dp"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:background="@drawable/subway_telephone"
+        android:contentDescription="@string/subwayTelephone"
+        app:layout_constraintEnd_toEndOf="@id/subway_telephone_activity"
+        app:layout_constraintStart_toStartOf="@id/subway_telephone_activity"
+        app:layout_constraintTop_toTopOf="@id/subway_telephone_activity"
+        app:layout_constraintBottom_toBottomOf="@id/subway_telephone_activity"
+        app:layout_constraintVertical_chainStyle="packed" />
+
+    <TextView
+        android:id="@+id/subway_station_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="전화 걸기 버튼(임시)"
-        android:id="@+id/telToSubwayBtn" />
-</LinearLayout>
+        android:layout_marginTop="20dp"
+        android:text="삼성역 역무실 : 000 : 0000 : 0000 으로 전화합니다."
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/subway_phone"
+        tools:ignore="MissingConstraints" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
