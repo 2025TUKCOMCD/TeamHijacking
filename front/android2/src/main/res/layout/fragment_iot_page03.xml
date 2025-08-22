@@ -64,7 +64,7 @@
                 android:orientation="horizontal"
                 android:background="@drawable/setting_border_layout"
                 android:layout_marginEnd="15dp"
-                android:visibility="visible">
+                android:visibility="gone">
                 <ImageView
                     android:layout_width="50dp"
                     android:layout_height="50dp"
@@ -133,7 +133,7 @@
                 android:layout_height="wrap_content"
                 android:id="@+id/InfoLittleLayout"
                 android:orientation="vertical"
-                android:visibility="visible">
+                android:visibility="gone">
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -249,7 +249,7 @@
                 android:layout_height="wrap_content"
                 android:id="@+id/QuestionLittleLayout"
                 android:orientation="vertical"
-                android:visibility="visible">
+                android:visibility="gone">
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"

@@ -48,7 +48,19 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         android:elevation="10dp"/>
-
+    <ImageButton
+        android:id="@+id/iotAddBtn"
+        android:padding="10dp"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:background="@android:color/transparent"
+        android:src = "@drawable/add"
+        android:elevation="10dp"
+        android:contentDescription="@string/addIoTContentDescription"
+        android:scaleType="fitCenter"
+        app:layout_constraintTop_toTopOf="@+id/toolBar"
+        app:layout_constraintBottom_toBottomOf="@+id/toolBar"
+        app:layout_constraintEnd_toEndOf="parent" />
 
 
     <androidx.viewpager2.widget.ViewPager2
