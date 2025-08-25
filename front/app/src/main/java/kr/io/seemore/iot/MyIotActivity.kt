@@ -23,6 +23,9 @@ class MyIotActivity : AppCompatActivity() {
     private val deviceList = mutableListOf<Device>()
     private val tokenapiService = RetrofitClient.tokenapiService
     private var apiToken:String = ""
+    private var isVolumeUpdating = false
+    private var lastVolumeClickTime = 0L
+    private val debounceInterval = 300L
 
     override fun onCreate(savedInstanceState: Bundle?) {
 
