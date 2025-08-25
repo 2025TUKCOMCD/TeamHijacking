@@ -169,6 +169,7 @@ class MyIotActivity : AppCompatActivity() {
 
                 btnVolumeDown.setOnClickListener {
                     val now = System.currentTimeMillis()
+                    if (now - lastVolumeClickTime < debounceInterval || isVolumeUpdating) return@setOnClickListener
 
                     val newVolume = (currentVolume - 10).coerceAtLeast(0)
                     deviceControlHelper.setVolume(
