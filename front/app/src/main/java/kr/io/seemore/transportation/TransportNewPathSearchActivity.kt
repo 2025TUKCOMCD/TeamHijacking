@@ -5,17 +5,22 @@ import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 
-import android.view.LayoutInflater // LayoutInflater를 사용하기 위해 import 추가
+import android.view.LayoutInflater
 import android.view.View
-import android.widget.TextView // TextView를 사용하기 위해 import 추가
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import kr.io.seemore.R
 import kr.io.seemore.databinding.ActivityTransportNewPathSearchBinding
 import kr.io.seemore.transportation.data.searchPath.Route
 
-
 import androidx.activity.viewModels
+import com.google.android.gms.tasks.Tasks
+import com.google.android.gms.wearable.PutDataMapRequest
+import com.google.android.gms.wearable.Wearable
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 
 class TransportNewPathSearchActivity : AppCompatActivity() {
@@ -26,7 +31,7 @@ class TransportNewPathSearchActivity : AppCompatActivity() {
     private var receivedTransportRouteKey: Int? = null
     private var receivedIsFavorite: Boolean = false
     private var receivedIsSelected: Boolean = false
-    private var receivedSavedRouteName: String? = null // 저장된 경로 이름도 필요할 수 있으니 추가
+    private var receivedSavedRouteName: String? = null
 
     @SuppressLint("SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -49,7 +54,7 @@ class TransportNewPathSearchActivity : AppCompatActivity() {
         // --- Intent에서 플래그 데이터 받기 ---
         val bundle = intent.extras
         bundle?.let {
-            receivedTransportRouteKey = it.getInt("transportRouteKey", -1).takeIf { it != -1 } // -1이면 null 처리
+            receivedTransportRouteKey = it.getInt("transportRouteKey", -1).takeIf { it != -1 }
             receivedIsFavorite = it.getBoolean("isFavorite", false)
             receivedIsSelected = it.getBoolean("isSelected", false)
             receivedSavedRouteName = it.getString("savedRouteName")
@@ -79,7 +84,7 @@ class TransportNewPathSearchActivity : AppCompatActivity() {
 
         // binding을 사용하여 뷰 참조
         val loadingSpinner = binding.loadingSpinner
-        val dataLayout = binding.newPathLinearLayout // 동적 추가될 컨테이너
+        val dataLayout = binding.newPathLinearLayout
 
         // 데이터 로딩 시작
         loadingSpinner.visibility = View.VISIBLE
@@ -100,9 +105,9 @@ class TransportNewPathSearchActivity : AppCompatActivity() {
                         it,
                         startLat, startLng, endLat, endLng,
                         departureName, destinationName,
-                        receivedTransportRouteKey, // 전달받은 transportRouteKey
-                        receivedIsFavorite,       // 전달받은 isFavorite
-                        receivedIsSelected        // 전달받은 isSelected
+                        receivedTransportRouteKey,
+                        receivedIsFavorite,
+                        receivedIsSelected
                     )
                 } else {
                     Log.d("TransportNewPathSearchActivity", "검색된 경로가 없습니다.")
@@ -118,7 +123,6 @@ class TransportNewPathSearchActivity : AppCompatActivity() {
         routeViewModel.fetchRoute(startLat, startLng, endLat , endLng )
     }
 
-    // updateRouteViews 메서드 시그니처를 변경하여 모든 필요한 플래그를 받도록 합니다.
     private fun updateRouteViews(
         routes: List<Route>,
         startLat: Double,
@@ -127,13 +131,11 @@ class TransportNewPathSearchActivity : AppCompatActivity() {
         endLng: Double,
         departureName : String,
         destinationName : String,
-        // 새로 추가된 파라미터들
-        passedTransportRouteKey: Int?, // 이전 화면에서 전달받은 transportRouteKey
-        passedIsFavorite: Boolean,     // 이전 화면에서 전달받은 isFavorite
-        passedIsSelected: Boolean      // 이전 화면에서 전달받은 isSelected
+        passedTransportRouteKey: Int?,
+        passedIsFavorite: Boolean,
+        passedIsSelected: Boolean
     ) {
 
-        // 기존에 추가된 모든 동적 뷰를 제거하여 중복 생성을 방지합니다.
         binding.newPathLinearLayout.removeAllViews()
 
         routes.forEachIndexed { index, route ->
@@ -145,13 +147,12 @@ class TransportNewPathSearchActivity : AppCompatActivity() {
                 }
             }
 
-
             val routeItemView = LayoutInflater.from(this).inflate(R.layout.trans_new_path_search_view, binding.newPathLinearLayout, false)
 
             val mainTransitTypesView: TextView = routeItemView.findViewById(R.id.mainTransitTypesView)
             val transitCountView: TextView = routeItemView.findViewById(R.id.transitCountView)
             val totalTimeView: TextView = routeItemView.findViewById(R.id.totalTimeView)
-            val detailedPathView: TextView = routeItemView.findViewById(R.id.detatiledPathView) // 오타 주의: detatiledPathView
+            val detailedPathView: TextView = routeItemView.findViewById(R.id.detatiledPathView)
             val predictTimeView: TextView = routeItemView.findViewById(R.id.predictTimeView)
 
             mainTransitTypesView.text = route.mainTransitType
@@ -164,7 +165,6 @@ class TransportNewPathSearchActivity : AppCompatActivity() {
             totalTimeView.contentDescription = "총 소요 시간은 ${route.totalTime}분입니다."
 
             detailedPathView.text = route.transitTypeNo.joinToString(", ")
-            // detailedPathView의 contentDescription을 더 명확하게 구성
             val detailedPathDescription = if (route.transitTypeNo.isNotEmpty()) {
                 "상세 경로는 ${route.transitTypeNo.joinToString(" 이용, ")} 이용입니다."
             } else {
@@ -173,29 +173,23 @@ class TransportNewPathSearchActivity : AppCompatActivity() {
             detailedPathView.contentDescription = detailedPathDescription
 
 
-            // 예측 시간 데이터를 빌드할 StringBuilder
             val predictTimesTextBuilder = StringBuilder()
-            // predictTimeView의 contentDescription에 사용될 StringBuilder
             val predictTimesContentDescriptionBuilder = StringBuilder()
 
             routeIndices.forEachIndexed { i, routeIndex ->
                 val transit = route.transitTypeNo[routeIndex]
                 var predictTime = routes[index].routeIds.getOrNull(i)?.predictTimes1
 
-                // 예측 시간이 "데이터 없음"인 경우 "서비스 지원 안함"으로 변경
                 if (predictTime.isNullOrBlank() || predictTime.equals("데이터 없음", ignoreCase = true)) {
                     predictTime = "서비스 지원 안함"
                 }
 
-                // UI에 표시될 텍스트 추가 (줄 바꿈 포함)
                 predictTimesTextBuilder.append("${transit} : ${predictTime} \n")
-                // 접근성을 위한 contentDescription 텍스트 추가 (더 자연스러운 문장으로)
                 predictTimesContentDescriptionBuilder.append("대중교통 ${transit}의 예상 시간은 ${predictTime}입니다. ")
             }
 
-            // predictTimeView의 텍스트와 contentDescription 설정
-            predictTimeView.text = predictTimesTextBuilder.toString().trimEnd('\n') // 마지막 줄 바꿈 제거
-            predictTimeView.contentDescription = predictTimesContentDescriptionBuilder.toString().trim() // 마지막 공백 제거
+            predictTimeView.text = predictTimesTextBuilder.toString().trimEnd('\n')
+            predictTimeView.contentDescription = predictTimesContentDescriptionBuilder.toString().trim()
 
             // 각 동적 생성된 경로 항목에 클릭 리스너 설정
             routeItemView.setOnClickListener {
@@ -215,12 +209,65 @@ class TransportNewPathSearchActivity : AppCompatActivity() {
                 intent.putExtra("isFavorite", passedIsFavorite)
                 intent.putExtra("isSelected", passedIsSelected)
 
+                // 워치로 모든 데이터를 한번에 전송하는 함수 호출
+                sendAllDataToWearable(
+                    route.pathTransitType,
+                    route.transitTypeNo,
+                    startLat,
+                    startLng,
+                    endLat,
+                    endLng,
+                    departureName,
+                    destinationName
+                )
+
                 startActivity(intent)
             }
 
-            // 모든 설정이 완료된 routeItemView를 컨테이너에 추가합니다.
             binding.newPathLinearLayout.addView(routeItemView)
             Log.d("TransportNewPathSearchActivity", "경로 항목 추가됨: ${route.transitTypeNo.joinToString()}")
+        }
+    }
+
+    /**
+     * DataMap을 사용하여 여러 종류의 데이터를 한 번에 워치로 전송합니다.
+     * 경로는 /all_trans_data로 설정했습니다.
+     */
+    private fun sendAllDataToWearable(
+        pathTransitType: List<Int>,
+        transitTypeNo: List<String>,
+        startLat: Double,
+        startLng: Double,
+        endLat: Double,
+        endLng: Double,
+        departureName: String,
+        destinationName: String
+    ) {
+        CoroutineScope(Dispatchers.IO).launch {
+            try {
+                val dataClient = Wearable.getDataClient(this@TransportNewPathSearchActivity)
+
+                // PutDataMapRequest를 생성하고 데이터를 추가
+                val putDataMapReq = PutDataMapRequest.create("/all_trans_data").apply {
+                    dataMap.putIntegerArrayList("pathTransitType", ArrayList(pathTransitType))
+                    dataMap.putStringArrayList("transitTypeNo", ArrayList(transitTypeNo))
+                    dataMap.putDouble("startLat", startLat)
+                    dataMap.putDouble("startLng", startLng)
+                    dataMap.putDouble("endLat", endLat)
+                    dataMap.putDouble("endLng", endLng)
+                    dataMap.putString("departureName", departureName)
+                    dataMap.putString("destinationName", destinationName)
+                    dataMap.putLong("timestamp", System.currentTimeMillis())
+                }
+
+                val putDataReq = putDataMapReq.asPutDataRequest()
+                Tasks.await(dataClient.putDataItem(putDataReq))
+
+                Log.d("WearableDataSender", "모든 교통 데이터 전송 성공")
+
+            } catch (e: Exception) {
+                Log.e("WearableDataSender", "데이터 전송 실패: ${e.message}")
+            }
         }
     }
 }
