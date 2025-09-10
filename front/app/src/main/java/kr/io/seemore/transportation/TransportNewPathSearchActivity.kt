@@ -233,6 +233,7 @@ class TransportNewPathSearchActivity : AppCompatActivity() {
      * DataMap을 사용하여 여러 종류의 데이터를 한 번에 워치로 전송합니다.
      * 경로는 /all_trans_data로 설정했습니다.
      */
+
     private fun sendAllDataToWearable(
         pathTransitType: List<Int>,
         transitTypeNo: List<String>,
