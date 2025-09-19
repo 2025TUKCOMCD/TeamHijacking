@@ -61,15 +61,6 @@
             android:background="@android:color/transparent"
             android:contentDescription="@string/iot_iot_smartthings"/>
 
-        <!-- 🎤 음성 명령 버튼 -->
-        <Button
-            android:id="@+id/btnVoiceControl"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/start_ai"
-            android:textSize="12sp"
-            android:padding="12dp"
-            android:minHeight="20dp" />
 
     </LinearLayout>
     </ScrollView>
