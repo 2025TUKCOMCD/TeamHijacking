@@ -221,7 +221,8 @@ class LoginActivity : AppCompatActivity() {
 //        val csrfBytes = ByteArray(16)
 //        secureRandom.nextBytes(csrfBytes)
 //        val csrfToken = Base64.getUrlEncoder().withoutPadding().encodeToString(csrfBytes)
-        val state = "${userId}" // 백엔드가 userId를 추출할 수 있도록 형식 지정
+        val csrfToken = UUID.randomUUID().toString()
+        val state = "${userId}$csrfToken" // 백엔드가 userId를 추출할 수 있도록 형식 지정
 
         // SmartThings 인증 URL 구성
         val authUrl = Uri.parse(SMARTTHINGS_AUTHORIZE_URL).buildUpon()

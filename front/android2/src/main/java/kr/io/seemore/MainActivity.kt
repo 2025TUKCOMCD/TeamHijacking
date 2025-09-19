@@ -120,7 +120,7 @@ class MainActivity : AppCompatActivity() {
 
                 val title = when (position) {
                     0 -> "IoT 기기 관리"
-                    1 -> "IoT 기기 추가"
+                    1 -> "역무실에 전화"
                     2 -> "설정"
                     else -> "IoT 기기 관리"
                 }

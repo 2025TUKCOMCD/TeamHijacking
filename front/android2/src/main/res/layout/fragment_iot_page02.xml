@@ -1,33 +1,68 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/subway_telephone_activity"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:id = "@+id/subway_telephone_activity"
+    android:orientation="vertical"
+    android:gravity="center"
     tools:context=".MainActivity">
-    <ImageButton
-        android:id="@+id/subway_phone"
-        android:paddingTop="100dp"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
-        android:background="@drawable/subway_telephone"
-        android:contentDescription="@string/subwayTelephone"
-        app:layout_constraintEnd_toEndOf="@id/subway_telephone_activity"
-        app:layout_constraintStart_toStartOf="@id/subway_telephone_activity"
-        app:layout_constraintTop_toTopOf="@id/subway_telephone_activity"
-        app:layout_constraintBottom_toBottomOf="@id/subway_telephone_activity"
-        app:layout_constraintVertical_chainStyle="packed" />
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/callstationText"
+        android:textSize="30sp"
+        android:paddingStart="30dp"
+        android:paddingEnd="20dp"
+        android:paddingBottom="20dp"
+        />
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="그거 아시나요? 교통 약자분들의 경우, '또타 지하철 앱' 또는 1577-1234에 전화하며 도움을 받을 수 있습니다!"
+        android:textSize="20sp"
+        android:paddingStart="20dp"
+        android:paddingEnd="30dp"
+        android:textColor="@android:color/darker_gray"
+        android:paddingBottom="10dp"
+        />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingStart="20dp"
+        android:paddingEnd="20dp"
+        android:paddingTop="20dp">
+        <ImageButton
+            android:id="@+id/subway_phone"
+            android:layout_width="120dp"
+            android:layout_height="120dp"
+            android:background="@drawable/subway_telephone"
+            android:contentDescription="@string/subwayTelephone"
+            android:padding="20dp"
+            android:scaleType="fitCenter"
+            android:backgroundTint="@color/iotColor" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="☜   전화걸기"
+            android:paddingStart="40dp"
+            android:paddingEnd="10dp"
+            android:textSize="25sp"
+            android:layout_gravity="center"
+            android:textAlignment="center"/>
+    </LinearLayout>
 
     <TextView
         android:id="@+id/subway_station_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:text="삼성역 역무실 : 000 : 0000 : 0000 으로 전화합니다."
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/subway_phone"
-        tools:ignore="MissingConstraints" />
+        android:layout_marginTop="32dp"
+        android:text="삼성역 역무실: 000-0000-0000으로 전화합니다."
+        android:textSize="16sp"
+        android:textStyle="bold"
+        android:gravity="center"
+        android:paddingStart="16dp"
+        android:paddingEnd="16dp"/>
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+</LinearLayout>

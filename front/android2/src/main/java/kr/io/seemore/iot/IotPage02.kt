@@ -61,7 +61,7 @@ class IotPage02 : Fragment() {
     ): View? {
         _binding = FragmentIotPage02Binding.inflate(inflater, container, false)
         telToSubwayBtn = binding.subwayPhone
-        telToSubwayBtn.visibility = View.GONE
+//        telToSubwayBtn.visibility = View.GONE
 
         telToSubwayBtn.setOnClickListener {
             callToSubway()
