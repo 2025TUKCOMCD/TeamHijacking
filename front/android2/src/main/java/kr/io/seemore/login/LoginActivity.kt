@@ -21,6 +21,7 @@ import com.kakao.sdk.common.model.ClientErrorCause
 import com.kakao.sdk.user.UserApiClient
 import com.kakao.sdk.common.util.Utility
 import java.security.SecureRandom
+import java.util.UUID
 
 
 class LoginActivity : AppCompatActivity() {
@@ -52,7 +53,11 @@ class LoginActivity : AppCompatActivity() {
         }
 
         val keyHash = Utility.getKeyHash(this)
-        Log.e("해시키", keyHash)
+        if (keyHash != null) {
+            Log.e("해시키", keyHash)
+        } else {
+            Log.e("해시키", "해시키 생성 실패 - null 반환됨")
+        }
     }
 
 
@@ -220,7 +225,10 @@ class LoginActivity : AppCompatActivity() {
 //        val csrfBytes = ByteArray(16)
 //        secureRandom.nextBytes(csrfBytes)
 //        val csrfToken = Base64.getUrlEncoder().withoutPadding().encodeToString(csrfBytes)
-        val state = "${userId}" // 백엔드가 userId를 추출할 수 있도록 형식 지정
+        val userId = "본인 유저아이디"
+        val csrfToken = UUID.randomUUID().toString()
+        val state = "$userId$csrfToken"
+        // 백엔드가 userId를 추출할 수 있도록 형식 지정
 
         // SmartThings 인증 URL 구성
         val authUrl = Uri.parse(SMARTTHINGS_AUTHORIZE_URL).buildUpon()
