@@ -56,7 +56,8 @@ class MainActivity : AppCompatActivity() {
         viewPager.adapter = pagerAdapter
 
         //이름을 받아올 수 있는지 테스트 위한 코드
-        val name = intent.getStringExtra("name")
+
+        val name = intent.getStringExtra("userName")
         Toast.makeText(this, "어서오세요 $name 님", Toast.LENGTH_SHORT).show()
 
         // 딥링크 처리 로직 추가
