@@ -48,15 +48,20 @@ class  IotPage02 : Fragment() {
 
 
                     val transitNum = transitTypeNo?.get(conditionMetindex[0])
-                    var filterdpathTransitType = transitNum?.get(4).toString() ?: "10"
-                    val intTransitType = filterdpathTransitType.toInt()
+                    var filterdpathTransitType = transitNum?.get(4).toString().toIntOrNull().takeIf { it in 1..9 } ?: 10
+                    val intTransitType = filterdpathTransitType
                     call_info = selectCallNum(intTransitType, departureName)
 
                     Log.d(tag, "${call_info.first}호선 역무실 전화연결\n ${call_info.second}")
-                    if(filterdpathTransitType=="10"){
-                        "전화번호를 지원하는 호선이 아닙니다."
+                    if(filterdpathTransitType==10){
+                        binding.subwayPhone.text ="전화번호를 지원하는 호선이 아닙니다."
+                        telToSubwayBtn.setOnClickListener {
+                        }
                     }else{
                         binding.subwayPhone.text = "${call_info.first}호선 역무실 전화연결\n${call_info.second}"
+                        telToSubwayBtn.setOnClickListener {
+                            callToSubway(call_info.first, call_info.second)
+                        }
                     }
 /*                    for(i in conditionMetindex){
                         val transitNum = transitTypeNo?.get(i)
