@@ -8,7 +8,6 @@
     android:layout_marginVertical="30dp"
     android:layout_marginHorizontal="10dp"
     android:layout_gravity="center"
-    android:minWidth="200dp"
     android:minHeight="200dp"
     android:id="@+id/settingOpenSourceDialog">
     <ScrollView
