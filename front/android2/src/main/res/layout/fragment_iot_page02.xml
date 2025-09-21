@@ -14,8 +14,8 @@
     <View
         android:layout_width="match_parent"
         android:layout_height="2dp"
-        android:background="#402240"
-        android:layout_marginBottom="20dp"/>
+        android:background="#873C87"
+        android:layout_marginBottom="40dp"/>
 
     <!-- 메인 타이틀 -->
     <TextView
@@ -27,20 +27,20 @@
         android:paddingEnd="20dp"
         android:paddingBottom="20dp"
         android:textStyle="bold"
-        android:contentDescription="역무실 전화 연결 화면" />
+        android:contentDescription="@string/callstationText" />
 
     <!-- 안내 메시지 -->
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="그거 아시나요? 교통 약자분들의 경우, '또타 지하철 앱' 또는 1577-1234에 전화하며 도움을 받을 수 있습니다!"
+        android:text="@string/do_you_know_text"
         android:textSize="18sp"
         android:paddingStart="20dp"
         android:paddingEnd="20dp"
         android:textColor="@android:color/darker_gray"
         android:paddingBottom="20dp"
         android:lineSpacingExtra="4dp"
-        android:contentDescription="교통약자 지원 서비스 안내: 또타 지하철 앱 또는 1577-1234로 전화하여 도움을 받을 수 있습니다" />
+        android:contentDescription="@string/tto_ta_ContentDescription" />
 
     <!-- 전화 연결 버튼 컨테이너 -->
     <LinearLayout
@@ -52,18 +52,19 @@
         android:paddingBottom="30dp">
 
         <!-- 역무실 전화 버튼 -->
-        <Button
+        <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/subwayPhone"
+            style="@style/Widget.AppCompat.Button"
             android:layout_width="match_parent"
             android:layout_height="120dp"
             android:layout_marginStart="20dp"
             android:layout_marginEnd="20dp"
-            android:text="삼성역 역무실\n전화연결\n000-0000-0000"
+            android:text="삼성역 역무실 전화연결\n000-0000-0000"
             android:textSize="20sp"
             android:textStyle="bold"
             android:textColor="@android:color/white"
-            android:background="@drawable/phone_button_background2"
-            android:backgroundTint="@color/iotColor"
+            android:background="@drawable/phone_button_background3"
+            android:backgroundTint="@null"
             android:drawableTop="@drawable/subway_telephone"
             android:drawablePadding="8dp"
             android:gravity="center"
@@ -77,11 +78,11 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
-            android:text="버튼을 터치하면 즉시 역무실로 연결됩니다"
+            android:text="@string/plus_info_text"
             android:textSize="16sp"
             android:textColor="@android:color/darker_gray"
             android:gravity="center"
-            android:contentDescription="버튼 터치 시 즉시 역무실로 전화가 연결된다는 안내 메시지" />
+            android:contentDescription="@string/plus_info_text" />
 
     </LinearLayout>
 
@@ -89,7 +90,7 @@
     <View
         android:layout_width="match_parent"
         android:layout_height="2dp"
-        android:background="#402240"
-        android:layout_marginTop="20dp" />
+        android:background="#873C87"
+        android:layout_marginTop="40dp" />
 
 </LinearLayout>
