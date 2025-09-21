@@ -27,20 +27,20 @@
         android:paddingEnd="20dp"
         android:paddingBottom="20dp"
         android:textStyle="bold"
-        android:contentDescription="역무실 전화 연결 화면" />
+        android:contentDescription="@string/callstationText" />
 
     <!-- 안내 메시지 -->
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="그거 아시나요? 교통 약자분들의 경우, '또타 지하철 앱' 또는 1577-1234에 전화하며 도움을 받을 수 있습니다!"
+        android:text="@string/do_you_know_text"
         android:textSize="18sp"
         android:paddingStart="20dp"
         android:paddingEnd="20dp"
         android:textColor="@android:color/darker_gray"
         android:paddingBottom="20dp"
         android:lineSpacingExtra="4dp"
-        android:contentDescription="교통약자 지원 서비스 안내: 또타 지하철 앱 또는 1577-1234로 전화하여 도움을 받을 수 있습니다" />
+        android:contentDescription="@string/tto_ta_ContentDescription" />
 
     <!-- 전화 연결 버튼 컨테이너 -->
     <LinearLayout
@@ -78,11 +78,11 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
-            android:text="버튼을 터치하면 즉시 역무실로 연결됩니다"
+            android:text="@string/plus_info_text"
             android:textSize="16sp"
             android:textColor="@android:color/darker_gray"
             android:gravity="center"
-            android:contentDescription="버튼 터치 시 즉시 역무실로 전화가 연결된다는 안내 메시지" />
+            android:contentDescription="@string/plus_info_text" />
 
     </LinearLayout>
 

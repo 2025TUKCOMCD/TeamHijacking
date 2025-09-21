@@ -75,9 +75,19 @@ class IotPage01 : Fragment() {
                     deviceList.clear()
                     deviceList.addAll(devices)
 
-                    //동적 뷰 추가
-                    deviceList.forEach {
-                        device -> addIoTDeviceView(device)
+                    //기본 뷰 초기화(중복 방지)
+                    binding.iotLinearLayout.removeAllViews()
+
+                    if (deviceList.isEmpty()) {
+                        //장치 없음 -> 안내 문구 표시
+                        binding.isIotExistText.visibility = View.VISIBLE
+                    } else {
+                        //장치 있음 -> 안내 문구 숨김
+                        binding.isIotExistText.visibility = View.GONE
+                        //동적 뷰 추가
+                        deviceList.forEach {
+                                device -> addIoTDeviceView(device)
+                        }
                     }
                 } else {
                     Log.e(tag, "응답 실패. 코드: ${response.code()}, 메시지: ${response.message()}")
