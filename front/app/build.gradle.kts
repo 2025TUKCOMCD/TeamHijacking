@@ -22,7 +22,7 @@ android {
     // SmartThings OAuth 관련 정보 (application.properties 또는 local.properties에서 가져온다고 가정)
 
     defaultConfig {
-        applicationId = "com.example.front"
+        applicationId = "kr.io.seemore"
         minSdk = 30
         targetSdk = 34
         versionCode = 1

@@ -36,6 +36,7 @@ android {
     //로컬 프로퍼티가 가져온게 제대로 됐는지 확인
 
     defaultConfig {
+        applicationId = "kr.io.seemore"
         minSdk = 30
         targetSdk = 34
         versionCode = 1

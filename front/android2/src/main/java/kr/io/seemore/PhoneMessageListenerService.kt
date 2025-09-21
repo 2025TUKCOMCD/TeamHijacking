@@ -41,7 +41,9 @@ class PhoneMessageListenerService : WearableListenerService() {
                         Log.e(TAG, "스마트폰 앱 'com.example.front'을(를) 찾을 수 없거나 실행할 수 없습니다.")
                     }
                 }
-
+                DATA_PATH_ALL_TRANS_DATA->{
+                    Log.d("현빈", "들어옴${messageEvent}")
+                }
             }
         } catch (e: Exception) {
             Log.e(TAG, "onMessageReceived 처리 중 예외 발생: ${e.message}", e)
@@ -72,7 +74,7 @@ class PhoneMessageListenerService : WearableListenerService() {
                     Log.d(TAG, "DataMap 데이터 수신: $pathTransitType, $transitTypeNo, $departureName -> $destinationName")
 
                     // 수신된 데이터를 Intent에 담아 브로드캐스트로 전송
-                    val dataIntent = Intent("kr.io.seemore.ACTION_ALL_TRANS_DATA")
+                    val dataIntent = Intent("ACTION_ALL_TRANS_DATA")
                     dataIntent.putIntegerArrayListExtra("pathTransitType", pathTransitType)
                     dataIntent.putStringArrayListExtra("transitTypeNo", transitTypeNo)
                     dataIntent.putExtra("startLat", startLat)

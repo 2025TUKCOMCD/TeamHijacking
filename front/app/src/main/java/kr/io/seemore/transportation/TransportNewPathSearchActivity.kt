@@ -262,9 +262,9 @@ class TransportNewPathSearchActivity : AppCompatActivity() {
                 }
 
                 val putDataReq = putDataMapReq.asPutDataRequest()
-                Tasks.await(dataClient.putDataItem(putDataReq))
+                dataClient.putDataItem(putDataReq)
 
-                Log.d("WearableDataSender", "모든 교통 데이터 전송 성공")
+                Log.d("WearableDataSender", "모든 교통 데이터 전송 성공 : ${putDataMapReq}")
 
             } catch (e: Exception) {
                 Log.e("WearableDataSender", "데이터 전송 실패: ${e.message}")

@@ -17,7 +17,7 @@ import kr.io.seemore.databinding.FragmentIotPage02Binding
 import android.net.Uri
 import android.widget.ImageButton
 
-class IotPage02 : Fragment() {
+class  IotPage02 : Fragment() {
 
     private var _binding: FragmentIotPage02Binding? = null
     private val binding get() = _binding!!
@@ -29,14 +29,24 @@ class IotPage02 : Fragment() {
         override fun onReceive(context: Context?, intent: Intent?) {
             intent?.let {
                 // 수정: Int 배열 데이터를 받도록 변경
-                val receivedPathTypes: ArrayList<Int>? = it.getIntegerArrayListExtra("pathTransitType")
-                Log.d(tag, "Received path transit types: $receivedPathTypes")
+                val pathTransitType: ArrayList<Int>? = it.getIntegerArrayListExtra("pathTransitType")
+                Log.d(tag, "Received path transit types: $pathTransitType")
+
+                val conditionMetindex = getIndicesOfOne(pathTransitType)
+                val transitTypeNo: ArrayList<String>? = it.getStringArrayListExtra("transitTypeNo")
+                Log.d(tag, "Received path transit types: $transitTypeNo")
 
                 // pathTransitType 배열에 1이 포함되어 있는지 확인
-                val isConditionMet = receivedPathTypes?.contains(1) == true
+                val isConditionMet = pathTransitType?.contains(1) == true
 
                 if (isConditionMet) {
                     telToSubwayBtn.visibility = View.VISIBLE
+                    for(i in conditionMetindex){
+                        val transitNum = transitTypeNo?.get(i)
+                        val filterdpathTransitType = transitNum?.get(4)
+                        Log.d(tag, "${filterdpathTransitType}")
+                    }
+
                     Log.d(tag, "pathTransitType에 1이 포함되어 있어 버튼을 보이게 합니다.")
                 } else {
                     telToSubwayBtn.visibility = View.GONE
@@ -51,7 +61,7 @@ class IotPage02 : Fragment() {
         // 브로드캐스트 리시버 등록
         // 이 액션은 PhoneMessageListenerService에서 보낸 액션과 동일해야 합니다.
         LocalBroadcastManager.getInstance(requireContext()).registerReceiver(
-            dataReceiver, IntentFilter("kr.io.seemore.ACTION_ALL_TRANS_DATA")
+            dataReceiver, IntentFilter("ACTION_ALL_TRANS_DATA")
         )
     }
 
@@ -109,6 +119,21 @@ class IotPage02 : Fragment() {
         }
 
         return resultStr
+    }
+
+    private fun getIndicesOfOne(pathTransitType: ArrayList<Int>?): List<Int> {
+        // 1. null 체크: 리스트가 null이면 안전하게 빈 리스트를 반환합니다.
+        val list = pathTransitType ?: return emptyList()
+
+        return list
+            // 2. withIndex(): 리스트의 요소들을 (인덱스, 값) 쌍으로 변환합니다.
+            .withIndex()
+
+            // 3. filter(): 이 쌍들 중에서 값이 1인 요소만 걸러냅니다.
+            .filter { it.value == 1 }
+
+            // 4. map(): 필터링된 쌍들에서 인덱스(index)만 추출하여 최종 리스트를 만듭니다.
+            .map { it.index }
     }
 
     //-------------전화 text func 관련 이 곳에 기입 예정
