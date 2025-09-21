@@ -7,7 +7,7 @@
     android:background="@drawable/iot_device_bg"
     android:layout_marginVertical="30dp"
     android:layout_marginHorizontal="10dp"    android:layout_gravity="center"
-
+    android:minWidth="400dp"
     android:minHeight="200dp"
     android:id="@+id/settingTermOfUseDialog">
     <ScrollView
