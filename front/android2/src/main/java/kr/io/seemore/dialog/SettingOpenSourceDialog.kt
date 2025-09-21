@@ -14,11 +14,6 @@ class SettingOpenSourceDialog: DialogFragment() {
     override fun onStart() {
         super.onStart()
         dialog?.window?.setBackgroundDrawableResource(android.R.color.transparent)
-
-        // 다이얼로그의 너비를 전체 화면에 맞게 조정
-        val width = ViewGroup.LayoutParams.MATCH_PARENT
-        val height = ViewGroup.LayoutParams.WRAP_CONTENT // 높이는 내용물에 맞춤
-        dialog?.window?.setLayout(width, height)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
