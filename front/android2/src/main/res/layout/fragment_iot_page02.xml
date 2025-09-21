@@ -59,7 +59,7 @@
             android:layout_height="120dp"
             android:layout_marginStart="20dp"
             android:layout_marginEnd="20dp"
-            android:text="삼성역 역무실 전화연결\n000-0000-0000"
+            android:text="1호선 역무실 전화연결\n000-0000-0000"
             android:textSize="20sp"
             android:textStyle="bold"
             android:textColor="@android:color/white"
