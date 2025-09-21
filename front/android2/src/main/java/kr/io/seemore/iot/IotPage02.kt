@@ -22,7 +22,7 @@ class IotPage02 : Fragment() {
     private var _binding: FragmentIotPage02Binding? = null
     private val binding get() = _binding!!
     private val tag = "IoT_page02"
-    private lateinit var telToSubwayBtn: ImageButton
+    private lateinit var telToSubwayBtn: Button
 
     // 데이터 수신을 위한 BroadcastReceiver
     private val dataReceiver = object : BroadcastReceiver() {
