@@ -103,8 +103,8 @@ class MainActivity : AppCompatActivity() {
                     tab.text = "관리" // 텍스트
                 }
                 1 -> {
-                    tab.setIcon(R.drawable.ic_add)
-                    tab.text = "추가"
+                    tab.setIcon(R.drawable.subway_telephone2)
+                    tab.text = "전화"
                 }
                 2 -> {
                     tab.setIcon(R.drawable.ic_settings)
@@ -119,10 +119,10 @@ class MainActivity : AppCompatActivity() {
                 super.onPageSelected(position)
 
                 val title = when (position) {
-                    0 -> "IoT 기기 관리"
+                    0 -> "IoT 기기 리스트"
                     1 -> "역무실에 전화"
                     2 -> "설정"
-                    else -> "IoT 기기 관리"
+                    else -> "IoT 기기 리스트"
                 }
                 binding.toolBarText.text = title
                 binding.backStepBtn.visibility = if (position == 0) android.view.View.GONE else android.view.View.VISIBLE
