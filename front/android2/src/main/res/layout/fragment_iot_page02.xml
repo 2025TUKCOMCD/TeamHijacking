@@ -14,8 +14,8 @@
     <View
         android:layout_width="match_parent"
         android:layout_height="2dp"
-        android:background="#402240"
-        android:layout_marginBottom="20dp"/>
+        android:background="#873C87"
+        android:layout_marginBottom="40dp"/>
 
     <!-- 메인 타이틀 -->
     <TextView
@@ -52,18 +52,19 @@
         android:paddingBottom="30dp">
 
         <!-- 역무실 전화 버튼 -->
-        <Button
+        <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/subwayPhone"
+            style="@style/Widget.AppCompat.Button"
             android:layout_width="match_parent"
             android:layout_height="120dp"
             android:layout_marginStart="20dp"
             android:layout_marginEnd="20dp"
-            android:text="삼성역 역무실\n전화연결\n000-0000-0000"
+            android:text="삼성역 역무실 전화연결\n000-0000-0000"
             android:textSize="20sp"
             android:textStyle="bold"
             android:textColor="@android:color/white"
-            android:background="@drawable/phone_button_background2"
-            android:backgroundTint="@color/iotColor"
+            android:background="@drawable/phone_button_background3"
+            android:backgroundTint="@null"
             android:drawableTop="@drawable/subway_telephone"
             android:drawablePadding="8dp"
             android:gravity="center"
@@ -89,7 +90,7 @@
     <View
         android:layout_width="match_parent"
         android:layout_height="2dp"
-        android:background="#402240"
-        android:layout_marginTop="20dp" />
+        android:background="#873C87"
+        android:layout_marginTop="40dp" />
 
 </LinearLayout>

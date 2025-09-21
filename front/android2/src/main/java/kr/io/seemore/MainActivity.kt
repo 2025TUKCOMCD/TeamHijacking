@@ -103,8 +103,8 @@ class MainActivity : AppCompatActivity() {
                     tab.text = "관리" // 텍스트
                 }
                 1 -> {
-                    tab.setIcon(R.drawable.ic_add)
-                    tab.text = "추가"
+                    tab.setIcon(R.drawable.subway_telephone2)
+                    tab.text = "전화"
                 }
                 2 -> {
                     tab.setIcon(R.drawable.ic_settings)
