@@ -73,7 +73,7 @@ Q3. 앱을 사용하기 위해 인터넷 연결이 필요한가요?
 제19조 (이용자의 의무)
 이용자는 허위 내용 등록, 타인의 정보 도용, 정보 변경, 지적재산권 침해 등 법령과 공서양속에 반하는 행위를 해서는 안 됩니다."</string>
     <string name="TermOfUseNameText">이용 약관</string>
-    <string name="privacyPolicyText">개인정보 처리방침</string>
+    <string name="privacyPolicyText">개인정보 정책</string>
     <string name="privacyPolicyDescription">"1. 수집하는 개인정보 항목 및 수집 방법
 저희 팀은 다음과 같은 개인정보를 수집하여 이용자에게 최적의 서비스를 제공합니다.
 회원가입 및 로그인 시: 카카오 계정으로 로그인할 때, 카카오로부터 제공받는 이메일, 프로필 사진, 이름(또는 닉네임) 등과 같은 식별 정보를 수집합니다.
