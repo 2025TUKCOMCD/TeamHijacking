@@ -23,10 +23,18 @@
     <string name="defaultText">기본 텍스트입니다.</string>
     <string name="selectIoT">사용자분께서 선택하신 IoT 기종을 이미지로 알려주는 곳입니다.</string>
     <string name="defaultIotText">"<b>"IOT 기기의 디폴트 이름"</b>"</string>
-    <string name="additionalExplanation">기본설명입니다기본설명입니다기본설명입니다기본설명입니다기본설명입니다기본설명입니다기본설명입니다기본설명입니다기본설명입니다기본설명입니다</string>
+    <string name="additionalExplanation">기본설명입니다</string>
     <string name="addSamsung">삼성 기기 추가</string>
     <string name="close">닫기</string>
-    <string name="faqText">질문이 들어오면 추가되고 수정됩니다.</string>
+    <string name="faqText">"서비스 이용 관련
+Q1. 씨모어 앱은 어떤 서비스인가요?
+    씨모어앱 은 시각장애인을 위한 보조 도구로, 음성으로 알려주는 등 다양한 기능을 제공합니다.
+
+Q2. 서비스를 이용하려면 회원가입이 필수인가요?
+    일부 기능은 회원가입 없이도 이용할 수 있지만, 모든 기능을 사용하거나 개인 설정을 저장하려면 회원가입이 필요합니다.
+
+Q3. 앱을 사용하기 위해 인터넷 연결이 필요한가요?
+    대부분의 기능은 온라인에서 작동하며 업데이트를 위해서는 인터넷 연결이 필요합니다."</string>
     <string name="change_nickname">닉네임 변경</string>
     <string name="editNicknameText">수정할 닉네임을 입력해주십시오.</string>
     <string name="change">변경</string>
@@ -35,12 +43,88 @@
     <string name="OpenSourceText">오픈 소스</string>
     <string name="opensource_Text">- Geolocation API (https://developer.mozilla.org/en-US/docs/Web/API/Geolocation_API)\n  The Geolocation API is used to retrieve the user\'s location, so that it can for example be used to display their position using a mapping API. This article explains the basics of how to use it. \n\n- ODsay API (https://lab.odsay.com/)\n  This terms and conditions is effective by disclosing to members. The purpose of the terms and conditions is to prescribe basic matters such as the conditions of use, rights and obligations. The terms of use may be amended within the scope of not violating the relevant laws and regulations. The amended terms and conditions is effective by announcing users, and important regulations such as users\' rights or obligations will be notified in advance. \n\n- SmartThings API (https://developer.smartthings.com/docs/api/public)\n  The SmartThings API consists of several endpoints, including Rules, Locations, Devices, and more. Even though each of these endpoints are not standalone APIs, you may hear them referred to as such. For example, the Rules API is used to build Automations. \n\n- 공공 데이터 포탈 (https://www.data.go.kr/) \n\n- Kakao Login API (https://developers.kakao.com/)</string>
     <string name="QnAExplainText">주로 들어오는 질문이 이 곳에 추가됩니다.</string>
-    <string name="TermOfUseText">"이용 약관은 추후 수정해야 합니다. "</string>
+    <string name="TermOfUseText">"제1조 (목적)
+이 약관은 팀 하이재킹팀(이하 '팀')이 운영하는 씨모어 앱(이하 '앱')에서 제공하는 서비스를 이용함에 있어, 팀과 이용자 간의 권리, 의무 및 책임 사항을 규정하는 것을 목적으로 합니다.
+
+제2조 (정의)
+"앱": 팀이 이용자에게 서비스를 제공하기 위해 만든 가상의 공간을 말하며, 앱을 운영하는 팀의 의미로도 사용됩니다.
+"이용자": 이 약관에 따라 앱이 제공하는 서비스를 받는 사람을 말합니다.
+
+제4조 (서비스의 제공 및 변경)
+팀은 앱을 통해 다양한 서비스를 제공하며, 서비스 내용이 변경될 경우 변경 사항을 즉시 공지합니다.
+계약된 서비스 내용이 변경되면 그 사유를 이용자에게 통지해야 하며, 이로 인해 이용자가 입은 손해를 배상할 책임이 있습니다. 단, 팀에 고의나 과실이 없음을 입증하는 경우는 예외입니다.
+
+제5조 (서비스의 중단)
+서버 점검, 통신 두절 등으로 서비스 제공이 일시적으로 중단될 수 있습니다.
+서비스 중단으로 이용자가 손해를 입은 경우, 팀은 배상해야 합니다. 단, 고의나 과실이 없음을 입증하면 배상하지 않습니다.
+
+제17조 (개인정보보호)
+팀은 서비스 제공에 필요한 최소한의 개인정보만을 수집합니다.
+개인정보를 수집하거나 이용할 때는 이용자에게 목적을 알리고 동의를 받겠습니다.
+개인정보 유출, 도난, 동의 없는 제3자 제공 등으로 인한 손해에 대해 모든 책임을 지겠습니다.
+개인정보 수집·이용·제공 동의 칸을 미리 선택해 두지 않으며, 필수 항목이 아닌 정보에 대한 동의를 거부한다고 해서 서비스 제공을 제한하거나 거부할 수 없습니다.
+이용자는 자신의 개인정보에 대해 언제든지 열람 및 오류 정정을 요구할 수 있습니다.
+
+제18조 (팀의 의무)
+팀은 법령과 이 약관이 금지하는 행위를 하지 않고, 안정적으로 서비스를 제공하기 위해 최선을 다하겠습니다.
+이용자의 개인정보 보호를 위한 보안 시스템을 갖추겠습니다.
+부당한 표시·광고로 인해 이용자가 입은 손해를 배상할 책임이 있습니다.
+
+제19조 (이용자의 의무)
+이용자는 허위 내용 등록, 타인의 정보 도용, 정보 변경, 지적재산권 침해 등 법령과 공서양속에 반하는 행위를 해서는 안 됩니다."</string>
     <string name="TermOfUseNameText">이용 약관</string>
-    <string name="privacyPolicyText">이용 약관</string>
-    <string name="privacyPolicyDescription">이용약관을 추가해야 합니다.</string>
-    <string name="howToDoDescription">"앱 실행 방법도 추가해야 합니다."</string>
-    <string name="developersName">개발자 이메일</string>
+    <string name="privacyPolicyText">개인정보 처리방침</string>
+    <string name="privacyPolicyDescription">"1. 수집하는 개인정보 항목 및 수집 방법
+저희 팀은 다음과 같은 개인정보를 수집하여 이용자에게 최적의 서비스를 제공합니다.
+회원가입 및 로그인 시: 카카오 계정으로 로그인할 때, 카카오로부터 제공받는 이메일, 프로필 사진, 이름(또는 닉네임) 등과 같은 식별 정보를 수집합니다.
+서비스 이용 시: 대중교통 경로 저장 및 불러오기, 음향 유도기 및 음성 유도기 기능 사용 시 위치 정보, 이용 경로 정보를 수집합니다.
+문의사항 접수 시: 이용자가 서비스 이용 중 문의를 남길 때, 이메일 주소나 전화번호를 수집하여 답변을 드립니다.
+
+2. 개인정보의 수집 및 이용 목적
+수집된 개인정보는 다음의 목적을 위해 활용됩니다.
+서비스 제공: 길 찾기, 주변 사물 안내, 대중교통 경로 저장 등 앱의 주요 기능을 제공하기 위함입니다.
+회원 관리: 서비스 이용에 따른 본인 식별, 개인 설정 관리 및 부정 이용 방지를 위한 목적입니다.
+고객 지원: 문의사항, 불만사항 처리 및 서비스 이용 관련 중요 공지사항 전달을 위함입니다.
+서비스 개선: 이용자의 서비스 이용 패턴을 분석하여 보다 나은 기능을 개발하고 사용자 경험을 개선하기 위함입니다.
+
+3. 개인정보의 보유 및 이용 기간
+이용자의 개인정보는 원칙적으로 수집 및 이용 목적이 달성되면 지체 없이 파기합니다. 단, 관련 법령의 규정에 따라 보존할 필요가 있는 경우, 해당 법령에서 정한 기간 동안 개인정보를 보관합니다.
+
+4. 개인정보의 제3자 제공
+저희 팀은 이용자의 개인정보를 원칙적으로 외부에 제공하지 않습니다. 다만, 이용자가 사전에 동의했거나 관련 법령에 의해 의무적으로 제출해야 하는 경우에는 예외로 합니다.
+
+5. 개인정보의 파기 절차 및 방법
+개인정보는 이용 목적이 달성된 후 별도의 저장 공간에 옮겨져 관련 법령에 따라 일정 기간 보관된 후 파기됩니다.
+전자적 파일 형태: 복구 및 재생 불가능한 기술적 방법을 사용하여 삭제합니다.
+
+6. 이용자 권리 및 행사 방법
+이용자는 언제든지 자신의 개인정보를 열람하거나 수정할 수 있으며 , 동의한 개인정보 수집 및 이용에 대한 동의를 철회할 수 있습니다. 권리 행사는 앱 내의 '설정' 메뉴를 통해 진행하거나, 아래 연락처로 요청할 수 있습니다.
+
+
+7. 개인정보 보호를 위한 노력
+저희 팀은 이용자의 개인정보를 안전하게 관리하기 위해 다음과 같은 노력을 하고 있습니다.
+기술적 보호 조치: 개인정보는 암호화되어 저장 및 관리되며, 해킹을 막기 위한 보안 시스템을 구축하고 있습니다.
+관리적 보호 조치: 개인정보를 취급하는 직원을 최소한으로 제한하고, 주기적인 교육을 실시하여 개인정보 보호의 중요성을 강조하고 있습니다."</string>
+    <string name="howToDoDescription">"
+1. TALKBACK을 이용한 실행
+저희 앱은 시각장애인 분들이 더욱 편리하게 사용하실 수 있도록 TALKBACK(토크백) 기능을 완벽하게 지원합니다. 앱 아이콘을 터치하시면 음성으로 '씨모어 앱'이라고 알려드리고, 자동으로 앱이 실행됩니다. 화면의 모든 버튼과 텍스트를 음성으로 안내받으며 쉽게 앱을 탐색하고 조작하실 수 있습니다.
+
+2. 카카오 로그인을 통한 로그인
+앱을 처음 실행하시면 카카오 로그인 화면이 나타납니다. 카카오 로그인은 회원가입 절차를 간소화하여 빠르고 안전하게 로그인을 도와줍니다. 카카오 계정으로 로그인하면, 개인 설정이나 이용 기록을 저장하고 관리할 수 있어 더욱 편리하게 앱을 이용할 수 있습니다.
+
+3. 스마트싱스를 이용한 IoT 제어
+저희 앱의 특별한 기능 중 하나는 바로 스마트싱스(SmartThings) 연동입니다. 스마트싱스를 통해 집 안의 IoT 기기들을 앱으로 제어할 수 있습니다. 예를 들어, 음성 명령만으로 전등을 켜고 끄거나, 가전제품을 조작하는 등 다양한 스마트 기기들을 편리하게 관리할 수 있습니다.
+
+4. 대중교통 경로 저장 및 불러오기
+로그인 후에는 대중교통 경로를 저장하고 불러올 수 있는 기능을 사용할 수 있습니다. 자주 이용하는 버스 노선이나 지하철 경로를 미리 저장해 두세요. 다음번에 같은 경로를 이용할 때, 저장된 목록에서 선택만 하면 즉시 음성으로 경로를 안내받을 수 있어 시간을 절약하고 편리하게 이동할 수 있습니다.
+
+5. 음향 및 음성 유도기능
+저희 앱의 핵심 기능인 음향 유도기와 음성 유도기를 사용해 보세요.
+
+    음향 유도기: 이 기능은 특정 위치에 설치된 음향 유도 장치에 연결하여 소리로 길을 안내받는 기능입니다. 소리를 따라가면 목적지까지 안전하게 이동할 수 있습니다.
+
+    음성 유도기: 길을 걸으면서 주변의 사물이나 시설물에 대한 정보를 음성으로 안내받을 수 있습니다. 예를 들어, "50m 앞에 편의점이 있습니다"와 같이 현재 위치를 기준으로 주변 환경을 알려줘 길 찾기에 큰 도움이 됩니다."</string>
+    <string name="developersName">서하연 : nsrn13542@gmail.com \n연찬호 : yeonchanho0927@gmail.com \김현빈 : nhhb0664@naver.com\n김의연 : nklmot2071@gmail.com</string>
     <string name="contactToDevDescription">한국공학대학교 컴퓨터공학전공 팀 하이재킹</string>
     <string name="addIoTContentDescription">IoT 장치 추가하기</string>
     <string name="subwayTelephone">해당 지하철 역 역무실 전화번호입니다. 도움이 필요하시면 클릭후 역무실로 전화번호로 전화를 겁니다.</string>
