@@ -45,7 +45,20 @@ class  IotPage02 : Fragment() {
 
                 if (isConditionMet) {
                     telToSubwayBtn.visibility = View.VISIBLE
-                    for(i in conditionMetindex){
+
+
+                    val transitNum = transitTypeNo?.get(conditionMetindex[0])
+                    var filterdpathTransitType = transitNum?.get(4).toString() ?: "10"
+                    val intTransitType = filterdpathTransitType.toInt()
+                    call_info = selectCallNum(intTransitType, departureName)
+
+                    Log.d(tag, "${call_info.first}호선 역무실 전화연결\n ${call_info.second}")
+                    if(filterdpathTransitType=="10"){
+                        "전화번호를 지원하는 호선이 아닙니다."
+                    }else{
+                        binding.subwayPhone.text = "${call_info.first}호선 역무실 전화연결\n${call_info.second}"
+                    }
+/*                    for(i in conditionMetindex){
                         val transitNum = transitTypeNo?.get(i)
                         var filterdpathTransitType = transitNum?.get(4)!!.toString()
                         val intTransitType = filterdpathTransitType.toInt()
@@ -53,7 +66,7 @@ class  IotPage02 : Fragment() {
 
                         Log.d(tag, "${call_info.first}호선 역무실 전화연결\n ${call_info.second}")
                         binding.subwayPhone.text = "${call_info.first}호선 역무실 전화연결\n${call_info.second}"
-                    }
+                    }*/
 
                     Log.d(tag, "pathTransitType에 1이 포함되어 있어 버튼을 보이게 합니다.")
                 } else {
@@ -84,7 +97,6 @@ class  IotPage02 : Fragment() {
         telToSubwayBtn.setOnClickListener {
             callToSubway(call_info.first, call_info.second)
         }
-
         return binding.root
     }
 
