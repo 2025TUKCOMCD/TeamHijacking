@@ -6,12 +6,18 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:paddingTop="80dp"
+    android:paddingStart="16dp"
+    android:paddingEnd="16dp"
     tools:context=".MainActivity">
+
+    <!-- 상단 구분선 -->
     <View
         android:layout_width="match_parent"
-        android:layout_height="2px"
+        android:layout_height="2dp"
         android:background="#402240"
         android:layout_marginBottom="20dp"/>
+
+    <!-- 메인 타이틀 -->
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -20,51 +26,70 @@
         android:paddingStart="30dp"
         android:paddingEnd="20dp"
         android:paddingBottom="20dp"
-        />
+        android:textStyle="bold"
+        android:contentDescription="역무실 전화 연결 화면" />
+
+    <!-- 안내 메시지 -->
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="그거 아시나요? 교통 약자분들의 경우, '또타 지하철 앱' 또는 1577-1234에 전화하며 도움을 받을 수 있습니다!"
-        android:textSize="20sp"
+        android:textSize="18sp"
         android:paddingStart="20dp"
-        android:paddingEnd="30dp"
+        android:paddingEnd="20dp"
         android:textColor="@android:color/darker_gray"
-        android:paddingBottom="10dp"
-        />
+        android:paddingBottom="20dp"
+        android:lineSpacingExtra="4dp"
+        android:contentDescription="교통약자 지원 서비스 안내: 또타 지하철 앱 또는 1577-1234로 전화하여 도움을 받을 수 있습니다" />
+
+    <!-- 전화 연결 버튼 컨테이너 -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:paddingStart="20dp"
-        android:paddingEnd="20dp"
-        android:paddingTop="20dp">
-        <ImageButton
-            android:id="@+id/subway_phone"
-            android:layout_width="120dp"
+        android:orientation="vertical"
+        android:gravity="center"
+        android:paddingTop="30dp"
+        android:paddingBottom="30dp">
+
+        <!-- 역무실 전화 버튼 -->
+        <Button
+            android:id="@+id/subwayPhone"
+            android:layout_width="match_parent"
             android:layout_height="120dp"
-            android:background="@drawable/subway_telephone"
-            android:contentDescription="@string/subwayTelephone"
-            android:padding="20dp"
-            android:scaleType="fitCenter"
-            android:backgroundTint="@color/iotColor" />
+            android:layout_marginStart="20dp"
+            android:layout_marginEnd="20dp"
+            android:text="삼성역 역무실\n전화연결\n000-0000-0000"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:textColor="@android:color/white"
+            android:background="@drawable/phone_button_background2"
+            android:backgroundTint="@color/iotColor"
+            android:drawableTop="@drawable/subway_telephone"
+            android:drawablePadding="8dp"
+            android:gravity="center"
+            android:padding="16dp"
+            android:elevation="4dp"
+            android:stateListAnimator="@null"
+            android:contentDescription="삼성역 역무실 전화연결 버튼입니다. 전화번호 000-0000-0000로 즉시 연결됩니다. 터치하여 전화를 걸어보세요." />
+
+        <!-- 추가 안내 텍스트 -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:text="버튼을 터치하면 즉시 역무실로 연결됩니다"
+            android:textSize="16sp"
+            android:textColor="@android:color/darker_gray"
+            android:gravity="center"
+            android:contentDescription="버튼 터치 시 즉시 역무실로 전화가 연결된다는 안내 메시지" />
+
     </LinearLayout>
 
-    <TextView
-        android:id="@+id/subway_station_name"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
-        android:text="삼성역 역무실: 000-0000-0000으로 전화합니다."
-        android:textSize="16sp"
-        android:gravity="center"
-        android:paddingStart="16dp"
-        android:paddingEnd="16dp"
-        android:textAlignment="center"
-        android:layout_gravity="center"
-        android:paddingBottom="20dp"/>
+    <!-- 하단 구분선 -->
     <View
         android:layout_width="match_parent"
-        android:layout_height="2px"
+        android:layout_height="2dp"
         android:background="#402240"
-        android:layout_margin="2px" />
+        android:layout_marginTop="20dp" />
+
 </LinearLayout>
