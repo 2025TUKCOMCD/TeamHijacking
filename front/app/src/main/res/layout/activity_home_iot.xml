@@ -23,41 +23,33 @@
             android:orientation="vertical"
             android:gravity="center"
             android:padding="16dp"
-            android:minHeight="100dp"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent">
+            android:layout_gravity="center_vertical">
 
             <!-- ➕ My IoT 페이지 이동 버튼 -->
             <ImageButton
                 android:id="@+id/btnMyIot"
                 android:layout_width="match_parent"
                 android:layout_height="60dp"
-                android:minWidth="20dp"
-                android:minHeight="40dp"
-                android:layout_margin="5dp"
+                android:layout_margin="8dp"
                 android:text="@string/iotmanage"
                 android:contentDescription="@string/iot_manage_content_description"
-                android:layout_marginBottom="10dp"
                 android:src="@drawable/myiot_btn2"
                 android:background="@android:color/transparent"
-                android:scaleType="fitCenter"/>
+                android:adjustViewBounds="true"
+                android:scaleType="centerInside"/>
 
             <!-- 🔄 IoT 추가 버튼 (SmartThings 앱 이동) -->
         <ImageButton
             android:id="@+id/btnAddDevice"
             android:layout_width="match_parent"
             android:layout_height="60dp"
-            android:minWidth="20dp"
-            android:minHeight="40dp"
             android:text="@string/iot_add"
-            android:layout_margin="5dp"
+            android:layout_margin="8dp"
             android:backgroundTint="@android:color/holo_blue_light"
             android:textColor="@android:color/white"
-            android:layout_marginBottom="12dp"
             android:src="@drawable/manage_myiot_btn2"
-            android:scaleType="fitCenter"
+            android:adjustViewBounds="true"
+            android:scaleType="centerInside"
             android:background="@android:color/transparent"
             android:contentDescription="@string/iot_iot_smartthings"/>
 
