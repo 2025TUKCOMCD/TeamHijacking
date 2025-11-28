@@ -302,15 +302,22 @@ public class SubwayProcessService {
             Time Time1 = predictTimeList.size() > 0 ? predictTimeList.get(0).getArrival_Time() : null;
             Time Time2 = predictTimeList.size() > 1 ? predictTimeList.get(1).getArrival_Time() : null;
 
-
             Time current = subwayService.getSeoulCurrentTime();
             if (Time1 != null) {
                 long minutes = Duration.between(current.toLocalTime(), Time1.toLocalTime()).toMinutes();
-                predictTime1String = minutes + "분 후";
+                if(minutes > 60){
+                    predictTime1String = "운행종료";
+                }else {
+                    predictTime1String = minutes + "분 후";
+                }
             }
             if (Time2 != null) {
                 long minutes = Duration.between(current.toLocalTime(), Time2.toLocalTime()).toMinutes();
-                predictTime2String = minutes + "분 후";
+                if(minutes > 60) {
+                    predictTime1String = "운행종료";
+                }else{
+                    predictTime2String = minutes + "분 후";
+                }
             }
         }
         return new String[]{predictTime1String, predictTime2String};
@@ -438,9 +445,9 @@ public class SubwayProcessService {
             System.out.println(station.getStatnNm());
             if (station.getStatnNm().equals(nowStation) && station.getUpdnLine()==convertedDirection) {
                 // 해당 열차의 고유 번호 반환
-                int trainNo = station.getTrainNo();
-                String convertedTrainNo = Integer.toString(trainNo);
-                return convertedTrainNo ; // trainNo가 int 타입이어야 합니다
+                String trainNo = station.getTrainNo();
+
+                return trainNo ; // trainNo가 int 타입이어야 합니다
             }
         }
         // 못 찾았을 경우 예외 발생 또는 기본값 설정
@@ -450,7 +457,6 @@ public class SubwayProcessService {
     // 실시간 위치정보 현재 위치 추출
     protected String getLocation(RealtimeDTO data) {
         String trainNo = data.getTrainNo(); // 열차 고유 번호
-        int convertedTrainNo = Integer.parseInt(trainNo); // 열차 고유 번호를 int로 변환
         int subwayCode = data.getTransportLocalID(); // 지하철 노선 코드
         int convertedDirection = data.getDirection().equals("상행") ? 0 : 1; // 상행: 0, 하행: 1
         int convertedCode = subwayService.convertSubwayCode(subwayCode); // 변환 노선 코드
@@ -467,7 +473,7 @@ public class SubwayProcessService {
         // trainNo가 같은경우를 찾아 statnNm 반환
         List<RealSubwayLocationDTO.RealtimePositionDTO> stations = realSubwayLocation.getRealtimePositionList();
         for (RealSubwayLocationDTO.RealtimePositionDTO station : stations) {
-            if (station.getTrainNo() == (convertedTrainNo) && station.getUpdnLine()==convertedDirection) {
+            if (station.getTrainNo().equals(trainNo) && station.getUpdnLine()==convertedDirection) {
                 // 해당 역에 위치한 열차의 현재 위치 반환
                 return station.getStatnNm(); // location이 int 타입이어야 합니다
             }

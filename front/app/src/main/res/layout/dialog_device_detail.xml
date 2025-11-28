@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
+    android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:fillViewport="true">
 
@@ -19,15 +19,17 @@
             android:layout_height="wrap_content"
             android:text="기기 정보 로딩 중..."
             android:textAppearance="?android:attr/textAppearanceMedium"
-            android:paddingBottom="16dp" />
+            android:paddingBottom="16dp"
+            android:textAlignment="center"/>
 
 
         <!-- 밝기 SeekBar 제거, 버튼 형식으로 교체함 -->
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="밝기 조절"
-            android:textStyle="bold" />
+            android:text="@string/brighten_text"
+            android:textStyle="bold"
+            android:paddingBottom="10dp"/>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -35,53 +37,62 @@
             android:orientation="horizontal"
             android:layout_marginBottom="16dp">
 
-            <Button
+            <ImageButton
                 android:id="@+id/btnBrightnessDown"
                 android:layout_width="0dp"
                 android:layout_weight="1"
+                android:minHeight="30dp"
+                android:minWidth="80dp"
                 android:layout_height="wrap_content"
                 android:text="밝기 -10"
-                android:contentDescription="@string/btn_brightnessDescription1"/>
+                android:scaleType="centerInside"
+                android:background="@android:color/transparent"
+                android:src="@drawable/iot_brighten_up2"
+                android:contentDescription="@string/btn_brightnessDescription1"
+                android:layout_marginEnd="10dp"/>
 
-            <Button
+            <ImageButton
                 android:id="@+id/btnBrightnessUp"
                 android:layout_width="0dp"
                 android:layout_weight="1"
                 android:layout_height="wrap_content"
                 android:text="밝기 +10"
+                android:src="@drawable/iot_brighten_down2"
+                android:background="@android:color/transparent"
                 android:contentDescription="@string/btn_brightnessDescription2"/>
         </LinearLayout>
 
 
         <!-- 채도 SeekBar 제거, 버튼 형식으로 교체함 -->
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="채도 조절"
-            android:textStyle="bold" />
+<!--        <TextView-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:text="채도 조절"-->
+<!--            android:textStyle="bold"-->
+<!--            android:paddingBottom="10dp"/>-->
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_marginBottom="16dp">
+<!--        <LinearLayout-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:orientation="horizontal"-->
+<!--            android:layout_marginBottom="16dp">-->
 
-            <Button
-                android:id="@+id/btnSaturationDown"
-                android:layout_width="0dp"
-                android:layout_weight="1"
-                android:layout_height="wrap_content"
-                android:text="채도 -10"
-                android:contentDescription="@string/btn_btnSaturationDescription1" />
+<!--            <Button-->
+<!--                android:id="@+id/btnSaturationDown"-->
+<!--                android:layout_width="0dp"-->
+<!--                android:layout_weight="1"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:text="채도 -10"-->
+<!--                android:contentDescription="@string/btn_btnSaturationDescription1" />-->
 
-            <Button
-                android:id="@+id/btnSaturationUp"
-                android:layout_width="0dp"
-                android:layout_weight="1"
-                android:layout_height="wrap_content"
-                android:text="채도 +10"
-                android:contentDescription="@string/btn_btnSaturationDescription2"/>
-        </LinearLayout>
+<!--            <Button-->
+<!--                android:id="@+id/btnSaturationUp"-->
+<!--                android:layout_width="0dp"-->
+<!--                android:layout_weight="1"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:text="채도 +10"-->
+<!--                android:contentDescription="@string/btn_btnSaturationDescription2"/>-->
+<!--        </LinearLayout>-->
 
 
         <!-- 전원 토글 -->
@@ -90,7 +101,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="전원 ON / OFF"
-            android:layout_marginTop="8dp" />
+            android:layout_marginTop="8dp"
+            />
     </LinearLayout>
 </ScrollView>
 

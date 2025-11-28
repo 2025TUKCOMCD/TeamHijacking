@@ -16,6 +16,7 @@ import java.sql.Timestamp;
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)  //AUTO_INCREMENT
+    @Column(name = "id", columnDefinition = "INT UNSIGNED") // <-- 여기에 추가
     private Integer id;                                  //기본 키 (Integer 타입)
 
     @Column(nullable = false)

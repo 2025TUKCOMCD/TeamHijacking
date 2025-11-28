@@ -1,0 +1,274 @@
+package kr.io.seemore.transportation
+
+import android.annotation.SuppressLint
+import android.content.Intent
+import android.os.Bundle
+import android.util.Log
+
+import android.view.LayoutInflater
+import android.view.View
+import android.widget.TextView
+import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.Observer
+import kr.io.seemore.R
+import kr.io.seemore.databinding.ActivityTransportNewPathSearchBinding
+import kr.io.seemore.transportation.data.searchPath.Route
+
+import androidx.activity.viewModels
+import com.google.android.gms.tasks.Tasks
+import com.google.android.gms.wearable.PutDataMapRequest
+import com.google.android.gms.wearable.Wearable
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+
+
+class TransportNewPathSearchActivity : AppCompatActivity() {
+    private lateinit var binding: ActivityTransportNewPathSearchBinding
+    private val routeViewModel: RouteViewModel by viewModels()
+
+    // Intent로 받은 데이터를 클래스 멤버 변수로 선언하여 다른 메서드에서도 접근할 수 있도록 합니다.
+    private var receivedTransportRouteKey: Int? = null
+    private var receivedIsFavorite: Boolean = false
+    private var receivedIsSelected: Boolean = false
+    private var receivedSavedRouteName: String? = null
+
+    @SuppressLint("SetTextI18n")
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        binding = ActivityTransportNewPathSearchBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+
+        // onCreate 스코프에 있는 지역 변수 (기존 지리적 데이터)
+        val startLat = intent.getDoubleExtra("startLat", 37.340174)
+        val startLng = intent.getDoubleExtra("startLng", 126.7335933)
+        val endLat = intent.getDoubleExtra("endLat", 37.340174)
+        val endLng = intent.getDoubleExtra("endLng", 127.0900351)
+        val departureName = intent.getStringExtra("departureName") ?: "출발지"
+        val destinationName = intent.getStringExtra("destinationName") ?: "도착지"
+        Log.d("startLat",startLat.toString())
+        Log.d("startLng",startLng.toString())
+        Log.d("endLat",endLat.toString())
+        Log.d("endLng",endLng.toString())
+        // --- Intent에서 플래그 데이터 받기 ---
+        val bundle = intent.extras
+        bundle?.let {
+            receivedTransportRouteKey = it.getInt("transportRouteKey", -1).takeIf { it != -1 }
+            receivedIsFavorite = it.getBoolean("isFavorite", false)
+            receivedIsSelected = it.getBoolean("isSelected", false)
+            receivedSavedRouteName = it.getString("savedRouteName")
+
+            Log.d("TransportNewPathSearchActivity", "받은 데이터: " +
+                    "transportRouteKey: $receivedTransportRouteKey, " +
+                    "isFavorite: $receivedIsFavorite, " +
+                    "isSelected: $receivedIsSelected, " +
+                    "savedRouteName: $receivedSavedRouteName"
+            )
+
+            // !!! 받은 플래그 데이터를 활용하는 로직 예시 !!!
+            if (receivedIsSelected) {
+                // 이 경로는 '저장된 경로' 화면에서 선택되어 넘어온 경로입니다.
+                receivedSavedRouteName?.let { name ->
+                    Log.d("TransportNewPathSearchActivity", "저장된 경로 '$name'가 선택되어 넘어왔습니다.")
+                }
+            }
+
+            if (receivedIsFavorite) {
+                Log.d("TransportNewPathSearchActivity", "이 경로는 즐겨찾기 상태입니다.")
+            }
+        }
+        // --- 플래그 데이터 받기 끝 ---
+
+        Log.d("TransportNewPathSearchActivity", "startLat: $startLat, startLng: $startLng, endLat: $endLat, endLng: $endLng")
+
+        // binding을 사용하여 뷰 참조
+        val loadingSpinner = binding.loadingSpinner
+        val dataLayout = binding.newPathLinearLayout
+
+        // 데이터 로딩 시작
+        loadingSpinner.visibility = View.VISIBLE
+        dataLayout.visibility = View.GONE
+
+        // ViewModel 의 LiveData 관찰
+        routeViewModel.routeData.observe(this, Observer { routes ->
+            // 데이터 로드 완료 후 처리
+            loadingSpinner.visibility = View.GONE
+            dataLayout.visibility = View.VISIBLE
+
+            // 데이터 UI에 설정
+            routes?.let {
+                if (it.isNotEmpty()) {
+                    // updateRouteViews 호출 시 start/end Lat/Lng, 출발/도착지 이름,
+                    // 그리고 받은 플래그 데이터들을 함께 넘겨줍니다.
+                    updateRouteViews(
+                        it,
+                        startLat, startLng, endLat, endLng,
+                        departureName, destinationName,
+                        receivedTransportRouteKey,
+                        receivedIsFavorite,
+                        receivedIsSelected
+                    )
+                } else {
+                    Log.d("TransportNewPathSearchActivity", "검색된 경로가 없습니다.")
+                    // TODO: "경로를 찾을 수 없습니다" 메시지 표시 등
+                }
+            } ?: run {
+                Log.e("TransportNewPathSearchActivity", "경로 데이터 로드 실패: routes is null")
+                // TODO: 사용자에게 오류 메시지 표시
+            }
+        })
+
+        // 경로 데이터 가져오기
+        routeViewModel.fetchRoute(startLat, startLng, endLat , endLng )
+    }
+
+    private fun updateRouteViews(
+        routes: List<Route>,
+        startLat: Double,
+        startLng: Double,
+        endLat: Double,
+        endLng: Double,
+        departureName : String,
+        destinationName : String,
+        passedTransportRouteKey: Int?,
+        passedIsFavorite: Boolean,
+        passedIsSelected: Boolean
+    ) {
+
+        binding.newPathLinearLayout.removeAllViews()
+
+        routes.forEachIndexed { index, route ->
+            val routeIndices = mutableListOf<Int>()
+
+            route.pathTransitType.forEachIndexed { pathIndex, pathType ->
+                if (pathType != 3) {
+                    routeIndices.add(pathIndex)
+                }
+            }
+
+            val routeItemView = LayoutInflater.from(this).inflate(R.layout.trans_new_path_search_view, binding.newPathLinearLayout, false)
+
+            val mainTransitTypesView: TextView = routeItemView.findViewById(R.id.mainTransitTypesView)
+            val transitCountView: TextView = routeItemView.findViewById(R.id.transitCountView)
+            val totalTimeView: TextView = routeItemView.findViewById(R.id.totalTimeView)
+            val detailedPathView: TextView = routeItemView.findViewById(R.id.detatiledPathView)
+            val predictTimeView: TextView = routeItemView.findViewById(R.id.predictTimeView)
+
+            mainTransitTypesView.text = route.mainTransitType
+            mainTransitTypesView.contentDescription = "주요 교통수단은 ${route.mainTransitType}입니다."
+
+            transitCountView.text = getString(R.string.transitCount, route.transitCount)
+            transitCountView.contentDescription = "환승 횟수는 ${route.transitCount}회입니다."
+
+            totalTimeView.text = "${route.totalTime} 분"
+            totalTimeView.contentDescription = "총 소요 시간은 ${route.totalTime}분입니다."
+
+            detailedPathView.text = route.transitTypeNo.joinToString(", ")
+            val detailedPathDescription = if (route.transitTypeNo.isNotEmpty()) {
+                "상세 경로는 ${route.transitTypeNo.joinToString(" 이용, ")} 이용입니다."
+            } else {
+                "상세 경로 정보가 없습니다."
+            }
+            detailedPathView.contentDescription = detailedPathDescription
+
+
+            val predictTimesTextBuilder = StringBuilder()
+            val predictTimesContentDescriptionBuilder = StringBuilder()
+
+            routeIndices.forEachIndexed { i, routeIndex ->
+                val transit = route.transitTypeNo[routeIndex]
+                var predictTime = routes[index].routeIds.getOrNull(i)?.predictTimes1
+
+                if (predictTime.isNullOrBlank() || predictTime.equals("데이터 없음", ignoreCase = true)) {
+                    predictTime = "서비스 지원 안함"
+                }
+
+                predictTimesTextBuilder.append("${transit} : ${predictTime} \n")
+                predictTimesContentDescriptionBuilder.append("대중교통 ${transit}의 예상 시간은 ${predictTime}입니다. ")
+            }
+
+            predictTimeView.text = predictTimesTextBuilder.toString().trimEnd('\n')
+            predictTimeView.contentDescription = predictTimesContentDescriptionBuilder.toString().trim()
+
+            // 각 동적 생성된 경로 항목에 클릭 리스너 설정
+            routeItemView.setOnClickListener {
+                val intent = Intent(this, TransportInformationActivity::class.java)
+                intent.putIntegerArrayListExtra("pathTransitType", ArrayList(route.pathTransitType))
+                intent.putStringArrayListExtra("transitTypeNo", ArrayList(route.transitTypeNo))
+                intent.putExtra("routeIds", ArrayList(route.routeIds))
+
+                intent.putExtra("startLat", startLat)
+                intent.putExtra("startLng", startLng)
+                intent.putExtra("endLat", endLat)
+                intent.putExtra("endLng", endLng)
+                intent.putExtra("departureName", departureName)
+                intent.putExtra("destinationName", destinationName)
+
+                passedTransportRouteKey?.let { key -> intent.putExtra("transportRouteKey", key) }
+                intent.putExtra("isFavorite", passedIsFavorite)
+                intent.putExtra("isSelected", passedIsSelected)
+
+                // 워치로 모든 데이터를 한번에 전송하는 함수 호출
+                sendAllDataToWearable(
+                    route.pathTransitType,
+                    route.transitTypeNo,
+                    startLat,
+                    startLng,
+                    endLat,
+                    endLng,
+                    departureName,
+                    destinationName
+                )
+
+                startActivity(intent)
+            }
+
+            binding.newPathLinearLayout.addView(routeItemView)
+            Log.d("TransportNewPathSearchActivity", "경로 항목 추가됨: ${route.transitTypeNo.joinToString()}")
+        }
+    }
+
+    /**
+     * DataMap을 사용하여 여러 종류의 데이터를 한 번에 워치로 전송합니다.
+     * 경로는 /all_trans_data로 설정했습니다.
+     */
+
+    private fun sendAllDataToWearable(
+        pathTransitType: List<Int>,
+        transitTypeNo: List<String>,
+        startLat: Double,
+        startLng: Double,
+        endLat: Double,
+        endLng: Double,
+        departureName: String,
+        destinationName: String
+    ) {
+        CoroutineScope(Dispatchers.IO).launch {
+            try {
+                val dataClient = Wearable.getDataClient(this@TransportNewPathSearchActivity)
+
+                // PutDataMapRequest를 생성하고 데이터를 추가
+                val putDataMapReq = PutDataMapRequest.create("/all_trans_data").apply {
+                    dataMap.putIntegerArrayList("pathTransitType", ArrayList(pathTransitType))
+                    dataMap.putStringArrayList("transitTypeNo", ArrayList(transitTypeNo))
+                    dataMap.putDouble("startLat", startLat)
+                    dataMap.putDouble("startLng", startLng)
+                    dataMap.putDouble("endLat", endLat)
+                    dataMap.putDouble("endLng", endLng)
+                    dataMap.putString("departureName", departureName)
+                    dataMap.putString("destinationName", destinationName)
+                    dataMap.putLong("timestamp", System.currentTimeMillis())
+                }
+
+                val putDataReq = putDataMapReq.asPutDataRequest()
+                dataClient.putDataItem(putDataReq)
+
+                Log.d("WearableDataSender", "모든 교통 데이터 전송 성공 : ${putDataMapReq}")
+
+            } catch (e: Exception) {
+                Log.e("WearableDataSender", "데이터 전송 실패: ${e.message}")
+            }
+        }
+    }
+}

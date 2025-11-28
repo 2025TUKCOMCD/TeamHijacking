@@ -8,10 +8,10 @@ import retrofit2.http.Query;
 public interface RouteApi {
     @GET("searchPubTransPathT")
     Call<ResponseBody> searchPubTransPathT(
-            @Query("SX") double startLat,
-            @Query("SY") double startLng,
-            @Query("EX") double endLat,
-            @Query("EY") double endLng,
+            @Query("SX") double startLng,
+            @Query("SY") double startLat,
+            @Query("EX") double endLng,
+            @Query("EY") double endLat,
             @Query("apiKey") String apiKey
     );
 

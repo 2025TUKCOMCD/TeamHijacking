@@ -1,33 +1,96 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/subway_telephone_activity"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:gravity="center"
     android:orientation="vertical"
+    android:paddingTop="80dp"
+    android:paddingStart="16dp"
+    android:paddingEnd="16dp"
     tools:context=".MainActivity">
-    <!-- 장치 추가 페이지 -->
 
-    <LinearLayout
-        android:layout_width="350dp"
+    <!-- 상단 구분선 -->
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:background="#873C87"
+        android:layout_marginBottom="40dp"/>
+
+    <!-- 메인 타이틀 -->
+    <TextView
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:minHeight="100dp"
-        android:minWidth="100dp"
-        android:padding="15dp"
-        android:gravity="start"
-        android:background="@drawable/add_iot_background"
-        android:orientation="vertical">
+        android:text="@string/callstationText"
+        android:textSize="30sp"
+        android:paddingStart="30dp"
+        android:paddingEnd="20dp"
+        android:paddingBottom="20dp"
+        android:textStyle="bold"
+        android:contentDescription="@string/callstationText" />
+
+    <!-- 안내 메시지 -->
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/do_you_know_text"
+        android:textSize="18sp"
+        android:paddingStart="20dp"
+        android:paddingEnd="20dp"
+        android:textColor="@android:color/darker_gray"
+        android:paddingBottom="20dp"
+        android:lineSpacingExtra="4dp"
+        android:contentDescription="@string/tto_ta_ContentDescription" />
+
+    <!-- 전화 연결 버튼 컨테이너 -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:gravity="center"
+        android:paddingTop="30dp"
+        android:paddingBottom="30dp">
+
+        <!-- 역무실 전화 버튼 -->
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/subwayPhone"
+            style="@style/Widget.AppCompat.Button"
+            android:layout_width="match_parent"
+            android:layout_height="120dp"
+            android:layout_marginStart="20dp"
+            android:layout_marginEnd="20dp"
+            android:text="1호선 역무실 전화연결\n000-0000-0000"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:textColor="@android:color/white"
+            android:background="@drawable/phone_button_background3"
+            android:backgroundTint="@null"
+            android:drawableTop="@drawable/subway_telephone"
+            android:drawablePadding="8dp"
+            android:gravity="center"
+            android:padding="16dp"
+            android:elevation="4dp"
+            android:stateListAnimator="@null"
+            android:contentDescription="삼성역 역무실 전화연결 버튼입니다. 전화번호 000-0000-0000로 즉시 연결됩니다. 터치하여 전화를 걸어보세요." />
+
+        <!-- 추가 안내 텍스트 -->
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="30sp"
-            android:text="@string/addSamsung"
-            android:paddingBottom="40dp"/>
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_gravity="fill_horizontal">
-        </LinearLayout>
+            android:layout_marginTop="20dp"
+            android:text="@string/plus_info_text"
+            android:textSize="16sp"
+            android:textColor="@android:color/darker_gray"
+            android:gravity="center"
+            android:contentDescription="@string/plus_info_text" />
+
     </LinearLayout>
+
+    <!-- 하단 구분선 -->
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:background="#873C87"
+        android:layout_marginTop="40dp" />
+
 </LinearLayout>

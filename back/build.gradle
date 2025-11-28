@@ -55,6 +55,9 @@ dependencies {
 	implementation 'com.google.guava:guava:32.0.0-jre'
 	//Websocket
 	implementation 'org.springframework.boot:spring-boot-starter-websocket'
+	// thymeleaf
+	implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
+
 }
 
 tasks.named('test') {

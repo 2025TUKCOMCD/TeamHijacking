@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SmartThings 연동 결과</title>
+    <style>
+        /* 기존 스타일은 동일 */
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            background-color: #f4f4f4;
+            text-align: center;
+        }
+        .container {
+            background-color: #fff;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            max-width: 400px;
+            width: 90%;
+        }
+        h1 {
+            color: #333;
+            margin-bottom: 20px;
+        }
+        p {
+            color: #666;
+            line-height: 1.6;
+            margin-bottom: 30px;
+        }
+        .success {
+            color: #4CAF50; /* Green */
+        }
+        .failure {
+            color: #f44336; /* Red */
+        }
+        .button-group {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        .app-button {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            font-weight: bold;
+            transition: background-color 0.3s ease;
+        }
+        .app-button:hover {
+            background-color: #0056b3;
+        }
+        .deep-link-info {
+            margin-top: 20px;
+            padding: 10px;
+            background-color: #e9ecef;
+            border-radius: 5px;
+            font-size: 0.8em;
+            word-break: break-all;
+            text-align: left;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1 th:if="${success}" class="success">✅ SmartThings 연동 성공!</h1>
+    <h1 th:unless="${success}" class="failure">❌ SmartThings 연동 실패</h1>
+
+    <p th:text="${message}"></p>
+
+    <div class="button-group">
+        <a id="deepLinkButton" th:href="${androidDeepLink}" class="app-button">앱으로 돌아가기</a>
+    </div>
+
+</div>
+
+<script th:inline="javascript">
+    /*<![CDATA[*/
+    // Thymeleaf 변수를 JavaScript 변수로 가져옵니다.
+    var androidDeepLink = /*[[${androidDeepLink}]]*/ 'default_deeplink';
+    var isSuccess = /*[[${success}]]*/ false; // 성공 여부도 가져와서 활용 가능
+
+    // 페이지 로드 시 딥링크로 리다이렉트
+    window.onload = function() {
+        if (androidDeepLink) { // 딥링크 URL이 유효한 경우에만 시도
+            window.location.href = androidDeepLink;
+
+            // 딥링크 이동에 실패했을 경우 (예: 앱이 설치되지 않았거나, 브라우저가 스킴을 처리 못할 때)
+            // 사용자에게 버튼을 보여주는 백업 로직을 추가할 수 있습니다.
+            // 일정 시간 후에도 페이지가 이동하지 않으면 버튼을 표시 (선택 사항)
+            setTimeout(function() {
+                // 이 메시지는 앱으로 이동이 안 되었을 때만 보이게 할 수 있습니다.
+                // 예를 들어, div를 숨겨두었다가 필요할 때만 보이게 합니다.
+                var deepLinkButton = document.getElementById('deepLinkButton');
+                if (deepLinkButton && !document.hidden) { // 현재 페이지가 숨겨지지 않았다면 (앱으로 이동하지 않았다면)
+                    deepLinkButton.style.display = 'block'; // 버튼을 보이게 합니다.
+                    // alert("앱으로 자동 이동에 실패했습니다. 버튼을 눌러 수동으로 이동하거나 앱을 설치해주세요.");
+                }
+            }, 1500); // 1.5초 후에도 페이지가 이동하지 않으면
+        }
+    };
+    /*]]>*/
+</script>
+</body>
+</html>

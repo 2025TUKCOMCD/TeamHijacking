@@ -6,6 +6,8 @@ import com.example.back.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.NoSuchElementException;
+
 /*Lombok 으로 스프링 에서 DI 방법 중 생성자 주입을 임의의 코드 없이 자동 으로 설정. 초기화 되지 않은
 final 필드나 @NonNull 이 붙은 필드에 대해 생성자 생성. 새로운 필드 추가 시 다시 생성자 안 만들어도 됨
 chatGPT 의 도움 받아 @Autowired 대신 생성자 다른 걸로 주입*/
@@ -27,5 +29,17 @@ public class UserService {
         User user = userDTO.toEntity();
         return userRepository.save(user);
         //id는 자동 생성되므로, saveUser()에서는 id를 직접 설정하지 않음
+    }
+
+    public User updateNickname(String loginId, String newName) {
+        if (newName == null || newName.isBlank()) {
+            throw new IllegalArgumentException("닉네임은 비워둘 수 없습니다.");
+        }
+
+        User user = userRepository.findByLoginId(loginId)
+                .orElseThrow(() -> new NoSuchElementException("사용자를 찾을 수 없습니다."));
+
+        user.setName(newName);
+        return userRepository.save(user);
     }
 }

@@ -112,66 +112,60 @@ public class RouteService{
     // 지하철 도착 정보 처리
     public CompletableFuture<Map.Entry<Integer, Map<String, Object>>> processTrafficType1Async(RouteProcessDTO.SubPath subPath, int index) {
         return CompletableFuture.supplyAsync(() -> {
-                    Map<String, Object> timeAndDayType;
-                    String predictTime1String = "도착 정보 없음";
-                    String predictTime2String = "도착 정보 없음";
-                    // 첫번째 역 이름
-                    String startName = subPath.getStartName();
-                    // 마지막 역 이름
-                    String endName = subPath.getEndName();
-                    // 노선 정보
-                    int subwayCode = subPath.getLane().get(0).getSubwayCode();
+            Map<String, Object> timeAndDayType;
+            String predictTime1String = "도착 정보 없음";
+            String predictTime2String = "도착 정보 없음";
+            // 첫번째 역 이름
+            String startName = subPath.getStartName();
+            // 마지막 역 이름
+            String endName = subPath.getEndName();
+            // 노선 정보
+            int subwayCode = subPath.getLane().get(0).getSubwayCode();
 
-                    String subwayLineName = subPath.getLane().get(0).getName();
-                    // 노선 방향
-                    String direction = subPath.getWayCode() == 1 ? "상행" : "하행";
+            String subwayLineName = subPath.getLane().get(0).getName();
+            // 노선 방향
+            String direction = subPath.getWayCode() == 1 ? "상행" : "하행";
 
-                    // 시작 주소
-                    double startX = subPath.getStartX();
-                    double startY = subPath.getStartY();
-                    // 상세 정보
-                    List<RouteProcessDTO.Station> stations = subPath.getPassStopList().getStations();
+            // 시작 주소
+            double startX = subPath.getStartX();
+            double startY = subPath.getStartY();
+            // 상세 정보
+            List<RouteProcessDTO.Station> stations = subPath.getPassStopList().getStations();
 
-                    // 역 이름 리스트
-                    List<String> transferStations = new ArrayList<>();
-                    for (RouteProcessDTO.Station station : stations) {
-                        transferStations.add(station.getStationName());
-                    }
+            // 역 이름 리스트
+            List<String> transferStations = new ArrayList<>();
+            for (RouteProcessDTO.Station station : stations) {
+                transferStations.add(station.getStationName());
+            }
 
-                    String secondStation = transferStations.size() > 1 ? transferStations.get(1) : null;
-                    // 결과 데이터를 저장할 Map 생성
-                    Map<String, Object> dataMap = new HashMap<>();
+            String secondStation = transferStations.size() > 1 ? transferStations.get(1) : null;
+            // 결과 데이터를 저장할 Map 생성
+            Map<String, Object> dataMap = new HashMap<>();
 
-                    String[] arrivals;
-                    // 모든 지하철 노선 별 구간 소요 시간 작성 필요
-                    // 실시간 도착정보 제공x 지하철 시
-                    int convertedCode = subwayService.convertSubwayCode(subwayCode);
-                    int [] betweenTime = null;
+            String[] arrivals;
+            // 모든 지하철 노선 별 구간 소요 시간 작성 필요
+            // 실시간 도착정보 제공x 지하철 시
+            int convertedCode = subwayService.convertSubwayCode(subwayCode);
+            int [] betweenTime = null;
 
-                    if(index <= 2 ) {
-                        // 도착정보 존재 x 처리
-//                        if (subwayService.convertSubwayCodeForTime(convertedCode)) {
-//                            betweenTime = subwayProcessService.getBetweenTimes(convertedCode, startName, endName, direction);
-//                        }
-                        // if (index < 2) {
-                        // 데이터베이스 처리 여부
-                        if (subwayService.DBCode(subwayCode)) {
-                            List<TimeTable> predictTimeTable = subwayProcessService.fetchPredictedTimes(subwayCode, startName, direction);
-                            arrivals = subwayProcessService.processPredictedArrivals(predictTimeTable);
-                        } else {
-                            // 실시간 도착정보 처리
-                            List< SubwayArriveProcessDTO.RealtimeArrival> matchedArrivals = subwayProcessService.processSeoulSubway(convertedCode, startName, endName, direction, secondStation);
-                            arrivals =  subwayProcessService.handleArrivalQueue(matchedArrivals, startName, convertedCode, direction);
-                        }
+            // 데이터베이스 처리 여부
+            if (subwayService.DBCode(subwayCode)) {
+                List<TimeTable> predictTimeTable = subwayProcessService.fetchPredictedTimes(subwayCode, startName, direction);
+                arrivals = subwayProcessService.processPredictedArrivals(predictTimeTable);
+            } else {
+                // 실시간 도착정보 처리
+                List< SubwayArriveProcessDTO.RealtimeArrival> matchedArrivals = subwayProcessService.processSeoulSubway(convertedCode, startName, endName, direction, secondStation);
+                arrivals =  subwayProcessService.handleArrivalQueue(matchedArrivals, startName, convertedCode, direction);
+            }
 
-                        // `arrivals`에서 예측 도착 시간 분리
-                        if (arrivals != null && arrivals.length > 0) {
-                            predictTime1String = arrivals[0]; // predictTime1에 첫 번째 할당
-                        }
-                        if (arrivals != null && arrivals.length > 1) {
-                            predictTime2String = arrivals[1]; // predictTime2에 두 번째 할당
-                        }
-                    }
+            // `arrivals`에서 예측 도착 시간 분리
+            if (arrivals != null && arrivals.length > 0) {
+                predictTime1String = arrivals[0]; // predictTime1에 첫 번째 할당
+            }
+            if (arrivals != null && arrivals.length > 1) {
+                predictTime2String = arrivals[1]; // predictTime2에 두 번째 할당
+            }
+
             // 결과를 Map으로 저장
             dataMap.put("transportLocalID", subwayCode);
             dataMap.put("subwayLineName", subwayLineName );
@@ -179,7 +173,6 @@ public class RouteService{
             dataMap.put("startY",startY);
             dataMap.put("trainDirection", direction);
             dataMap.put("transferStations",transferStations);
-//            dataMap.put("betweenTime", betweenTime);
             dataMap.put("predictTime1", predictTime1String);
             dataMap.put("predictTime2", predictTime2String);
             return new AbstractMap.SimpleEntry<>(index, dataMap);
@@ -269,7 +262,6 @@ public class RouteService{
         int pathType = path.getPathType();
         RouteProcessDTO.Info info = path.getInfo();
         List<RouteProcessDTO.SubPath> subPathList = path.getSubPath();
-
 
         // ResultDTO 객체 생성
         ResultDTO resultDTO = new ResultDTO();
