@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.widget.Button
+import android.widget.ImageButton
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
@@ -114,9 +115,9 @@ class MyIotActivity : AppCompatActivity() {
     private fun showGalaxyHomeMiniControl(device: Device) {
         val view = LayoutInflater.from(this).inflate(R.layout.dialog_ai_speaker, null)
         //val statusText = view.findViewById<TextView>(R.id.textSpeakerStatus)
-        val btnPlayPause = view.findViewById<Button>(R.id.btnPlayPause)
-        val btnVolumeUp = view.findViewById<Button>(R.id.btnVolumeUp)
-        val btnVolumeDown = view.findViewById<Button>(R.id.btnVolumeDown)
+        val btnPlayPause = view.findViewById<ImageButton>(R.id.btnPlayPause)
+        val btnVolumeUp = view.findViewById<ImageButton>(R.id.btnVolumeUp)
+        val btnVolumeDown = view.findViewById<ImageButton>(R.id.btnVolumeDown)
 
         //statusText.text = "기기 이름: ${device.label}\n상태 확인 중..."
 
