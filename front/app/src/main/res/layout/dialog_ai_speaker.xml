@@ -60,7 +60,7 @@
                     android:layout_weight="1"
                     android:layout_height="wrap_content"
                     android:text="볼륨 ↓"
-                    android:src="@drawable/iot_volume_up"
+                    android:src="@drawable/iot_volume_down"
                     android:background="@android:color/transparent"
                     android:scaleType="fitCenter"
                     android:paddingBottom="5dp"
@@ -72,7 +72,7 @@
                     android:layout_weight="1"
                     android:layout_height="wrap_content"
                     android:text="볼륨 ↑"
-                    android:src="@drawable/iot_volume_down"
+                    android:src="@drawable/iot_volume_up"
                     android:background="@android:color/transparent"
                     android:scaleType="fitCenter"
                     android:contentDescription="볼륨을 높이는 버튼입니다" />
